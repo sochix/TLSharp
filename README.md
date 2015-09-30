@@ -58,6 +58,10 @@ You can contribute! If you have any questions don't afraid to ask!
 
 You should change the telegram server address to XX. XX server address you can get from InitResponse. Address should be changed in [this file](https://github.com/sochix/TLSharp/blob/master/TLSharp.Core/Network/TcpTransport.cs)
 
+#### I get an exception: System.IO.EndOfStreamException: Unable to read beyond the end of the stream. All test methos except that AuthenticationWorks and TestConnection return same error. I did every thing including setting api id and hash, and setting server address.
+
+You should create a Telegram session. See [configuration guide](#sending-messages-set-up)
+
 #### Why does TLSharp lacks future XXXX?
 
 Now TLSharp is basic realization of Telegram protocol, you can be a contributor or a sponsor to speed-up developemnt of any feature.
