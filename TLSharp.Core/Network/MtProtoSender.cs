@@ -267,6 +267,12 @@ namespace TLSharp.Core.Network
 					Debug.WriteLine($"Should wait {seconds} sec.");
 					Thread.Sleep(1000*seconds);
 				}
+				else if (errorMessage.StartsWith("PHONE_MIGRATE_"))
+				{
+					var resultString = Regex.Match(errorMessage, @"\d+").Value;
+					var dcIdx = int.Parse(resultString);
+					throw new InvalidOperationException($"Your phone number registered to {dcIdx} dc. Please update settings. See https://github.com/sochix/TLSharp#i-get-an-error-migrate_x for details.");
+				}
 				else
 				{
 					throw new InvalidOperationException(errorMessage);
@@ -332,7 +338,7 @@ namespace TLSharp.Core.Network
 					throw new InvalidOperationException("invalid container");
 
 			}
-			throw new NotImplementedException();
+			throw new NotImplementedException("This should never happens");
 			/*
 			logger.debug("bad_msg_notification: msgid {0}, seq {1}, errorcode {2}", requestId, requestSequence,
 						 errorCode);
@@ -397,7 +403,7 @@ namespace TLSharp.Core.Network
 
 			messageReader.BaseStream.Position -= 12;
 
-			throw new NotImplementedException();
+			throw new NotImplementedException("Handle future server salts function isn't implemented.");
 			/*
 			if (!runningRequests.ContainsKey(requestId))
 			{

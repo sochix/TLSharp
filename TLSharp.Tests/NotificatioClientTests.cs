@@ -21,15 +21,30 @@ namespace TLSharp.Tests
 		{
 			// Setup your phone numbers in app.config
 			NumberToAuthenticate = ConfigurationManager.AppSettings["numberToAuthenticate"];
+			if (string.IsNullOrEmpty(NumberToAuthenticate))
+				throw new InvalidOperationException("NumberToAuthenticate is null");
+
 			RegisteredNumber = ConfigurationManager.AppSettings["registeredNumber"];
+			if (string.IsNullOrEmpty(RegisteredNumber))
+				throw new InvalidOperationException("RegisteredNumber is null");
+
 			UnregisteredNumber = ConfigurationManager.AppSettings["unregisteredNumber"];
-        }
+			if (string.IsNullOrEmpty(UnregisteredNumber))
+				throw new InvalidOperationException("UnregisteredNumber is null");
+
+			if (NumberToAuthenticate == UnregisteredNumber)
+				throw new InvalidOperationException("NumberToAuthenticate eqauls UnregisteredNumber but shouldn't!");
+
+			if (RegisteredNumber == UnregisteredNumber)
+				throw new InvalidOperationException("RegisteredNumber eqauls UnregisteredNumber but shouldn't!");
+		}
 
 		[TestMethod]
 		public async Task AuthUser()
 		{
 			var store = new FileSessionStore();
 			var client = new TelegramClient(store, "session");
+
 			await client.Connect();
 
 			var hash = await client.SendCodeRequest(NumberToAuthenticate);
@@ -70,6 +85,7 @@ namespace TLSharp.Tests
 
 			var store = new FileSessionStore();
 			var client = new Core.TelegramClient(store, "session");
+			
 			await client.Connect();
 
 			Assert.IsTrue(client.IsUserAuthorized());
