@@ -14,6 +14,7 @@ It's a perfect fit for any developer who need to sends data directly to Telegram
 - [Dependencies](#dependencies)
 - [Starter Guide](#starter-guide)
   - [Quick configuration](#quick-configuration)
+  - [Sending messages set-up](#sending-messages-set-up)
   - [Using TLSharp](#using-tlsharp)
 - [Contributing](#contributing)
 - [FAQ](#faq)
@@ -36,6 +37,13 @@ All dependencies listed in [package.conf file](https://github.com/sochix/TLSharp
 1. When you're done you should specify phone number in international format for Test purposes in [app.config file]( https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/app.config)
 1. Run the test TestConnection(), if it passed than you successfully setted up a library.
 
+##Sending messages set-up
+
+1. Firstly create a valid session. Run the `AuthUser` test, and set a breakpoint on `var code = "123"; // you can change code in debugger line`. 
+2. Replace value of `code` variable with code from Telegram. 
+3. Continue execution. You'll see created session.dat file.
+4. Try to run `SendMessage` test
+
 ## Using TLSharp
 
 See tests to undertsand how TLSharp works.
@@ -46,9 +54,20 @@ You can contribute! If you have any questions don't afraid to ask!
 
 # FAQ
 
-#### I get an error MIGRATE_XX?
+#### I get an error MIGRATE_X?
 
-You should change the telegram server address to XX. XX server address you can get from InitResponse. Address should be changed in [this file](https://github.com/sochix/TLSharp/blob/master/TLSharp.Core/Network/TcpTransport.cs)
+You should change the telegram server address to X. X server address you can get from InitResponse or from Server addresses list. Address should be changed in [this file](https://github.com/sochix/TLSharp/blob/master/TLSharp.Core/Network/TcpTransport.cs)
+
+**Server addresses:**
+* Server 1: 149.154.175.50:443
+* Server 2: 149.154.167.51:443
+* Server 3: 149.154.175.100:443
+* Server 4: 149.154.167.91:443
+* Server 5: 91.108.56.165:443
+
+#### I get an exception: System.IO.EndOfStreamException: Unable to read beyond the end of the stream. All test methos except that AuthenticationWorks and TestConnection return same error. I did every thing including setting api id and hash, and setting server address.
+
+You should create a Telegram session. See [configuration guide](#sending-messages-set-up)
 
 #### Why does TLSharp lacks future XXXX?
 
