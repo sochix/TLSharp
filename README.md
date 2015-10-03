@@ -69,6 +69,9 @@ You should change the telegram server address to X. X server address you can get
 
 You should create a Telegram session. See [configuration guide](#sending-messages-set-up)
 
+#### Why I get FLOOD_WAIT error?
+It's Telegram restrictions. See [this](https://core.telegram.org/api/errors#420-flood)
+
 #### Why does TLSharp lacks future XXXX?
 
 Now TLSharp is basic realization of Telegram protocol, you can be a contributor or a sponsor to speed-up developemnt of any feature.
