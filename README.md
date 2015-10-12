@@ -2,9 +2,9 @@
 
 ![](https://telegram.org/favicon.ico)
 
-Telegram (http://telegram.org) client library implemented in C#. Only basic functionality are implemented now. **Consider donation to speed up development process.**
+Telegram (http://telegram.org) client library implemented in C#. Only basic functionality is currently implemented. **Consider donation to speed up development process.**
 
-It's a perfect fit for any developer who need to sends data directly to Telegram users.
+It's a perfect fit for any developer who would like to send data directly to Telegram users.
 
 **Please, don't use it for SPAM!**
 
@@ -22,24 +22,24 @@ It's a perfect fit for any developer who need to sends data directly to Telegram
 
 #How do I add this to my project?
 
-Library don't have Nu-Get package, so you need to download it from GitHub and compile in VS2015.
+There currenrly is no Nu-Get package available, so you need to clone it from GitHub and compile in VS2015.
 
 #Dependencies
 
-TLSharp have a few dependenices, most of functionality implemented from scratch.
+TLSharp has a few dependenices, most of functionality implemented from scratch.
 All dependencies listed in [package.conf file](https://github.com/sochix/TLSharp/blob/master/TLSharp.Core/packages.config).
 
 #Starter Guide
 
 ## Quick Configuration
-1. To start using TLSharp you need to create a developer account in Telegram. Start from https://my.telegram.org/
-1. After registering copy API_ID and API_HASH from your account to [TelegramClient.cs](https://github.com/sochix/TLSharp/blob/master/TLSharp.Core/TelegramClient.cs)
-1. When you're done you should specify phone number in international format for Test purposes in [app.config file]( https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/app.config)
-1. Run the test TestConnection(), if it passed than you successfully setted up a library.
+1. To start using TLSharp you need to create a [developer account](https://my.telegram.org/) with Telegram. 
+1. After registering, copy API_ID and API_HASH from your account to [TelegramClient.cs](https://github.com/sochix/TLSharp/blob/master/TLSharp.Core/TelegramClient.cs)
+1. When you're done you should specify a phone number in international format for Test purposes in [app.config file]( https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/app.config)
+1. Run the test TestConnection(), if it passed than you successfully configured TLSharp.
 
 ##Sending messages set-up
 
-1. Firstly create a valid session. Run the `AuthUser` test, and set a breakpoint on `var code = "123"; // you can change code in debugger line`. 
+1. First, create a valid session. Run the `AuthUser` test, and set a breakpoint on `var code = "123"; // you can change code in debugger line`. 
 2. Replace value of `code` variable with code from Telegram. 
 3. Continue execution. You'll see created session.dat file.
 4. Try to run `SendMessage` test
@@ -50,7 +50,7 @@ See tests to undertsand how TLSharp works.
 
 ## Contributing
 
-You can contribute! If you have any questions don't afraid to ask!
+You can contribute! If you have any questions don't be afraid to ask!
 
 # FAQ
 
