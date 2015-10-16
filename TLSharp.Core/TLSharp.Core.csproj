@@ -67,6 +67,11 @@
     <Compile Include="Requests\AuthCheckPhoneRequest.cs" />
     <Compile Include="Requests\AuthSendCodeRequest.cs" />
     <Compile Include="Requests\AuthSignInRequest.cs" />
+    <Compile Include="Requests\GetDialogsRequest.cs" />
+    <Compile Include="Requests\GetFileRequest.cs" />
+    <Compile Include="Requests\GetHistoryRequest.cs" />
+    <Compile Include="Requests\GetNearestDcRequest.cs" />
+    <Compile Include="Requests\GetUsersRequest.cs" />
     <Compile Include="Requests\ImportContactRequest.cs" />
     <Compile Include="Requests\InitConnectionRequest.cs" />
     <Compile Include="Requests\MTProtoRequest.cs" />

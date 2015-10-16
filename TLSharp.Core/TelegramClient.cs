@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TLSharp.Core.Auth;
@@ -18,7 +19,12 @@ namespace TLSharp.Core
 		private int _apiId = 19474;
 		private Session _session;
 
-		public TelegramClient(ISessionStore store, string sessionUserId)
+        public User loggedUser { get { return _session.User; } }
+
+        public List<Chat> chats;
+        public List<User> users;
+
+        public TelegramClient(ISessionStore store, string sessionUserId)
 		{
 			if (_apiId == 0)
 				throw new InvalidOperationException("Your API_ID is invalid. Do a configuration first https://github.com/sochix/TLSharp#quick-configuration");
@@ -107,7 +113,26 @@ namespace TLSharp.Core
 
 			await _sender.Send(request);
 			await _sender.Recieve(request);
-
 		}
-	}
+
+        public async Task LoadChatsAndUsers(int offset, int max_id, int limit)
+        {
+            // GetDialogs
+            var request = new GetDialogsRequest(offset, max_id, limit);
+            await _sender.Send(request);
+            await _sender.Recieve(request);
+
+            chats = request.chats;
+            users = request.users;
+        }
+
+        public async Task<List<Message>> GetHistory(int user_id, int offset, int max_id, int limit)
+        {
+            var request = new GetHistoryRequest(new InputPeerContactConstructor(user_id), offset, max_id, limit);
+            await _sender.Send(request);
+            await _sender.Recieve(request);
+
+            return request.messages;
+        }
+    }
 }
