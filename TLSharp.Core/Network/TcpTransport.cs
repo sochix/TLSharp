@@ -31,16 +31,56 @@ namespace TLSharp.Core.Network
 			await _tcpClient.GetStream().WriteAsync(tcpMessage.Encode(), 0, tcpMessage.Encode().Length);
 			sendCounter++;
 		}
+        
+        public async Task<TcpMessage> Receieve()
+        {
+            var stream = _tcpClient.GetStream();
 
-		public async Task<TcpMessage> Receieve()
-		{
-			var buffer = new byte[_tcpClient.ReceiveBufferSize];
-			var availableBytes = await _tcpClient.GetStream().ReadAsync(buffer, 0, buffer.Length);
+            var packetLengthBytes = new byte[4];
+            if (await stream.ReadAsync(packetLengthBytes, 0, 4) != 4)
+                throw new InvalidOperationException("Couldn't read the packet length");
+            int packetLength = BitConverter.ToInt32(packetLengthBytes, 0);
 
-			var result = buffer.Take(availableBytes).ToArray();
+            var seqBytes = new byte[4];
+            if (await stream.ReadAsync(seqBytes, 0, 4) != 4)
+                throw new InvalidOperationException("Couldn't read the sequence");
+            int seq = BitConverter.ToInt32(seqBytes, 0);
 
-			return TcpMessage.Decode(result);
-		}
+            int readBytes = 0;
+            var body = new byte[packetLength - 12];
+            int neededToRead = packetLength - 12;
+
+            do
+            {
+                var bodyByte = new byte[packetLength - 12];
+                var availableBytes = await stream.ReadAsync(bodyByte, 0, neededToRead);
+                neededToRead -= availableBytes;
+                Buffer.BlockCopy(bodyByte, 0, body, readBytes, availableBytes);
+                readBytes += availableBytes;
+            }
+            while (readBytes != packetLength - 12);
+
+            var crcBytes = new byte[4];
+            if(await stream.ReadAsync(crcBytes, 0, 4) != 4)
+                throw new InvalidOperationException("Couldn't read the crc");
+            int checksum = BitConverter.ToInt32(crcBytes, 0);
+
+            byte[] rv = new byte[packetLengthBytes.Length + seqBytes.Length + body.Length];
+
+            Buffer.BlockCopy(packetLengthBytes, 0, rv, 0, packetLengthBytes.Length);
+            Buffer.BlockCopy(seqBytes, 0, rv, packetLengthBytes.Length, seqBytes.Length);
+            Buffer.BlockCopy(body, 0, rv, packetLengthBytes.Length + seqBytes.Length, body.Length);
+            var crc32 = new Ionic.Crc.CRC32();
+            crc32.SlurpBlock(rv, 0, rv.Length);
+            var validChecksum = crc32.Crc32Result;
+
+            if (checksum != validChecksum)
+            {
+                throw new InvalidOperationException("invalid checksum! skip");
+            }
+
+            return new TcpMessage(seq, body);
+        }
 
 		public void Dispose()
 		{
