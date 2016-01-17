@@ -76,6 +76,8 @@
     <Compile Include="Requests\InitConnectionRequest.cs" />
     <Compile Include="Requests\MTProtoRequest.cs" />
     <Compile Include="Requests\SendMessageRequest.cs" />
+    <Compile Include="Requests\Message_SendMediaRequest.cs" />
+    <Compile Include="Requests\Upload_SaveFilePartRequest.cs" />
     <Compile Include="Session.cs" />
     <Compile Include="TelegramClient.cs" />
     <Compile Include="Utils\Helpers.cs" />
