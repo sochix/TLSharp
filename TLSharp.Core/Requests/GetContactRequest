@@ -1,0 +1,72 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TLSharp.Core.MTProto;
+
+namespace TLSharp.Core.Requests
+{
+    public class GetContactRequest : MTProtoRequest
+    {
+        private List<int> currentContacts { get; set; }
+
+        public List<Contact> contacts;
+        public List<UserContactConstructor> users;
+
+        public GetContactRequest(List<int> currentContactsID = null)
+        {
+            currentContacts = currentContactsID;
+        }
+
+        public override void OnSend(BinaryWriter writer)
+        {
+            writer.Write(0x22c6aa08);
+            if (currentContacts == null)
+                Serializers.String.write(writer, "");
+            else
+            {
+                string hash = "";
+                foreach (var currentUserID in currentContacts)
+                {
+                    var md5 = Utils.Helpers.md5(currentUserID.ToString());
+                    hash += md5 + ",";
+                }
+                hash = hash.Length > 0 ? hash.Remove(hash.LastIndexOf(','), 1) : Utils.Helpers.md5( hash);
+                Serializers.String.write(writer, hash);
+            }
+        }
+
+        public override void OnResponse(BinaryReader reader)
+        {
+            var code = reader.ReadUInt32();
+            var result = reader.ReadInt32(); // vector code
+            int contact_len = reader.ReadInt32();
+            this.contacts = new List<Contact>(contact_len);
+            for (int imported_index = 0; imported_index < contact_len; imported_index++)
+            {
+                Contact imported_element;
+                imported_element = TL.Parse<Contact>(reader);
+                this.contacts.Add(imported_element);
+            }
+            reader.ReadInt32(); // vector code
+            int users_len = reader.ReadInt32();
+            this.users = new List<UserContactConstructor>(users_len);
+            for (int users_index = 0; users_index < users_len; users_index++)
+            {
+                UserContactConstructor users_element;
+                users_element = TL.Parse<UserContactConstructor>(reader);
+                this.users.Add(users_element);
+            }
+        }
+
+        public override void OnException(Exception exception)
+        {
+            throw new NotImplementedException();
+        }
+        public override bool Confirmed { get { return true; } }
+        private readonly bool responded;
+        public override bool Responded { get { return responded; } }
+    }
+}
