@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using TLSharp.Core.Auth;
 using TLSharp.Core.MTProto;
@@ -95,6 +96,63 @@ namespace TLSharp.Core
 
 			return request.user;
 		}
+
+       
+
+        public async Task<InputFile> UploadFile(string name, byte[] data)
+        {
+            var partSize = 65536;
+
+            var file_id = DateTime.Now.Ticks;
+
+            var partedData = new Dictionary<int, byte[]>();
+            var parts = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(data.Length) / Convert.ToDouble(partSize)));
+            var remainBytes = data.Length;
+            for (int i = 0; i < parts; i++)
+            {
+                partedData.Add(i, data
+                    .Skip(i * partSize)
+                    .Take(remainBytes < partSize ? remainBytes : partSize)
+                    .ToArray());
+
+                remainBytes -= partSize;
+            }
+            
+            for(int i =0;i<parts;i++)
+            {
+                var saveFilePartRequest = new Upload_SaveFilePartRequest(file_id, i, partedData[i]);
+                await _sender.Send(saveFilePartRequest);
+                await _sender.Recieve(saveFilePartRequest);
+
+                if (saveFilePartRequest.Done == false)
+                    throw new InvalidOperationException($"File part {i} does not uploaded");
+            }
+
+            string md5_checksum;
+            using (var md5 = System.Security.Cryptography.MD5.Create())
+            {
+                var hash = md5.ComputeHash(data);
+                var hashResult = new StringBuilder(hash.Length * 2);
+
+                for (int i = 0; i < hash.Length; i++)
+                    hashResult.Append(hash[i].ToString("x2"));
+
+                md5_checksum = hashResult.ToString();
+            }
+
+            var inputFile = new InputFileConstructor(file_id, parts, name, md5_checksum);
+
+            return inputFile;
+        }
+
+        public async Task<messages_StatedMessage> SendMediaMessage(InputPeer inputPeer, InputMedia inputMedia)
+        {
+            var request = new Message_SendMediaRequest(inputPeer, inputMedia);
+            await _sender.Send(request);
+            await _sender.Recieve(request);
+
+            return request.StatedMessage;
+        }
 
 		public async Task<int?> ImportContact(string phoneNumber)
 		{
