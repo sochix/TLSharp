@@ -12,9 +12,9 @@ namespace TLSharp.Tests
 	[TestClass]
 	public class NotificatioClientTests
 	{
-		public string NumberToAuthenticate { get; set; }
-		public string RegisteredNumber { get; set; }
-		public string UnregisteredNumber { get; set; }
+		private string NumberToSendMessage { get; set; }
+
+		private string NumberToAuthenticate { get; set; }
 
 		[TestInitialize]
 		public void Init()
@@ -24,19 +24,9 @@ namespace TLSharp.Tests
 			if (string.IsNullOrEmpty(NumberToAuthenticate))
 				throw new InvalidOperationException("NumberToAuthenticate is null");
 
-			RegisteredNumber = ConfigurationManager.AppSettings["registeredNumber"];
-			if (string.IsNullOrEmpty(RegisteredNumber))
-				throw new InvalidOperationException("RegisteredNumber is null");
-
-			UnregisteredNumber = ConfigurationManager.AppSettings["unregisteredNumber"];
-			if (string.IsNullOrEmpty(UnregisteredNumber))
-				throw new InvalidOperationException("UnregisteredNumber is null");
-
-			if (NumberToAuthenticate == UnregisteredNumber)
-				throw new InvalidOperationException("NumberToAuthenticate eqauls UnregisteredNumber but shouldn't!");
-
-			if (RegisteredNumber == UnregisteredNumber)
-				throw new InvalidOperationException("RegisteredNumber eqauls UnregisteredNumber but shouldn't!");
+			NumberToSendMessage = ConfigurationManager.AppSettings["numberToSendMessage"];
+			if (string.IsNullOrEmpty(NumberToSendMessage))
+				throw new InvalidOperationException("NumberToSendMessage is null");
 		}
 
 		[TestMethod]
@@ -62,20 +52,8 @@ namespace TLSharp.Tests
 			var client = new Core.TelegramClient(store, "session");
 			await client.Connect();
 
-			var phoneList = new string[]
-			{
-				RegisteredNumber,
-				NumberToAuthenticate
-			};
-
-			var rand = new Random();
-			foreach (var phone in phoneList)
-			{
-				var result = await client.IsPhoneRegistered(phone);
-				Thread.Sleep(rand.Next(9) * 1000);
-				if (result)
-					Console.WriteLine($"{phone} - OK");
-			}
+			var result = await client.IsPhoneRegistered(NumberToAuthenticate);
+			Assert.IsTrue(result);
 		}
 
 		[TestMethod]
@@ -84,16 +62,15 @@ namespace TLSharp.Tests
 			// User should be already authenticated!
 
 			var store = new FileSessionStore();
-			var client = new Core.TelegramClient(store, "session");
+			var client = new TelegramClient(store, "session");
 			
 			await client.Connect();
 
 			Assert.IsTrue(client.IsUserAuthorized());
 
-			var res = await client.ImportContact(RegisteredNumber);
+			var res = await client.ImportContact(NumberToSendMessage);
 
 			Assert.IsNotNull(res);
-
 		}
 
 		[TestMethod]
@@ -102,12 +79,12 @@ namespace TLSharp.Tests
 			// User should be already authenticated!
 
 			var store = new FileSessionStore();
-			var client = new Core.TelegramClient(store, "session");
+			var client = new TelegramClient(store, "session");
 			await client.Connect();
 
 			Assert.IsTrue(client.IsUserAuthorized());
 
-			var res = await client.ImportContact(RegisteredNumber);
+			var res = await client.ImportContact(NumberToSendMessage);
 
 			Assert.IsNotNull(res);
 
@@ -118,7 +95,7 @@ namespace TLSharp.Tests
 		public async Task TestConnection()
 		{
 			var store = new FakeSessionStore();
-			var client = new Core.TelegramClient(store, "");
+			var client = new TelegramClient(store, "");
 
 			Assert.IsTrue(await client.Connect());
 		}
@@ -126,7 +103,7 @@ namespace TLSharp.Tests
 		[TestMethod]
 		public async Task AuthenticationWorks()
 		{
-			using (var transport = new TcpTransport())
+			using (var transport = new TcpTransport("91.108.56.165", 443))
 			{
 				var authKey = await Authenticator.DoAuthentication(transport);
 

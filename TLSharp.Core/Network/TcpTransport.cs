@@ -8,12 +8,10 @@ namespace TLSharp.Core.Network
 {
 	public class TcpTransport : IDisposable
 	{
-		private const string defaultConnectionAddress = "91.108.56.165";
-		private const int defaultConnectionPort = 443;
 		private readonly TcpClient _tcpClient;
 		private int sendCounter = 0;
 
-		public TcpTransport(string address = defaultConnectionAddress, int port = defaultConnectionPort)
+		public TcpTransport(string address, int port)
 		{
 			_tcpClient = new TcpClient();
 			

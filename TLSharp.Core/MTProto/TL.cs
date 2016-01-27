@@ -4321,8 +4321,8 @@ namespace TLSharp.Core.MTProto
 			Serializers.String.write(writer, this.first_name);
 			Serializers.String.write(writer, this.last_name);
 			Serializers.String.write(writer, this.phone);
-			this.photo.Write(writer);
-			this.status.Write(writer);
+			//this.photo.Write(writer);
+			//this.status.Write(writer);
 			writer.Write(this.inactive ? 0x997275b5 : 0xbc799737);
 		}
 
@@ -4332,8 +4332,8 @@ namespace TLSharp.Core.MTProto
 			this.first_name = Serializers.String.read(reader);
 			this.last_name = Serializers.String.read(reader);
 			this.phone = Serializers.String.read(reader);
-			this.photo = TL.Parse<UserProfilePhoto>(reader);
-			this.status = TL.Parse<UserStatus>(reader);
+			//this.photo = TL.Parse<UserProfilePhoto>(reader);
+			//this.status = TL.Parse<UserStatus>(reader);
 			this.inactive = reader.ReadUInt32() == 0x997275b5;
 		}
 

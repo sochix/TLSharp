@@ -49,7 +49,12 @@ namespace TLSharp.Core
 
 	public class Session
 	{
+		private const string defaultConnectionAddress = "91.108.56.165";
+		private const int defaultConnectionPort = 443;
+
 		public string SessionUserId { get; set; }
+		public string ServerAddress { get; set; }
+		public int Port { get; set; }
 		public AuthKey AuthKey { get; set; }
 		public ulong Id { get; set; }
 		public int Sequence { get; set; }
@@ -78,6 +83,9 @@ namespace TLSharp.Core
 				writer.Write(Salt);
 				writer.Write(LastMessageId);
 				writer.Write(TimeOffset);
+				Serializers.String.write(writer, ServerAddress);
+				writer.Write(Port);
+
 				if (User != null)
 				{
 					writer.Write(1);
@@ -105,6 +113,8 @@ namespace TLSharp.Core
 				var salt = reader.ReadUInt64();
 				var lastMessageId = reader.ReadInt64();
 				var timeOffset = reader.ReadInt32();
+				var serverAddress = Serializers.String.read(reader);
+				var port = reader.ReadInt32();
 
 				var isAuthExsist = reader.ReadInt32() == 1;
 				int sessionExpires = 0;
@@ -127,7 +137,9 @@ namespace TLSharp.Core
 					TimeOffset = timeOffset,
 					SessionExpires = sessionExpires,
 					User = user,
-					SessionUserId = sessionUserId
+					SessionUserId = sessionUserId,
+					ServerAddress = serverAddress,
+					Port = port
 				};
 			}
 		}
@@ -147,7 +159,13 @@ namespace TLSharp.Core
 			}
 			catch
 			{
-				session = new Session(store) { Id = GenerateRandomUlong(), SessionUserId = sessionUserId };
+				session = new Session(store)
+				{
+					Id = GenerateRandomUlong(),
+					SessionUserId = sessionUserId,
+					ServerAddress = defaultConnectionAddress,
+					Port = defaultConnectionPort
+				};
 			}
 
 			return session;

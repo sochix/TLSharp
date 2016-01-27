@@ -29,6 +29,11 @@ namespace TLSharp.Core.Network
 			_session = session;
 		}
 
+		public void ChangeTransport(TcpTransport transport)
+		{
+			_transport = transport;
+		}
+
 		private int GenerateSequence(bool confirmed)
 		{
 			return confirmed ? _session.Sequence++ * 2 + 1 : _session.Sequence * 2;
@@ -101,9 +106,12 @@ namespace TLSharp.Core.Network
 			ulong remoteMessageId;
 			int remoteSequence;
 
-			using (MemoryStream inputStream = new MemoryStream(body))
-			using (BinaryReader inputReader = new BinaryReader(inputStream))
+			using (var inputStream = new MemoryStream(body))
+			using (var inputReader = new BinaryReader(inputStream))
 			{
+				if (inputReader.BaseStream.Length < 8)
+					throw new InvalidOperationException($"Can't decode packet");
+				
 				ulong remoteAuthKeyId = inputReader.ReadUInt64(); // TODO: check auth key id
 				byte[] msgKey = inputReader.ReadBytes(16); // TODO: check msg_key correctness
 				AESKeyData keyData = Helpers.CalcKey(_session.AuthKey.Data, msgKey, false);
@@ -130,8 +138,8 @@ namespace TLSharp.Core.Network
 			{
 				var result = DecodeMessage((await _transport.Receieve()).Body);
 
-				using (MemoryStream messageStream = new MemoryStream(result.Item1, false))
-				using (BinaryReader messageReader = new BinaryReader(messageStream))
+				using (var messageStream = new MemoryStream(result.Item1, false))
+				using (var messageReader = new BinaryReader(messageStream))
 				{
 					processMessage(result.Item2, result.Item3, messageReader, request);
 				}
@@ -271,7 +279,9 @@ namespace TLSharp.Core.Network
 				{
 					var resultString = Regex.Match(errorMessage, @"\d+").Value;
 					var dcIdx = int.Parse(resultString);
-					throw new InvalidOperationException($"Your phone number registered to {dcIdx} dc. Please update settings. See https://github.com/sochix/TLSharp#i-get-an-error-migrate_x for details.");
+					var exception = new InvalidOperationException($"Your phone number registered to {dcIdx} dc. Please update settings. See https://github.com/sochix/TLSharp#i-get-an-error-migrate_x for details.");
+					exception.Data.Add("dcId", dcIdx);
+					throw exception;
 				}
 				else
 				{
