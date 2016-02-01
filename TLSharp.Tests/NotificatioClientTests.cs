@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Configuration;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TLSharp.Core;
@@ -22,11 +21,11 @@ namespace TLSharp.Tests
 			// Setup your phone numbers in app.config
 			NumberToAuthenticate = ConfigurationManager.AppSettings["numberToAuthenticate"];
 			if (string.IsNullOrEmpty(NumberToAuthenticate))
-				throw new InvalidOperationException("NumberToAuthenticate is null");
+				throw new InvalidOperationException("NumberToAuthenticate is null. Specify number in app.config");
 
 			NumberToSendMessage = ConfigurationManager.AppSettings["numberToSendMessage"];
 			if (string.IsNullOrEmpty(NumberToSendMessage))
-				throw new InvalidOperationException("NumberToSendMessage is null");
+				throw new InvalidOperationException("NumberToSendMessage is null. Specify number in app.config");
 		}
 
 		[TestMethod]
@@ -38,7 +37,7 @@ namespace TLSharp.Tests
 			await client.Connect();
 
 			var hash = await client.SendCodeRequest(NumberToAuthenticate);
-			var code = "123"; // you can change code in debugger
+			var code = "86474"; // you can change code in debugger
 
 			var user = await client.MakeAuth(NumberToAuthenticate, hash, code);
 
@@ -49,7 +48,7 @@ namespace TLSharp.Tests
 		public async Task CheckPhones()
 		{
 			var store = new FileSessionStore();
-			var client = new Core.TelegramClient(store, "session");
+			var client = new TelegramClient(store, "session");
 			await client.Connect();
 
 			var result = await client.IsPhoneRegistered(NumberToAuthenticate);
