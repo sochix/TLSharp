@@ -73,6 +73,21 @@ namespace TLSharp.Tests
 		}
 
 		[TestMethod]
+		public async Task ImportByUserName()
+		{
+			var store = new FileSessionStore();
+			var client = new TelegramClient(store, "session");
+
+			await client.Connect();
+
+			Assert.IsTrue(client.IsUserAuthorized());
+
+			var res = await client.ImportByUserName(NumberToSendMessage);
+
+			Assert.IsNotNull(res);
+		}
+
+		[TestMethod]
 		public async Task SendMessage()
 		{
 			// User should be already authenticated!

@@ -210,6 +210,15 @@ namespace TLSharp.Core
 			return importedUser?.user_id;
 		}
 
+		public async Task<int?> ImportByUserName(string username)
+		{
+			var request = new ImportByUserName(username);
+			await _sender.Send(request);
+			await _sender.Recieve(request);
+
+			return null;
+		}
+
 		public async Task SendMessage(int id, string message)
 		{
 			var request = new SendMessageRequest(new InputPeerContactConstructor(id), message);

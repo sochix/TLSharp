@@ -72,6 +72,7 @@
     <Compile Include="Requests\GetHistoryRequest.cs" />
     <Compile Include="Requests\GetNearestDcRequest.cs" />
     <Compile Include="Requests\GetUsersRequest.cs" />
+    <Compile Include="Requests\ImportByUserName.cs" />
     <Compile Include="Requests\ImportContactRequest.cs" />
     <Compile Include="Requests\InitConnectionRequest.cs" />
     <Compile Include="Requests\MTProtoRequest.cs" />

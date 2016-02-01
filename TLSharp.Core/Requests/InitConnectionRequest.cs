@@ -16,7 +16,8 @@ namespace TLSharp.Core.Requests
 
 		public override void OnSend(BinaryWriter writer)
 		{
-			writer.Write(0x1c900537); // invokeWithLayer18#1c900537
+			writer.Write(0xda9b0d0d); 
+			writer.Write(23);// invokeWithLayer23#1c900537
 			writer.Write(0x69796de9); // initConnection
 			writer.Write(_apiId); // api id
 			Serializers.String.write(writer, "WinPhone Emulator"); // device model

@@ -10966,6 +10966,7 @@ namespace TLSharp.Core.MTProto
 		public override void Read(BinaryReader reader)
 		{
 			this.date = reader.ReadInt32();
+			var expires = reader.ReadInt32();
 			this.test_mode = reader.ReadUInt32() == 0x997275b5;
 			this.this_dc = reader.ReadInt32();
 			reader.ReadInt32(); // vector code
