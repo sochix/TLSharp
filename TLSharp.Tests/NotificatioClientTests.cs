@@ -15,6 +15,8 @@ namespace TLSharp.Tests
 
 		private string NumberToAuthenticate { get; set; }
 
+		private string UserNameToSendMessage { get; set; }
+
 		[TestInitialize]
 		public void Init()
 		{
@@ -26,6 +28,11 @@ namespace TLSharp.Tests
 			NumberToSendMessage = ConfigurationManager.AppSettings["numberToSendMessage"];
 			if (string.IsNullOrEmpty(NumberToSendMessage))
 				throw new InvalidOperationException("NumberToSendMessage is null. Specify number in app.config");
+
+			UserNameToSendMessage = ConfigurationManager.AppSettings["userNameToSendMessage"];
+			if (string.IsNullOrEmpty(UserNameToSendMessage))
+				throw new InvalidOperationException("UserNameToSendMessage is null. Specify userName in app.config");
+
 		}
 
 		[TestMethod]
@@ -82,9 +89,26 @@ namespace TLSharp.Tests
 
 			Assert.IsTrue(client.IsUserAuthorized());
 
-			var res = await client.ImportByUserName(NumberToSendMessage);
+			var res = await client.ImportByUserName(UserNameToSendMessage);
 
 			Assert.IsNotNull(res);
+		}
+
+		[TestMethod]
+		public async Task ImportByUserNameAndSendMessage()
+		{
+			var store = new FileSessionStore();
+			var client = new TelegramClient(store, "session");
+
+			await client.Connect();
+
+			Assert.IsTrue(client.IsUserAuthorized());
+
+			var res = await client.ImportByUserName(UserNameToSendMessage);
+
+			Assert.IsNotNull(res);
+
+			await client.SendMessage(res.Value, "Test message from TelegramClient");
 		}
 
 		[TestMethod]

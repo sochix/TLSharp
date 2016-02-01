@@ -216,7 +216,7 @@ namespace TLSharp.Core
 			await _sender.Send(request);
 			await _sender.Recieve(request);
 
-			return null;
+			return request.id;
 		}
 
 		public async Task SendMessage(int id, string message)
