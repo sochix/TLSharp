@@ -291,13 +291,20 @@ namespace TLSharp.Core.Network
 			}
 			else if (innerCode == 0x3072cfa1)
 			{
-				// gzip_packed
-				byte[] packedData = Serializers.Bytes.read(messageReader);
-				using (MemoryStream packedStream = new MemoryStream(packedData, false))
-				using (GZipStream zipStream = new GZipStream(packedStream, CompressionMode.Decompress))
-				using (BinaryReader compressedReader = new BinaryReader(zipStream))
+				try
 				{
-					request.OnResponse(compressedReader);
+					// gzip_packed
+					byte[] packedData = Serializers.Bytes.read(messageReader);
+					using (var packedStream = new MemoryStream(packedData, false))
+					using (var zipStream = new GZipStream(packedStream, CompressionMode.Decompress))
+					using (var compressedReader = new BinaryReader(zipStream))
+					{
+						request.OnResponse(compressedReader);
+					}
+				}
+				catch (ZlibException ex)
+				{
+					
 				}
 			}
 			else

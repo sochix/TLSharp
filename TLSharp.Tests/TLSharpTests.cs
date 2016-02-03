@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Configuration;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TLSharp.Core;
 using TLSharp.Core.Auth;
+using TLSharp.Core.MTProto;
 using TLSharp.Core.Network;
 
 namespace TLSharp.Tests
 {
 	[TestClass]
-	public class NotificatioClientTests
+	public class TLSharpTests
 	{
 		private string NumberToSendMessage { get; set; }
 
@@ -44,7 +46,7 @@ namespace TLSharp.Tests
 			await client.Connect();
 
 			var hash = await client.SendCodeRequest(NumberToAuthenticate);
-			var code = "86474"; // you can change code in debugger
+			var code = "64443"; // you can change code in debugger
 
 			var user = await client.MakeAuth(NumberToAuthenticate, hash, code);
 
@@ -130,6 +132,51 @@ namespace TLSharp.Tests
 		}
 
 		[TestMethod]
+		public async Task GetHistory()
+		{
+			var store = new FileSessionStore();
+			var client = new TelegramClient(store, "session");
+			await client.Connect();
+
+			Assert.IsTrue(client.IsUserAuthorized());
+
+			var res = await client.ImportContact(NumberToSendMessage);
+
+			Assert.IsNotNull(res);
+
+			var hist = await client.GetHistory(res.Value, 0, -1, 5);
+
+			Assert.IsNotNull(hist);
+		}
+
+		[TestMethod]
+		public async Task UploadAndSendMedia()
+		{
+			var store = new FileSessionStore();
+			var client = new TelegramClient(store, "session");
+			await client.Connect();
+
+			Assert.IsTrue(client.IsUserAuthorized());
+
+			var res = await client.ImportContact(NumberToSendMessage);
+
+			Assert.IsNotNull(res);
+			const string testFile = "TEST";
+
+			var file = File.ReadAllBytes("../../data/cat.jpg");
+
+			var mediaFile = await client.UploadFile("test_file.jpg", file);
+
+			Assert.IsNotNull(mediaFile);
+
+			var state = await client.SendMediaMessage(
+				new InputPeerContactConstructor(res.Value),
+				new InputMediaUploadedPhotoConstructor(mediaFile));
+
+			Assert.IsTrue(state);
+		}
+
+		[TestMethod]
 		public async Task TestConnection()
 		{
 			var store = new FakeSessionStore();
@@ -147,6 +194,13 @@ namespace TLSharp.Tests
 
 				Assert.IsNotNull(authKey.AuthKey.Data);
 			}
+		}
+
+		static byte[] GetBytes(string str)
+		{
+			byte[] bytes = new byte[str.Length * sizeof(char)];
+			System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
+			return bytes;
 		}
 	}
 }

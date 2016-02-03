@@ -22,11 +22,6 @@ namespace TLSharp.Core
 		private Session _session;
 		private List<DcOption> dcOptions; 
 
-		public User loggedUser { get { return _session.User; } }
-
-		public List<Chat> chats;
-		public List<User> users;
-
 		public TelegramClient(ISessionStore store, string sessionUserId)
 		{
 			if (_apiId == 0)
@@ -38,7 +33,6 @@ namespace TLSharp.Core
 			_session = Session.TryLoadOrCreateNew(store, sessionUserId);
 			_transport = new TcpTransport(_session.ServerAddress, _session.Port);
 		}
-
 		
 		public async Task<bool> Connect(bool reconnect = false)
 		{
@@ -142,7 +136,6 @@ namespace TLSharp.Core
 
 			return request.user;
 		}
-		
 
 		public async Task<InputFile> UploadFile(string name, byte[] data)
 		{
@@ -190,13 +183,13 @@ namespace TLSharp.Core
 			return inputFile;
 		}
 
-		public async Task<messages_StatedMessage> SendMediaMessage(InputPeer inputPeer, InputMedia inputMedia)
+		public async Task<Boolean> SendMediaMessage(InputPeer inputPeer, InputMedia inputMedia)
 		{
 			var request = new Message_SendMediaRequest(inputPeer, inputMedia);
 			await _sender.Send(request);
 			await _sender.Recieve(request);
 
-			return request.StatedMessage;
+			return true;
 		}
 
 		public async Task<int?> ImportContact(string phoneNumber)
@@ -227,15 +220,14 @@ namespace TLSharp.Core
 			await _sender.Recieve(request);
 		}
 
-		public async Task LoadChatsAndUsers(int offset, int max_id, int limit)
+		public async Task<Tuple<List<Chat>, List<User>>>  LoadChatsAndUsers(int offset, int max_id, int limit)
 		{
 			// GetDialogs
 			var request = new GetDialogsRequest(offset, max_id, limit);
 			await _sender.Send(request);
 			await _sender.Recieve(request);
 
-			chats = request.chats;
-			users = request.users;
+			return new Tuple<List<Chat>, List<User>>(request.chats, request.users);
 		}
 
 		public async Task<List<Message>> GetHistory(int user_id, int offset, int max_id, int limit)

@@ -34,12 +34,7 @@ namespace TLSharp.Core.Requests
 
         public override void OnResponse(BinaryReader reader)
         {
-            var code = reader.ReadUInt32();
-
-            if (code != 0xd07ae726 && code != 0xa9af2881)
-                throw new InvalidOperationException($"Expected Tl messages_StatedMessage type");
-
-            StatedMessage = TL.Parse<messages_StatedMessage>(reader);
+            
         }
 
         public override void OnException(Exception exception)

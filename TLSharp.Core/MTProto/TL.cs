@@ -328,7 +328,8 @@ namespace TLSharp.Core.MTProto
 			{0x7c596b46, typeof (FileLocationUnavailableConstructor)},
 			{0x53d69076, typeof (FileLocationConstructor)},
 			{0x200250ba, typeof (UserEmptyConstructor)},
-			{0x720535ec, typeof (UserSelfConstructor)},
+			{0x720535EC, typeof (UserSelfConstructor)},
+			{0x7007b451, typeof (UserSelfConstructor)},
 			{0xf2fb8319, typeof (UserContactConstructor)},
 			{0x22e8ceb0, typeof (UserRequestConstructor)},
 			{0x5214c89d, typeof (UserForeignConstructor)},
@@ -348,8 +349,8 @@ namespace TLSharp.Core.MTProto
 			{0x37c1011c, typeof (ChatPhotoEmptyConstructor)},
 			{0x6153276a, typeof (ChatPhotoConstructor)},
 			{0x83e5de54, typeof (MessageEmptyConstructor)},
-			{0x22eb6aba, typeof (MessageConstructor)},
-			{0x05f46804, typeof (MessageForwardedConstructor)},
+			{0x567699B3, typeof (MessageConstructor)},
+			{0xa367e716, typeof (MessageForwardedConstructor)},
 			{0x9f8d60bb, typeof (MessageServiceConstructor)},
 			{0x3ded6320, typeof (MessageMediaEmptyConstructor)},
 			{0xc8c45a2a, typeof (MessageMediaPhotoConstructor)},
@@ -522,7 +523,7 @@ namespace TLSharp.Core.MTProto
 			{0x34e794bd, typeof (InputMediaUploadedDocumentConstructor)},
 			{0x3e46de5d, typeof (InputMediaUploadedThumbDocumentConstructor)},
 			{0xd184e841, typeof (InputMediaDocumentConstructor)},
-			{0x2fda2204, typeof (MessageMediaDocumentConstructor)},
+			{0x2fda2204  , typeof (MessageMediaDocumentConstructor)},
 			{0xc6b68300, typeof (MessageMediaAudioConstructor)},
 			{0xd95adc84, typeof (InputAudioEmptyConstructor)},
 			{0x77d440ff, typeof (InputAudioConstructor)},
@@ -535,7 +536,7 @@ namespace TLSharp.Core.MTProto
 			{0x586988d8, typeof (AudioEmptyConstructor)},
 			{0x427425e7, typeof (AudioConstructor)},
 			{0x36f8c871, typeof (DocumentEmptyConstructor)},
-			{0x9efc6326, typeof (DocumentConstructor)},
+			{0xf9a39f4f, typeof (DocumentConstructor)},
 		};
 
 		public static TLObject Parse(BinaryReader reader, uint code)
@@ -564,7 +565,7 @@ namespace TLSharp.Core.MTProto
 
 				if (!constructors.ContainsKey(dataCode))
 				{
-					throw new Exception(String.Format("invalid constructor code {0}", dataCode));
+					throw new Exception(String.Format("invalid constructor code {0}", dataCode.ToString("X")));
 				}
 
 				Type constructorType = constructors[dataCode];
@@ -950,13 +951,13 @@ namespace TLSharp.Core.MTProto
 			return new MessageEmptyConstructor(id);
 		}
 
-		public static Message message(int id, int from_id, Peer to_id, bool output, bool unread, int date, string message,
+		public static Message message(int id, int from_id, int to_id, bool output, bool unread, int date, string message,
 			MessageMedia media)
 		{
 			return new MessageConstructor(id, from_id, to_id, output, unread, date, message, media);
 		}
 
-		public static Message messageForwarded(int id, int fwd_from_id, int fwd_date, int from_id, Peer to_id, bool output,
+		public static Message messageForwarded(int id, int fwd_from_id, int fwd_date, int from_id, int to_id, bool output,
 			bool unread, int date, string message, MessageMedia media)
 		{
 			return new MessageForwardedConstructor(id, fwd_from_id, fwd_date, from_id, to_id, output, unread, date, message,
@@ -5230,7 +5231,7 @@ namespace TLSharp.Core.MTProto
 	{
 		public int id;
 		public int from_id;
-		public Peer to_id;
+		public int to_id;
 		public bool output;
 		public bool unread;
 		public int date;
@@ -5242,7 +5243,7 @@ namespace TLSharp.Core.MTProto
 
 		}
 
-		public MessageConstructor(int id, int from_id, Peer to_id, bool output, bool unread, int date, string message,
+		public MessageConstructor(int id, int from_id, int to_id, bool output, bool unread, int date, string message,
 			MessageMedia media)
 		{
 			this.id = id;
@@ -5266,7 +5267,7 @@ namespace TLSharp.Core.MTProto
 			writer.Write(0x22eb6aba);
 			writer.Write(this.id);
 			writer.Write(this.from_id);
-			this.to_id.Write(writer);
+			writer.Write(this.to_id);
 			writer.Write(this.output ? 0x997275b5 : 0xbc799737);
 			writer.Write(this.unread ? 0x997275b5 : 0xbc799737);
 			writer.Write(this.date);
@@ -5278,7 +5279,7 @@ namespace TLSharp.Core.MTProto
 		{
 			this.id = reader.ReadInt32();
 			this.from_id = reader.ReadInt32();
-			this.to_id = TL.Parse<Peer>(reader);
+			this.to_id = reader.ReadInt32();
 			this.output = reader.ReadUInt32() == 0x997275b5;
 			this.unread = reader.ReadUInt32() == 0x997275b5;
 			this.date = reader.ReadInt32();
@@ -5300,7 +5301,7 @@ namespace TLSharp.Core.MTProto
 		public int fwd_from_id;
 		public int fwd_date;
 		public int from_id;
-		public Peer to_id;
+		public int to_id;
 		public bool output;
 		public bool unread;
 		public int date;
@@ -5312,7 +5313,7 @@ namespace TLSharp.Core.MTProto
 
 		}
 
-		public MessageForwardedConstructor(int id, int fwd_from_id, int fwd_date, int from_id, Peer to_id, bool output,
+		public MessageForwardedConstructor(int id, int fwd_from_id, int fwd_date, int from_id, int to_id, bool output,
 			bool unread, int date, string message, MessageMedia media)
 		{
 			this.id = id;
@@ -5340,7 +5341,7 @@ namespace TLSharp.Core.MTProto
 			writer.Write(this.fwd_from_id);
 			writer.Write(this.fwd_date);
 			writer.Write(this.from_id);
-			this.to_id.Write(writer);
+			writer.Write(this.to_id);
 			writer.Write(this.output ? 0x997275b5 : 0xbc799737);
 			writer.Write(this.unread ? 0x997275b5 : 0xbc799737);
 			writer.Write(this.date);
@@ -5354,7 +5355,7 @@ namespace TLSharp.Core.MTProto
 			this.fwd_from_id = reader.ReadInt32();
 			this.fwd_date = reader.ReadInt32();
 			this.from_id = reader.ReadInt32();
-			this.to_id = TL.Parse<Peer>(reader);
+			this.to_id = reader.ReadInt32();
 			this.output = reader.ReadUInt32() == 0x997275b5;
 			this.unread = reader.ReadUInt32() == 0x997275b5;
 			this.date = reader.ReadInt32();
@@ -8758,6 +8759,7 @@ namespace TLSharp.Core.MTProto
 				chats_element = TL.Parse<Chat>(reader);
 				this.chats.Add(chats_element);
 			}
+			/*
 			reader.ReadInt32(); // vector code
 			int users_len = reader.ReadInt32();
 			this.users = new List<User>(users_len);
@@ -8769,6 +8771,7 @@ namespace TLSharp.Core.MTProto
 			}
 			this.pts = reader.ReadInt32();
 			this.seq = reader.ReadInt32();
+			*/
 		}
 
 		public override string ToString()
@@ -14808,6 +14811,7 @@ namespace TLSharp.Core.MTProto
 			this.file_name = Serializers.String.read(reader);
 			this.mime_type = Serializers.String.read(reader);
 			this.size = reader.ReadInt32();
+			var tst = Serializers.String.read(reader);
 			this.thumb = TL.Parse<PhotoSize>(reader);
 			this.dc_id = reader.ReadInt32();
 		}
