@@ -220,17 +220,7 @@ namespace TLSharp.Core
 			await _sender.Recieve(request);
 		}
 
-		public async Task<Tuple<List<Chat>, List<User>>>  LoadChatsAndUsers(int offset, int max_id, int limit)
-		{
-			// GetDialogs
-			var request = new GetDialogsRequest(offset, max_id, limit);
-			await _sender.Send(request);
-			await _sender.Recieve(request);
-
-			return new Tuple<List<Chat>, List<User>>(request.chats, request.users);
-		}
-
-		public async Task<List<Message>> GetHistory(int user_id, int offset, int max_id, int limit)
+		public async Task<List<Message>> GetMessagesHistoryForContact(int user_id, int offset, int limit, int max_id = -1)
 		{
 			var request = new GetHistoryRequest(new InputPeerContactConstructor(user_id), offset, max_id, limit);
 			await _sender.Send(request);

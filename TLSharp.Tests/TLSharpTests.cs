@@ -46,7 +46,7 @@ namespace TLSharp.Tests
 			await client.Connect();
 
 			var hash = await client.SendCodeRequest(NumberToAuthenticate);
-			var code = "64443"; // you can change code in debugger
+			var code = "93463"; // you can change code in debugger
 
 			var user = await client.MakeAuth(NumberToAuthenticate, hash, code);
 
@@ -144,7 +144,7 @@ namespace TLSharp.Tests
 
 			Assert.IsNotNull(res);
 
-			var hist = await client.GetHistory(res.Value, 0, -1, 5);
+			var hist = await client.GetMessagesHistoryForContact(res.Value, 0, 5);
 
 			Assert.IsNotNull(hist);
 		}
@@ -194,13 +194,6 @@ namespace TLSharp.Tests
 
 				Assert.IsNotNull(authKey.AuthKey.Data);
 			}
-		}
-
-		static byte[] GetBytes(string str)
-		{
-			byte[] bytes = new byte[str.Length * sizeof(char)];
-			System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
-			return bytes;
 		}
 	}
 }
