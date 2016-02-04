@@ -27,9 +27,10 @@ It's a perfect fit for any developer who would like to send data directly to Tel
 Library isn't ready for production usage, that's why no Nu-Get package available.
 
 To use it follow next steps:
+
 1. Clone TLSharp from GitHub
-2. Compile source with VS2015
-3. Add reference to ```TLSharp.Core.dll``` to your awesome project.
+1. Compile source with VS2015
+1. Add reference to ```TLSharp.Core.dll``` to your awesome project.
 
 #Dependencies
 
