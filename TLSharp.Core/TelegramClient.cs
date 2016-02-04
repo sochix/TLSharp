@@ -183,9 +183,12 @@ namespace TLSharp.Core
 			return inputFile;
 		}
 
-		public async Task<Boolean> SendMediaMessage(InputPeer inputPeer, InputMedia inputMedia)
+		public async Task<Boolean> SendMediaMessage(int contactId, InputFile file)
 		{
-			var request = new Message_SendMediaRequest(inputPeer, inputMedia);
+			var request = new Message_SendMediaRequest(
+				new InputPeerContactConstructor(contactId),
+				new InputMediaUploadedPhotoConstructor(file));
+
 			await _sender.Send(request);
 			await _sender.Recieve(request);
 

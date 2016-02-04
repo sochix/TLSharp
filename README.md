@@ -6,11 +6,11 @@ Telegram (http://telegram.org) client library implemented in C#. Only basic func
 
 It's a perfect fit for any developer who would like to send data directly to Telegram users.
 
-:star::star::star: If you :heart: library, please star it! :star::star::star: 
+:star: If you :heart: library, please star it! :star:
 
 :exclamation: **Please, don't use it for SPAM!**
 
-#Table of contents
+#Table of contents?
 
 - [How do I add this to my project?](#how-do-i-add-this-to-my-project)
 - [Dependencies](#dependencies)
@@ -24,7 +24,12 @@ It's a perfect fit for any developer who would like to send data directly to Tel
 
 #How do I add this to my project?
 
-There currenrly is no Nu-Get package available, so you need to clone it from GitHub and compile in VS2015.
+Library isn't ready for production usage, that's why no Nu-Get package available.
+
+To use it follow next steps:
+1. Clone TLSharp from GitHub
+2. Compile source with VS2015
+3. Add reference to ```TLSharp.Core.dll``` to your awesome project.
 
 #Dependencies
 
@@ -34,25 +39,150 @@ All dependencies listed in [package.conf file](https://github.com/sochix/TLSharp
 #Starter Guide
 
 ## Quick Configuration
-1. To start using TLSharp you need to create a [developer account](https://my.telegram.org/) with Telegram. 
-1. After registering, copy API_ID and API_HASH from your account to [TelegramClient.cs](https://github.com/sochix/TLSharp/blob/master/TLSharp.Core/TelegramClient.cs)
-1. When you're done you should specify a phone number in international format for Test purposes in [app.config file]( https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/app.config)
-1. Run the test TestConnection(), if it passed than you successfully configured TLSharp.
+Telegram API isn't that easy to start. You need to do some configuration first.
 
-##Sending messages set-up
-
-1. First, create a valid session. Run the `AuthUser` test, and set a breakpoint on `var code = "123"; // you can change code in debugger line`. 
-2. Replace value of `code` variable with code from Telegram. 
-3. Continue execution. You'll see created session.dat file.
-4. Try to run `SendMessage` test
+1. Create a [developer account](https://my.telegram.org/) in Telegram. 
+1. Goto [API development tools](https://my.telegram.org/apps) and copy **API_ID** and **API_HASH** from your account to [TelegramClient.cs](https://github.com/sochix/TLSharp/blob/master/TLSharp.Core/TelegramClient.cs)
 
 ## Using TLSharp
 
-See tests to undertsand how TLSharp works.
+###Initializing client
+
+To initialize client you need to create a store in which TLSharp will save Session info.
+
+```
+var store = new FileSessionStore();
+```
+
+Next, create client instance and connect to Telegram server.
+
+```
+var client = new TelegramClient(store, "session");
+await client.Connect();
+```
+Now, you can call methods.
+
+All methods except [IsPhoneRegistered](#IsPhoneRegistered) requires to authenticated user. Example usage of all methods you can find in [Tests].
+
+###Supported methods
+Currently supported methods:
+ - [IsPhoneRegistered - Check if phone is registered in Telegram](#IsPhoneRegistered)
+ - [Authenticate user](#Authenticate_user)
+ - [Get Contact by Phone number](#Get_Contact_By_Phone_number)
+ - [Get Contact by Username](#Get_Contact_By_Username)
+ - [Send Message to Contact](#Send_Message_To_Contact)
+ - [Send Media to Contact](#Send_Media_To_Contact)
+ - [Get Messages History for a Contact](#Get_Messages_History)
+
+####IsPhoneRegistered
+Check if phone number registered to Telegram.
+
+_Example_:
+
+```
+var result = await client.IsPhoneRegistered(phoneNumber)
+```
+
+* phoneNumber - **string**, phone number in international format (eg. 791812312323)
+
+**Returns:** **bool**, is phone registerd in Telegram or not.
+
+
+####Authenticate user
+Authenticate user by phone number and secret code.
+
+_Example_:
+
+```
+	var hash = await client.SendCodeRequest(phoneNumber);
+    
+	var code = "1234"; //code that you receive from Telegram 
+
+	var user = await client.MakeAuth(phoneNumber, hash, code); 
+```
+* phoneNumber - **string**, phone number in international format (eg. 791812312323)
+
+**Returns:** **User**, authenticated User.
+
+####Get Contact By Phone number
+Get user id by phone number.
+
+_Example_:
+
+```
+var res = await client.ImportContact(phoneNumber);
+```
+
+* phoneNumber - **string**, phone number in international format (eg. 791812312323)
+
+**Returns**: **int?**, User Id with phoneNumber
+
+####Get Contact By Username
+Get user id by userName.
+
+_Example_:
+
+```
+var res = await client.ImportByUserName(userName);
+```
+
+* userName - **string**, user name  (eg. telegram_bot)
+
+**Returns**: **int?**, User Id with phoneNumber 
+
+####Send Message To Contact
+Send text message to specified user
+
+_Example_:
+
+```
+await client.SendMessage(userId, message);
+```
+* userId - **int**, user id
+* message - **string**, message
+
+####Send Media To Contact
+Send media file to specified contact.
+
+_Example_:
+
+```
+var mediaFile = await client.UploadFile(file_name, file);
+
+var res = await client.SendMediaMessage(userId, mediaFile);
+```
+
+* file_name - **string**, file name with extension (eg. "file.jpg")
+* file - **byte[]**, file content
+* userId - **int**, user id
+* mediaFile - **InputFile**, reference to uploaded file
+
+**Returns**: **bool**, file sent or not
+
+####Get Messages History
+Returns messages history for specified userId.
+
+_Example_:
+
+```
+var hist = await client.GetMessagesHistoryForContact(userId, offset, limit);
+``` 
+
+* userId - **int**, user id
+* offset - **int**, from what index start load history
+* limit - **int**, how much items return
+
+**Returns**: **List\<Message\>**, message history
 
 ## Contributing
 
-You can contribute! If you have any questions don't be afraid to ask!
+Contributing is highly appreciated!
+
+###How to add new functions
+It's really simple to add new functionality to TLSharp.
+
+###What things can I Implement?
+TODO:
 
 # FAQ
 

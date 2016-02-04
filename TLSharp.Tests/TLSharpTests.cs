@@ -169,9 +169,7 @@ namespace TLSharp.Tests
 
 			Assert.IsNotNull(mediaFile);
 
-			var state = await client.SendMediaMessage(
-				new InputPeerContactConstructor(res.Value),
-				new InputMediaUploadedPhotoConstructor(mediaFile));
+			var state = await client.SendMediaMessage(res.Value, mediaFile);
 
 			Assert.IsTrue(state);
 		}
