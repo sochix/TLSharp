@@ -65,7 +65,7 @@ namespace TLSharp.Tests
 		}
 
 		[TestMethod]
-		public async Task ImportContact()
+		public async Task ImportContactByPhoneNumber()
 		{
 			// User should be already authenticated!
 
@@ -76,7 +76,7 @@ namespace TLSharp.Tests
 
 			Assert.IsTrue(client.IsUserAuthorized());
 
-			var res = await client.ImportContact(NumberToSendMessage);
+			var res = await client.ImportContactByPhoneNumber(NumberToSendMessage);
 
 			Assert.IsNotNull(res);
 		}
@@ -114,7 +114,7 @@ namespace TLSharp.Tests
 		}
 
 		[TestMethod]
-		public async Task SendMessage()
+		public async Task ImportContactByPhoneNumberAndSendMessage()
 		{
 			// User should be already authenticated!
 
@@ -124,7 +124,7 @@ namespace TLSharp.Tests
 
 			Assert.IsTrue(client.IsUserAuthorized());
 
-			var res = await client.ImportContact(NumberToSendMessage);
+			var res = await client.ImportContactByPhoneNumber(NumberToSendMessage);
 
 			Assert.IsNotNull(res);
 
@@ -140,7 +140,7 @@ namespace TLSharp.Tests
 
 			Assert.IsTrue(client.IsUserAuthorized());
 
-			var res = await client.ImportContact(NumberToSendMessage);
+			var res = await client.ImportContactByPhoneNumber(NumberToSendMessage);
 
 			Assert.IsNotNull(res);
 
@@ -158,7 +158,7 @@ namespace TLSharp.Tests
 
 			Assert.IsTrue(client.IsUserAuthorized());
 
-			var res = await client.ImportContact(NumberToSendMessage);
+			var res = await client.ImportContactByPhoneNumber(NumberToSendMessage);
 
 			Assert.IsNotNull(res);
 			const string testFile = "TEST";

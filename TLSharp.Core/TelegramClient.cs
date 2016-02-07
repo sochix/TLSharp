@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TLSharp.Core.Auth;
 using TLSharp.Core.MTProto;
@@ -183,7 +184,7 @@ namespace TLSharp.Core
 			return inputFile;
 		}
 
-		public async Task<Boolean> SendMediaMessage(int contactId, InputFile file)
+		public async Task<bool> SendMediaMessage(int contactId, InputFile file)
 		{
 			var request = new Message_SendMediaRequest(
 				new InputPeerContactConstructor(contactId),
@@ -195,8 +196,11 @@ namespace TLSharp.Core
 			return true;
 		}
 
-		public async Task<int?> ImportContact(string phoneNumber)
+		public async Task<int?> ImportContactByPhoneNumber(string phoneNumber)
 		{
+			if (!validateNumber(phoneNumber))
+				throw new InvalidOperationException("Invalid phone number. It should be only digit string, from 5 to 20 digits.");
+
 			var request = new ImportContactRequest(new InputPhoneContactConstructor(0, phoneNumber, "My Test Name", String.Empty));
 			await _sender.Send(request);
 			await _sender.Recieve(request);
@@ -208,6 +212,9 @@ namespace TLSharp.Core
 
 		public async Task<int?> ImportByUserName(string username)
 		{
+			if (string.IsNullOrEmpty(username))
+				throw new InvalidOperationException("Username can't be null");
+
 			var request = new ImportByUserName(username);
 			await _sender.Send(request);
 			await _sender.Recieve(request);
@@ -230,6 +237,13 @@ namespace TLSharp.Core
 			await _sender.Recieve(request);
 
 			return request.messages;
+		}
+
+		private bool validateNumber(string number)
+		{
+			var regex = new Regex("^\\d{7,20}$");
+
+			return regex.IsMatch(number);
 		}
 	}
 }

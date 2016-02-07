@@ -110,12 +110,12 @@ Get user id by phone number.
 _Example_:
 
 ```
-var res = await client.ImportContact(phoneNumber);
+var res = await client.ImportContactByPhoneNumber("791812312323");
 ```
 
 * phoneNumber - **string**, phone number in international format (eg. 791812312323)
 
-**Returns**: **int?**, User Id with phoneNumber
+**Returns**: **int?**, User Id or null if no such user. 
 
 ####Get Contact By Username
 Get user id by userName.
@@ -128,7 +128,7 @@ var res = await client.ImportByUserName(userName);
 
 * userName - **string**, user name  (eg. telegram_bot)
 
-**Returns**: **int?**, User Id with phoneNumber 
+**Returns**: **int?**, User Id or null if no such user. 
 
 ####Send Message To Contact
 Send text message to specified user
@@ -179,10 +179,59 @@ var hist = await client.GetMessagesHistoryForContact(userId, offset, limit);
 Contributing is highly appreciated!
 
 ###How to add new functions
-It's really simple to add new functionality to TLSharp.
 
-###What things can I Implement?
-TODO:
+Adding new functions is easy.
+
+* Just create a new Request class in Requests folder.
+* Derive it from MTProtoRequest.
+
+Requests specification you can find in [Telegram API](link) reference.
+
+_Example_:
+
+```
+public class ExampleRequest : MTProtoRequest
+{
+    private int _someParameter;
+
+    // pass needed parameters through constructor, and save it to private vars
+    public InitConnectionRequest(int someParameter)
+    {
+        _someParameter = someParameter;
+    }
+
+    // send all needed params to Telegram
+    public override void OnSend(BinaryWriter writer)
+    {
+        writer.Write(_someParameter); 
+    }
+
+    // read a received data from Telegram 
+    public override void OnResponse(BinaryReader reader)
+    {
+        _someParameter = reader.ReadUInt32();
+    }
+
+    public override void OnException(Exception exception)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override bool Responded { get; }
+
+    public override bool Confirmed => true;
+}
+```
+
+More advanced examples you can find in [Requests folder](link). 
+
+###What things can I Implement (Project Roadmap)?
+
+* Factor out current TL language implementation, and use [this one](link)
+* Add possibility to get current user Chats and Users
+* Fix Chat requests (Create, AddUser) 
+* Add Updates handling
+* Add possibility to work with Channels
 
 # FAQ
 
@@ -200,6 +249,17 @@ It's Telegram restrictions. See [this](https://core.telegram.org/api/errors#420-
 #### Why does TLSharp lacks future XXXX?
 
 Now TLSharp is basic realization of Telegram protocol, you can be a contributor or a sponsor to speed-up developemnt of any feature.
+
+#### Nothing helps
+Create an issue in project bug tracker.
+
+**Attach this information**:
+
+* Full problem description and exception message
+* Stack-trace
+* Your code that runs in to this exception
+
+Without information listen above your issue will be closed. 
 
 # License
 
