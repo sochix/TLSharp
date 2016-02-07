@@ -67,13 +67,13 @@ All methods except [IsPhoneRegistered](#IsPhoneRegistered) requires to authentic
 
 ###Supported methods
 Currently supported methods:
- - [IsPhoneRegistered - Check if phone is registered in Telegram](#IsPhoneRegistered)
- - [Authenticate user](#Authenticate_user)
- - [Get Contact by Phone number](#Get_Contact_By_Phone_number)
- - [Get Contact by Username](#Get_Contact_By_Username)
- - [Send Message to Contact](#Send_Message_To_Contact)
- - [Send Media to Contact](#Send_Media_To_Contact)
- - [Get Messages History for a Contact](#Get_Messages_History)
+ - [IsPhoneRegistered - Check if phone is registered in Telegram](#isphoneregistered)
+ - [Authenticate user](#authenticate-user)
+ - [Get Contact by Phone number](#get-contact-by-phone-number)
+ - [Get Contact by Username](#get-contact-by-username)
+ - [Send Message to Contact](#send-message-to-contact)
+ - [Send Media to Contact](#send-media-to-contact)
+ - [Get Messages History for a Contact](#get-messages-history)
 
 ####IsPhoneRegistered
 Check if phone number registered to Telegram.
@@ -186,7 +186,7 @@ Adding new functions is easy.
 * Just create a new Request class in Requests folder.
 * Derive it from MTProtoRequest.
 
-Requests specification you can find in [Telegram API](link) reference.
+Requests specification you can find in [Telegram API](https://core.telegram.org/#api-methods) reference.
 
 _Example_:
 
@@ -224,11 +224,11 @@ public class ExampleRequest : MTProtoRequest
 }
 ```
 
-More advanced examples you can find in [Requests folder](link). 
+More advanced examples you can find in [Requests folder](https://github.com/sochix/TLSharp/tree/master/TLSharp.Core/Requests). 
 
 ###What things can I Implement (Project Roadmap)?
 
-* Factor out current TL language implementation, and use [this one](link)
+* Factor out current TL language implementation, and use [this one](https://github.com/everbytes/SharpTL)
 * Add possibility to get current user Chats and Users
 * Fix Chat requests (Create, AddUser) 
 * Add Updates handling
