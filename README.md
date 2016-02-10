@@ -1,6 +1,6 @@
 #TLSharp
 
-![](https://telegram.org/favicon.ico)
+[![Build status](https://ci.appveyor.com/api/projects/status/95rl618ch5c4h2fa?svg=true)](https://ci.appveyor.com/project/sochix/tlsharp)
 
 Telegram (http://telegram.org) client library implemented in C#. Only basic functionality is currently implemented. **Consider donation to speed up development process.**
 
@@ -16,7 +16,6 @@ It's a perfect fit for any developer who would like to send data directly to Tel
 - [Dependencies](#dependencies)
 - [Starter Guide](#starter-guide)
   - [Quick configuration](#quick-configuration)
-  - [Sending messages set-up](#sending-messages-set-up)
   - [Using TLSharp](#using-tlsharp)
 - [Contributing](#contributing)
 - [FAQ](#faq)
