@@ -10,6 +10,8 @@ It's a perfect fit for any developer who would like to send data directly to Tel
 
 :exclamation: **Please, don't use it for SPAM!**
 
+:ru: Russian description you can find [here](https://habrahabr.ru/post/277079/)
+
 #Table of contents?
 
 - [How do I add this to my project?](#how-do-i-add-this-to-my-project)
