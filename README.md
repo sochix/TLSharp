@@ -248,7 +248,7 @@ You should create a Telegram session. See [configuration guide](#sending-message
 #### Why I get FLOOD_WAIT error?
 It's Telegram restrictions. See [this](https://core.telegram.org/api/errors#420-flood)
 
-#### Why does TLSharp lacks future XXXX?
+#### Why does TLSharp lacks feature XXXX?
 
 Now TLSharp is basic realization of Telegram protocol, you can be a contributor or a sponsor to speed-up developemnt of any feature.
 
