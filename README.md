@@ -21,6 +21,7 @@ It's a perfect fit for any developer who would like to send data directly to Tel
   - [Using TLSharp](#using-tlsharp)
 - [Contributing](#contributing)
 - [FAQ](#faq)
+- [Donations](#donations)
 - [License](#license)
 
 #How do I add this to my project?
@@ -262,6 +263,12 @@ Create an issue in project bug tracker.
 * Your code that runs in to this exception
 
 Without information listen above your issue will be closed. 
+# Donations
+Thanks for donations! It's highly appreciated. 
+Bitcoin wallet: **3K1ocweFgaHnAibJ3n6hX7RNZWFTFcJjUe**
+
+List of donators:
+* [mtbitcoin](https://github.com/mtbitcoin)
 
 # License
 
