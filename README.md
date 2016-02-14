@@ -2,9 +2,7 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/95rl618ch5c4h2fa?svg=true)](https://ci.appveyor.com/project/sochix/tlsharp)
 
-BitCoin wallet: 3K1ocweFgaHnAibJ3n6hX7RNZWFTFcJjUe
-
-Telegram (http://telegram.org) client library implemented in C#. Only basic functionality is currently implemented. **Consider donation to speed up development process.**
+Telegram (http://telegram.org) client library implemented in C#. Only basic functionality is currently implemented. **Consider donation to speed up development process.** Bitcoin wallet: **3K1ocweFgaHnAibJ3n6hX7RNZWFTFcJjUe**
 
 It's a perfect fit for any developer who would like to send data directly to Telegram users.
 
