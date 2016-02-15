@@ -10,6 +10,8 @@ It's a perfect fit for any developer who would like to send data directly to Tel
 
 :exclamation: **Please, don't use it for SPAM!**
 
+[How-To: Send messages to Telegram from C#](http://www.sochix.ru/how-to-send-messages-to-telegram-from-c/)
+
 :ru: Russian description you can find [here](https://habrahabr.ru/post/277079/)
 
 #Table of contents?
