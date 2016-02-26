@@ -6,7 +6,9 @@ Telegram (http://telegram.org) client library implemented in C#. Only basic func
 
 It's a perfect fit for any developer who would like to send data directly to Telegram users.
 
-**Please, don't use it for SPAM!**
+:star::star::star: If you :heart: library, please star it! :star::star::star: 
+
+:exclamation: **Please, don't use it for SPAM!**
 
 #Table of contents
 
@@ -56,14 +58,7 @@ You can contribute! If you have any questions don't be afraid to ask!
 
 #### I get an error MIGRATE_X?
 
-You should change the telegram server address to X. X server address you can get from InitResponse or from Server addresses list. Address should be changed in [this file](https://github.com/sochix/TLSharp/blob/master/TLSharp.Core/Network/TcpTransport.cs)
-
-**Server addresses:**
-* Server 1: 149.154.175.50:443
-* Server 2: 149.154.167.51:443
-* Server 3: 149.154.175.100:443
-* Server 4: 149.154.167.91:443
-* Server 5: 91.108.56.165:443
+TLSharp library should automatically handle this errors. If you see such errors, pls create a new issue.
 
 #### I get an exception: System.IO.EndOfStreamException: Unable to read beyond the end of the stream. All test methos except that AuthenticationWorks and TestConnection return same error. I did every thing including setting api id and hash, and setting server address.
 

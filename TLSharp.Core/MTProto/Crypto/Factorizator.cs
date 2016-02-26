@@ -103,8 +103,5 @@ namespace TLSharp.Core.MTProto.Crypto {
                // return null;
             }
         }
-
     }
-
-
 }

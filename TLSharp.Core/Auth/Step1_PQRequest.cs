@@ -35,7 +35,7 @@ namespace TLSharp.Core.Auth
 				{
 					binaryWriter.Write(constructorNumber);
 					binaryWriter.Write(nonce);
-
+                    
 					return memoryStream.ToArray();
 				}
 			}
@@ -47,7 +47,7 @@ namespace TLSharp.Core.Auth
 
 			using (var memoryStream = new MemoryStream(bytes, false))
 			{
-				using (var binaryReader = new BinaryReader(memoryStream))
+				using (var binaryReader = new TBinaryReader(memoryStream))
 				{
 					const int responseConstructorNumber = 0x05162463;
 					var responseCode = binaryReader.ReadInt32();
@@ -65,7 +65,7 @@ namespace TLSharp.Core.Auth
 					
 					var serverNonce = binaryReader.ReadBytes(16);
 
-					byte[] pqbytes = Serializers.Bytes.read(binaryReader);
+					byte[] pqbytes = binaryReader.ReadBytes();
 					var pq = new BigInteger(1, pqbytes);
 
 					var vectorId = binaryReader.ReadInt32();

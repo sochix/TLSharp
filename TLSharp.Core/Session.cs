@@ -27,7 +27,7 @@ namespace TLSharp.Core
 			using (var stream = new FileStream($"{sessionUserId}.dat", FileMode.Open))
 			{
 				var buffer = new byte[2048];
-				stream.Read(buffer, 0, 2048);
+				stream.Read(buffer, 0, buffer.Length);
 
 				return Session.FromBytes(buffer, this, sessionUserId);
 			}
@@ -49,14 +49,18 @@ namespace TLSharp.Core
 
 	public class Session
 	{
+		private const string defaultConnectionAddress = "149.154.167.91";
+		private const int defaultConnectionPort = 443;
+
 		public string SessionUserId { get; set; }
+		public string ServerAddress { get; set; }
+		public int Port { get; set; }
 		public AuthKey AuthKey { get; set; }
 		public ulong Id { get; set; }
 		public int Sequence { get; set; }
 		public ulong Salt { get; set; }
 		public int TimeOffset { get; set; }
 		public long LastMessageId { get; set; }
-		public int SessionExpires { get; set; }
 		public User User { get; set; }
 		private Random random;
 
@@ -71,51 +75,50 @@ namespace TLSharp.Core
 		public byte[] ToBytes()
 		{
 			using (var stream = new MemoryStream())
-			using (var writer = new BinaryWriter(stream))
+			using (var writer = new TBinaryWriter(stream))
 			{
 				writer.Write(Id);
 				writer.Write(Sequence);
 				writer.Write(Salt);
 				writer.Write(LastMessageId);
 				writer.Write(TimeOffset);
+				writer.Write(ServerAddress);
+				writer.Write(Port);
+
 				if (User != null)
 				{
-					writer.Write(1);
-					writer.Write(SessionExpires);
-					User.Write(writer);
+					writer.Write(true);
+                    User.Write(writer);
 				}
 				else
 				{
-					writer.Write(0);
+					writer.Write(false);
 				}
 
-				Serializers.Bytes.write(writer, AuthKey.Data);
+                writer.Write(AuthKey.Data);
 
-				return stream.ToArray();
+                return stream.ToArray();
 			}
 		}
 
 		public static Session FromBytes(byte[] buffer, ISessionStore store, string sessionUserId)
 		{
 			using (var stream = new MemoryStream(buffer))
-			using (var reader = new BinaryReader(stream))
+			using (var reader = new TBinaryReader(stream))
 			{
 				var id = reader.ReadUInt64();
 				var sequence = reader.ReadInt32();
 				var salt = reader.ReadUInt64();
 				var lastMessageId = reader.ReadInt64();
 				var timeOffset = reader.ReadInt32();
-
-				var isAuthExsist = reader.ReadInt32() == 1;
-				int sessionExpires = 0;
+				var serverAddress = reader.ReadString();
+				var port = reader.ReadInt32();
+                
 				User user = null;
-				if (isAuthExsist)
-				{
-					sessionExpires = reader.ReadInt32();
-					user = TL.Parse<User>(reader);
-				}
+				if (reader.ReadBoolean())
+                    user = reader.Read<User>();
 
-				var authData = Serializers.Bytes.read(reader);
+				var authData = reader.ReadBytes();
 
 				return new Session(store)
 				{
@@ -125,9 +128,10 @@ namespace TLSharp.Core
 					Sequence = sequence,
 					LastMessageId = lastMessageId,
 					TimeOffset = timeOffset,
-					SessionExpires = sessionExpires,
-					User = user,
-					SessionUserId = sessionUserId
+                    User = user,
+					SessionUserId = sessionUserId,
+					ServerAddress = serverAddress,
+					Port = port
 				};
 			}
 		}
@@ -147,7 +151,13 @@ namespace TLSharp.Core
 			}
 			catch
 			{
-				session = new Session(store) { Id = GenerateRandomUlong(), SessionUserId = sessionUserId };
+				session = new Session(store)
+				{
+					Id = GenerateRandomUlong(),
+					SessionUserId = sessionUserId,
+					ServerAddress = defaultConnectionAddress,
+					Port = defaultConnectionPort
+				};
 			}
 
 			return session;

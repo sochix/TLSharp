@@ -11,7 +11,7 @@ namespace TLSharp.Core.Auth
 			var step1 = new Step1_PQRequest();
 
 			await sender.Send(step1.ToBytes());
-			var step1Response = step1.FromBytes(await sender.Recieve());
+			var step1Response = step1.FromBytes(await sender.Receive());
 
 			var step2 = new Step2_DHExchange();
 			await sender.Send(step2.ToBytes(
@@ -20,7 +20,7 @@ namespace TLSharp.Core.Auth
 				step1Response.Fingerprints,
 				step1Response.Pq));
 
-			var step2Response = step2.FromBytes(await sender.Recieve());
+			var step2Response = step2.FromBytes(await sender.Receive());
 
 			var step3 = new Step3_CompleteDHExchange();
 			await sender.Send(step3.ToBytes(
@@ -29,7 +29,7 @@ namespace TLSharp.Core.Auth
 				step2Response.NewNonce,
 				step2Response.EncryptedAnswer));
 
-			var step3Response = step3.FromBytes(await sender.Recieve());
+			var step3Response = step3.FromBytes(await sender.Receive());
 
 			return step3Response;
 		}
