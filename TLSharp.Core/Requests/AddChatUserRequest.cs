@@ -12,7 +12,7 @@ namespace TLSharp.Core.Requests
         private InputUserContactConstructor _user;
         private string _title;
 
-        
+
         public Messages_statedMessageConstructor message;
         public AddChatUserRequest(int chatID, InputUserContactConstructor user)
         {

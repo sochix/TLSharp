@@ -28,11 +28,11 @@ namespace TLSharp.Core.Requests
             writer.Write(_offset);
             writer.Write(_limit);
         }
-        
+
         public override void OnResponse(BinaryReader reader)
         {
             var code = reader.ReadUInt32(); // upload.file#96a18d5
-            
+
             type = TL.Parse<storage_FileType>(reader);
             mtime = reader.ReadInt32();
             bytes = reader.ReadBytes(_limit);

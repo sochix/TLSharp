@@ -22,7 +22,7 @@ namespace TLSharp.Core.Requests
             this.inputPeer = inputPeer;
             this.inputMedia = inputMedia;
         }
-        
+
         public override void OnSend(BinaryWriter writer)
         {
             writer.Write(0xa3c85d76);
@@ -34,7 +34,7 @@ namespace TLSharp.Core.Requests
 
         public override void OnResponse(BinaryReader reader)
         {
-            
+
         }
 
         public override void OnException(Exception exception)

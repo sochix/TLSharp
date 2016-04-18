@@ -13,237 +13,237 @@ using MD5 = System.Security.Cryptography.MD5;
 
 namespace TLSharp.Core
 {
-	public class TelegramClient
-	{
-		private MtProtoSender _sender;
-		private AuthKey _key;
-		private TcpTransport _transport;
-		private string _apiHash = "a2514f96431a228e4b9ee473f6c51945";
-		private int _apiId = 19474;
-		private Session _session;
-		private List<DcOption> dcOptions; 
+    public class TelegramClient
+    {
+        private MtProtoSender _sender;
+        private AuthKey _key;
+        private TcpTransport _transport;
+        private string _apiHash = "a2514f96431a228e4b9ee473f6c51945";
+        private int _apiId = 19474;
+        private Session _session;
+        private List<DcOption> dcOptions;
 
-		public TelegramClient(ISessionStore store, string sessionUserId)
-		{
-			if (_apiId == 0)
-				throw new InvalidOperationException("Your API_ID is invalid. Do a configuration first https://github.com/sochix/TLSharp#quick-configuration");
+        public TelegramClient(ISessionStore store, string sessionUserId)
+        {
+            if (_apiId == 0)
+                throw new InvalidOperationException("Your API_ID is invalid. Do a configuration first https://github.com/sochix/TLSharp#quick-configuration");
 
-			if (string.IsNullOrEmpty(_apiHash))
-				throw new InvalidOperationException("Your API_ID is invalid. Do a configuration first https://github.com/sochix/TLSharp#quick-configuration");
+            if (string.IsNullOrEmpty(_apiHash))
+                throw new InvalidOperationException("Your API_ID is invalid. Do a configuration first https://github.com/sochix/TLSharp#quick-configuration");
 
-			_session = Session.TryLoadOrCreateNew(store, sessionUserId);
-			_transport = new TcpTransport(_session.ServerAddress, _session.Port);
-		}
-		
-		public async Task<bool> Connect(bool reconnect = false)
-		{
-			if (_session.AuthKey == null || reconnect)
-			{
-				var result = await Authenticator.DoAuthentication(_transport);
-				_session.AuthKey = result.AuthKey;
-				_session.TimeOffset = result.TimeOffset;
-			}
+            _session = Session.TryLoadOrCreateNew(store, sessionUserId);
+            _transport = new TcpTransport(_session.ServerAddress, _session.Port);
+        }
 
-			_sender = new MtProtoSender(_transport, _session);
+        public async Task<bool> Connect(bool reconnect = false)
+        {
+            if (_session.AuthKey == null || reconnect)
+            {
+                var result = await Authenticator.DoAuthentication(_transport);
+                _session.AuthKey = result.AuthKey;
+                _session.TimeOffset = result.TimeOffset;
+            }
 
-			if (!reconnect)
-			{
-				var request = new InitConnectionRequest(_apiId);
+            _sender = new MtProtoSender(_transport, _session);
 
-				await _sender.Send(request);
-				await _sender.Recieve(request);
+            if (!reconnect)
+            {
+                var request = new InitConnectionRequest(_apiId);
 
-				dcOptions = request.ConfigConstructor.dc_options;
-			}
+                await _sender.Send(request);
+                await _sender.Recieve(request);
 
-			return true;
-		}
+                dcOptions = request.ConfigConstructor.dc_options;
+            }
 
-		private async Task ReconnectToDc(int dcId)
-		{
-			if (dcOptions == null || !dcOptions.Any())
-				throw new InvalidOperationException($"Can't reconnect. Establish initial connection first.");
+            return true;
+        }
 
-			var dc = dcOptions.Cast<DcOptionConstructor>().First(d => d.id == dcId);
+        private async Task ReconnectToDc(int dcId)
+        {
+            if (dcOptions == null || !dcOptions.Any())
+                throw new InvalidOperationException($"Can't reconnect. Establish initial connection first.");
 
-			_transport = new TcpTransport(dc.ip_address, dc.port);
-			_session.ServerAddress = dc.ip_address;
-			_session.Port = dc.port;
+            var dc = dcOptions.Cast<DcOptionConstructor>().First(d => d.id == dcId);
 
-			await Connect(true);
-		}
+            _transport = new TcpTransport(dc.ip_address, dc.port);
+            _session.ServerAddress = dc.ip_address;
+            _session.Port = dc.port;
 
-		public bool IsUserAuthorized()
-		{
-			return _session.User != null;
-		}
+            await Connect(true);
+        }
 
-		public async Task<bool> IsPhoneRegistered(string phoneNumber)
-		{
-			if (_sender == null)
-				throw new InvalidOperationException("Not connected!");
+        public bool IsUserAuthorized()
+        {
+            return _session.User != null;
+        }
 
-			var authCheckPhoneRequest = new AuthCheckPhoneRequest(phoneNumber);
-			await _sender.Send(authCheckPhoneRequest);
-			await _sender.Recieve(authCheckPhoneRequest);
+        public async Task<bool> IsPhoneRegistered(string phoneNumber)
+        {
+            if (_sender == null)
+                throw new InvalidOperationException("Not connected!");
 
-			return authCheckPhoneRequest._phoneRegistered;
-		}
+            var authCheckPhoneRequest = new AuthCheckPhoneRequest(phoneNumber);
+            await _sender.Send(authCheckPhoneRequest);
+            await _sender.Recieve(authCheckPhoneRequest);
 
-		public async Task<string> SendCodeRequest(string phoneNumber)
-		{
-			var completed = false;
+            return authCheckPhoneRequest._phoneRegistered;
+        }
 
-			AuthSendCodeRequest request = null;
+        public async Task<string> SendCodeRequest(string phoneNumber)
+        {
+            var completed = false;
 
-			while (!completed)
-			{
-				request = new AuthSendCodeRequest(phoneNumber, 5, _apiId, _apiHash, "en");
-				try
-				{
-					
+            AuthSendCodeRequest request = null;
 
-					await _sender.Send(request);
-					await _sender.Recieve(request);
+            while (!completed)
+            {
+                request = new AuthSendCodeRequest(phoneNumber, 5, _apiId, _apiHash, "en");
+                try
+                {
 
-					completed = true;
-				}
-				catch (InvalidOperationException ex)
-				{
-					if (ex.Message.StartsWith("Your phone number registered to") && ex.Data["dcId"] != null)
-					{
-						await ReconnectToDc((int) ex.Data["dcId"]);
-					}
-					else
-					{
-						throw;
-					}
-				}
-			}
 
-			return request._phoneCodeHash;
-		}
+                    await _sender.Send(request);
+                    await _sender.Recieve(request);
 
-		public async Task<User> MakeAuth(string phoneNumber, string phoneHash, string code)
-		{
-			var request = new AuthSignInRequest(phoneNumber, phoneHash, code);
-			await _sender.Send(request);
-			await _sender.Recieve(request);
+                    completed = true;
+                }
+                catch (InvalidOperationException ex)
+                {
+                    if (ex.Message.StartsWith("Your phone number registered to") && ex.Data["dcId"] != null)
+                    {
+                        await ReconnectToDc((int)ex.Data["dcId"]);
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
 
-			_session.SessionExpires = request.SessionExpires;
-			_session.User = request.user;
+            return request._phoneCodeHash;
+        }
 
-			_session.Save();
+        public async Task<User> MakeAuth(string phoneNumber, string phoneHash, string code)
+        {
+            var request = new AuthSignInRequest(phoneNumber, phoneHash, code);
+            await _sender.Send(request);
+            await _sender.Recieve(request);
 
-			return request.user;
-		}
+            _session.SessionExpires = request.SessionExpires;
+            _session.User = request.user;
 
-		public async Task<InputFile> UploadFile(string name, byte[] data)
-		{
-			var partSize = 65536;
+            _session.Save();
 
-			var file_id = DateTime.Now.Ticks;
+            return request.user;
+        }
 
-			var partedData = new Dictionary<int, byte[]>();
-			var parts = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(data.Length) / Convert.ToDouble(partSize)));
-			var remainBytes = data.Length;
-			for (int i = 0; i < parts; i++)
-			{
-				partedData.Add(i, data
-					.Skip(i * partSize)
-					.Take(remainBytes < partSize ? remainBytes : partSize)
-					.ToArray());
+        public async Task<InputFile> UploadFile(string name, byte[] data)
+        {
+            var partSize = 65536;
 
-				remainBytes -= partSize;
-			}
+            var file_id = DateTime.Now.Ticks;
 
-			for (int i = 0; i < parts; i++)
-			{
-				var saveFilePartRequest = new Upload_SaveFilePartRequest(file_id, i, partedData[i]);
-				await _sender.Send(saveFilePartRequest);
-				await _sender.Recieve(saveFilePartRequest);
+            var partedData = new Dictionary<int, byte[]>();
+            var parts = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(data.Length) / Convert.ToDouble(partSize)));
+            var remainBytes = data.Length;
+            for (int i = 0; i < parts; i++)
+            {
+                partedData.Add(i, data
+                    .Skip(i * partSize)
+                    .Take(remainBytes < partSize ? remainBytes : partSize)
+                    .ToArray());
 
-				if (saveFilePartRequest.Done == false)
-					throw new InvalidOperationException($"File part {i} does not uploaded");
-			}
+                remainBytes -= partSize;
+            }
 
-			string md5_checksum;
-			using (var md5 = MD5.Create())
-			{
-				var hash = md5.ComputeHash(data);
-				var hashResult = new StringBuilder(hash.Length * 2);
+            for (int i = 0; i < parts; i++)
+            {
+                var saveFilePartRequest = new Upload_SaveFilePartRequest(file_id, i, partedData[i]);
+                await _sender.Send(saveFilePartRequest);
+                await _sender.Recieve(saveFilePartRequest);
 
-				for (int i = 0; i < hash.Length; i++)
-					hashResult.Append(hash[i].ToString("x2"));
+                if (saveFilePartRequest.Done == false)
+                    throw new InvalidOperationException($"File part {i} does not uploaded");
+            }
 
-				md5_checksum = hashResult.ToString();
-			}
+            string md5_checksum;
+            using (var md5 = MD5.Create())
+            {
+                var hash = md5.ComputeHash(data);
+                var hashResult = new StringBuilder(hash.Length * 2);
 
-			var inputFile = new InputFileConstructor(file_id, parts, name, md5_checksum);
+                for (int i = 0; i < hash.Length; i++)
+                    hashResult.Append(hash[i].ToString("x2"));
 
-			return inputFile;
-		}
+                md5_checksum = hashResult.ToString();
+            }
 
-		public async Task<bool> SendMediaMessage(int contactId, InputFile file)
-		{
-			var request = new Message_SendMediaRequest(
-				new InputPeerContactConstructor(contactId),
-				new InputMediaUploadedPhotoConstructor(file));
+            var inputFile = new InputFileConstructor(file_id, parts, name, md5_checksum);
 
-			await _sender.Send(request);
-			await _sender.Recieve(request);
+            return inputFile;
+        }
 
-			return true;
-		}
+        public async Task<bool> SendMediaMessage(int contactId, InputFile file)
+        {
+            var request = new Message_SendMediaRequest(
+                new InputPeerContactConstructor(contactId),
+                new InputMediaUploadedPhotoConstructor(file));
 
-		public async Task<int?> ImportContactByPhoneNumber(string phoneNumber)
-		{
-			if (!validateNumber(phoneNumber))
-				throw new InvalidOperationException("Invalid phone number. It should be only digit string, from 5 to 20 digits.");
+            await _sender.Send(request);
+            await _sender.Recieve(request);
 
-			var request = new ImportContactRequest(new InputPhoneContactConstructor(0, phoneNumber, "My Test Name", String.Empty));
-			await _sender.Send(request);
-			await _sender.Recieve(request);
+            return true;
+        }
 
-			var importedUser = (ImportedContactConstructor)request.imported.FirstOrDefault();
+        public async Task<int?> ImportContactByPhoneNumber(string phoneNumber)
+        {
+            if (!validateNumber(phoneNumber))
+                throw new InvalidOperationException("Invalid phone number. It should be only digit string, from 5 to 20 digits.");
 
-			return importedUser?.user_id;
-		}
+            var request = new ImportContactRequest(new InputPhoneContactConstructor(0, phoneNumber, "My Test Name", String.Empty));
+            await _sender.Send(request);
+            await _sender.Recieve(request);
 
-		public async Task<int?> ImportByUserName(string username)
-		{
-			if (string.IsNullOrEmpty(username))
-				throw new InvalidOperationException("Username can't be null");
+            var importedUser = (ImportedContactConstructor)request.imported.FirstOrDefault();
 
-			var request = new ImportByUserName(username);
-			await _sender.Send(request);
-			await _sender.Recieve(request);
+            return importedUser?.user_id;
+        }
 
-			return request.id;
-		}
+        public async Task<int?> ImportByUserName(string username)
+        {
+            if (string.IsNullOrEmpty(username))
+                throw new InvalidOperationException("Username can't be null");
 
-		public async Task SendMessage(int id, string message)
-		{
-			var request = new SendMessageRequest(new InputPeerContactConstructor(id), message);
+            var request = new ImportByUserName(username);
+            await _sender.Send(request);
+            await _sender.Recieve(request);
 
-			await _sender.Send(request);
-			await _sender.Recieve(request);
-		}
+            return request.id;
+        }
 
-		public async Task<List<Message>> GetMessagesHistoryForContact(int user_id, int offset, int limit, int max_id = -1)
-		{
-			var request = new GetHistoryRequest(new InputPeerContactConstructor(user_id), offset, max_id, limit);
-			await _sender.Send(request);
-			await _sender.Recieve(request);
+        public async Task SendMessage(int id, string message)
+        {
+            var request = new SendMessageRequest(new InputPeerContactConstructor(id), message);
 
-			return request.messages;
-		}
+            await _sender.Send(request);
+            await _sender.Recieve(request);
+        }
 
-		private bool validateNumber(string number)
-		{
-			var regex = new Regex("^\\d{7,20}$");
+        public async Task<List<Message>> GetMessagesHistoryForContact(int user_id, int offset, int limit, int max_id = -1)
+        {
+            var request = new GetHistoryRequest(new InputPeerContactConstructor(user_id), offset, max_id, limit);
+            await _sender.Send(request);
+            await _sender.Recieve(request);
 
-			return regex.IsMatch(number);
-		}
-	}
+            return request.messages;
+        }
+
+        private bool validateNumber(string number)
+        {
+            var regex = new Regex("^\\d{7,20}$");
+
+            return regex.IsMatch(number);
+        }
+    }
 }

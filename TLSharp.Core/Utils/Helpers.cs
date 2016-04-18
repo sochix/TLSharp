@@ -4,26 +4,31 @@ using TLSharp.Core.MTProto.Crypto;
 
 namespace TLSharp.Core.Utils
 {
-	public class Helpers {
+    public class Helpers
+    {
         private static Random random = new Random();
 
-        public static ulong GenerateRandomUlong() {
+        public static ulong GenerateRandomUlong()
+        {
             ulong rand = (((ulong)random.Next()) << 32) | ((ulong)random.Next());
             return rand;
         }
 
-        public static long GenerateRandomLong() {
+        public static long GenerateRandomLong()
+        {
             long rand = (((long)random.Next()) << 32) | ((long)random.Next());
             return rand;
         }
 
-        public static byte[] GenerateRandomBytes(int num) {
+        public static byte[] GenerateRandomBytes(int num)
+        {
             byte[] data = new byte[num];
             random.NextBytes(data);
             return data;
         }
-		
-        public static AESKeyData CalcKey(byte[] sharedKey, byte[] msgKey, bool client) {
+
+        public static AESKeyData CalcKey(byte[] sharedKey, byte[] msgKey, bool client)
+        {
             int x = client ? 0 : 8;
             byte[] buffer = new byte[48];
 
@@ -58,26 +63,32 @@ namespace TLSharp.Core.Utils
             return new AESKeyData(key, iv);
         }
 
-        public static byte[] CalcMsgKey(byte[] data) {
+        public static byte[] CalcMsgKey(byte[] data)
+        {
             byte[] msgKey = new byte[16];
             Array.Copy(sha1(data), 4, msgKey, 0, 16);
             return msgKey;
         }
 
-        public static byte[] CalcMsgKey(byte[] data, int offset, int limit) {
+        public static byte[] CalcMsgKey(byte[] data, int offset, int limit)
+        {
             byte[] msgKey = new byte[16];
             Array.Copy(sha1(data, offset, limit), 4, msgKey, 0, 16);
             return msgKey;
         }
 
-        public static byte[] sha1(byte[] data) {
-            using (SHA1 sha1 = new SHA1Managed()) {
+        public static byte[] sha1(byte[] data)
+        {
+            using (SHA1 sha1 = new SHA1Managed())
+            {
                 return sha1.ComputeHash(data);
             }
         }
 
-        public static byte[] sha1(byte[] data, int offset, int limit) {
-            using (SHA1 sha1 = new SHA1Managed()) {
+        public static byte[] sha1(byte[] data, int offset, int limit)
+        {
+            using (SHA1 sha1 = new SHA1Managed())
+            {
                 return sha1.ComputeHash(data, offset, limit);
             }
         }
