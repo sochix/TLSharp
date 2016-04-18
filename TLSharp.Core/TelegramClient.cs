@@ -18,13 +18,15 @@ namespace TLSharp.Core
         private MtProtoSender _sender;
         private AuthKey _key;
         private TcpTransport _transport;
-        private string _apiHash = "a2514f96431a228e4b9ee473f6c51945";
-        private int _apiId = 19474;
+        private string _apiHash = "";
+        private int _apiId = 0;
         private Session _session;
         private List<DcOption> dcOptions;
 
-        public TelegramClient(ISessionStore store, string sessionUserId)
+        public TelegramClient(ISessionStore store, string sessionUserId, string apiHash, int apiId)
         {
+            _apiHash = apiHash;
+            _apiId = apiId;
             if (_apiId == 0)
                 throw new InvalidOperationException("Your API_ID is invalid. Do a configuration first https://github.com/sochix/TLSharp#quick-configuration");
 
