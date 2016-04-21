@@ -47,7 +47,7 @@ All dependencies listed in [package.conf file](https://github.com/sochix/TLSharp
 Telegram API isn't that easy to start. You need to do some configuration first.
 
 1. Create a [developer account](https://my.telegram.org/) in Telegram. 
-1. Goto [API development tools](https://my.telegram.org/apps) and copy **API_ID** and **API_HASH** from your account to [TelegramClient.cs](https://github.com/sochix/TLSharp/blob/master/TLSharp.Core/TelegramClient.cs)
+1. Goto [API development tools](https://my.telegram.org/apps) and copy **API_ID** and **API_HASH** from your account. You'll need it later.
 
 ## Using TLSharp
 
@@ -59,10 +59,10 @@ To initialize client you need to create a store in which TLSharp will save Sessi
 var store = new FileSessionStore();
 ```
 
-Next, create client instance and connect to Telegram server.
+Next, create client instance and connect to Telegram server. You need your **API_ID** and **API_HASH** for this step.
 
 ```
-var client = new TelegramClient(store, "session");
+var client = new TelegramClient(store, "session", API_ID, "API_HASH");
 await client.Connect();
 ```
 Now, you can call methods.
