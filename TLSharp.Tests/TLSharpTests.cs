@@ -45,7 +45,7 @@ namespace TLSharp.Tests
         public async Task AuthUser()
         {
             var store = new FileSessionStore();
-            var client = new TelegramClient(store, "session", apiHash, apiId);
+            var client = new TelegramClient(store, "session", apiId, apiHash);
 
             await client.Connect();
 
@@ -61,7 +61,7 @@ namespace TLSharp.Tests
         public async Task CheckPhones()
         {
             var store = new FileSessionStore();
-            var client = new TelegramClient(store, "session", apiHash, apiId);
+            var client = new TelegramClient(store, "session", apiId, apiHash);
             await client.Connect();
 
             var result = await client.IsPhoneRegistered(NumberToAuthenticate);
@@ -74,7 +74,7 @@ namespace TLSharp.Tests
             // User should be already authenticated!
 
             var store = new FileSessionStore();
-            var client = new TelegramClient(store, "session", apiHash, apiId);
+            var client = new TelegramClient(store, "session", apiId, apiHash);
 
             await client.Connect();
 
@@ -89,7 +89,7 @@ namespace TLSharp.Tests
         public async Task ImportByUserName()
         {
             var store = new FileSessionStore();
-            var client = new TelegramClient(store, "session", apiHash, apiId);
+            var client = new TelegramClient(store, "session", apiId, apiHash);
 
             await client.Connect();
 
@@ -104,7 +104,7 @@ namespace TLSharp.Tests
         public async Task ImportByUserNameAndSendMessage()
         {
             var store = new FileSessionStore();
-            var client = new TelegramClient(store, "session", apiHash, apiId);
+            var client = new TelegramClient(store, "session", apiId, apiHash);
 
             await client.Connect();
 
@@ -123,7 +123,7 @@ namespace TLSharp.Tests
             // User should be already authenticated!
 
             var store = new FileSessionStore();
-            var client = new TelegramClient(store, "session", apiHash, apiId);
+            var client = new TelegramClient(store, "session", apiId, apiHash);
             await client.Connect();
 
             Assert.IsTrue(client.IsUserAuthorized());
@@ -139,7 +139,7 @@ namespace TLSharp.Tests
         public async Task GetHistory()
         {
             var store = new FileSessionStore();
-            var client = new TelegramClient(store, "session", apiHash, apiId);
+            var client = new TelegramClient(store, "session", apiId, apiHash);
             await client.Connect();
 
             Assert.IsTrue(client.IsUserAuthorized());
@@ -157,7 +157,7 @@ namespace TLSharp.Tests
         public async Task UploadAndSendMedia()
         {
             var store = new FileSessionStore();
-            var client = new TelegramClient(store, "session", apiHash, apiId);
+            var client = new TelegramClient(store, "session", apiId, apiHash);
             await client.Connect();
 
             Assert.IsTrue(client.IsUserAuthorized());
@@ -182,7 +182,7 @@ namespace TLSharp.Tests
         public async Task TestConnection()
         {
             var store = new FakeSessionStore();
-            var client = new TelegramClient(store, "", apiHash, apiId);
+            var client = new TelegramClient(store, "", apiId, apiHash);
 
             Assert.IsTrue(await client.Connect());
         }
