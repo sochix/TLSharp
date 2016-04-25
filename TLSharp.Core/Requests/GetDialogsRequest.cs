@@ -22,7 +22,7 @@ namespace TLSharp.Core.Requests
             _max_id = max_id;
             _limit = limit;
         }
-        
+
         public override void OnSend(BinaryWriter writer)
         {
             writer.Write(0xeccf1df6);
@@ -30,7 +30,7 @@ namespace TLSharp.Core.Requests
             writer.Write(_max_id);
             writer.Write(_limit);
         }
-        
+
         public override void OnResponse(BinaryReader reader)
         {
             bool dialogsSlice = reader.ReadUInt32() == 0x71e094f3; // else dialogs#15ba6c40

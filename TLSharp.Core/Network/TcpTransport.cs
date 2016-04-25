@@ -6,30 +6,30 @@ using System.Threading.Tasks;
 
 namespace TLSharp.Core.Network
 {
-	public class TcpTransport : IDisposable
-	{
-		private readonly TcpClient _tcpClient;
-		private int sendCounter = 0;
+    public class TcpTransport : IDisposable
+    {
+        private readonly TcpClient _tcpClient;
+        private int sendCounter = 0;
 
-		public TcpTransport(string address, int port)
-		{
-			_tcpClient = new TcpClient();
-			
-			var ipAddress = IPAddress.Parse(address);
-			_tcpClient.Connect(ipAddress, port);
-		}
+        public TcpTransport(string address, int port)
+        {
+            _tcpClient = new TcpClient();
 
-		public async Task Send(byte[] packet)
-		{
-			if (!_tcpClient.Connected)
-				throw new InvalidOperationException("Client not connected to server.");
+            var ipAddress = IPAddress.Parse(address);
+            _tcpClient.Connect(ipAddress, port);
+        }
 
-			var tcpMessage = new TcpMessage(sendCounter, packet);
+        public async Task Send(byte[] packet)
+        {
+            if (!_tcpClient.Connected)
+                throw new InvalidOperationException("Client not connected to server.");
 
-			await _tcpClient.GetStream().WriteAsync(tcpMessage.Encode(), 0, tcpMessage.Encode().Length);
-			sendCounter++;
-		}
-        
+            var tcpMessage = new TcpMessage(sendCounter, packet);
+
+            await _tcpClient.GetStream().WriteAsync(tcpMessage.Encode(), 0, tcpMessage.Encode().Length);
+            sendCounter++;
+        }
+
         public async Task<TcpMessage> Receieve()
         {
             var stream = _tcpClient.GetStream();
@@ -59,7 +59,7 @@ namespace TLSharp.Core.Network
             while (readBytes != packetLength - 12);
 
             var crcBytes = new byte[4];
-            if(await stream.ReadAsync(crcBytes, 0, 4) != 4)
+            if (await stream.ReadAsync(crcBytes, 0, 4) != 4)
                 throw new InvalidOperationException("Couldn't read the crc");
             int checksum = BitConverter.ToInt32(crcBytes, 0);
 
@@ -80,10 +80,10 @@ namespace TLSharp.Core.Network
             return new TcpMessage(seq, body);
         }
 
-		public void Dispose()
-		{
-			if (_tcpClient.Connected)
-				_tcpClient.Close();
-		}
-	}
+        public void Dispose()
+        {
+            if (_tcpClient.Connected)
+                _tcpClient.Close();
+        }
+    }
 }

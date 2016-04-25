@@ -30,7 +30,7 @@ namespace TLSharp.Core.Requests
 
             if (code != 0xbc799737 && code != 0x997275b5)
                 throw new InvalidOperationException($"Expected Tl Bool type");
-            
+
             Done = code == 0x997275b5 ? true : false;
         }
 

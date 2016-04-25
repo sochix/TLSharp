@@ -4,58 +4,34 @@ using System.Security.Cryptography;
 
 namespace TLSharp.Core.MTProto.Crypto
 {
-	public class AESKeyData {
+    public class AESKeyData
+    {
         private readonly byte[] key;
         private readonly byte[] iv;
 
-        public AESKeyData(byte[] key, byte[] iv) {
+        public AESKeyData(byte[] key, byte[] iv)
+        {
             this.key = key;
             this.iv = iv;
         }
 
-        public byte[] Key {
+        public byte[] Key
+        {
             get { return key; }
         }
 
-        public byte[] Iv {
+        public byte[] Iv
+        {
             get { return iv; }
         }
     }
 
-	public class AES {
-        public static byte[] DecryptWithNonces(byte[] data, byte[] serverNonce, byte[] newNonce) {
-            using(SHA1 hash = new SHA1Managed()) {
-                var nonces = new byte[48];
-
-                newNonce.CopyTo(nonces, 0);
-                serverNonce.CopyTo(nonces, 32);
-                byte[] hash1 = hash.ComputeHash(nonces);
-
-                serverNonce.CopyTo(nonces, 0);
-                newNonce.CopyTo(nonces, 16);
-                byte[] hash2 = hash.ComputeHash(nonces);
-
-                nonces = new byte[64];
-                newNonce.CopyTo(nonces, 0);
-                newNonce.CopyTo(nonces, 32);
-                byte[] hash3 = hash.ComputeHash(nonces);
-
-                using(var keyBuffer = new MemoryStream(32))
-                using(var ivBuffer = new MemoryStream(32)) {
-                    keyBuffer.Write(hash1, 0, hash1.Length);
-                    keyBuffer.Write(hash2, 0, 12);
-
-                    ivBuffer.Write(hash2, 12, 8);
-                    ivBuffer.Write(hash3, 0, hash3.Length);
-                    ivBuffer.Write(newNonce, 0, 4);
-
-                    return DecryptIGE(data, keyBuffer.ToArray(), ivBuffer.ToArray());
-                }
-            }
-        }
-
-        public static AESKeyData GenerateKeyDataFromNonces(byte[] serverNonce, byte[] newNonce) {
-            using (SHA1 hash = new SHA1Managed()) {
+    public class AES
+    {
+        public static byte[] DecryptWithNonces(byte[] data, byte[] serverNonce, byte[] newNonce)
+        {
+            using (SHA1 hash = new SHA1Managed())
+            {
                 var nonces = new byte[48];
 
                 newNonce.CopyTo(nonces, 0);
@@ -72,7 +48,42 @@ namespace TLSharp.Core.MTProto.Crypto
                 byte[] hash3 = hash.ComputeHash(nonces);
 
                 using (var keyBuffer = new MemoryStream(32))
-                using (var ivBuffer = new MemoryStream(32)) {
+                using (var ivBuffer = new MemoryStream(32))
+                {
+                    keyBuffer.Write(hash1, 0, hash1.Length);
+                    keyBuffer.Write(hash2, 0, 12);
+
+                    ivBuffer.Write(hash2, 12, 8);
+                    ivBuffer.Write(hash3, 0, hash3.Length);
+                    ivBuffer.Write(newNonce, 0, 4);
+
+                    return DecryptIGE(data, keyBuffer.ToArray(), ivBuffer.ToArray());
+                }
+            }
+        }
+
+        public static AESKeyData GenerateKeyDataFromNonces(byte[] serverNonce, byte[] newNonce)
+        {
+            using (SHA1 hash = new SHA1Managed())
+            {
+                var nonces = new byte[48];
+
+                newNonce.CopyTo(nonces, 0);
+                serverNonce.CopyTo(nonces, 32);
+                byte[] hash1 = hash.ComputeHash(nonces);
+
+                serverNonce.CopyTo(nonces, 0);
+                newNonce.CopyTo(nonces, 16);
+                byte[] hash2 = hash.ComputeHash(nonces);
+
+                nonces = new byte[64];
+                newNonce.CopyTo(nonces, 0);
+                newNonce.CopyTo(nonces, 32);
+                byte[] hash3 = hash.ComputeHash(nonces);
+
+                using (var keyBuffer = new MemoryStream(32))
+                using (var ivBuffer = new MemoryStream(32))
+                {
                     keyBuffer.Write(hash1, 0, hash1.Length);
                     keyBuffer.Write(hash2, 0, 12);
 
@@ -85,17 +96,20 @@ namespace TLSharp.Core.MTProto.Crypto
             }
         }
 
-        public static byte[] DecryptAES(AESKeyData key, byte[] ciphertext) {
+        public static byte[] DecryptAES(AESKeyData key, byte[] ciphertext)
+        {
             return DecryptIGE(ciphertext, key.Key, key.Iv);
         }
 
-        public static byte[] EncryptAES(AESKeyData key, byte[] plaintext) {
+        public static byte[] EncryptAES(AESKeyData key, byte[] plaintext)
+        {
             return EncryptIGE(plaintext, key.Key, key.Iv);
         }
 
-        public static byte[] DecryptIGE(byte[] ciphertext, byte[] key, byte[] iv) {
-            var iv1 = new byte[iv.Length/2];
-            var iv2 = new byte[iv.Length/2];
+        public static byte[] DecryptIGE(byte[] ciphertext, byte[] key, byte[] iv)
+        {
+            var iv1 = new byte[iv.Length / 2];
+            var iv2 = new byte[iv.Length / 2];
 
             Array.Copy(iv, 0, iv1, 0, iv1.Length);
             Array.Copy(iv, iv1.Length, iv2, 0, iv2.Length);
@@ -104,18 +118,21 @@ namespace TLSharp.Core.MTProto.Crypto
             aes.Init(false, key);
 
             byte[] plaintext = new byte[ciphertext.Length];
-            int blocksCount = ciphertext.Length/16;
+            int blocksCount = ciphertext.Length / 16;
 
             byte[] ciphertextBlock = new byte[16];
             byte[] plaintextBlock = new byte[16];
-            for(int blockIndex = 0; blockIndex < blocksCount; blockIndex++) {
-                for(int i = 0; i < 16; i++) {
-                    ciphertextBlock[i] = (byte) (ciphertext[blockIndex*16 + i] ^ iv2[i]);
+            for (int blockIndex = 0; blockIndex < blocksCount; blockIndex++)
+            {
+                for (int i = 0; i < 16; i++)
+                {
+                    ciphertextBlock[i] = (byte)(ciphertext[blockIndex * 16 + i] ^ iv2[i]);
                 }
 
                 aes.ProcessBlock(ciphertextBlock, 0, plaintextBlock, 0);
 
-                for(int i = 0; i < 16; i++) {
+                for (int i = 0; i < 16; i++)
+                {
                     plaintextBlock[i] ^= iv1[i];
                 }
 
@@ -128,22 +145,25 @@ namespace TLSharp.Core.MTProto.Crypto
             return plaintext;
         }
 
-        public static byte[] EncryptIGE(byte[] originPlaintext, byte[] key, byte[] iv) {
-            
+        public static byte[] EncryptIGE(byte[] originPlaintext, byte[] key, byte[] iv)
+        {
+
             byte[] plaintext;
-            using (MemoryStream plaintextBuffer = new MemoryStream(originPlaintext.Length + 40)) { 
-            //using(SHA1 hash = new SHA1Managed()) {
+            using (MemoryStream plaintextBuffer = new MemoryStream(originPlaintext.Length + 40))
+            {
+                //using(SHA1 hash = new SHA1Managed()) {
                 //byte[] hashsum = hash.ComputeHash(originPlaintext);
                 //plaintextBuffer.Write(hashsum, 0, hashsum.Length);
                 plaintextBuffer.Write(originPlaintext, 0, originPlaintext.Length);
-                while(plaintextBuffer.Position%16 != 0) {
+                while (plaintextBuffer.Position % 16 != 0)
+                {
                     plaintextBuffer.WriteByte(0); // TODO: random padding
                 }
                 plaintext = plaintextBuffer.ToArray();
             }
 
-            var iv1 = new byte[iv.Length/2];
-            var iv2 = new byte[iv.Length/2];
+            var iv1 = new byte[iv.Length / 2];
+            var iv2 = new byte[iv.Length / 2];
 
             Array.Copy(iv, 0, iv1, 0, iv1.Length);
             Array.Copy(iv, iv1.Length, iv2, 0, iv2.Length);
@@ -151,18 +171,20 @@ namespace TLSharp.Core.MTProto.Crypto
             AesEngine aes = new AesEngine();
             aes.Init(true, key);
 
-            int blocksCount = plaintext.Length/16;
+            int blocksCount = plaintext.Length / 16;
             byte[] ciphertext = new byte[plaintext.Length];
 
             byte[] ciphertextBlock = new byte[16];
             byte[] plaintextBlock = new byte[16];
-            for(int blockIndex = 0; blockIndex < blocksCount; blockIndex++) {
-                Array.Copy(plaintext, 16*blockIndex, plaintextBlock, 0, 16);
+            for (int blockIndex = 0; blockIndex < blocksCount; blockIndex++)
+            {
+                Array.Copy(plaintext, 16 * blockIndex, plaintextBlock, 0, 16);
 
                 //logger.info("plaintext block: {0} xor {1}", BitConverter.ToString(plaintextBlock).Replace("-", ""), BitConverter.ToString(iv1).Replace("-", ""));
 
-                for(int i = 0; i < 16; i++) {
-                        plaintextBlock[i] ^= iv1[i];
+                for (int i = 0; i < 16; i++)
+                {
+                    plaintextBlock[i] ^= iv1[i];
                 }
 
                 //logger.info("xored plaintext: {0}", BitConverter.ToString(plaintextBlock).Replace("-", ""));
@@ -171,14 +193,15 @@ namespace TLSharp.Core.MTProto.Crypto
 
                 //logger.info("encrypted plaintext: {0} xor {1}", BitConverter.ToString(ciphertextBlock).Replace("-", ""), BitConverter.ToString(iv2).Replace("-", ""));
 
-                for(int i = 0; i < 16; i++) {
+                for (int i = 0; i < 16; i++)
+                {
                     ciphertextBlock[i] ^= iv2[i];
                 }
 
                 //logger.info("xored ciphertext: {0}", BitConverter.ToString(ciphertextBlock).Replace("-", ""));
 
                 Array.Copy(ciphertextBlock, 0, iv1, 0, 16);
-                Array.Copy(plaintext, 16*blockIndex, iv2, 0, 16);
+                Array.Copy(plaintext, 16 * blockIndex, iv2, 0, 16);
 
                 Array.Copy(ciphertextBlock, 0, ciphertext, blockIndex * 16, 16);
             }
@@ -186,10 +209,11 @@ namespace TLSharp.Core.MTProto.Crypto
             return ciphertext;
         }
 
-        public static byte[] XOR(byte[] buffer1, byte[] buffer2) {
+        public static byte[] XOR(byte[] buffer1, byte[] buffer2)
+        {
             var result = new byte[buffer1.Length];
-            for(int i = 0; i < buffer1.Length; i++)
-                result[i] = (byte) (buffer1[i] ^ buffer2[i]);
+            for (int i = 0; i < buffer1.Length; i++)
+                result[i] = (byte)(buffer1[i] ^ buffer2[i]);
             return result;
         }
 
@@ -199,7 +223,8 @@ namespace TLSharp.Core.MTProto.Crypto
 
     // AES engine implementation
 
-    public class AesEngine {
+    public class AesEngine
+    {
         // The S box
         private const uint m1 = 0x80808080;
         private const uint m2 = 0x7f7f7f7f;
@@ -399,23 +424,27 @@ namespace TLSharp.Core.MTProto.Crypto
         private uint[,] WorkingKey;
         private bool forEncryption;
 
-        public string AlgorithmName {
+        public string AlgorithmName
+        {
             get { return "AES"; }
         }
 
-        public bool IsPartialBlockOkay {
+        public bool IsPartialBlockOkay
+        {
             get { return false; }
         }
 
         private uint Shift(
             uint r,
-            int shift) {
+            int shift)
+        {
             return (r >> shift) | (r << (32 - shift));
         }
 
         private uint FFmulX(
-            uint x) {
-            return ((x & m2) << 1) ^ (((x & m1) >> 7)*m3);
+            uint x)
+        {
+            return ((x & m2) << 1) ^ (((x & m1) >> 7) * m3);
         }
 
         /*
@@ -429,7 +458,8 @@ namespace TLSharp.Core.MTProto.Crypto
         */
 
         private uint Inv_Mcol(
-            uint x) {
+            uint x)
+        {
             uint f2 = FFmulX(x);
             uint f4 = FFmulX(f2);
             uint f8 = FFmulX(f4);
@@ -439,11 +469,12 @@ namespace TLSharp.Core.MTProto.Crypto
         }
 
         private uint SubWord(
-            uint x) {
+            uint x)
+        {
             return S[x & 255]
-                   | (((uint) S[(x >> 8) & 255]) << 8)
-                   | (((uint) S[(x >> 16) & 255]) << 16)
-                   | (((uint) S[(x >> 24) & 255]) << 24);
+                   | (((uint)S[(x >> 8) & 255]) << 8)
+                   | (((uint)S[(x >> 16) & 255]) << 16)
+                   | (((uint)S[(x >> 24) & 255]) << 24);
         }
 
         /**
@@ -455,11 +486,12 @@ namespace TLSharp.Core.MTProto.Crypto
 
         private uint[,] GenerateWorkingKey(
             byte[] key,
-            bool forEncryption) {
-            int KC = key.Length/4; // key length in words
+            bool forEncryption)
+        {
+            int KC = key.Length / 4; // key length in words
             int t;
 
-            if((KC != 4) && (KC != 6) && (KC != 8))
+            if ((KC != 4) && (KC != 6) && (KC != 8))
                 throw new ArgumentException("Key length not 128/192/256 bits.");
 
             ROUNDS = KC + 6; // This is not always true for the generalized Rijndael that allows larger block sizes
@@ -470,7 +502,8 @@ namespace TLSharp.Core.MTProto.Crypto
             //
 
             t = 0;
-            for(int i = 0; i < key.Length; t++) {
+            for (int i = 0; i < key.Length; t++)
+            {
                 W[t >> 2, t & 3] = Pack.LE_To_UInt32(key, i);
                 i += 4;
             }
@@ -480,20 +513,27 @@ namespace TLSharp.Core.MTProto.Crypto
             // calculate new values
             //
             int k = (ROUNDS + 1) << 2;
-            for(int i = KC; (i < k); i++) {
+            for (int i = KC; (i < k); i++)
+            {
                 uint temp = W[(i - 1) >> 2, (i - 1) & 3];
-                if((i%KC) == 0) {
-                    temp = SubWord(Shift(temp, 8)) ^ rcon[(i/KC) - 1];
-                } else if((KC > 6) && ((i%KC) == 4)) {
+                if ((i % KC) == 0)
+                {
+                    temp = SubWord(Shift(temp, 8)) ^ rcon[(i / KC) - 1];
+                }
+                else if ((KC > 6) && ((i % KC) == 4))
+                {
                     temp = SubWord(temp);
                 }
 
                 W[i >> 2, i & 3] = W[(i - KC) >> 2, (i - KC) & 3] ^ temp;
             }
 
-            if(!forEncryption) {
-                for(int j = 1; j < ROUNDS; j++) {
-                    for(int i = 0; i < 4; i++) {
+            if (!forEncryption)
+            {
+                for (int j = 1; j < ROUNDS; j++)
+                {
+                    for (int i = 0; i < 4; i++)
+                    {
                         W[j, i] = Inv_Mcol(W[j, i]);
                     }
                 }
@@ -502,33 +542,41 @@ namespace TLSharp.Core.MTProto.Crypto
             return W;
         }
 
-        public void Init(bool forEncryption, byte[] key) {
+        public void Init(bool forEncryption, byte[] key)
+        {
             WorkingKey = GenerateWorkingKey(key, forEncryption);
             this.forEncryption = forEncryption;
         }
 
-        public int GetBlockSize() {
+        public int GetBlockSize()
+        {
             return BLOCK_SIZE;
         }
 
-        public int ProcessBlock(byte[] input, int inOff, byte[] output, int outOff) {
-            if(WorkingKey == null) {
+        public int ProcessBlock(byte[] input, int inOff, byte[] output, int outOff)
+        {
+            if (WorkingKey == null)
+            {
                 throw new InvalidOperationException("AES engine not initialised");
             }
 
-            if((inOff + (32/2)) > input.Length) {
+            if ((inOff + (32 / 2)) > input.Length)
+            {
                 throw new InvalidOperationException("input buffer too short");
             }
 
-            if((outOff + (32/2)) > output.Length) {
+            if ((outOff + (32 / 2)) > output.Length)
+            {
                 throw new InvalidOperationException("output buffer too short");
             }
 
             UnPackBlock(input, inOff);
 
-            if(forEncryption) {
+            if (forEncryption)
+            {
                 EncryptBlock(WorkingKey);
-            } else {
+            }
+            else {
                 DecryptBlock(WorkingKey);
             }
 
@@ -537,12 +585,14 @@ namespace TLSharp.Core.MTProto.Crypto
             return BLOCK_SIZE;
         }
 
-        public void Reset() {
+        public void Reset()
+        {
         }
 
         private void UnPackBlock(
             byte[] bytes,
-            int off) {
+            int off)
+        {
             C0 = Pack.LE_To_UInt32(bytes, off);
             C1 = Pack.LE_To_UInt32(bytes, off + 4);
             C2 = Pack.LE_To_UInt32(bytes, off + 8);
@@ -551,7 +601,8 @@ namespace TLSharp.Core.MTProto.Crypto
 
         private void PackBlock(
             byte[] bytes,
-            int off) {
+            int off)
+        {
             Pack.UInt32_To_LE(C0, bytes, off);
             Pack.UInt32_To_LE(C1, bytes, off + 4);
             Pack.UInt32_To_LE(C2, bytes, off + 8);
@@ -559,7 +610,8 @@ namespace TLSharp.Core.MTProto.Crypto
         }
 
         private void EncryptBlock(
-            uint[,] KW) {
+            uint[,] KW)
+        {
             uint r, r0, r1, r2, r3;
 
             C0 ^= KW[0, 0];
@@ -567,7 +619,8 @@ namespace TLSharp.Core.MTProto.Crypto
             C2 ^= KW[0, 2];
             C3 ^= KW[0, 3];
 
-            for(r = 1; r < ROUNDS - 1;) {
+            for (r = 1; r < ROUNDS - 1;)
+            {
                 r0 = T0[C0 & 255] ^ Shift(T0[(C1 >> 8) & 255], 24) ^ Shift(T0[(C2 >> 16) & 255], 16) ^
                      Shift(T0[(C3 >> 24) & 255], 8) ^ KW[r, 0];
                 r1 = T0[C1 & 255] ^ Shift(T0[(C2 >> 8) & 255], 24) ^ Shift(T0[(C3 >> 16) & 255], 16) ^
@@ -597,18 +650,19 @@ namespace TLSharp.Core.MTProto.Crypto
 
             // the final round's table is a simple function of S so we don't use a whole other four tables for it
 
-            C0 = S[r0 & 255] ^ (((uint) S[(r1 >> 8) & 255]) << 8) ^ (((uint) S[(r2 >> 16) & 255]) << 16) ^
-                 (((uint) S[(r3 >> 24) & 255]) << 24) ^ KW[r, 0];
-            C1 = S[r1 & 255] ^ (((uint) S[(r2 >> 8) & 255]) << 8) ^ (((uint) S[(r3 >> 16) & 255]) << 16) ^
-                 (((uint) S[(r0 >> 24) & 255]) << 24) ^ KW[r, 1];
-            C2 = S[r2 & 255] ^ (((uint) S[(r3 >> 8) & 255]) << 8) ^ (((uint) S[(r0 >> 16) & 255]) << 16) ^
-                 (((uint) S[(r1 >> 24) & 255]) << 24) ^ KW[r, 2];
-            C3 = S[r3 & 255] ^ (((uint) S[(r0 >> 8) & 255]) << 8) ^ (((uint) S[(r1 >> 16) & 255]) << 16) ^
-                 (((uint) S[(r2 >> 24) & 255]) << 24) ^ KW[r, 3];
+            C0 = S[r0 & 255] ^ (((uint)S[(r1 >> 8) & 255]) << 8) ^ (((uint)S[(r2 >> 16) & 255]) << 16) ^
+                 (((uint)S[(r3 >> 24) & 255]) << 24) ^ KW[r, 0];
+            C1 = S[r1 & 255] ^ (((uint)S[(r2 >> 8) & 255]) << 8) ^ (((uint)S[(r3 >> 16) & 255]) << 16) ^
+                 (((uint)S[(r0 >> 24) & 255]) << 24) ^ KW[r, 1];
+            C2 = S[r2 & 255] ^ (((uint)S[(r3 >> 8) & 255]) << 8) ^ (((uint)S[(r0 >> 16) & 255]) << 16) ^
+                 (((uint)S[(r1 >> 24) & 255]) << 24) ^ KW[r, 2];
+            C3 = S[r3 & 255] ^ (((uint)S[(r0 >> 8) & 255]) << 8) ^ (((uint)S[(r1 >> 16) & 255]) << 16) ^
+                 (((uint)S[(r2 >> 24) & 255]) << 24) ^ KW[r, 3];
         }
 
         private void DecryptBlock(
-            uint[,] KW) {
+            uint[,] KW)
+        {
             int r;
             uint r0, r1, r2, r3;
 
@@ -617,7 +671,8 @@ namespace TLSharp.Core.MTProto.Crypto
             C2 ^= KW[ROUNDS, 2];
             C3 ^= KW[ROUNDS, 3];
 
-            for(r = ROUNDS - 1; r > 1;) {
+            for (r = ROUNDS - 1; r > 1;)
+            {
                 r0 = Tinv0[C0 & 255] ^ Shift(Tinv0[(C3 >> 8) & 255], 24) ^ Shift(Tinv0[(C2 >> 16) & 255], 16) ^
                      Shift(Tinv0[(C1 >> 24) & 255], 8) ^ KW[r, 0];
                 r1 = Tinv0[C1 & 255] ^ Shift(Tinv0[(C0 >> 8) & 255], 24) ^ Shift(Tinv0[(C3 >> 16) & 255], 16) ^
@@ -647,124 +702,142 @@ namespace TLSharp.Core.MTProto.Crypto
 
             // the final round's table is a simple function of Si so we don't use a whole other four tables for it
 
-            C0 = Si[r0 & 255] ^ (((uint) Si[(r3 >> 8) & 255]) << 8) ^ (((uint) Si[(r2 >> 16) & 255]) << 16) ^
-                 (((uint) Si[(r1 >> 24) & 255]) << 24) ^ KW[0, 0];
-            C1 = Si[r1 & 255] ^ (((uint) Si[(r0 >> 8) & 255]) << 8) ^ (((uint) Si[(r3 >> 16) & 255]) << 16) ^
-                 (((uint) Si[(r2 >> 24) & 255]) << 24) ^ KW[0, 1];
-            C2 = Si[r2 & 255] ^ (((uint) Si[(r1 >> 8) & 255]) << 8) ^ (((uint) Si[(r0 >> 16) & 255]) << 16) ^
-                 (((uint) Si[(r3 >> 24) & 255]) << 24) ^ KW[0, 2];
-            C3 = Si[r3 & 255] ^ (((uint) Si[(r2 >> 8) & 255]) << 8) ^ (((uint) Si[(r1 >> 16) & 255]) << 16) ^
-                 (((uint) Si[(r0 >> 24) & 255]) << 24) ^ KW[0, 3];
+            C0 = Si[r0 & 255] ^ (((uint)Si[(r3 >> 8) & 255]) << 8) ^ (((uint)Si[(r2 >> 16) & 255]) << 16) ^
+                 (((uint)Si[(r1 >> 24) & 255]) << 24) ^ KW[0, 0];
+            C1 = Si[r1 & 255] ^ (((uint)Si[(r0 >> 8) & 255]) << 8) ^ (((uint)Si[(r3 >> 16) & 255]) << 16) ^
+                 (((uint)Si[(r2 >> 24) & 255]) << 24) ^ KW[0, 1];
+            C2 = Si[r2 & 255] ^ (((uint)Si[(r1 >> 8) & 255]) << 8) ^ (((uint)Si[(r0 >> 16) & 255]) << 16) ^
+                 (((uint)Si[(r3 >> 24) & 255]) << 24) ^ KW[0, 2];
+            C3 = Si[r3 & 255] ^ (((uint)Si[(r2 >> 8) & 255]) << 8) ^ (((uint)Si[(r1 >> 16) & 255]) << 16) ^
+                 (((uint)Si[(r0 >> 24) & 255]) << 24) ^ KW[0, 3];
         }
     }
 
 
-    internal sealed class Pack {
-        private Pack() {
+    internal sealed class Pack
+    {
+        private Pack()
+        {
         }
 
-        internal static void UInt32_To_BE(uint n, byte[] bs) {
-            bs[0] = (byte) (n >> 24);
-            bs[1] = (byte) (n >> 16);
-            bs[2] = (byte) (n >> 8);
-            bs[3] = (byte) (n);
+        internal static void UInt32_To_BE(uint n, byte[] bs)
+        {
+            bs[0] = (byte)(n >> 24);
+            bs[1] = (byte)(n >> 16);
+            bs[2] = (byte)(n >> 8);
+            bs[3] = (byte)(n);
         }
 
-        internal static void UInt32_To_BE(uint n, byte[] bs, int off) {
-            bs[off] = (byte) (n >> 24);
-            bs[++off] = (byte) (n >> 16);
-            bs[++off] = (byte) (n >> 8);
-            bs[++off] = (byte) (n);
+        internal static void UInt32_To_BE(uint n, byte[] bs, int off)
+        {
+            bs[off] = (byte)(n >> 24);
+            bs[++off] = (byte)(n >> 16);
+            bs[++off] = (byte)(n >> 8);
+            bs[++off] = (byte)(n);
         }
 
-        internal static uint BE_To_UInt32(byte[] bs) {
-            uint n = (uint) bs[0] << 24;
-            n |= (uint) bs[1] << 16;
-            n |= (uint) bs[2] << 8;
+        internal static uint BE_To_UInt32(byte[] bs)
+        {
+            uint n = (uint)bs[0] << 24;
+            n |= (uint)bs[1] << 16;
+            n |= (uint)bs[2] << 8;
             n |= bs[3];
             return n;
         }
 
-        internal static uint BE_To_UInt32(byte[] bs, int off) {
-            uint n = (uint) bs[off] << 24;
-            n |= (uint) bs[++off] << 16;
-            n |= (uint) bs[++off] << 8;
+        internal static uint BE_To_UInt32(byte[] bs, int off)
+        {
+            uint n = (uint)bs[off] << 24;
+            n |= (uint)bs[++off] << 16;
+            n |= (uint)bs[++off] << 8;
             n |= bs[++off];
             return n;
         }
 
-        internal static ulong BE_To_UInt64(byte[] bs) {
+        internal static ulong BE_To_UInt64(byte[] bs)
+        {
             uint hi = BE_To_UInt32(bs);
             uint lo = BE_To_UInt32(bs, 4);
-            return ((ulong) hi << 32) | lo;
+            return ((ulong)hi << 32) | lo;
         }
 
-        internal static ulong BE_To_UInt64(byte[] bs, int off) {
+        internal static ulong BE_To_UInt64(byte[] bs, int off)
+        {
             uint hi = BE_To_UInt32(bs, off);
             uint lo = BE_To_UInt32(bs, off + 4);
-            return ((ulong) hi << 32) | lo;
+            return ((ulong)hi << 32) | lo;
         }
 
-        internal static void UInt64_To_BE(ulong n, byte[] bs) {
-            UInt32_To_BE((uint) (n >> 32), bs);
-            UInt32_To_BE((uint) (n), bs, 4);
+        internal static void UInt64_To_BE(ulong n, byte[] bs)
+        {
+            UInt32_To_BE((uint)(n >> 32), bs);
+            UInt32_To_BE((uint)(n), bs, 4);
         }
 
-        internal static void UInt64_To_BE(ulong n, byte[] bs, int off) {
-            UInt32_To_BE((uint) (n >> 32), bs, off);
-            UInt32_To_BE((uint) (n), bs, off + 4);
+        internal static void UInt64_To_BE(ulong n, byte[] bs, int off)
+        {
+            UInt32_To_BE((uint)(n >> 32), bs, off);
+            UInt32_To_BE((uint)(n), bs, off + 4);
         }
 
-        internal static void UInt32_To_LE(uint n, byte[] bs) {
-            bs[0] = (byte) (n);
-            bs[1] = (byte) (n >> 8);
-            bs[2] = (byte) (n >> 16);
-            bs[3] = (byte) (n >> 24);
+        internal static void UInt32_To_LE(uint n, byte[] bs)
+        {
+            bs[0] = (byte)(n);
+            bs[1] = (byte)(n >> 8);
+            bs[2] = (byte)(n >> 16);
+            bs[3] = (byte)(n >> 24);
         }
 
-        internal static void UInt32_To_LE(uint n, byte[] bs, int off) {
-            bs[off] = (byte) (n);
-            bs[++off] = (byte) (n >> 8);
-            bs[++off] = (byte) (n >> 16);
-            bs[++off] = (byte) (n >> 24);
+        internal static void UInt32_To_LE(uint n, byte[] bs, int off)
+        {
+            bs[off] = (byte)(n);
+            bs[++off] = (byte)(n >> 8);
+            bs[++off] = (byte)(n >> 16);
+            bs[++off] = (byte)(n >> 24);
         }
 
-        internal static uint LE_To_UInt32(byte[] bs) {
+        internal static uint LE_To_UInt32(byte[] bs)
+        {
             uint n = bs[0];
-            n |= (uint) bs[1] << 8;
-            n |= (uint) bs[2] << 16;
-            n |= (uint) bs[3] << 24;
+            n |= (uint)bs[1] << 8;
+            n |= (uint)bs[2] << 16;
+            n |= (uint)bs[3] << 24;
             return n;
         }
 
-        internal static uint LE_To_UInt32(byte[] bs, int off) {
+        internal static uint LE_To_UInt32(byte[] bs, int off)
+        {
             uint n = bs[off];
-            n |= (uint) bs[++off] << 8;
-            n |= (uint) bs[++off] << 16;
-            n |= (uint) bs[++off] << 24;
+            n |= (uint)bs[++off] << 8;
+            n |= (uint)bs[++off] << 16;
+            n |= (uint)bs[++off] << 24;
             return n;
         }
 
-        internal static ulong LE_To_UInt64(byte[] bs) {
+        internal static ulong LE_To_UInt64(byte[] bs)
+        {
             uint lo = LE_To_UInt32(bs);
             uint hi = LE_To_UInt32(bs, 4);
-            return ((ulong) hi << 32) | lo;
+            return ((ulong)hi << 32) | lo;
         }
 
-        internal static ulong LE_To_UInt64(byte[] bs, int off) {
+        internal static ulong LE_To_UInt64(byte[] bs, int off)
+        {
             uint lo = LE_To_UInt32(bs, off);
             uint hi = LE_To_UInt32(bs, off + 4);
-            return ((ulong) hi << 32) | lo;
+            return ((ulong)hi << 32) | lo;
         }
 
-        internal static void UInt64_To_LE(ulong n, byte[] bs) {
-            UInt32_To_LE((uint) (n), bs);
-            UInt32_To_LE((uint) (n >> 32), bs, 4);
+        internal static void UInt64_To_LE(ulong n, byte[] bs)
+        {
+            UInt32_To_LE((uint)(n), bs);
+            UInt32_To_LE((uint)(n >> 32), bs, 4);
         }
 
-        internal static void UInt64_To_LE(ulong n, byte[] bs, int off) {
-            UInt32_To_LE((uint) (n), bs, off);
-            UInt32_To_LE((uint) (n >> 32), bs, off + 4);
+        internal static void UInt64_To_LE(ulong n, byte[] bs, int off)
+        {
+            UInt32_To_LE((uint)(n), bs, off);
+            UInt32_To_LE((uint)(n >> 32), bs, off + 4);
         }
     }
 }
