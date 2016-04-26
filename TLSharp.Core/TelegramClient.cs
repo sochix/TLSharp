@@ -197,7 +197,17 @@ namespace TLSharp.Core
 
             return true;
         }
+        public async Task<bool> SendDocumentMessage(int contactId, InputFile file, string fileName, string mimeType)
+		{
+			var request = new Message_SendMediaRequest(
+				new InputPeerContactConstructor(contactId),
+				new InputMediaUploadedDocumentConstructor(file, fileName, mimeType);
 
+			await _sender.Send(request);
+			await _sender.Recieve(request);
+
+			return true;
+		}
         public async Task<int?> ImportContactByPhoneNumber(string phoneNumber)
         {
             if (!validateNumber(phoneNumber))
