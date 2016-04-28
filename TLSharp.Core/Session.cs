@@ -149,7 +149,7 @@ namespace TLSharp.Core
             _store.Save(this);
         }
 
-        public static Session TryLoadOrCreateNew(ISessionStore store, string sessionUserId)
+        public static Session TryLoadOrCreateNew(ISessionStore store, string sessionUserId, string connectionAddress = defaultConnectionAddress, int connectionPort = defaultConnectionPort)
         {
             Session session;
 
@@ -163,8 +163,8 @@ namespace TLSharp.Core
                 {
                     Id = GenerateRandomUlong(),
                     SessionUserId = sessionUserId,
-                    ServerAddress = defaultConnectionAddress,
-                    Port = defaultConnectionPort
+                    ServerAddress = connectionAddress,
+                    Port = connectionPort
                 };
             }
 

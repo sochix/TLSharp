@@ -23,7 +23,11 @@ namespace TLSharp.Core
         private Session _session;
         private List<DcOption> dcOptions;
 
-        public TelegramClient(ISessionStore store, string sessionUserId, int apiId, string apiHash)
+		public TelegramClient(ISessionStore store, string sessionUserId, int apiId, string apiHash) : this(store, sessionUserId, apiId, apiHash, null, dcPort)
+        {
+        }
+
+        public TelegramClient(ISessionStore store, string sessionUserId, int apiId, string apiHash, string dcAddress, int dcPort)
         {
             _apiHash = apiHash;
             _apiId = apiId;
@@ -34,7 +38,11 @@ namespace TLSharp.Core
                 throw new InvalidOperationException("Your API_ID is invalid. Do a configuration first https://github.com/sochix/TLSharp#quick-configuration");
 
             _session = Session.TryLoadOrCreateNew(store, sessionUserId);
-            _transport = new TcpTransport(_session.ServerAddress, _session.Port);
+			if(string.IsNullOrEmpty(dcAddress)) {
+				_transport = new TcpTransport(_session.ServerAddress, _session.Port);
+			} else {
+				_transport = new TcpTransport(_session.ServerAddress, _session.Port, dcAddress, dcPort);
+			}
         }
 
 		public void SetFloodWaitEvent(MTProtoSender.FloodWait floodWaitEvent) {
