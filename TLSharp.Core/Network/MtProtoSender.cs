@@ -275,7 +275,7 @@ namespace TLSharp.Core.Network
                     Debug.WriteLine($"Should wait {seconds} sec.");
                     Thread.Sleep(1000 * seconds);
                 }
-                else if (errorMessage.StartsWith("PHONE_MIGRATE_"))
+                else if (errorMessage.StartsWith("PHONE_MIGRATE_") || errorMessage.StartsWith("NETWORK_MIGRATE_"))
                 {
                     var resultString = Regex.Match(errorMessage, @"\d+").Value;
                     var dcIdx = int.Parse(resultString);
