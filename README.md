@@ -73,7 +73,6 @@ All methods except [IsPhoneRegistered](#IsPhoneRegistered) requires to authentic
 Currently supported methods:
  - [IsPhoneRegistered - Check if phone is registered in Telegram](#isphoneregistered)
  - [Authenticate user](#authenticate-user)
- - [Register/Signup user](#Register-a-new-user)
  - [Get Contact by Phone number](#get-contact-by-phone-number)
  - [Get Contact by Username](#get-contact-by-username)
  - [Send Message to Contact](#send-message-to-contact)
