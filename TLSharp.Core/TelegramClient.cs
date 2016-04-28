@@ -214,7 +214,7 @@ namespace TLSharp.Core
 		{
 			var request = new Message_SendMediaRequest(
 				new InputPeerContactConstructor(contactId),
-				new InputMediaUploadedDocumentConstructor(file, fileName, mimeType);
+				new InputMediaUploadedDocumentConstructor(file, fileName, mimeType));
 
 			await _sender.Send(request);
 			await _sender.Recieve(request);
