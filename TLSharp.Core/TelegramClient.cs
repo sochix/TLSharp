@@ -37,11 +37,10 @@ namespace TLSharp.Core
             if (string.IsNullOrEmpty(_apiHash))
                 throw new InvalidOperationException("Your API_ID is invalid. Do a configuration first https://github.com/sochix/TLSharp#quick-configuration");
 
-            _session = Session.TryLoadOrCreateNew(store, sessionUserId);
 			if(string.IsNullOrEmpty(dcAddress)) {
-				_transport = new TcpTransport(_session.ServerAddress, _session.Port);
+				_session = Session.TryLoadOrCreateNew(store, sessionUserId);
 			} else {
-				_transport = new TcpTransport(_session.ServerAddress, _session.Port, dcAddress, dcPort);
+				_session = Session.TryLoadOrCreateNew(store, sessionUserId, dcAddress, dcPort);
 			}
         }
 
@@ -54,6 +53,10 @@ namespace TLSharp.Core
 
         public async Task<bool> Connect(bool reconnect = false)
         {
+			if(_transport == null) {
+				_transport = new TcpTransport(_session.ServerAddress, _session.Port);
+			}
+
             if (_session.AuthKey == null || reconnect)
             {
                 var result = await Authenticator.DoAuthentication(_transport);
@@ -83,6 +86,9 @@ namespace TLSharp.Core
 
             var dc = dcOptions.Cast<DcOptionConstructor>().First(d => d.id == dcId);
 
+			if(_transport != null) {
+				_transport.Dispose();
+			}
             _transport = new TcpTransport(dc.ip_address, dc.port);
             _session.ServerAddress = dc.ip_address;
             _session.Port = dc.port;
@@ -262,5 +268,15 @@ namespace TLSharp.Core
 
             return regex.IsMatch(number);
         }
+
+		public void Dispose() {
+			if(_transport != null) {
+				_transport.Dispose();
+				_transport = null;
+			}
+
+			_sender = null;
+			dcOptions = null;
+		}
     }
 }
