@@ -21,7 +21,7 @@ namespace TLSharp.Core.Requests
             _phoneCodeHash = phoneCodeHash;
             _code = code;
             _firstName = firstName;
-            _lastName = lastName;
+            _lastName = lastName; 
         }
 
         public override void OnSend(BinaryWriter writer)
