@@ -37,6 +37,13 @@ namespace TLSharp.Core
             _transport = new TcpTransport(_session.ServerAddress, _session.Port);
         }
 
+		public void SetFloodWaitEvent(MTProtoSender.FloodWait floodWaitEvent) {
+			if(_sender == null) {
+				throw new InvalidOperationException("Telegram client cannot connected now.");
+			}
+			_sender.FloodWaitEvent = floodWaitEvent;
+		}
+
         public async Task<bool> Connect(bool reconnect = false)
         {
             if (_session.AuthKey == null || reconnect)
