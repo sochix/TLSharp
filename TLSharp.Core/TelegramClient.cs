@@ -139,7 +139,20 @@ namespace TLSharp.Core
 
             return request.user;
         }
+        
+        public async Task<User> SignUp(string phoneNumber, string phoneHash, string code, string firstName, string lastName)
+        {
+            var request = new AuthSignUpRequest(phoneNumber, phoneHash, code, firstName, lastName);
+            await _sender.Send(request);
+            await _sender.Recieve(request);
 
+            //_session.SessionExpires = request.SessionExpires;
+            //_session.User = request.user;
+
+            //_session.Save();
+
+            return request.user;
+        }
         public async Task<InputFile> UploadFile(string name, byte[] data)
         {
             var partSize = 65536;
