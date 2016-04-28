@@ -4,7 +4,7 @@ using TLSharp.Core.MTProto;
 
 namespace TLSharp.Core.Requests
 {
-    public class AuthSignInRequest : MTProtoRequest
+    public class AuthSignUpRequest : MTProtoRequest
     {
         private readonly string _phoneNumber;
         private readonly string _phoneCodeHash;
