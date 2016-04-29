@@ -23,10 +23,11 @@ namespace TLSharp.Core.Network
 
         public List<ulong> needConfirmation = new List<ulong>();
 
-		public delegate void FloodWait(int seconds);
-		public FloodWait FloodWaitEvent = delegate(int seconds) {
-			Thread.Sleep(seconds * 1000);
-		};
+        public delegate void FloodWait(int seconds);
+        public FloodWait FloodWaitEvent = delegate (int seconds)
+        {
+            Thread.Sleep(seconds * 1000);
+        };
 
         public MtProtoSender(TcpTransport transport, Session session)
         {
@@ -279,7 +280,7 @@ namespace TLSharp.Core.Network
                     var seconds = int.Parse(resultString);
                     Debug.WriteLine($"Should wait {seconds} sec.");
 
-					FloodWaitEvent(seconds);
+                    FloodWaitEvent(seconds);
                 }
                 else if (errorMessage.StartsWith("PHONE_MIGRATE_") || errorMessage.StartsWith("NETWORK_MIGRATE_"))
                 {

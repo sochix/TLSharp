@@ -23,7 +23,7 @@ namespace TLSharp.Core
         private Session _session;
         private List<DcOption> dcOptions;
 
-		public TelegramClient(ISessionStore store, string sessionUserId, int apiId, string apiHash) : this(store, sessionUserId, apiId, apiHash, null, dcPort)
+        public TelegramClient(ISessionStore store, string sessionUserId, int apiId, string apiHash) : this(store, sessionUserId, apiId, apiHash, null, 0)
         {
         }
 
@@ -37,25 +37,31 @@ namespace TLSharp.Core
             if (string.IsNullOrEmpty(_apiHash))
                 throw new InvalidOperationException("Your API_ID is invalid. Do a configuration first https://github.com/sochix/TLSharp#quick-configuration");
 
-			if(string.IsNullOrEmpty(dcAddress)) {
-				_session = Session.TryLoadOrCreateNew(store, sessionUserId);
-			} else {
-				_session = Session.TryLoadOrCreateNew(store, sessionUserId, dcAddress, dcPort);
-			}
+            if (string.IsNullOrEmpty(dcAddress))
+            {
+                _session = Session.TryLoadOrCreateNew(store, sessionUserId);
+            }
+            else
+            {
+                _session = Session.TryLoadOrCreateNew(store, sessionUserId, dcAddress, dcPort);
+            }
         }
 
-		public void SetFloodWaitEvent(MTProtoSender.FloodWait floodWaitEvent) {
-			if(_sender == null) {
-				throw new InvalidOperationException("Telegram client cannot connected now.");
-			}
-			_sender.FloodWaitEvent = floodWaitEvent;
-		}
+        public void SetFloodWaitEvent(MtProtoSender.FloodWait floodWaitEvent)
+        {
+            if (_sender == null)
+            {
+                throw new InvalidOperationException("Telegram client cannot connected now.");
+            }
+            _sender.FloodWaitEvent = floodWaitEvent;
+        }
 
         public async Task<bool> Connect(bool reconnect = false)
         {
-			if(_transport == null) {
-				_transport = new TcpTransport(_session.ServerAddress, _session.Port);
-			}
+            if (_transport == null)
+            {
+                _transport = new TcpTransport(_session.ServerAddress, _session.Port);
+            }
 
             if (_session.AuthKey == null || reconnect)
             {
@@ -86,9 +92,10 @@ namespace TLSharp.Core
 
             var dc = dcOptions.Cast<DcOptionConstructor>().First(d => d.id == dcId);
 
-			if(_transport != null) {
-				_transport.Dispose();
-			}
+            if (_transport != null)
+            {
+                _transport.Dispose();
+            }
             _transport = new TcpTransport(dc.ip_address, dc.port);
             _session.ServerAddress = dc.ip_address;
             _session.Port = dc.port;
@@ -106,14 +113,36 @@ namespace TLSharp.Core
             if (_sender == null)
                 throw new InvalidOperationException("Not connected!");
 
-            var authCheckPhoneRequest = new AuthCheckPhoneRequest(phoneNumber);
-            await _sender.Send(authCheckPhoneRequest);
-            await _sender.Recieve(authCheckPhoneRequest);
+            bool completed = false;
+            AuthCheckPhoneRequest authCheckPhoneRequest = null;
+
+            while (!completed)
+            {
+                authCheckPhoneRequest = new AuthCheckPhoneRequest(phoneNumber);
+
+                try
+                {
+                    await _sender.Send(authCheckPhoneRequest);
+                    await _sender.Recieve(authCheckPhoneRequest);
+                    completed = true;
+                }
+                catch (InvalidOperationException e)
+                {
+                    if (e.Message.StartsWith("Your phone number registered to") && e.Data["dcId"] != null)
+                    {
+                        await ReconnectToDc((int)e.Data["dcId"]);
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
 
             return authCheckPhoneRequest._phoneRegistered;
         }
 
-        public async Task<string> SendCodeRequest(string phoneNumber)
+        public async Task<string> SendCodeRequest(string phoneNumber, int requestType = 5)
         {
             var completed = false;
 
@@ -121,11 +150,9 @@ namespace TLSharp.Core
 
             while (!completed)
             {
-                request = new AuthSendCodeRequest(phoneNumber, 5, _apiId, _apiHash, "en");
+                request = new AuthSendCodeRequest(phoneNumber, requestType, _apiId, _apiHash, "en");
                 try
                 {
-
-
                     await _sender.Send(request);
                     await _sender.Recieve(request);
 
@@ -269,14 +296,16 @@ namespace TLSharp.Core
             return regex.IsMatch(number);
         }
 
-		public void Dispose() {
-			if(_transport != null) {
-				_transport.Dispose();
-				_transport = null;
-			}
+        public void Dispose()
+        {
+            if (_transport != null)
+            {
+                _transport.Dispose();
+                _transport = null;
+            }
 
-			_sender = null;
-			dcOptions = null;
-		}
+            _sender = null;
+            dcOptions = null;
+        }
     }
 }
