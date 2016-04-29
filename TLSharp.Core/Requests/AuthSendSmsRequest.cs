@@ -8,6 +8,7 @@ namespace TLSharp.Core.Requests
     {
         private readonly string _phoneNumber;
         private readonly string _phoneCodeHash;
+        private bool _smsSent;
         
         public AuthSendSmsRequest(string phoneNumber, string phoneCodeHash)
         {
@@ -24,8 +25,8 @@ namespace TLSharp.Core.Requests
 
         public override void OnResponse(BinaryReader reader)
         {
-            var dataCode = reader.ReadUInt32(); //0xf6b673a4
-            user = TL.Parse<Bool>(reader);
+            var dataCode = reader.ReadUInt32();
+            _smsSent = reader.ReadUInt32() == 0x997275b5;
         }
 
         public override void OnException(Exception exception)
