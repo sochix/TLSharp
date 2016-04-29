@@ -254,7 +254,17 @@ namespace TLSharp.Core
             await _sender.Send(request);
             await _sender.Recieve(request);
         }
+        public async Task<bool> SendCodeToPhone(string phoneNumber, string hash)
+        {
+            if (_sender == null)
+                throw new InvalidOperationException("Not connected!");
 
+            var authSendSmsRequest = new AuthSendSmsRequest(phoneNumber, hash);
+            await _sender.Send(authSendSmsRequest);
+            await _sender.Recieve(authSendSmsRequest);
+
+            return authSendSmsRequest._smsSent;
+        }
         public async Task<List<Message>> GetMessagesHistoryForContact(int user_id, int offset, int limit, int max_id = -1)
         {
             var request = new GetHistoryRequest(new InputPeerContactConstructor(user_id), offset, max_id, limit);
