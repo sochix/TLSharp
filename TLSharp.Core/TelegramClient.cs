@@ -289,6 +289,15 @@ namespace TLSharp.Core
             return request.messages;
         }
 
+        public async Task<List<Contact>> GetContacts()
+        {
+            var req = new GetContacts();
+            await _sender.Send(req);
+            await _sender.Recieve(req);
+
+            return req.contacts;
+        }
+
         private bool validateNumber(string number)
         {
             var regex = new Regex("^\\d{7,20}$");
