@@ -116,11 +116,17 @@ _Example_:
 
 ```
 	var hash = await client.SendCodeRequest(phoneNumber);
-    
 	var code = "1234"; //code that you receive from Telegram 
 	var firstName = "bloodRush"
 	var lastName = "TeleFather"
 	var user = await client.SignUp(phoneNumber, hash, code, firstName, lastName); 
+	if (user != null)
+           {
+                if (user.Constructor == Constructor.userSelf)
+                {
+                  var usr = await client.MakeAuth(phone, hash, code);
+                }
+           }
 ```
 * phoneNumber - **string**, phone number in international format (eg. 791812312323)
 
