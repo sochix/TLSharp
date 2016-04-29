@@ -8,7 +8,7 @@ namespace TLSharp.Core.Requests
     {
         private readonly string _phoneNumber;
         private readonly string _phoneCodeHash;
-        private bool _smsSent;
+        public bool _smsSent;
         
         public AuthSendSmsRequest(string phoneNumber, string phoneCodeHash)
         {
