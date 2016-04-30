@@ -138,7 +138,7 @@ Get user id by phone number.
 _Example_:
 
 ```
-var res = await client.ImportContactByPhoneNumber("791812312323");
+var res = await client.ImportContactByPhoneNumber("791812312323", "firstName", "lastName");
 ```
 
 * phoneNumber - **string**, phone number in international format (eg. 791812312323)
