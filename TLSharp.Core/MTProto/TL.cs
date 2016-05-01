@@ -75,6 +75,9 @@ namespace TLSharp.Core.MTProto
         userStatusEmpty,
         userStatusOnline,
         userStatusOffline,
+        userStatusRecently,
+        userStatusLastWeek,
+        userStatusLastMonth,
         chatEmpty,
         chat,
         chatForbidden,
@@ -272,7 +275,13 @@ namespace TLSharp.Core.MTProto
         audioEmpty,
         audio,
         documentEmpty,
-        document
+        document,
+        documentAttributeImageSize,
+        documentAttributeAnimated,
+        documentAttributeSticker,
+        documentAttributeVideo,
+        documentAttributeAudio,
+        documentAttributeFilename
     }
 
     public class TL
@@ -328,17 +337,19 @@ namespace TLSharp.Core.MTProto
             {0x7c596b46, typeof (FileLocationUnavailableConstructor)},
             {0x53d69076, typeof (FileLocationConstructor)},
             {0x200250ba, typeof (UserEmptyConstructor)},
-            {0x720535EC, typeof (UserSelfConstructor)},
             {0x7007b451, typeof (UserSelfConstructor)},
-            {0xf2fb8319, typeof (UserContactConstructor)},
-            {0x22e8ceb0, typeof (UserRequestConstructor)},
-            {0x5214c89d, typeof (UserForeignConstructor)},
-            {0xb29ad7cc, typeof (UserDeletedConstructor)},
+            {0xcab35e18, typeof (UserContactConstructor)},
+            {0xd9ccc4ef, typeof (UserRequestConstructor)},
+            {0x075cf7a8, typeof (UserForeignConstructor)},
+            {0xd6016d7a, typeof (UserDeletedConstructor)},
             {0x4f11bae1, typeof (UserProfilePhotoEmptyConstructor)},
             {0xd559d8c8, typeof (UserProfilePhotoConstructor)},
             {0x09d05049, typeof (UserStatusEmptyConstructor)},
             {0xedb93949, typeof (UserStatusOnlineConstructor)},
             {0x008c703f, typeof (UserStatusOfflineConstructor)},
+            {0xe26f42f1, typeof (UserStatusRecentlyConstructor)},
+            {0x07bf09fc, typeof (UserStatusLastWeekConstructor)},
+            {0x77ebc742, typeof (UserStatusLastMonthConstructor)},
             {0x9ba2d800, typeof (ChatEmptyConstructor)},
             {0x6e9c9bc7, typeof (ChatConstructor)},
             {0xfb0ccc41, typeof (ChatForbiddenConstructor)},
@@ -349,14 +360,16 @@ namespace TLSharp.Core.MTProto
             {0x37c1011c, typeof (ChatPhotoEmptyConstructor)},
             {0x6153276a, typeof (ChatPhotoConstructor)},
             {0x83e5de54, typeof (MessageEmptyConstructor)},
-            {0x567699B3, typeof (MessageConstructor)},
+            {0x567699b3, typeof (MessageConstructor)},
             {0xa367e716, typeof (MessageForwardedConstructor)},
-            {0x9f8d60bb, typeof (MessageServiceConstructor)},
+            {0x1d86f70e, typeof (MessageServiceConstructor)},
             {0x3ded6320, typeof (MessageMediaEmptyConstructor)},
             {0xc8c45a2a, typeof (MessageMediaPhotoConstructor)},
             {0xa2d24290, typeof (MessageMediaVideoConstructor)},
             {0x56e0d474, typeof (MessageMediaGeoConstructor)},
             {0x5e7d2f39, typeof (MessageMediaContactConstructor)},
+            {0x2fda2204, typeof (MessageMediaDocumentConstructor)},
+            {0xc6b68300, typeof (MessageMediaAudioConstructor)},
             {0x29632a36, typeof (MessageMediaUnsupportedConstructor)},
             {0xb6aef7b0, typeof (MessageActionEmptyConstructor)},
             {0xa6638b9a, typeof (MessageActionChatCreateConstructor)},
@@ -523,8 +536,6 @@ namespace TLSharp.Core.MTProto
             {0x34e794bd, typeof (InputMediaUploadedDocumentConstructor)},
             {0x3e46de5d, typeof (InputMediaUploadedThumbDocumentConstructor)},
             {0xd184e841, typeof (InputMediaDocumentConstructor)},
-            {0x2fda2204  , typeof (MessageMediaDocumentConstructor)},
-            {0xc6b68300, typeof (MessageMediaAudioConstructor)},
             {0xd95adc84, typeof (InputAudioEmptyConstructor)},
             {0x77d440ff, typeof (InputAudioConstructor)},
             {0x72f0eaae, typeof (InputDocumentEmptyConstructor)},
@@ -537,6 +548,12 @@ namespace TLSharp.Core.MTProto
             {0x427425e7, typeof (AudioConstructor)},
             {0x36f8c871, typeof (DocumentEmptyConstructor)},
             {0xf9a39f4f, typeof (DocumentConstructor)},
+            {0x6c37c15c, typeof (DocumentAttributeImageSize)},
+            {0x11b58939, typeof (DocumentAttributeAnimated)},
+            {0xfb0a5727, typeof (DocumentAttributeSticker)},
+            {0x5910cccb, typeof (DocumentAttributeVideo)},
+            {0x051448e5, typeof (DocumentAttributeAudio)},
+            {0x15590068, typeof (DocumentAttributeFilename)},
         };
 
         public static TLObject Parse(BinaryReader reader, uint code)
@@ -600,1338 +617,6 @@ namespace TLSharp.Core.MTProto
                 throw new Exception("unknown return type");
             }
         }
-
-        //public delegate TLObject InputPeerContactDelegate(InputPeerContactConstructor x);
-        // constructors
-
-        public static Error error(int code, string text)
-        {
-            return new ErrorConstructor(code, text);
-        }
-
-        public static InputPeer inputPeerEmpty()
-        {
-            return new InputPeerEmptyConstructor();
-        }
-
-        public static InputPeer inputPeerSelf()
-        {
-            return new InputPeerSelfConstructor();
-        }
-
-        public static InputPeer inputPeerContact(int user_id)
-        {
-            return new InputPeerContactConstructor(user_id);
-        }
-
-        public static InputPeer inputPeerForeign(int user_id, long access_hash)
-        {
-            return new InputPeerForeignConstructor(user_id, access_hash);
-        }
-
-        public static InputPeer inputPeerChat(int chat_id)
-        {
-            return new InputPeerChatConstructor(chat_id);
-        }
-
-        public static InputUser inputUserEmpty()
-        {
-            return new InputUserEmptyConstructor();
-        }
-
-        public static InputUser inputUserSelf()
-        {
-            return new InputUserSelfConstructor();
-        }
-
-        public static InputUser inputUserContact(int user_id)
-        {
-            return new InputUserContactConstructor(user_id);
-        }
-
-        public static InputUser inputUserForeign(int user_id, long access_hash)
-        {
-            return new InputUserForeignConstructor(user_id, access_hash);
-        }
-
-        public static InputContact inputPhoneContact(long client_id, string phone, string first_name, string last_name)
-        {
-            return new InputPhoneContactConstructor(client_id, phone, first_name, last_name);
-        }
-
-        public static InputFile inputFile(long id, int parts, string name, string md5_checksum)
-        {
-            return new InputFileConstructor(id, parts, name, md5_checksum);
-        }
-
-        public static InputMedia inputMediaEmpty()
-        {
-            return new InputMediaEmptyConstructor();
-        }
-
-        public static InputMedia inputMediaUploadedPhoto(InputFile file)
-        {
-            return new InputMediaUploadedPhotoConstructor(file);
-        }
-
-        public static InputMedia inputMediaPhoto(InputPhoto id)
-        {
-            return new InputMediaPhotoConstructor(id);
-        }
-
-        public static InputMedia inputMediaGeoPoint(InputGeoPoint geo_point)
-        {
-            return new InputMediaGeoPointConstructor(geo_point);
-        }
-
-        public static InputMedia inputMediaContact(string phone_number, string first_name, string last_name)
-        {
-            return new InputMediaContactConstructor(phone_number, first_name, last_name);
-        }
-
-        public static InputMedia inputMediaUploadedVideo(InputFile file, int duration, int w, int h)
-        {
-            return new InputMediaUploadedVideoConstructor(file, duration, w, h);
-        }
-
-        public static InputMedia inputMediaUploadedThumbVideo(InputFile file, InputFile thumb, int duration, int w, int h)
-        {
-            return new InputMediaUploadedThumbVideoConstructor(file, thumb, duration, w, h);
-        }
-
-        public static InputMedia inputMediaVideo(InputVideo id)
-        {
-            return new InputMediaVideoConstructor(id);
-        }
-
-        public static InputChatPhoto inputChatPhotoEmpty()
-        {
-            return new InputChatPhotoEmptyConstructor();
-        }
-
-        public static InputChatPhoto inputChatUploadedPhoto(InputFile file, InputPhotoCrop crop)
-        {
-            return new InputChatUploadedPhotoConstructor(file, crop);
-        }
-
-        public static InputChatPhoto inputChatPhoto(InputPhoto id, InputPhotoCrop crop)
-        {
-            return new InputChatPhotoConstructor(id, crop);
-        }
-
-        public static InputGeoPoint inputGeoPointEmpty()
-        {
-            return new InputGeoPointEmptyConstructor();
-        }
-
-        public static InputGeoPoint inputGeoPoint(double lat, double lng)
-        {
-            return new InputGeoPointConstructor(lat, lng);
-        }
-
-        public static InputPhoto inputPhotoEmpty()
-        {
-            return new InputPhotoEmptyConstructor();
-        }
-
-        public static InputPhoto inputPhoto(long id, long access_hash)
-        {
-            return new InputPhotoConstructor(id, access_hash);
-        }
-
-        public static InputVideo inputVideoEmpty()
-        {
-            return new InputVideoEmptyConstructor();
-        }
-
-        public static InputVideo inputVideo(long id, long access_hash)
-        {
-            return new InputVideoConstructor(id, access_hash);
-        }
-
-        public static InputFileLocation inputFileLocation(long volume_id, int local_id, long secret)
-        {
-            return new InputFileLocationConstructor(volume_id, local_id, secret);
-        }
-
-        public static InputFileLocation inputVideoFileLocation(long id, long access_hash)
-        {
-            return new InputVideoFileLocationConstructor(id, access_hash);
-        }
-
-        public static InputPhotoCrop inputPhotoCropAuto()
-        {
-            return new InputPhotoCropAutoConstructor();
-        }
-
-        public static InputPhotoCrop inputPhotoCrop(double crop_left, double crop_top, double crop_width)
-        {
-            return new InputPhotoCropConstructor(crop_left, crop_top, crop_width);
-        }
-
-        public static InputAppEvent inputAppEvent(double time, string type, long peer, string data)
-        {
-            return new InputAppEventConstructor(time, type, peer, data);
-        }
-
-        public static Peer peerUser(int user_id)
-        {
-            return new PeerUserConstructor(user_id);
-        }
-
-        public static Peer peerChat(int chat_id)
-        {
-            return new PeerChatConstructor(chat_id);
-        }
-
-        public static storage_FileType storage_fileUnknown()
-        {
-            return new Storage_fileUnknownConstructor();
-        }
-
-        public static storage_FileType storage_fileJpeg()
-        {
-            return new Storage_fileJpegConstructor();
-        }
-
-        public static storage_FileType storage_fileGif()
-        {
-            return new Storage_fileGifConstructor();
-        }
-
-        public static storage_FileType storage_filePng()
-        {
-            return new Storage_filePngConstructor();
-        }
-
-        public static storage_FileType storage_fileMp3()
-        {
-            return new Storage_fileMp3Constructor();
-        }
-
-        public static storage_FileType storage_fileMov()
-        {
-            return new Storage_fileMovConstructor();
-        }
-
-        public static storage_FileType storage_filePartial()
-        {
-            return new Storage_filePartialConstructor();
-        }
-
-        public static storage_FileType storage_fileMp4()
-        {
-            return new Storage_fileMp4Constructor();
-        }
-
-        public static storage_FileType storage_fileWebp()
-        {
-            return new Storage_fileWebpConstructor();
-        }
-
-        public static FileLocation fileLocationUnavailable(long volume_id, int local_id, long secret)
-        {
-            return new FileLocationUnavailableConstructor(volume_id, local_id, secret);
-        }
-
-        public static FileLocation fileLocation(int dc_id, long volume_id, int local_id, long secret)
-        {
-            return new FileLocationConstructor(dc_id, volume_id, local_id, secret);
-        }
-
-        public static User userEmpty(int id)
-        {
-            return new UserEmptyConstructor(id);
-        }
-
-        public static User userSelf(int id, string first_name, string last_name, string phone, UserProfilePhoto photo,
-            UserStatus status, bool inactive)
-        {
-            return new UserSelfConstructor(id, first_name, last_name, phone, photo, status, inactive);
-        }
-
-        public static User userContact(int id, string first_name, string last_name, long access_hash, string phone,
-            UserProfilePhoto photo, UserStatus status)
-        {
-            return new UserContactConstructor(id, first_name, last_name, access_hash, phone, photo, status);
-        }
-
-        public static User userRequest(int id, string first_name, string last_name, long access_hash, string phone,
-            UserProfilePhoto photo, UserStatus status)
-        {
-            return new UserRequestConstructor(id, first_name, last_name, access_hash, phone, photo, status);
-        }
-
-        public static User userForeign(int id, string first_name, string last_name, long access_hash, UserProfilePhoto photo,
-            UserStatus status)
-        {
-            return new UserForeignConstructor(id, first_name, last_name, access_hash, photo, status);
-        }
-
-        public static User userDeleted(int id, string first_name, string last_name)
-        {
-            return new UserDeletedConstructor(id, first_name, last_name);
-        }
-
-        public static UserProfilePhoto userProfilePhotoEmpty()
-        {
-            return new UserProfilePhotoEmptyConstructor();
-        }
-
-        public static UserProfilePhoto userProfilePhoto(long photo_id, FileLocation photo_small, FileLocation photo_big)
-        {
-            return new UserProfilePhotoConstructor(photo_id, photo_small, photo_big);
-        }
-
-        public static UserStatus userStatusEmpty()
-        {
-            return new UserStatusEmptyConstructor();
-        }
-
-        public static UserStatus userStatusOnline(int expires)
-        {
-            return new UserStatusOnlineConstructor(expires);
-        }
-
-        public static UserStatus userStatusOffline(int was_online)
-        {
-            return new UserStatusOfflineConstructor(was_online);
-        }
-
-        public static Chat chatEmpty(int id)
-        {
-            return new ChatEmptyConstructor(id);
-        }
-
-        public static Chat chat(int id, string title, ChatPhoto photo, int participants_count, int date, bool left,
-            int version)
-        {
-            return new ChatConstructor(id, title, photo, participants_count, date, left, version);
-        }
-
-        public static Chat chatForbidden(int id, string title, int date)
-        {
-            return new ChatForbiddenConstructor(id, title, date);
-        }
-
-        public static ChatFull chatFull(int id, ChatParticipants participants, Photo chat_photo,
-            PeerNotifySettings notify_settings)
-        {
-            return new ChatFullConstructor(id, participants, chat_photo, notify_settings);
-        }
-
-        public static ChatParticipant chatParticipant(int user_id, int inviter_id, int date)
-        {
-            return new ChatParticipantConstructor(user_id, inviter_id, date);
-        }
-
-        public static ChatParticipants chatParticipantsForbidden(int chat_id)
-        {
-            return new ChatParticipantsForbiddenConstructor(chat_id);
-        }
-
-        public static ChatParticipants chatParticipants(int chat_id, int admin_id, List<ChatParticipant> participants,
-            int version)
-        {
-            return new ChatParticipantsConstructor(chat_id, admin_id, participants, version);
-        }
-
-        public static ChatPhoto chatPhotoEmpty()
-        {
-            return new ChatPhotoEmptyConstructor();
-        }
-
-        public static ChatPhoto chatPhoto(FileLocation photo_small, FileLocation photo_big)
-        {
-            return new ChatPhotoConstructor(photo_small, photo_big);
-        }
-
-        public static Message messageEmpty(int id)
-        {
-            return new MessageEmptyConstructor(id);
-        }
-
-        public static Message message(int id, int from_id, int to_id, bool output, bool unread, int date, string message,
-            MessageMedia media)
-        {
-            return new MessageConstructor(id, from_id, to_id, output, unread, date, message, media);
-        }
-
-        public static Message messageForwarded(int id, int fwd_from_id, int fwd_date, int from_id, int to_id, bool output,
-            bool unread, int date, string message, MessageMedia media)
-        {
-            return new MessageForwardedConstructor(id, fwd_from_id, fwd_date, from_id, to_id, output, unread, date, message,
-                media);
-        }
-
-        public static Message messageService(int id, int from_id, Peer to_id, bool output, bool unread, int date,
-            MessageAction action)
-        {
-            return new MessageServiceConstructor(id, from_id, to_id, output, unread, date, action);
-        }
-
-        public static MessageMedia messageMediaEmpty()
-        {
-            return new MessageMediaEmptyConstructor();
-        }
-
-        public static MessageMedia messageMediaPhoto(Photo photo)
-        {
-            return new MessageMediaPhotoConstructor(photo);
-        }
-
-        public static MessageMedia messageMediaVideo(Video video)
-        {
-            return new MessageMediaVideoConstructor(video);
-        }
-
-        public static MessageMedia messageMediaGeo(GeoPoint geo)
-        {
-            return new MessageMediaGeoConstructor(geo);
-        }
-
-        public static MessageMedia messageMediaContact(string phone_number, string first_name, string last_name, int user_id)
-        {
-            return new MessageMediaContactConstructor(phone_number, first_name, last_name, user_id);
-        }
-
-        public static MessageMedia messageMediaUnsupported(byte[] bytes)
-        {
-            return new MessageMediaUnsupportedConstructor(bytes);
-        }
-
-        public static MessageAction messageActionEmpty()
-        {
-            return new MessageActionEmptyConstructor();
-        }
-
-        public static MessageAction messageActionChatCreate(string title, List<int> users)
-        {
-            return new MessageActionChatCreateConstructor(title, users);
-        }
-
-        public static MessageAction messageActionChatEditTitle(string title)
-        {
-            return new MessageActionChatEditTitleConstructor(title);
-        }
-
-        public static MessageAction messageActionChatEditPhoto(Photo photo)
-        {
-            return new MessageActionChatEditPhotoConstructor(photo);
-        }
-
-        public static MessageAction messageActionChatDeletePhoto()
-        {
-            return new MessageActionChatDeletePhotoConstructor();
-        }
-
-        public static MessageAction messageActionChatAddUser(int user_id)
-        {
-            return new MessageActionChatAddUserConstructor(user_id);
-        }
-
-        public static MessageAction messageActionChatDeleteUser(int user_id)
-        {
-            return new MessageActionChatDeleteUserConstructor(user_id);
-        }
-
-        public static Dialog dialog(Peer peer, int top_message, int unread_count)
-        {
-            return new DialogConstructor(peer, top_message, unread_count);
-        }
-
-        public static Photo photoEmpty(long id)
-        {
-            return new PhotoEmptyConstructor(id);
-        }
-
-        public static Photo photo(long id, long access_hash, int user_id, int date, string caption, GeoPoint geo,
-            List<PhotoSize> sizes)
-        {
-            return new PhotoConstructor(id, access_hash, user_id, date, caption, geo, sizes);
-        }
-
-        public static PhotoSize photoSizeEmpty(string type)
-        {
-            return new PhotoSizeEmptyConstructor(type);
-        }
-
-        public static PhotoSize photoSize(string type, FileLocation location, int w, int h, int size)
-        {
-            return new PhotoSizeConstructor(type, location, w, h, size);
-        }
-
-        public static PhotoSize photoCachedSize(string type, FileLocation location, int w, int h, byte[] bytes)
-        {
-            return new PhotoCachedSizeConstructor(type, location, w, h, bytes);
-        }
-
-        public static Video videoEmpty(long id)
-        {
-            return new VideoEmptyConstructor(id);
-        }
-
-        public static Video video(long id, long access_hash, int user_id, int date, string caption, int duration, int size,
-            PhotoSize thumb, int dc_id, int w, int h)
-        {
-            return new VideoConstructor(id, access_hash, user_id, date, caption, duration, size, thumb, dc_id, w, h);
-        }
-
-        public static GeoPoint geoPointEmpty()
-        {
-            return new GeoPointEmptyConstructor();
-        }
-
-        public static GeoPoint geoPoint(double lng, double lat)
-        {
-            return new GeoPointConstructor(lng, lat);
-        }
-
-        public static auth_CheckedPhone auth_checkedPhone(bool phone_registered, bool phone_invited)
-        {
-            return new Auth_checkedPhoneConstructor(phone_registered, phone_invited);
-        }
-
-        public static auth_SentCode auth_sentCode(bool phone_registered, string phone_code_hash)
-        {
-            return new Auth_sentCodeConstructor(phone_registered, phone_code_hash);
-        }
-
-        public static auth_Authorization auth_authorization(int expires, User user)
-        {
-            return new Auth_authorizationConstructor(expires, user);
-        }
-
-        public static auth_ExportedAuthorization auth_exportedAuthorization(int id, byte[] bytes)
-        {
-            return new Auth_exportedAuthorizationConstructor(id, bytes);
-        }
-
-        public static InputNotifyPeer inputNotifyPeer(InputPeer peer)
-        {
-            return new InputNotifyPeerConstructor(peer);
-        }
-
-        public static InputNotifyPeer inputNotifyUsers()
-        {
-            return new InputNotifyUsersConstructor();
-        }
-
-        public static InputNotifyPeer inputNotifyChats()
-        {
-            return new InputNotifyChatsConstructor();
-        }
-
-        public static InputNotifyPeer inputNotifyAll()
-        {
-            return new InputNotifyAllConstructor();
-        }
-
-        public static InputPeerNotifyEvents inputPeerNotifyEventsEmpty()
-        {
-            return new InputPeerNotifyEventsEmptyConstructor();
-        }
-
-        public static InputPeerNotifyEvents inputPeerNotifyEventsAll()
-        {
-            return new InputPeerNotifyEventsAllConstructor();
-        }
-
-        public static InputPeerNotifySettings inputPeerNotifySettings(int mute_until, string sound, bool show_previews,
-            int events_mask)
-        {
-            return new InputPeerNotifySettingsConstructor(mute_until, sound, show_previews, events_mask);
-        }
-
-        public static PeerNotifyEvents peerNotifyEventsEmpty()
-        {
-            return new PeerNotifyEventsEmptyConstructor();
-        }
-
-        public static PeerNotifyEvents peerNotifyEventsAll()
-        {
-            return new PeerNotifyEventsAllConstructor();
-        }
-
-        public static PeerNotifySettings peerNotifySettingsEmpty()
-        {
-            return new PeerNotifySettingsEmptyConstructor();
-        }
-
-        public static PeerNotifySettings peerNotifySettings(int mute_until, string sound, bool show_previews, int events_mask)
-        {
-            return new PeerNotifySettingsConstructor(mute_until, sound, show_previews, events_mask);
-        }
-
-        public static WallPaper wallPaper(int id, string title, List<PhotoSize> sizes, int color)
-        {
-            return new WallPaperConstructor(id, title, sizes, color);
-        }
-
-        public static UserFull userFull(User user, contacts_Link link, Photo profile_photo, PeerNotifySettings notify_settings,
-            bool blocked, string real_first_name, string real_last_name)
-        {
-            return new UserFullConstructor(user, link, profile_photo, notify_settings, blocked, real_first_name, real_last_name);
-        }
-
-        public static Contact contact(int user_id, bool mutual)
-        {
-            return new ContactConstructor(user_id, mutual);
-        }
-
-        public static ImportedContact importedContact(int user_id, long client_id)
-        {
-            return new ImportedContactConstructor(user_id, client_id);
-        }
-
-        public static ContactBlocked contactBlocked(int user_id, int date)
-        {
-            return new ContactBlockedConstructor(user_id, date);
-        }
-
-        public static ContactFound contactFound(int user_id)
-        {
-            return new ContactFoundConstructor(user_id);
-        }
-
-        public static ContactSuggested contactSuggested(int user_id, int mutual_contacts)
-        {
-            return new ContactSuggestedConstructor(user_id, mutual_contacts);
-        }
-
-        public static ContactStatus contactStatus(int user_id, int expires)
-        {
-            return new ContactStatusConstructor(user_id, expires);
-        }
-
-        public static ChatLocated chatLocated(int chat_id, int distance)
-        {
-            return new ChatLocatedConstructor(chat_id, distance);
-        }
-
-        public static contacts_ForeignLink contacts_foreignLinkUnknown()
-        {
-            return new Contacts_foreignLinkUnknownConstructor();
-        }
-
-        public static contacts_ForeignLink contacts_foreignLinkRequested(bool has_phone)
-        {
-            return new Contacts_foreignLinkRequestedConstructor(has_phone);
-        }
-
-        public static contacts_ForeignLink contacts_foreignLinkMutual()
-        {
-            return new Contacts_foreignLinkMutualConstructor();
-        }
-
-        public static contacts_MyLink contacts_myLinkEmpty()
-        {
-            return new Contacts_myLinkEmptyConstructor();
-        }
-
-        public static contacts_MyLink contacts_myLinkRequested(bool contact)
-        {
-            return new Contacts_myLinkRequestedConstructor(contact);
-        }
-
-        public static contacts_MyLink contacts_myLinkContact()
-        {
-            return new Contacts_myLinkContactConstructor();
-        }
-
-        public static contacts_Link contacts_link(contacts_MyLink my_link, contacts_ForeignLink foreign_link, User user)
-        {
-            return new Contacts_linkConstructor(my_link, foreign_link, user);
-        }
-
-        public static contacts_Contacts contacts_contacts(List<Contact> contacts, List<User> users)
-        {
-            return new Contacts_contactsConstructor(contacts, users);
-        }
-
-        public static contacts_Contacts contacts_contactsNotModified()
-        {
-            return new Contacts_contactsNotModifiedConstructor();
-        }
-
-        public static contacts_ImportedContacts contacts_importedContacts(List<ImportedContact> imported, List<User> users)
-        {
-            return new Contacts_importedContactsConstructor(imported, users);
-        }
-
-        public static contacts_Blocked contacts_blocked(List<ContactBlocked> blocked, List<User> users)
-        {
-            return new Contacts_blockedConstructor(blocked, users);
-        }
-
-        public static contacts_Blocked contacts_blockedSlice(int count, List<ContactBlocked> blocked, List<User> users)
-        {
-            return new Contacts_blockedSliceConstructor(count, blocked, users);
-        }
-
-        public static contacts_Found contacts_found(List<ContactFound> results, List<User> users)
-        {
-            return new Contacts_foundConstructor(results, users);
-        }
-
-        public static contacts_Suggested contacts_suggested(List<ContactSuggested> results, List<User> users)
-        {
-            return new Contacts_suggestedConstructor(results, users);
-        }
-
-        public static messages_Dialogs messages_dialogs(List<Dialog> dialogs, List<Message> messages, List<Chat> chats,
-            List<User> users)
-        {
-            return new Messages_dialogsConstructor(dialogs, messages, chats, users);
-        }
-
-        public static messages_Dialogs messages_dialogsSlice(int count, List<Dialog> dialogs, List<Message> messages,
-            List<Chat> chats, List<User> users)
-        {
-            return new Messages_dialogsSliceConstructor(count, dialogs, messages, chats, users);
-        }
-
-        public static messages_Messages messages_messages(List<Message> messages, List<Chat> chats, List<User> users)
-        {
-            return new Messages_messagesConstructor(messages, chats, users);
-        }
-
-        public static messages_Messages messages_messagesSlice(int count, List<Message> messages, List<Chat> chats,
-            List<User> users)
-        {
-            return new Messages_messagesSliceConstructor(count, messages, chats, users);
-        }
-
-        public static messages_Message messages_messageEmpty()
-        {
-            return new Messages_messageEmptyConstructor();
-        }
-
-        public static messages_Message messages_message(Message message, List<Chat> chats, List<User> users)
-        {
-            return new Messages_messageConstructor(message, chats, users);
-        }
-
-        public static messages_StatedMessages messages_statedMessages(List<Message> messages, List<Chat> chats,
-            List<User> users, int pts, int seq)
-        {
-            return new Messages_statedMessagesConstructor(messages, chats, users, pts, seq);
-        }
-
-        public static messages_StatedMessage messages_statedMessage(Message message, List<Chat> chats, List<User> users,
-            int pts, int seq)
-        {
-            return new Messages_statedMessageConstructor(message, chats, users, pts, seq);
-        }
-
-        public static messages_SentMessage messages_sentMessage(int id, int date, int pts, int seq)
-        {
-            return new Messages_sentMessageConstructor(id, date, pts, seq);
-        }
-
-        public static messages_Chat messages_chat(Chat chat, List<User> users)
-        {
-            return new Messages_chatConstructor(chat, users);
-        }
-
-        public static messages_Chats messages_chats(List<Chat> chats, List<User> users)
-        {
-            return new Messages_chatsConstructor(chats, users);
-        }
-
-        public static messages_ChatFull messages_chatFull(ChatFull full_chat, List<Chat> chats, List<User> users)
-        {
-            return new Messages_chatFullConstructor(full_chat, chats, users);
-        }
-
-        public static messages_AffectedHistory messages_affectedHistory(int pts, int seq, int offset)
-        {
-            return new Messages_affectedHistoryConstructor(pts, seq, offset);
-        }
-
-        public static MessagesFilter inputMessagesFilterEmpty()
-        {
-            return new InputMessagesFilterEmptyConstructor();
-        }
-
-        public static MessagesFilter inputMessagesFilterPhotos()
-        {
-            return new InputMessagesFilterPhotosConstructor();
-        }
-
-        public static MessagesFilter inputMessagesFilterVideo()
-        {
-            return new InputMessagesFilterVideoConstructor();
-        }
-
-        public static MessagesFilter inputMessagesFilterPhotoVideo()
-        {
-            return new InputMessagesFilterPhotoVideoConstructor();
-        }
-
-        public static Update updateNewMessage(Message message, int pts)
-        {
-            return new UpdateNewMessageConstructor(message, pts);
-        }
-
-        public static Update updateMessageID(int id, long random_id)
-        {
-            return new UpdateMessageIDConstructor(id, random_id);
-        }
-
-        public static Update updateReadMessages(List<int> messages, int pts)
-        {
-            return new UpdateReadMessagesConstructor(messages, pts);
-        }
-
-        public static Update updateDeleteMessages(List<int> messages, int pts)
-        {
-            return new UpdateDeleteMessagesConstructor(messages, pts);
-        }
-
-        public static Update updateRestoreMessages(List<int> messages, int pts)
-        {
-            return new UpdateRestoreMessagesConstructor(messages, pts);
-        }
-
-        public static Update updateUserTyping(int user_id)
-        {
-            return new UpdateUserTypingConstructor(user_id);
-        }
-
-        public static Update updateChatUserTyping(int chat_id, int user_id)
-        {
-            return new UpdateChatUserTypingConstructor(chat_id, user_id);
-        }
-
-        public static Update updateChatParticipants(ChatParticipants participants)
-        {
-            return new UpdateChatParticipantsConstructor(participants);
-        }
-
-        public static Update updateUserStatus(int user_id, UserStatus status)
-        {
-            return new UpdateUserStatusConstructor(user_id, status);
-        }
-
-        public static Update updateUserName(int user_id, string first_name, string last_name)
-        {
-            return new UpdateUserNameConstructor(user_id, first_name, last_name);
-        }
-
-        public static Update updateUserPhoto(int user_id, int date, UserProfilePhoto photo, bool previous)
-        {
-            return new UpdateUserPhotoConstructor(user_id, date, photo, previous);
-        }
-
-        public static Update updateContactRegistered(int user_id, int date)
-        {
-            return new UpdateContactRegisteredConstructor(user_id, date);
-        }
-
-        public static Update updateContactLink(int user_id, contacts_MyLink my_link, contacts_ForeignLink foreign_link)
-        {
-            return new UpdateContactLinkConstructor(user_id, my_link, foreign_link);
-        }
-
-        public static Update updateActivation(int user_id)
-        {
-            return new UpdateActivationConstructor(user_id);
-        }
-
-        public static Update updateNewAuthorization(long auth_key_id, int date, string device, string location)
-        {
-            return new UpdateNewAuthorizationConstructor(auth_key_id, date, device, location);
-        }
-
-        public static updates_State updates_state(int pts, int qts, int date, int seq, int unread_count)
-        {
-            return new Updates_stateConstructor(pts, qts, date, seq, unread_count);
-        }
-
-        public static updates_Difference updates_differenceEmpty(int date, int seq)
-        {
-            return new Updates_differenceEmptyConstructor(date, seq);
-        }
-
-        public static updates_Difference updates_difference(List<Message> new_messages,
-            List<EncryptedMessage> new_encrypted_messages, List<Update> other_updates, List<Chat> chats, List<User> users,
-            updates_State state)
-        {
-            return new Updates_differenceConstructor(new_messages, new_encrypted_messages, other_updates, chats, users, state);
-        }
-
-        public static updates_Difference updates_differenceSlice(List<Message> new_messages,
-            List<EncryptedMessage> new_encrypted_messages, List<Update> other_updates, List<Chat> chats, List<User> users,
-            updates_State intermediate_state)
-        {
-            return new Updates_differenceSliceConstructor(new_messages, new_encrypted_messages, other_updates, chats, users,
-                intermediate_state);
-        }
-
-        public static Updates updatesTooLong()
-        {
-            return new UpdatesTooLongConstructor();
-        }
-
-        public static Updates updateShortMessage(int id, int from_id, string message, int pts, int date, int seq)
-        {
-            return new UpdateShortMessageConstructor(id, from_id, message, pts, date, seq);
-        }
-
-        public static Updates updateShortChatMessage(int id, int from_id, int chat_id, string message, int pts, int date,
-            int seq)
-        {
-            return new UpdateShortChatMessageConstructor(id, from_id, chat_id, message, pts, date, seq);
-        }
-
-        public static Updates updateShort(Update update, int date)
-        {
-            return new UpdateShortConstructor(update, date);
-        }
-
-        public static Updates updatesCombined(List<Update> updates, List<User> users, List<Chat> chats, int date,
-            int seq_start, int seq)
-        {
-            return new UpdatesCombinedConstructor(updates, users, chats, date, seq_start, seq);
-        }
-
-        public static Updates updates(List<Update> updates, List<User> users, List<Chat> chats, int date, int seq)
-        {
-            return new UpdatesConstructor(updates, users, chats, date, seq);
-        }
-
-        public static photos_Photos photos_photos(List<Photo> photos, List<User> users)
-        {
-            return new Photos_photosConstructor(photos, users);
-        }
-
-        public static photos_Photos photos_photosSlice(int count, List<Photo> photos, List<User> users)
-        {
-            return new Photos_photosSliceConstructor(count, photos, users);
-        }
-
-        public static photos_Photo photos_photo(Photo photo, List<User> users)
-        {
-            return new Photos_photoConstructor(photo, users);
-        }
-
-        public static upload_File upload_file(storage_FileType type, int mtime, byte[] bytes)
-        {
-            return new Upload_fileConstructor(type, mtime, bytes);
-        }
-
-        public static DcOption dcOption(int id, string hostname, string ip_address, int port)
-        {
-            return new DcOptionConstructor(id, hostname, ip_address, port);
-        }
-
-        public static Config config(int date, bool test_mode, int this_dc, List<DcOption> dc_options, int chat_size_max)
-        {
-            return new ConfigConstructor(date, test_mode, this_dc, dc_options, chat_size_max);
-        }
-
-        public static NearestDc nearestDc(string country, int this_dc, int nearest_dc)
-        {
-            return new NearestDcConstructor(country, this_dc, nearest_dc);
-        }
-
-        public static help_AppUpdate help_appUpdate(int id, bool critical, string url, string text)
-        {
-            return new Help_appUpdateConstructor(id, critical, url, text);
-        }
-
-        public static help_AppUpdate help_noAppUpdate()
-        {
-            return new Help_noAppUpdateConstructor();
-        }
-
-        public static help_InviteText help_inviteText(string message)
-        {
-            return new Help_inviteTextConstructor(message);
-        }
-
-        public static messages_StatedMessages messages_statedMessagesLinks(List<Message> messages, List<Chat> chats,
-            List<User> users, List<contacts_Link> links, int pts, int seq)
-        {
-            return new Messages_statedMessagesLinksConstructor(messages, chats, users, links, pts, seq);
-        }
-
-        public static messages_StatedMessage messages_statedMessageLink(Message message, List<Chat> chats, List<User> users,
-            List<contacts_Link> links, int pts, int seq)
-        {
-            return new Messages_statedMessageLinkConstructor(message, chats, users, links, pts, seq);
-        }
-
-        public static messages_SentMessage messages_sentMessageLink(int id, int date, int pts, int seq,
-            List<contacts_Link> links)
-        {
-            return new Messages_sentMessageLinkConstructor(id, date, pts, seq, links);
-        }
-
-        public static InputGeoChat inputGeoChat(int chat_id, long access_hash)
-        {
-            return new InputGeoChatConstructor(chat_id, access_hash);
-        }
-
-        public static InputNotifyPeer inputNotifyGeoChatPeer(InputGeoChat peer)
-        {
-            return new InputNotifyGeoChatPeerConstructor(peer);
-        }
-
-        public static Chat geoChat(int id, long access_hash, string title, string address, string venue, GeoPoint geo,
-            ChatPhoto photo, int participants_count, int date, bool checked_in, int version)
-        {
-            return new GeoChatConstructor(id, access_hash, title, address, venue, geo, photo, participants_count, date,
-                checked_in, version);
-        }
-
-        public static GeoChatMessage geoChatMessageEmpty(int chat_id, int id)
-        {
-            return new GeoChatMessageEmptyConstructor(chat_id, id);
-        }
-
-        public static GeoChatMessage geoChatMessage(int chat_id, int id, int from_id, int date, string message,
-            MessageMedia media)
-        {
-            return new GeoChatMessageConstructor(chat_id, id, from_id, date, message, media);
-        }
-
-        public static GeoChatMessage geoChatMessageService(int chat_id, int id, int from_id, int date, MessageAction action)
-        {
-            return new GeoChatMessageServiceConstructor(chat_id, id, from_id, date, action);
-        }
-
-        public static geochats_StatedMessage geochats_statedMessage(GeoChatMessage message, List<Chat> chats, List<User> users,
-            int seq)
-        {
-            return new Geochats_statedMessageConstructor(message, chats, users, seq);
-        }
-
-        public static geochats_Located geochats_located(List<ChatLocated> results, List<GeoChatMessage> messages,
-            List<Chat> chats, List<User> users)
-        {
-            return new Geochats_locatedConstructor(results, messages, chats, users);
-        }
-
-        public static geochats_Messages geochats_messages(List<GeoChatMessage> messages, List<Chat> chats, List<User> users)
-        {
-            return new Geochats_messagesConstructor(messages, chats, users);
-        }
-
-        public static geochats_Messages geochats_messagesSlice(int count, List<GeoChatMessage> messages, List<Chat> chats,
-            List<User> users)
-        {
-            return new Geochats_messagesSliceConstructor(count, messages, chats, users);
-        }
-
-        public static MessageAction messageActionGeoChatCreate(string title, string address)
-        {
-            return new MessageActionGeoChatCreateConstructor(title, address);
-        }
-
-        public static MessageAction messageActionGeoChatCheckin()
-        {
-            return new MessageActionGeoChatCheckinConstructor();
-        }
-
-        public static Update updateNewGeoChatMessage(GeoChatMessage message)
-        {
-            return new UpdateNewGeoChatMessageConstructor(message);
-        }
-
-        public static WallPaper wallPaperSolid(int id, string title, int bg_color, int color)
-        {
-            return new WallPaperSolidConstructor(id, title, bg_color, color);
-        }
-
-        public static Update updateNewEncryptedMessage(EncryptedMessage message, int qts)
-        {
-            return new UpdateNewEncryptedMessageConstructor(message, qts);
-        }
-
-        public static Update updateEncryptedChatTyping(int chat_id)
-        {
-            return new UpdateEncryptedChatTypingConstructor(chat_id);
-        }
-
-        public static Update updateEncryption(EncryptedChat chat, int date)
-        {
-            return new UpdateEncryptionConstructor(chat, date);
-        }
-
-        public static Update updateEncryptedMessagesRead(int chat_id, int max_date, int date)
-        {
-            return new UpdateEncryptedMessagesReadConstructor(chat_id, max_date, date);
-        }
-
-        public static EncryptedChat encryptedChatEmpty(int id)
-        {
-            return new EncryptedChatEmptyConstructor(id);
-        }
-
-        public static EncryptedChat encryptedChatWaiting(int id, long access_hash, int date, int admin_id, int participant_id)
-        {
-            return new EncryptedChatWaitingConstructor(id, access_hash, date, admin_id, participant_id);
-        }
-
-        public static EncryptedChat encryptedChatRequested(int id, long access_hash, int date, int admin_id,
-            int participant_id, byte[] g_a, byte[] nonce)
-        {
-            return new EncryptedChatRequestedConstructor(id, access_hash, date, admin_id, participant_id, g_a, nonce);
-        }
-
-        public static EncryptedChat encryptedChat(int id, long access_hash, int date, int admin_id, int participant_id,
-            byte[] g_a_or_b, byte[] nonce, long key_fingerprint)
-        {
-            return new EncryptedChatConstructor(id, access_hash, date, admin_id, participant_id, g_a_or_b, nonce, key_fingerprint);
-        }
-
-        public static EncryptedChat encryptedChatDiscarded(int id)
-        {
-            return new EncryptedChatDiscardedConstructor(id);
-        }
-
-        public static InputEncryptedChat inputEncryptedChat(int chat_id, long access_hash)
-        {
-            return new InputEncryptedChatConstructor(chat_id, access_hash);
-        }
-
-        public static EncryptedFile encryptedFileEmpty()
-        {
-            return new EncryptedFileEmptyConstructor();
-        }
-
-        public static EncryptedFile encryptedFile(long id, long access_hash, int size, int dc_id, int key_fingerprint)
-        {
-            return new EncryptedFileConstructor(id, access_hash, size, dc_id, key_fingerprint);
-        }
-
-        public static InputEncryptedFile inputEncryptedFileEmpty()
-        {
-            return new InputEncryptedFileEmptyConstructor();
-        }
-
-        public static InputEncryptedFile inputEncryptedFileUploaded(long id, int parts, string md5_checksum,
-            int key_fingerprint)
-        {
-            return new InputEncryptedFileUploadedConstructor(id, parts, md5_checksum, key_fingerprint);
-        }
-
-        public static InputEncryptedFile inputEncryptedFile(long id, long access_hash)
-        {
-            return new InputEncryptedFileConstructor(id, access_hash);
-        }
-
-        public static InputFileLocation inputEncryptedFileLocation(long id, long access_hash)
-        {
-            return new InputEncryptedFileLocationConstructor(id, access_hash);
-        }
-
-        public static EncryptedMessage encryptedMessage(long random_id, int chat_id, int date, byte[] bytes,
-            EncryptedFile file)
-        {
-            return new EncryptedMessageConstructor(random_id, chat_id, date, bytes, file);
-        }
-
-        public static EncryptedMessage encryptedMessageService(long random_id, int chat_id, int date, byte[] bytes)
-        {
-            return new EncryptedMessageServiceConstructor(random_id, chat_id, date, bytes);
-        }
-
-        public static DecryptedMessageLayer decryptedMessageLayer(int layer, DecryptedMessage message)
-        {
-            return new DecryptedMessageLayerConstructor(layer, message);
-        }
-
-        public static DecryptedMessage decryptedMessage(long random_id, byte[] random_bytes, string message,
-            DecryptedMessageMedia media)
-        {
-            return new DecryptedMessageConstructor(random_id, random_bytes, message, media);
-        }
-
-        public static DecryptedMessage decryptedMessageService(long random_id, byte[] random_bytes,
-            DecryptedMessageAction action)
-        {
-            return new DecryptedMessageServiceConstructor(random_id, random_bytes, action);
-        }
-
-        public static DecryptedMessageMedia decryptedMessageMediaEmpty()
-        {
-            return new DecryptedMessageMediaEmptyConstructor();
-        }
-
-        public static DecryptedMessageMedia decryptedMessageMediaPhoto(byte[] thumb, int thumb_w, int thumb_h, int w, int h,
-            int size, byte[] key, byte[] iv)
-        {
-            return new DecryptedMessageMediaPhotoConstructor(thumb, thumb_w, thumb_h, w, h, size, key, iv);
-        }
-
-        public static DecryptedMessageMedia decryptedMessageMediaVideo(byte[] thumb, int thumb_w, int thumb_h, int duration,
-            int w, int h, int size, byte[] key, byte[] iv)
-        {
-            return new DecryptedMessageMediaVideoConstructor(thumb, thumb_w, thumb_h, duration, w, h, size, key, iv);
-        }
-
-        public static DecryptedMessageMedia decryptedMessageMediaGeoPoint(double lat, double lng)
-        {
-            return new DecryptedMessageMediaGeoPointConstructor(lat, lng);
-        }
-
-        public static DecryptedMessageMedia decryptedMessageMediaContact(string phone_number, string first_name,
-            string last_name, int user_id)
-        {
-            return new DecryptedMessageMediaContactConstructor(phone_number, first_name, last_name, user_id);
-        }
-
-        public static DecryptedMessageAction decryptedMessageActionSetMessageTTL(int ttl_seconds)
-        {
-            return new DecryptedMessageActionSetMessageTTLConstructor(ttl_seconds);
-        }
-
-        public static messages_DhConfig messages_dhConfigNotModified(byte[] random)
-        {
-            return new Messages_dhConfigNotModifiedConstructor(random);
-        }
-
-        public static messages_DhConfig messages_dhConfig(int g, byte[] p, int version, byte[] random)
-        {
-            return new Messages_dhConfigConstructor(g, p, version, random);
-        }
-
-        public static messages_SentEncryptedMessage messages_sentEncryptedMessage(int date)
-        {
-            return new Messages_sentEncryptedMessageConstructor(date);
-        }
-
-        public static messages_SentEncryptedMessage messages_sentEncryptedFile(int date, EncryptedFile file)
-        {
-            return new Messages_sentEncryptedFileConstructor(date, file);
-        }
-
-        public static InputFile inputFileBig(long id, int parts, string name)
-        {
-            return new InputFileBigConstructor(id, parts, name);
-        }
-
-        public static InputEncryptedFile inputEncryptedFileBigUploaded(long id, int parts, int key_fingerprint)
-        {
-            return new InputEncryptedFileBigUploadedConstructor(id, parts, key_fingerprint);
-        }
-
-        public static Update updateChatParticipantAdd(int chat_id, int user_id, int inviter_id, int version)
-        {
-            return new UpdateChatParticipantAddConstructor(chat_id, user_id, inviter_id, version);
-        }
-
-        public static Update updateChatParticipantDelete(int chat_id, int user_id, int version)
-        {
-            return new UpdateChatParticipantDeleteConstructor(chat_id, user_id, version);
-        }
-
-        public static Update updateDcOptions(List<DcOption> dc_options)
-        {
-            return new UpdateDcOptionsConstructor(dc_options);
-        }
-
-        public static InputMedia inputMediaUploadedAudio(InputFile file, int duration)
-        {
-            return new InputMediaUploadedAudioConstructor(file, duration);
-        }
-
-        public static InputMedia inputMediaAudio(InputAudio id)
-        {
-            return new InputMediaAudioConstructor(id);
-        }
-
-        public static InputMedia inputMediaUploadedDocument(InputFile file, string file_name, string mime_type)
-        {
-            return new InputMediaUploadedDocumentConstructor(file, file_name, mime_type);
-        }
-
-        public static InputMedia inputMediaUploadedThumbDocument(InputFile file, InputFile thumb, string file_name,
-            string mime_type)
-        {
-            return new InputMediaUploadedThumbDocumentConstructor(file, thumb, file_name, mime_type);
-        }
-
-        public static InputMedia inputMediaDocument(InputDocument id)
-        {
-            return new InputMediaDocumentConstructor(id);
-        }
-
-        public static MessageMedia messageMediaDocument(Document document)
-        {
-            return new MessageMediaDocumentConstructor(document);
-        }
-
-        public static MessageMedia messageMediaAudio(Audio audio)
-        {
-            return new MessageMediaAudioConstructor(audio);
-        }
-
-        public static InputAudio inputAudioEmpty()
-        {
-            return new InputAudioEmptyConstructor();
-        }
-
-        public static InputAudio inputAudio(long id, long access_hash)
-        {
-            return new InputAudioConstructor(id, access_hash);
-        }
-
-        public static InputDocument inputDocumentEmpty()
-        {
-            return new InputDocumentEmptyConstructor();
-        }
-
-        public static InputDocument inputDocument(long id, long access_hash)
-        {
-            return new InputDocumentConstructor(id, access_hash);
-        }
-
-        public static InputFileLocation inputAudioFileLocation(long id, long access_hash)
-        {
-            return new InputAudioFileLocationConstructor(id, access_hash);
-        }
-
-        public static InputFileLocation inputDocumentFileLocation(long id, long access_hash)
-        {
-            return new InputDocumentFileLocationConstructor(id, access_hash);
-        }
-
-        public static DecryptedMessageMedia decryptedMessageMediaDocument(byte[] thumb, int thumb_w, int thumb_h,
-            string file_name, string mime_type, int size, byte[] key, byte[] iv)
-        {
-            return new DecryptedMessageMediaDocumentConstructor(thumb, thumb_w, thumb_h, file_name, mime_type, size, key, iv);
-        }
-
-        public static DecryptedMessageMedia decryptedMessageMediaAudio(int duration, int size, byte[] key, byte[] iv)
-        {
-            return new DecryptedMessageMediaAudioConstructor(duration, size, key, iv);
-        }
-
-        public static Audio audioEmpty(long id)
-        {
-            return new AudioEmptyConstructor(id);
-        }
-
-        public static Audio audio(long id, long access_hash, int user_id, int date, int duration, int size, int dc_id)
-        {
-            return new AudioConstructor(id, access_hash, user_id, date, duration, size, dc_id);
-        }
-
-        public static Document documentEmpty(long id)
-        {
-            return new DocumentEmptyConstructor(id);
-        }
-
-        public static Document document(long id, long access_hash, int user_id, int date, string file_name, string mime_type,
-            int size, PhotoSize thumb, int dc_id)
-        {
-            return new DocumentConstructor(id, access_hash, user_id, date, file_name, mime_type, size, thumb, dc_id);
-        }
-
     }
 
     // abstract types
@@ -4287,6 +2972,7 @@ namespace TLSharp.Core.MTProto
         public int id;
         public string first_name;
         public string last_name;
+        public string username;
         public string phone;
         public UserProfilePhoto photo;
         public UserStatus status;
@@ -4297,12 +2983,13 @@ namespace TLSharp.Core.MTProto
 
         }
 
-        public UserSelfConstructor(int id, string first_name, string last_name, string phone, UserProfilePhoto photo,
+        public UserSelfConstructor(int id, string first_name, string last_name, string username, string phone, UserProfilePhoto photo,
             UserStatus status, bool inactive)
         {
             this.id = id;
             this.first_name = first_name;
             this.last_name = last_name;
+            this.username = username;
             this.phone = phone;
             this.photo = photo;
             this.status = status;
@@ -4317,10 +3004,11 @@ namespace TLSharp.Core.MTProto
 
         public override void Write(BinaryWriter writer)
         {
-            writer.Write(0x720535ec);
+            writer.Write(0x7007b451);
             writer.Write(this.id);
             Serializers.String.write(writer, this.first_name);
             Serializers.String.write(writer, this.last_name);
+            Serializers.String.write(writer, this.username);
             Serializers.String.write(writer, this.phone);
             //this.photo.Write(writer);
             //this.status.Write(writer);
@@ -4332,6 +3020,7 @@ namespace TLSharp.Core.MTProto
             this.id = reader.ReadInt32();
             this.first_name = Serializers.String.read(reader);
             this.last_name = Serializers.String.read(reader);
+            this.username = Serializers.String.read(reader);
             this.phone = Serializers.String.read(reader);
             //this.photo = TL.Parse<UserProfilePhoto>(reader);
             //this.status = TL.Parse<UserStatus>(reader);
@@ -4341,8 +3030,8 @@ namespace TLSharp.Core.MTProto
         public override string ToString()
         {
             return
-                String.Format("(userSelf id:{0} first_name:'{1}' last_name:'{2}' phone:'{3}' photo:{4} status:{5} inactive:{6})", id,
-                    first_name, last_name, phone, photo, status, inactive);
+                String.Format("(userSelf id:{0} first_name:'{1}' last_name:'{2}' username:'{7}' phone:'{3}' photo:{4} status:{5} inactive:{6})", id,
+                    first_name, last_name, phone, photo, status, inactive, username);
         }
     }
 
@@ -4352,6 +3041,7 @@ namespace TLSharp.Core.MTProto
         public int id;
         public string first_name;
         public string last_name;
+        public string username;
         public long access_hash;
         public string phone;
         public UserProfilePhoto photo;
@@ -4362,12 +3052,13 @@ namespace TLSharp.Core.MTProto
 
         }
 
-        public UserContactConstructor(int id, string first_name, string last_name, long access_hash, string phone,
+        public UserContactConstructor(int id, string first_name, string last_name, string username, long access_hash, string phone,
             UserProfilePhoto photo, UserStatus status)
         {
             this.id = id;
             this.first_name = first_name;
             this.last_name = last_name;
+            this.username = username;
             this.access_hash = access_hash;
             this.phone = phone;
             this.photo = photo;
@@ -4382,10 +3073,11 @@ namespace TLSharp.Core.MTProto
 
         public override void Write(BinaryWriter writer)
         {
-            writer.Write(0xf2fb8319);
+            writer.Write(0xcab35e18);
             writer.Write(this.id);
             Serializers.String.write(writer, this.first_name);
             Serializers.String.write(writer, this.last_name);
+            Serializers.String.write(writer, this.username);
             writer.Write(this.access_hash);
             Serializers.String.write(writer, this.phone);
             this.photo.Write(writer);
@@ -4397,6 +3089,7 @@ namespace TLSharp.Core.MTProto
             this.id = reader.ReadInt32();
             this.first_name = Serializers.String.read(reader);
             this.last_name = Serializers.String.read(reader);
+            this.username = Serializers.String.read(reader);
             this.access_hash = reader.ReadInt64();
             this.phone = Serializers.String.read(reader);
             this.photo = TL.Parse<UserProfilePhoto>(reader);
@@ -4407,8 +3100,8 @@ namespace TLSharp.Core.MTProto
         {
             return
                 String.Format(
-                    "(userContact id:{0} first_name:'{1}' last_name:'{2}' access_hash:{3} phone:'{4}' photo:{5} status:{6})", id,
-                    first_name, last_name, access_hash, phone, photo, status);
+                    "(userContact id:{0} first_name:'{1}' last_name:'{2}' username:'{7}' access_hash:{3} phone:'{4}' photo:{5} status:{6})", id,
+                    first_name, last_name, access_hash, phone, photo, status, username);
         }
     }
 
@@ -4418,6 +3111,7 @@ namespace TLSharp.Core.MTProto
         public int id;
         public string first_name;
         public string last_name;
+        public string username;
         public long access_hash;
         public string phone;
         public UserProfilePhoto photo;
@@ -4428,12 +3122,13 @@ namespace TLSharp.Core.MTProto
 
         }
 
-        public UserRequestConstructor(int id, string first_name, string last_name, long access_hash, string phone,
+        public UserRequestConstructor(int id, string first_name, string last_name, string username, long access_hash, string phone,
             UserProfilePhoto photo, UserStatus status)
         {
             this.id = id;
             this.first_name = first_name;
             this.last_name = last_name;
+            this.username = username;
             this.access_hash = access_hash;
             this.phone = phone;
             this.photo = photo;
@@ -4448,10 +3143,11 @@ namespace TLSharp.Core.MTProto
 
         public override void Write(BinaryWriter writer)
         {
-            writer.Write(0x22e8ceb0);
+            writer.Write(0xd9ccc4ef);
             writer.Write(this.id);
             Serializers.String.write(writer, this.first_name);
             Serializers.String.write(writer, this.last_name);
+            Serializers.String.write(writer, this.username);
             writer.Write(this.access_hash);
             Serializers.String.write(writer, this.phone);
             this.photo.Write(writer);
@@ -4463,6 +3159,7 @@ namespace TLSharp.Core.MTProto
             this.id = reader.ReadInt32();
             this.first_name = Serializers.String.read(reader);
             this.last_name = Serializers.String.read(reader);
+            this.username = Serializers.String.read(reader);
             this.access_hash = reader.ReadInt64();
             this.phone = Serializers.String.read(reader);
             this.photo = TL.Parse<UserProfilePhoto>(reader);
@@ -4473,8 +3170,8 @@ namespace TLSharp.Core.MTProto
         {
             return
                 String.Format(
-                    "(userRequest id:{0} first_name:'{1}' last_name:'{2}' access_hash:{3} phone:'{4}' photo:{5} status:{6})", id,
-                    first_name, last_name, access_hash, phone, photo, status);
+                    "(userRequest id:{0} first_name:'{1}' last_name:'{2}' username:'{7}' access_hash:{3} phone:'{4}' photo:{5} status:{6})", id,
+                    first_name, last_name, access_hash, phone, photo, status, username);
         }
     }
 
@@ -4484,6 +3181,7 @@ namespace TLSharp.Core.MTProto
         public int id;
         public string first_name;
         public string last_name;
+        public string username;
         public long access_hash;
         public UserProfilePhoto photo;
         public UserStatus status;
@@ -4493,12 +3191,13 @@ namespace TLSharp.Core.MTProto
 
         }
 
-        public UserForeignConstructor(int id, string first_name, string last_name, long access_hash, UserProfilePhoto photo,
+        public UserForeignConstructor(int id, string first_name, string last_name, string username, long access_hash, UserProfilePhoto photo,
             UserStatus status)
         {
             this.id = id;
             this.first_name = first_name;
             this.last_name = last_name;
+            this.username = username;
             this.access_hash = access_hash;
             this.photo = photo;
             this.status = status;
@@ -4512,10 +3211,11 @@ namespace TLSharp.Core.MTProto
 
         public override void Write(BinaryWriter writer)
         {
-            writer.Write(0x5214c89d);
+            writer.Write(0x75cf7a8);
             writer.Write(this.id);
             Serializers.String.write(writer, this.first_name);
             Serializers.String.write(writer, this.last_name);
+            Serializers.String.write(writer, this.username);
             writer.Write(this.access_hash);
             this.photo.Write(writer);
             this.status.Write(writer);
@@ -4526,6 +3226,7 @@ namespace TLSharp.Core.MTProto
             this.id = reader.ReadInt32();
             this.first_name = Serializers.String.read(reader);
             this.last_name = Serializers.String.read(reader);
+            this.username = Serializers.String.read(reader);
             this.access_hash = reader.ReadInt64();
             this.photo = TL.Parse<UserProfilePhoto>(reader);
             this.status = TL.Parse<UserStatus>(reader);
@@ -4533,8 +3234,8 @@ namespace TLSharp.Core.MTProto
 
         public override string ToString()
         {
-            return String.Format("(userForeign id:{0} first_name:'{1}' last_name:'{2}' access_hash:{3} photo:{4} status:{5})", id,
-                first_name, last_name, access_hash, photo, status);
+            return String.Format("(userForeign id:{0} first_name:'{1}' last_name:'{2}' username:'{6}' access_hash:{3} photo:{4} status:{5})", id,
+                first_name, last_name, access_hash, photo, status, username);
         }
     }
 
@@ -4565,7 +3266,7 @@ namespace TLSharp.Core.MTProto
 
         public override void Write(BinaryWriter writer)
         {
-            writer.Write(0xb29ad7cc);
+            writer.Write(0xd6016d7a);
             writer.Write(this.id);
             Serializers.String.write(writer, this.first_name);
             Serializers.String.write(writer, this.last_name);
@@ -4766,6 +3467,75 @@ namespace TLSharp.Core.MTProto
         public override string ToString()
         {
             return String.Format("(userStatusOffline was_online:{0})", was_online);
+        }
+    }
+
+    public class UserStatusRecentlyConstructor : UserStatus
+    {
+        public UserStatusRecentlyConstructor()
+        {
+
+        }
+
+        public override Constructor Constructor
+        {
+            get { return Constructor.userStatusRecently; }
+        }
+
+        public override void Write(BinaryWriter writer)
+        {
+            writer.Write(0xe26f42f1);
+        }
+
+        public override void Read(BinaryReader reader)
+        {
+
+        }
+    }
+
+    public class UserStatusLastWeekConstructor : UserStatus
+    {
+        public UserStatusLastWeekConstructor()
+        {
+
+        }
+
+        public override Constructor Constructor
+        {
+            get { return Constructor.userStatusLastWeek; }
+        }
+
+        public override void Write(BinaryWriter writer)
+        {
+            writer.Write(0x7bf09fc);
+        }
+
+        public override void Read(BinaryReader reader)
+        {
+
+        }
+    }
+
+    public class UserStatusLastMonthConstructor : UserStatus
+    {
+        public UserStatusLastMonthConstructor()
+        {
+
+        }
+
+        public override Constructor Constructor
+        {
+            get { return Constructor.userStatusLastMonth; }
+        }
+
+        public override void Write(BinaryWriter writer)
+        {
+            writer.Write(0x77ebc742);
+        }
+
+        public override void Read(BinaryReader reader)
+        {
+
         }
     }
 
@@ -5229,11 +3999,10 @@ namespace TLSharp.Core.MTProto
 
     public class MessageConstructor : Message
     {
+        public int flags;
         public int id;
         public int from_id;
-        public int to_id;
-        public bool output;
-        public bool unread;
+        public Peer to_id;
         public int date;
         public string message;
         public MessageMedia media;
@@ -5243,14 +4012,12 @@ namespace TLSharp.Core.MTProto
 
         }
 
-        public MessageConstructor(int id, int from_id, int to_id, bool output, bool unread, int date, string message,
-            MessageMedia media)
+        public MessageConstructor(int flags, int id, int from_id, Peer to_id, int date, string message, MessageMedia media)
         {
+            this.flags = flags;
             this.id = id;
             this.from_id = from_id;
             this.to_id = to_id;
-            this.output = output;
-            this.unread = unread;
             this.date = date;
             this.message = message;
             this.media = media;
@@ -5264,12 +4031,11 @@ namespace TLSharp.Core.MTProto
 
         public override void Write(BinaryWriter writer)
         {
-            writer.Write(0x22eb6aba);
+            writer.Write(0x567699b3);
+            writer.Write(this.flags);
             writer.Write(this.id);
             writer.Write(this.from_id);
-            writer.Write(this.to_id);
-            writer.Write(this.output ? 0x997275b5 : 0xbc799737);
-            writer.Write(this.unread ? 0x997275b5 : 0xbc799737);
+            this.to_id.Write(writer);
             writer.Write(this.date);
             Serializers.String.write(writer, this.message);
             this.media.Write(writer);
@@ -5277,11 +4043,10 @@ namespace TLSharp.Core.MTProto
 
         public override void Read(BinaryReader reader)
         {
+            this.flags = reader.ReadInt32();
             this.id = reader.ReadInt32();
             this.from_id = reader.ReadInt32();
-            this.to_id = reader.ReadInt32();
-            this.output = reader.ReadUInt32() == 0x997275b5;
-            this.unread = reader.ReadUInt32() == 0x997275b5;
+            this.to_id = TL.Parse<Peer>(reader);
             this.date = reader.ReadInt32();
             this.message = Serializers.String.read(reader);
             this.media = TL.Parse<MessageMedia>(reader);
@@ -5289,21 +4054,20 @@ namespace TLSharp.Core.MTProto
 
         public override string ToString()
         {
-            return String.Format("(message id:{0} from_id:{1} to_id:{2} out:{3} unread:{4} date:{5} message:'{6}' media:{7})", id,
-                from_id, to_id, output, unread, date, message, media);
+            return String.Format("(message flags:{6} id:{0} from_id:{1} to_id:{2} date:{3} message:'{4}' media:{5})", id,
+                from_id, to_id, date, message, media, flags);
         }
     }
 
 
     public class MessageForwardedConstructor : Message
     {
+        public int flags;
         public int id;
         public int fwd_from_id;
         public int fwd_date;
         public int from_id;
-        public int to_id;
-        public bool output;
-        public bool unread;
+        public Peer to_id;
         public int date;
         public string message;
         public MessageMedia media;
@@ -5313,16 +4077,15 @@ namespace TLSharp.Core.MTProto
 
         }
 
-        public MessageForwardedConstructor(int id, int fwd_from_id, int fwd_date, int from_id, int to_id, bool output,
-            bool unread, int date, string message, MessageMedia media)
+        public MessageForwardedConstructor(int flags, int id, int fwd_from_id, int fwd_date, int from_id, Peer to_id, int date, 
+            string message, MessageMedia media)
         {
+            this.flags = flags;
             this.id = id;
             this.fwd_from_id = fwd_from_id;
             this.fwd_date = fwd_date;
             this.from_id = from_id;
             this.to_id = to_id;
-            this.output = output;
-            this.unread = unread;
             this.date = date;
             this.message = message;
             this.media = media;
@@ -5336,14 +4099,13 @@ namespace TLSharp.Core.MTProto
 
         public override void Write(BinaryWriter writer)
         {
-            writer.Write(0x05f46804);
+            writer.Write(0xa367e716);
+            writer.Write(this.flags);
             writer.Write(this.id);
             writer.Write(this.fwd_from_id);
             writer.Write(this.fwd_date);
             writer.Write(this.from_id);
-            writer.Write(this.to_id);
-            writer.Write(this.output ? 0x997275b5 : 0xbc799737);
-            writer.Write(this.unread ? 0x997275b5 : 0xbc799737);
+            this.to_id.Write(writer);
             writer.Write(this.date);
             Serializers.String.write(writer, this.message);
             this.media.Write(writer);
@@ -5351,13 +4113,12 @@ namespace TLSharp.Core.MTProto
 
         public override void Read(BinaryReader reader)
         {
+            this.flags = reader.ReadInt32();
             this.id = reader.ReadInt32();
             this.fwd_from_id = reader.ReadInt32();
             this.fwd_date = reader.ReadInt32();
             this.from_id = reader.ReadInt32();
-            this.to_id = reader.ReadInt32();
-            this.output = reader.ReadUInt32() == 0x997275b5;
-            this.unread = reader.ReadUInt32() == 0x997275b5;
+            this.to_id = TL.Parse<Peer>(reader);
             this.date = reader.ReadInt32();
             this.message = Serializers.String.read(reader);
             this.media = TL.Parse<MessageMedia>(reader);
@@ -5367,14 +4128,15 @@ namespace TLSharp.Core.MTProto
         {
             return
                 String.Format(
-                    "(messageForwarded id:{0} fwd_from_id:{1} fwd_date:{2} from_id:{3} to_id:{4} out:{5} unread:{6} date:{7} message:'{8}' media:{9})",
-                    id, fwd_from_id, fwd_date, from_id, to_id, output, unread, date, message, media);
+                    "(messageForwarded flags:{8} id:{0} fwd_from_id:{1} fwd_date:{2} from_id:{3} to_id:{4} date:{5} message:'{6}' media:{7})",
+                    id, fwd_from_id, fwd_date, from_id, to_id, date, message, media, flags);
         }
     }
 
 
     public class MessageServiceConstructor : Message
     {
+        public int flags;
         public int id;
         public int from_id;
         public Peer to_id;
@@ -5388,14 +4150,12 @@ namespace TLSharp.Core.MTProto
 
         }
 
-        public MessageServiceConstructor(int id, int from_id, Peer to_id, bool output, bool unread, int date,
-            MessageAction action)
+        public MessageServiceConstructor(int flags, int id, int from_id, Peer to_id, int date, MessageAction action)
         {
+            this.flags = flags;
             this.id = id;
             this.from_id = from_id;
             this.to_id = to_id;
-            this.output = output;
-            this.unread = unread;
             this.date = date;
             this.action = action;
         }
@@ -5408,31 +4168,29 @@ namespace TLSharp.Core.MTProto
 
         public override void Write(BinaryWriter writer)
         {
-            writer.Write(0x9f8d60bb);
+            writer.Write(0x1d86f70e);
+            writer.Write(this.flags);
             writer.Write(this.id);
             writer.Write(this.from_id);
             this.to_id.Write(writer);
-            writer.Write(this.output ? 0x997275b5 : 0xbc799737);
-            writer.Write(this.unread ? 0x997275b5 : 0xbc799737);
             writer.Write(this.date);
             this.action.Write(writer);
         }
 
         public override void Read(BinaryReader reader)
         {
+            this.flags = reader.ReadInt32();
             this.id = reader.ReadInt32();
             this.from_id = reader.ReadInt32();
             this.to_id = TL.Parse<Peer>(reader);
-            this.output = reader.ReadUInt32() == 0x997275b5;
-            this.unread = reader.ReadUInt32() == 0x997275b5;
             this.date = reader.ReadInt32();
             this.action = TL.Parse<MessageAction>(reader);
         }
 
         public override string ToString()
         {
-            return String.Format("(messageService id:{0} from_id:{1} to_id:{2} out:{3} unread:{4} date:{5} action:{6})", id,
-                from_id, to_id, output, unread, date, action);
+            return String.Format("(messageService flags:{5} id:{0} from_id:{1} to_id:{2} date:{3} action:{4})", 
+                id, from_id, to_id, output, unread, date, action, flags);
         }
     }
 
@@ -14755,31 +13513,29 @@ namespace TLSharp.Core.MTProto
     {
         public long id;
         public long access_hash;
-        public int user_id;
         public int date;
-        public string file_name;
         public string mime_type;
         public int size;
         public PhotoSize thumb;
         public int dc_id;
+        public List<DocumentAttribute> attributes;
 
         public DocumentConstructor()
         {
 
         }
 
-        public DocumentConstructor(long id, long access_hash, int user_id, int date, string file_name, string mime_type,
-            int size, PhotoSize thumb, int dc_id)
+        public DocumentConstructor(long id, long access_hash, int date, string mime_type, int size, PhotoSize thumb, 
+            int dc_id, List<DocumentAttribute> attributes)
         {
             this.id = id;
             this.access_hash = access_hash;
-            this.user_id = user_id;
             this.date = date;
-            this.file_name = file_name;
             this.mime_type = mime_type;
             this.size = size;
             this.thumb = thumb;
             this.dc_id = dc_id;
+            this.attributes = attributes;
         }
 
 
@@ -14790,38 +13546,262 @@ namespace TLSharp.Core.MTProto
 
         public override void Write(BinaryWriter writer)
         {
-            writer.Write(0x9efc6326);
+            writer.Write(0xf9a39f4f);
             writer.Write(this.id);
             writer.Write(this.access_hash);
-            writer.Write(this.user_id);
             writer.Write(this.date);
-            Serializers.String.write(writer, this.file_name);
             Serializers.String.write(writer, this.mime_type);
             writer.Write(this.size);
             this.thumb.Write(writer);
             writer.Write(this.dc_id);
+            writer.Write(0x1cb5c415);
+            writer.Write(this.attributes.Count);
+            for (int i = 0; i < this.attributes.Count; i++)
+            {
+                this.attributes[i].Write(writer);
+            }
         }
 
         public override void Read(BinaryReader reader)
         {
             this.id = reader.ReadInt64();
             this.access_hash = reader.ReadInt64();
-            this.user_id = reader.ReadInt32();
             this.date = reader.ReadInt32();
-            this.file_name = Serializers.String.read(reader);
             this.mime_type = Serializers.String.read(reader);
             this.size = reader.ReadInt32();
-            var tst = Serializers.String.read(reader);
             this.thumb = TL.Parse<PhotoSize>(reader);
             this.dc_id = reader.ReadInt32();
+
+            reader.ReadInt32(); //1cb5c415 vector
+            int size = reader.ReadInt32();
+            attributes = new List<DocumentAttribute>(size);
+            for (int i = 0; i < size; i++)
+            {
+                attributes.Add(TL.Parse<DocumentAttribute>(reader));
+            }
         }
 
         public override string ToString()
         {
             return
                 String.Format(
-                    "(document id:{0} access_hash:{1} user_id:{2} date:{3} file_name:'{4}' mime_type:'{5}' size:{6} thumb:{7} dc_id:{8})",
-                    id, access_hash, user_id, date, file_name, mime_type, size, thumb, dc_id);
+                    "(document id:{0} access_hash:{1} date:{2} mime_type:'{3}' size:{4} thumb:{5} dc_id:{6} attributes:{7})",
+                    id, access_hash, date, mime_type, size, thumb, dc_id, attributes);
+        }
+    }
+
+    public abstract class DocumentAttribute : TLObject
+    {
+
+    }
+
+    public class DocumentAttributeImageSize : DocumentAttribute
+    {
+        public int w;
+        public int h;
+
+        public DocumentAttributeImageSize()
+        {
+
+        }
+
+        public DocumentAttributeImageSize(int w, int h)
+        {
+            this.w = w;
+            this.h = h;
+        }
+
+        public override Constructor Constructor
+        {
+            get { return Constructor.documentAttributeImageSize; }
+        }
+
+        public override void Write(BinaryWriter writer)
+        {
+            writer.Write(0x6c37c15c);
+            writer.Write(this.w);
+            writer.Write(this.h);
+        }
+
+        public override void Read(BinaryReader reader)
+        {
+            this.w = reader.ReadInt32();
+            this.h = reader.ReadInt32();
+        }
+
+        public override string ToString()
+        {
+            return String.Format("(w:{0} h:{1})", w, h);
+        }
+    }
+
+    public class DocumentAttributeAnimated : DocumentAttribute
+    {
+        public DocumentAttributeAnimated()
+        {
+
+        }
+
+        public override Constructor Constructor
+        {
+            get { return Constructor.documentAttributeAnimated; }
+        }
+
+        public override void Write(BinaryWriter writer)
+        {
+            writer.Write(0x11b58939);
+        }
+
+        public override void Read(BinaryReader reader)
+        {
+        }
+
+        public override string ToString()
+        {
+            return "()";
+        }
+    }
+
+    public class DocumentAttributeSticker : DocumentAttribute
+    {
+        public DocumentAttributeSticker()
+        {
+
+        }
+
+        public override Constructor Constructor
+        {
+            get { return Constructor.documentAttributeSticker; }
+        }
+
+        public override void Write(BinaryWriter writer)
+        {
+            writer.Write(0xfb0a5727);
+        }
+
+        public override void Read(BinaryReader reader)
+        {
+        }
+
+        public override string ToString()
+        {
+            return "()";
+        }
+    }
+
+    public class DocumentAttributeVideo : DocumentAttribute
+    {
+        public int duration;
+        public int w;
+        public int h;
+
+        public DocumentAttributeVideo()
+        {
+
+        }
+
+        public DocumentAttributeVideo(int duration, int w, int h)
+        {
+            this.duration = duration;
+            this.w = w;
+            this.h = h;
+        }
+
+        public override Constructor Constructor
+        {
+            get { return Constructor.documentAttributeVideo; }
+        }
+
+        public override void Write(BinaryWriter writer)
+        {
+            writer.Write(0x5910cccb);
+            writer.Write(duration);
+            writer.Write(w);
+            writer.Write(h);
+        }
+
+        public override void Read(BinaryReader reader)
+        {
+            this.duration = reader.ReadInt32();
+            this.w = reader.ReadInt32();
+            this.h = reader.ReadInt32();
+        }
+
+        public override string ToString()
+        {
+            return string.Format("(duration:{0} w:{1} h:{2})", duration, w, h);
+        }
+    }
+
+    public class DocumentAttributeAudio : DocumentAttribute
+    {
+        public int duration;
+
+        public DocumentAttributeAudio()
+        {
+
+        }
+
+        public DocumentAttributeAudio(int duration)
+        {
+            this.duration = duration;
+        }
+
+        public override Constructor Constructor
+        {
+            get { return Constructor.documentAttributeAudio; }
+        }
+
+        public override void Write(BinaryWriter writer)
+        {
+            writer.Write(0x51448e5);
+            writer.Write(duration);
+        }
+
+        public override void Read(BinaryReader reader)
+        {
+            this.duration = reader.ReadInt32();
+        }
+
+        public override string ToString()
+        {
+            return string.Format("(duration:{0})", duration);
+        }
+    }
+
+    public class DocumentAttributeFilename : DocumentAttribute
+    {
+        public string filename;
+
+        public DocumentAttributeFilename()
+        {
+
+        }
+
+        public DocumentAttributeFilename(string filename)
+        {
+            this.filename = filename;
+        }
+
+        public override Constructor Constructor
+        {
+            get { return Constructor.documentAttributeFilename; }
+        }
+
+        public override void Write(BinaryWriter writer)
+        {
+            writer.Write(0x15590068);
+            Serializers.String.write(writer, filename);
+        }
+
+        public override void Read(BinaryReader reader)
+        {
+            this.filename = Serializers.String.read(reader);
+        }
+
+        public override string ToString()
+        {
+            return string.Format("(filename:{0})", filename); ;
         }
     }
 }

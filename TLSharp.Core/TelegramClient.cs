@@ -9,6 +9,7 @@ using TLSharp.Core.MTProto;
 using TLSharp.Core.MTProto.Crypto;
 using TLSharp.Core.Network;
 using TLSharp.Core.Requests;
+using TLSharp.Core.Utils;
 using MD5 = System.Security.Cryptography.MD5;
 
 namespace TLSharp.Core
@@ -105,7 +106,17 @@ namespace TLSharp.Core
 
         public bool IsUserAuthorized()
         {
-            return _session.User != null;
+            return _session.User != null && !IsSessionExpired();
+        }
+
+        public bool IsSessionExpired()
+        {
+            return GetSessionExpireTime().CompareTo(DateTime.Now) <= 0;
+        }
+
+        public DateTime GetSessionExpireTime()
+        {
+            return Helpers.UnixToDateTime(_session.SessionExpires);
         }
 
         public async Task<bool> IsPhoneRegistered(string phoneNumber)
@@ -289,13 +300,33 @@ namespace TLSharp.Core
             return request.messages;
         }
 
-        public async Task<List<Contact>> GetContacts()
+        public async Task<contacts_Contacts> GetContacts()
         {
             var req = new GetContacts();
             await _sender.Send(req);
             await _sender.Recieve(req);
 
             return req.contacts;
+        }
+
+        //Limit req: value % 1024
+        public async Task<Upload_fileConstructor> GetFile(InputFileLocation ifl, int size, int limit = 1024)
+        {
+            var result = new Upload_fileConstructor();
+            result.bytes = new byte[size];
+            GetFileRequest req;
+            for (int recieved = 0; recieved < size; recieved += req.bytes.Length)
+            {
+                req = new GetFileRequest(ifl, recieved, limit);
+                await _sender.Send(req);
+                await _sender.Recieve(req);
+
+                result.type = req.type;
+                result.mtime = req.mtime;
+
+                req.bytes.CopyTo(result.bytes, recieved);
+            }
+            return result;
         }
 
         private bool validateNumber(string number)

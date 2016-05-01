@@ -30,7 +30,7 @@ namespace TLSharp.Core.Requests
         public override void OnResponse(BinaryReader reader)
         {
             var dataCode = reader.ReadUInt32(); //0xf6b673a4
-            var expires = reader.ReadInt32();
+            SessionExpires = reader.ReadInt32();
             user = TL.Parse<User>(reader);
         }
 
