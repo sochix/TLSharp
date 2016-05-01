@@ -63,6 +63,7 @@ namespace TLSharp.Core
         public long LastMessageId { get; set; }
         public int SessionExpires { get; set; }
         public User User { get; set; }
+        public int CurrentDcId { get; set; }
         private Random random;
 
         private ISessionStore _store;

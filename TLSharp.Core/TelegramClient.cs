@@ -17,7 +17,6 @@ namespace TLSharp.Core
     public class TelegramClient
     {
         private MtProtoSender _sender;
-        private AuthKey _key;
         private TcpTransport _transport;
         private string _apiHash = "";
         private int _apiId = 0;
@@ -81,6 +80,7 @@ namespace TLSharp.Core
                 await _sender.Recieve(request);
 
                 dcOptions = request.ConfigConstructor.dc_options;
+                _session.CurrentDcId = request.ConfigConstructor.this_dc;
             }
 
             return true;
@@ -100,6 +100,7 @@ namespace TLSharp.Core
             _transport = new TcpTransport(dc.ip_address, dc.port);
             _session.ServerAddress = dc.ip_address;
             _session.Port = dc.port;
+            _session.CurrentDcId = dcId;
 
             await Connect(true);
         }
