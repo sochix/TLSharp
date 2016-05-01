@@ -63,6 +63,7 @@ namespace TLSharp.Core
         public long LastMessageId { get; set; }
         public int SessionExpires { get; set; }
         public User User { get; set; }
+        public int CurrentDcId { get; set; }
         private Random random;
 
         private ISessionStore _store;
@@ -149,7 +150,7 @@ namespace TLSharp.Core
             _store.Save(this);
         }
 
-        public static Session TryLoadOrCreateNew(ISessionStore store, string sessionUserId)
+        public static Session TryLoadOrCreateNew(ISessionStore store, string sessionUserId, string connectionAddress = defaultConnectionAddress, int connectionPort = defaultConnectionPort)
         {
             Session session;
 
@@ -163,8 +164,8 @@ namespace TLSharp.Core
                 {
                     Id = GenerateRandomUlong(),
                     SessionUserId = sessionUserId,
-                    ServerAddress = defaultConnectionAddress,
-                    Port = defaultConnectionPort
+                    ServerAddress = connectionAddress,
+                    Port = connectionPort
                 };
             }
 

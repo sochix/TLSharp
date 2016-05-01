@@ -9,6 +9,7 @@ using TLSharp.Core.MTProto;
 using TLSharp.Core.MTProto.Crypto;
 using TLSharp.Core.Network;
 using TLSharp.Core.Requests;
+using TLSharp.Core.Utils;
 using MD5 = System.Security.Cryptography.MD5;
 
 namespace TLSharp.Core
@@ -16,14 +17,17 @@ namespace TLSharp.Core
     public class TelegramClient
     {
         private MtProtoSender _sender;
-        private AuthKey _key;
         private TcpTransport _transport;
         private string _apiHash = "";
         private int _apiId = 0;
         private Session _session;
         private List<DcOption> dcOptions;
 
-        public TelegramClient(ISessionStore store, string sessionUserId, int apiId, string apiHash)
+        public TelegramClient(ISessionStore store, string sessionUserId, int apiId, string apiHash) : this(store, sessionUserId, apiId, apiHash, null, 0)
+        {
+        }
+
+        public TelegramClient(ISessionStore store, string sessionUserId, int apiId, string apiHash, string dcAddress, int dcPort)
         {
             _apiHash = apiHash;
             _apiId = apiId;
@@ -33,12 +37,32 @@ namespace TLSharp.Core
             if (string.IsNullOrEmpty(_apiHash))
                 throw new InvalidOperationException("Your API_ID is invalid. Do a configuration first https://github.com/sochix/TLSharp#quick-configuration");
 
-            _session = Session.TryLoadOrCreateNew(store, sessionUserId);
-            _transport = new TcpTransport(_session.ServerAddress, _session.Port);
+            if (string.IsNullOrEmpty(dcAddress))
+            {
+                _session = Session.TryLoadOrCreateNew(store, sessionUserId);
+            }
+            else
+            {
+                _session = Session.TryLoadOrCreateNew(store, sessionUserId, dcAddress, dcPort);
+            }
+        }
+
+        public void SetFloodWaitEvent(MtProtoSender.FloodWait floodWaitEvent)
+        {
+            if (_sender == null)
+            {
+                throw new InvalidOperationException("Telegram client cannot connected now.");
+            }
+            _sender.FloodWaitEvent = floodWaitEvent;
         }
 
         public async Task<bool> Connect(bool reconnect = false)
         {
+            if (_transport == null)
+            {
+                _transport = new TcpTransport(_session.ServerAddress, _session.Port);
+            }
+
             if (_session.AuthKey == null || reconnect)
             {
                 var result = await Authenticator.DoAuthentication(_transport);
@@ -56,6 +80,7 @@ namespace TLSharp.Core
                 await _sender.Recieve(request);
 
                 dcOptions = request.ConfigConstructor.dc_options;
+                _session.CurrentDcId = request.ConfigConstructor.this_dc;
             }
 
             return true;
@@ -68,16 +93,31 @@ namespace TLSharp.Core
 
             var dc = dcOptions.Cast<DcOptionConstructor>().First(d => d.id == dcId);
 
+            if (_transport != null)
+            {
+                _transport.Dispose();
+            }
             _transport = new TcpTransport(dc.ip_address, dc.port);
             _session.ServerAddress = dc.ip_address;
             _session.Port = dc.port;
+            _session.CurrentDcId = dcId;
 
             await Connect(true);
         }
 
         public bool IsUserAuthorized()
         {
-            return _session.User != null;
+            return _session.User != null && !IsSessionExpired();
+        }
+
+        public bool IsSessionExpired()
+        {
+            return GetSessionExpireTime().CompareTo(DateTime.Now) <= 0;
+        }
+
+        public DateTime GetSessionExpireTime()
+        {
+            return Helpers.UnixToDateTime(_session.SessionExpires);
         }
 
         public async Task<bool> IsPhoneRegistered(string phoneNumber)
@@ -85,14 +125,36 @@ namespace TLSharp.Core
             if (_sender == null)
                 throw new InvalidOperationException("Not connected!");
 
-            var authCheckPhoneRequest = new AuthCheckPhoneRequest(phoneNumber);
-            await _sender.Send(authCheckPhoneRequest);
-            await _sender.Recieve(authCheckPhoneRequest);
+            bool completed = false;
+            AuthCheckPhoneRequest authCheckPhoneRequest = null;
+
+            while (!completed)
+            {
+                authCheckPhoneRequest = new AuthCheckPhoneRequest(phoneNumber);
+
+                try
+                {
+                    await _sender.Send(authCheckPhoneRequest);
+                    await _sender.Recieve(authCheckPhoneRequest);
+                    completed = true;
+                }
+                catch (InvalidOperationException e)
+                {
+                    if (e.Message.StartsWith("Your phone number registered to") && e.Data["dcId"] != null)
+                    {
+                        await ReconnectToDc((int)e.Data["dcId"]);
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
 
             return authCheckPhoneRequest._phoneRegistered;
         }
 
-        public async Task<string> SendCodeRequest(string phoneNumber)
+        public async Task<string> SendCodeRequest(string phoneNumber, int requestType = 5)
         {
             var completed = false;
 
@@ -100,11 +162,9 @@ namespace TLSharp.Core
 
             while (!completed)
             {
-                request = new AuthSendCodeRequest(phoneNumber, 5, _apiId, _apiHash, "en");
+                request = new AuthSendCodeRequest(phoneNumber, requestType, _apiId, _apiHash, "en");
                 try
                 {
-
-
                     await _sender.Send(request);
                     await _sender.Recieve(request);
 
@@ -241,11 +301,52 @@ namespace TLSharp.Core
             return request.messages;
         }
 
+        public async Task<contacts_Contacts> GetContacts()
+        {
+            var req = new GetContacts();
+            await _sender.Send(req);
+            await _sender.Recieve(req);
+
+            return req.contacts;
+        }
+
+        //Limit req: value % 1024
+        public async Task<Upload_fileConstructor> GetFile(InputFileLocation ifl, int size, int limit = 1024)
+        {
+            var result = new Upload_fileConstructor();
+            result.bytes = new byte[size];
+            GetFileRequest req;
+            for (int recieved = 0; recieved < size; recieved += req.bytes.Length)
+            {
+                req = new GetFileRequest(ifl, recieved, limit);
+                await _sender.Send(req);
+                await _sender.Recieve(req);
+
+                result.type = req.type;
+                result.mtime = req.mtime;
+
+                req.bytes.CopyTo(result.bytes, recieved);
+            }
+            return result;
+        }
+
         private bool validateNumber(string number)
         {
             var regex = new Regex("^\\d{7,20}$");
 
             return regex.IsMatch(number);
+        }
+
+        public void Dispose()
+        {
+            if (_transport != null)
+            {
+                _transport.Dispose();
+                _transport = null;
+            }
+
+            _sender = null;
+            dcOptions = null;
         }
     }
 }

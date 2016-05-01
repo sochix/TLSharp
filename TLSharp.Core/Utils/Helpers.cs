@@ -92,5 +92,11 @@ namespace TLSharp.Core.Utils
                 return sha1.ComputeHash(data, offset, limit);
             }
         }
+
+        public static DateTime UnixToDateTime(long unixTime)
+        {
+            var dt = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            return dt.AddSeconds(unixTime).ToLocalTime();
+        }
     }
 }
