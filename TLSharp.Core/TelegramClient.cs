@@ -198,18 +198,35 @@ namespace TLSharp.Core
             return true;
         }
 
-        public async Task<int?> ImportContactByPhoneNumber(string phoneNumber)
+        private async Task<int?> InputPhoneContactSend(string phoneNumber, string firstName = String.Empty, string lastName = String.Empty)
         {
             if (!validateNumber(phoneNumber))
                 throw new InvalidOperationException("Invalid phone number. It should be only digit string, from 5 to 20 digits.");
 
-            var request = new ImportContactRequest(new InputPhoneContactConstructor(0, phoneNumber, "My Test Name", String.Empty));
+            var request = new ImportContactRequest(new InputPhoneContactConstructor(0, phoneNumber, firstName, lastName));
             await _sender.Send(request);
             await _sender.Recieve(request);
 
             var importedUser = (ImportedContactConstructor)request.imported.FirstOrDefault();
 
             return importedUser?.user_id;
+        }
+
+        public async Task<bool> CustomizeNameForContact(string phoneNumber, string firstName, string lastName)
+        {
+            if (String.IsNullOrWhiteSpace(firstName)) {
+                throw new ArgumentNullException("firstName");
+            }
+            if (lastName == null) {
+                lastName = String.Empty;
+            }
+            var userId = await InputPhoneContactSend(phoneNumber, firstName, lastName);
+            return (userId == null);
+        }
+
+        public async Task<int?> ImportContactByPhoneNumber(string phoneNumber)
+        {
+            return await InputPhoneContactSend(phoneNumber);
         }
 
         public async Task<int?> ImportByUserName(string username)
