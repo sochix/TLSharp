@@ -330,7 +330,7 @@ namespace TLSharp.Core.MTProto
             {0x200250ba, typeof (UserEmptyConstructor)},
             {0x720535EC, typeof (UserSelfConstructor)},
             {0x7007b451, typeof (UserSelfConstructor)},
-            {0xf2fb8319, typeof (UserContactConstructor)},
+            {0xcab35e18, typeof (UserContactConstructor)}, //before signed as 0xf2fb8319
             {0x22e8ceb0, typeof (UserRequestConstructor)},
             {0x5214c89d, typeof (UserForeignConstructor)},
             {0xb29ad7cc, typeof (UserDeletedConstructor)},
@@ -523,7 +523,7 @@ namespace TLSharp.Core.MTProto
             {0x34e794bd, typeof (InputMediaUploadedDocumentConstructor)},
             {0x3e46de5d, typeof (InputMediaUploadedThumbDocumentConstructor)},
             {0xd184e841, typeof (InputMediaDocumentConstructor)},
-            {0x2fda2204  , typeof (MessageMediaDocumentConstructor)},
+            {0x2fda2204, typeof (MessageMediaDocumentConstructor)},
             {0xc6b68300, typeof (MessageMediaAudioConstructor)},
             {0xd95adc84, typeof (InputAudioEmptyConstructor)},
             {0x77d440ff, typeof (InputAudioConstructor)},
@@ -844,33 +844,33 @@ namespace TLSharp.Core.MTProto
             return new UserEmptyConstructor(id);
         }
 
-        public static User userSelf(int id, string first_name, string last_name, string phone, UserProfilePhoto photo,
+        public static User userSelf(int id, string first_name, string last_name, string username, string phone, UserProfilePhoto photo,
             UserStatus status, bool inactive)
         {
-            return new UserSelfConstructor(id, first_name, last_name, phone, photo, status, inactive);
+            return new UserSelfConstructor(id, first_name, last_name, username, phone, photo, status, inactive);
         }
 
-        public static User userContact(int id, string first_name, string last_name, long access_hash, string phone,
+        public static User userContact(int id, string first_name, string last_name, string username, long access_hash, string phone,
             UserProfilePhoto photo, UserStatus status)
         {
-            return new UserContactConstructor(id, first_name, last_name, access_hash, phone, photo, status);
+            return new UserContactConstructor(id, first_name, last_name, username, access_hash, phone, photo, status);
         }
 
-        public static User userRequest(int id, string first_name, string last_name, long access_hash, string phone,
+        public static User userRequest(int id, string first_name, string last_name, string username, long access_hash, string phone,
             UserProfilePhoto photo, UserStatus status)
         {
-            return new UserRequestConstructor(id, first_name, last_name, access_hash, phone, photo, status);
+            return new UserRequestConstructor(id, first_name, last_name, username, access_hash, phone, photo, status);
         }
 
-        public static User userForeign(int id, string first_name, string last_name, long access_hash, UserProfilePhoto photo,
+        public static User userForeign(int id, string first_name, string last_name, string username, long access_hash, UserProfilePhoto photo,
             UserStatus status)
         {
-            return new UserForeignConstructor(id, first_name, last_name, access_hash, photo, status);
+            return new UserForeignConstructor(id, first_name, last_name, username, access_hash, photo, status);
         }
 
-        public static User userDeleted(int id, string first_name, string last_name)
+        public static User userDeleted(int id, string first_name, string last_name, string username)
         {
-            return new UserDeletedConstructor(id, first_name, last_name);
+            return new UserDeletedConstructor(id, first_name, last_name, username);
         }
 
         public static UserProfilePhoto userProfilePhotoEmpty()
@@ -4282,11 +4282,12 @@ namespace TLSharp.Core.MTProto
     }
 
 
-    public class UserSelfConstructor : User
+    public class UserSelfConstructor : User //userSelf#7007b451 id:int first_name:string last_name:string username:string phone:string photo:UserProfilePhoto status:UserStatus inactive:Bool = User;
     {
         public int id;
         public string first_name;
         public string last_name;
+        public string username;
         public string phone;
         public UserProfilePhoto photo;
         public UserStatus status;
@@ -4297,12 +4298,13 @@ namespace TLSharp.Core.MTProto
 
         }
 
-        public UserSelfConstructor(int id, string first_name, string last_name, string phone, UserProfilePhoto photo,
+        public UserSelfConstructor(int id, string first_name, string last_name, string username, string phone, UserProfilePhoto photo,
             UserStatus status, bool inactive)
         {
             this.id = id;
             this.first_name = first_name;
             this.last_name = last_name;
+            this.username = username;
             this.phone = phone;
             this.photo = photo;
             this.status = status;
@@ -4321,9 +4323,10 @@ namespace TLSharp.Core.MTProto
             writer.Write(this.id);
             Serializers.String.write(writer, this.first_name);
             Serializers.String.write(writer, this.last_name);
+            Serializers.String.write(writer, this.username);
             Serializers.String.write(writer, this.phone);
-            //this.photo.Write(writer);
-            //this.status.Write(writer);
+            this.photo.Write(writer);
+            this.status.Write(writer);
             writer.Write(this.inactive ? 0x997275b5 : 0xbc799737);
         }
 
@@ -4332,26 +4335,28 @@ namespace TLSharp.Core.MTProto
             this.id = reader.ReadInt32();
             this.first_name = Serializers.String.read(reader);
             this.last_name = Serializers.String.read(reader);
+            this.username = Serializers.String.read(reader);
             this.phone = Serializers.String.read(reader);
-            //this.photo = TL.Parse<UserProfilePhoto>(reader);
-            //this.status = TL.Parse<UserStatus>(reader);
+            this.photo = TL.Parse<UserProfilePhoto>(reader);
+            this.status = TL.Parse<UserStatus>(reader);
             this.inactive = reader.ReadUInt32() == 0x997275b5;
         }
 
         public override string ToString()
         {
             return
-                String.Format("(userSelf id:{0} first_name:'{1}' last_name:'{2}' phone:'{3}' photo:{4} status:{5} inactive:{6})", id,
-                    first_name, last_name, phone, photo, status, inactive);
+                String.Format("(userSelf id:{0} first_name:'{1}' last_name:'{2}' username: '{3}' phone:'{4}' photo:{5} status:{6} inactive:{7})", id,
+                    first_name, last_name, username, phone, photo, status, inactive);
         }
     }
 
 
-    public class UserContactConstructor : User
+    public class UserContactConstructor : User //userContact#cab35e18 id:int first_name:string last_name:string username:string access_hash:long phone:string photo:UserProfilePhoto status:UserStatus = User;
     {
         public int id;
         public string first_name;
         public string last_name;
+        public string username;
         public long access_hash;
         public string phone;
         public UserProfilePhoto photo;
@@ -4362,12 +4367,13 @@ namespace TLSharp.Core.MTProto
 
         }
 
-        public UserContactConstructor(int id, string first_name, string last_name, long access_hash, string phone,
+        public UserContactConstructor(int id, string first_name, string last_name, string username, long access_hash, string phone,
             UserProfilePhoto photo, UserStatus status)
         {
             this.id = id;
             this.first_name = first_name;
             this.last_name = last_name;
+            this.username = username;
             this.access_hash = access_hash;
             this.phone = phone;
             this.photo = photo;
@@ -4382,10 +4388,11 @@ namespace TLSharp.Core.MTProto
 
         public override void Write(BinaryWriter writer)
         {
-            writer.Write(0xf2fb8319);
+            writer.Write(0xcab35e18);
             writer.Write(this.id);
             Serializers.String.write(writer, this.first_name);
             Serializers.String.write(writer, this.last_name);
+            Serializers.String.write(writer, this.username);
             writer.Write(this.access_hash);
             Serializers.String.write(writer, this.phone);
             this.photo.Write(writer);
@@ -4397,6 +4404,7 @@ namespace TLSharp.Core.MTProto
             this.id = reader.ReadInt32();
             this.first_name = Serializers.String.read(reader);
             this.last_name = Serializers.String.read(reader);
+            this.username = Serializers.String.read(reader);
             this.access_hash = reader.ReadInt64();
             this.phone = Serializers.String.read(reader);
             this.photo = TL.Parse<UserProfilePhoto>(reader);
@@ -4407,17 +4415,18 @@ namespace TLSharp.Core.MTProto
         {
             return
                 String.Format(
-                    "(userContact id:{0} first_name:'{1}' last_name:'{2}' access_hash:{3} phone:'{4}' photo:{5} status:{6})", id,
-                    first_name, last_name, access_hash, phone, photo, status);
+                    "(userContact id:{0} first_name:'{1}' last_name:'{2}' username: '{3}' access_hash:{4} phone:'{5}' photo:{6} status:{7})", id,
+                    first_name, last_name, username, access_hash, phone, photo, status);
         }
     }
 
 
-    public class UserRequestConstructor : User
+    public class UserRequestConstructor : User //userRequest#d9ccc4ef id:int first_name:string last_name:string username:string access_hash:long phone:string photo:UserProfilePhoto status:UserStatus = User;
     {
         public int id;
         public string first_name;
         public string last_name;
+        public string username;
         public long access_hash;
         public string phone;
         public UserProfilePhoto photo;
@@ -4428,12 +4437,13 @@ namespace TLSharp.Core.MTProto
 
         }
 
-        public UserRequestConstructor(int id, string first_name, string last_name, long access_hash, string phone,
+        public UserRequestConstructor(int id, string first_name, string last_name, string username, long access_hash, string phone,
             UserProfilePhoto photo, UserStatus status)
         {
             this.id = id;
             this.first_name = first_name;
             this.last_name = last_name;
+            this.username = username;
             this.access_hash = access_hash;
             this.phone = phone;
             this.photo = photo;
@@ -4452,6 +4462,7 @@ namespace TLSharp.Core.MTProto
             writer.Write(this.id);
             Serializers.String.write(writer, this.first_name);
             Serializers.String.write(writer, this.last_name);
+            Serializers.String.write(writer, this.username);
             writer.Write(this.access_hash);
             Serializers.String.write(writer, this.phone);
             this.photo.Write(writer);
@@ -4463,6 +4474,7 @@ namespace TLSharp.Core.MTProto
             this.id = reader.ReadInt32();
             this.first_name = Serializers.String.read(reader);
             this.last_name = Serializers.String.read(reader);
+            this.username = Serializers.String.read(reader);
             this.access_hash = reader.ReadInt64();
             this.phone = Serializers.String.read(reader);
             this.photo = TL.Parse<UserProfilePhoto>(reader);
@@ -4473,17 +4485,18 @@ namespace TLSharp.Core.MTProto
         {
             return
                 String.Format(
-                    "(userRequest id:{0} first_name:'{1}' last_name:'{2}' access_hash:{3} phone:'{4}' photo:{5} status:{6})", id,
-                    first_name, last_name, access_hash, phone, photo, status);
+                    "(userRequest id:{0} first_name:'{1}' last_name:'{2}' username:'{3}' access_hash:{4} phone:'{5}' photo:{6} status:{7})", id,
+                    first_name, last_name, username, access_hash, phone, photo, status);
         }
     }
 
 
-    public class UserForeignConstructor : User
+    public class UserForeignConstructor : User //userForeign#75cf7a8 id:int first_name:string last_name:string username:string access_hash:long photo:UserProfilePhoto status:UserStatus = User;
     {
         public int id;
         public string first_name;
         public string last_name;
+        public string username;
         public long access_hash;
         public UserProfilePhoto photo;
         public UserStatus status;
@@ -4493,12 +4506,12 @@ namespace TLSharp.Core.MTProto
 
         }
 
-        public UserForeignConstructor(int id, string first_name, string last_name, long access_hash, UserProfilePhoto photo,
-            UserStatus status)
+        public UserForeignConstructor(int id, string first_name, string last_name, string username, long access_hash, UserProfilePhoto photo, UserStatus status)
         {
             this.id = id;
             this.first_name = first_name;
             this.last_name = last_name;
+            this.username = username;
             this.access_hash = access_hash;
             this.photo = photo;
             this.status = status;
@@ -4516,6 +4529,7 @@ namespace TLSharp.Core.MTProto
             writer.Write(this.id);
             Serializers.String.write(writer, this.first_name);
             Serializers.String.write(writer, this.last_name);
+            Serializers.String.write(writer, this.username);
             writer.Write(this.access_hash);
             this.photo.Write(writer);
             this.status.Write(writer);
@@ -4526,35 +4540,39 @@ namespace TLSharp.Core.MTProto
             this.id = reader.ReadInt32();
             this.first_name = Serializers.String.read(reader);
             this.last_name = Serializers.String.read(reader);
+            this.username = Serializers.String.read(reader);
             this.access_hash = reader.ReadInt64();
             this.photo = TL.Parse<UserProfilePhoto>(reader);
             this.status = TL.Parse<UserStatus>(reader);
+            long tamano = reader.BaseStream.Length;
         }
 
         public override string ToString()
         {
-            return String.Format("(userForeign id:{0} first_name:'{1}' last_name:'{2}' access_hash:{3} photo:{4} status:{5})", id,
-                first_name, last_name, access_hash, photo, status);
+            return String.Format("(userForeign id:{0} first_name:'{1}' last_name:'{2}' username:'{3}' access_hash:{4} photo:{5} status:{6})", id,
+                first_name, last_name, username, access_hash, photo, status);
         }
     }
 
 
-    public class UserDeletedConstructor : User
+    public class UserDeletedConstructor : User //userDeleted#d6016d7a id:int first_name:string last_name:string username:string = User;
     {
         public int id;
         public string first_name;
         public string last_name;
+        public string username;
 
         public UserDeletedConstructor()
         {
 
         }
 
-        public UserDeletedConstructor(int id, string first_name, string last_name)
+        public UserDeletedConstructor(int id, string first_name, string last_name, string username)
         {
             this.id = id;
             this.first_name = first_name;
             this.last_name = last_name;
+            this.username = username;
         }
 
 
@@ -4569,6 +4587,7 @@ namespace TLSharp.Core.MTProto
             writer.Write(this.id);
             Serializers.String.write(writer, this.first_name);
             Serializers.String.write(writer, this.last_name);
+            Serializers.String.write(writer, this.username);
         }
 
         public override void Read(BinaryReader reader)
@@ -4576,11 +4595,12 @@ namespace TLSharp.Core.MTProto
             this.id = reader.ReadInt32();
             this.first_name = Serializers.String.read(reader);
             this.last_name = Serializers.String.read(reader);
+            this.username = Serializers.String.read(reader);
         }
 
         public override string ToString()
         {
-            return String.Format("(userDeleted id:{0} first_name:'{1}' last_name:'{2}')", id, first_name, last_name);
+            return String.Format("(userDeleted id:{0} first_name:'{1}' last_name:'{2}' username: '{3}')", id, first_name, last_name, username);
         }
     }
 
@@ -4592,8 +4612,6 @@ namespace TLSharp.Core.MTProto
         {
 
         }
-
-
 
         public override Constructor Constructor
         {
@@ -7061,7 +7079,7 @@ namespace TLSharp.Core.MTProto
     }
 
 
-    public class UserFullConstructor : UserFull
+    public class UserFullConstructor : UserFull //userFull#771095da user:User link:contacts.Link profile_photo:Photo notify_settings:PeerNotifySettings blocked:Bool real_first_name:string real_last_name:string = UserFull;
     {
         public User user;
         public contacts_Link link;
@@ -7108,7 +7126,10 @@ namespace TLSharp.Core.MTProto
 
         public override void Read(BinaryReader reader)
         {
-            this.user = TL.Parse<User>(reader);
+            this.user = new UserRequestConstructor();
+            uint dataCode = reader.ReadUInt32();
+            this.user.Read(reader);
+
             this.link = TL.Parse<contacts_Link>(reader);
             this.profile_photo = TL.Parse<Photo>(reader);
             this.notify_settings = TL.Parse<PeerNotifySettings>(reader);
