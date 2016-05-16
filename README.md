@@ -109,13 +109,36 @@ _Example_:
 
 **Returns:** **User**, authenticated User.
 
+####Register a new user
+Register a new user.
+
+_Example_:
+
+```
+	var hash = await client.SendCodeRequest(phoneNumber);
+	var code = "1234"; //code that you receive from Telegram 
+	var firstName = "bloodRush"
+	var lastName = "TeleFather"
+	var user = await client.SignUp(phoneNumber, hash, code, firstName, lastName); 
+	if (user != null)
+           {
+                if (user.Constructor == Constructor.userSelf)
+                {
+                  var usr = await client.MakeAuth(phone, hash, code);
+                }
+           }
+```
+* phoneNumber - **string**, phone number in international format (eg. 791812312323)
+
+**Returns:** **User**, registered User.
+
 ####Get Contact By Phone number
 Get user id by phone number.
 
 _Example_:
 
 ```
-var res = await client.ImportContactByPhoneNumber("791812312323");
+var res = await client.ImportContactByPhoneNumber("791812312323", "firstName", "lastName");
 ```
 
 * phoneNumber - **string**, phone number in international format (eg. 791812312323)

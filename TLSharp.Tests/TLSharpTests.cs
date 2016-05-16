@@ -80,7 +80,7 @@ namespace TLSharp.Tests
 
             Assert.IsTrue(client.IsUserAuthorized());
 
-            var res = await client.ImportContactByPhoneNumber(NumberToSendMessage);
+            var res = await client.ImportContactByPhoneNumber(NumberToSendMessage,"firstName", "lastName");
 
             Assert.IsNotNull(res);
         }
@@ -128,7 +128,7 @@ namespace TLSharp.Tests
 
             Assert.IsTrue(client.IsUserAuthorized());
 
-            var res = await client.ImportContactByPhoneNumber(NumberToSendMessage);
+            var res = await client.ImportContactByPhoneNumber(NumberToSendMessage,"firstName", "lastName");
 
             Assert.IsNotNull(res);
 
@@ -144,7 +144,7 @@ namespace TLSharp.Tests
 
             Assert.IsTrue(client.IsUserAuthorized());
 
-            var res = await client.ImportContactByPhoneNumber(NumberToSendMessage);
+            var res = await client.ImportContactByPhoneNumber(NumberToSendMessage,"firstName", "lastName");
 
             Assert.IsNotNull(res);
 
@@ -162,7 +162,7 @@ namespace TLSharp.Tests
 
             Assert.IsTrue(client.IsUserAuthorized());
 
-            var res = await client.ImportContactByPhoneNumber(NumberToSendMessage);
+            var res = await client.ImportContactByPhoneNumber(NumberToSendMessage,"firstName", "lastName");
 
             Assert.IsNotNull(res);
             const string testFile = "TEST";
