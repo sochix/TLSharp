@@ -241,6 +241,24 @@ namespace TLSharp.Core
             return request.messages;
         }
 
+        public async Task<Tuple<storage_FileType, byte[]>> GetFile(long volume_id, int local_id, long secret, int offset, int limit)
+        {
+            var request = new GetFileRequest(new InputFileLocationConstructor(volume_id, local_id, secret), offset, limit);
+            await _sender.Send(request);
+            await _sender.Recieve(request);
+
+            return Tuple.Create(request.type, request.bytes);
+        }
+
+        public async Task<List<Dialog>> GetDialogs(int offset, int limit, int max_id = -1)
+        {
+            var request = new GetDialogsRequest(offset, max_id, limit);
+            await _sender.Send(request);
+            await _sender.Recieve(request);
+
+            return request.dialogs;
+        }
+
         private bool validateNumber(string number)
         {
             var regex = new Regex("^\\d{7,20}$");
