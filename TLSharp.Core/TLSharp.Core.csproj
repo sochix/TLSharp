@@ -71,6 +71,7 @@
     <Compile Include="Requests\GetFileRequest.cs" />
     <Compile Include="Requests\GetHistoryRequest.cs" />
     <Compile Include="Requests\GetNearestDcRequest.cs" />
+    <Compile Include="Requests\GetUserFullRequest.cs" />
     <Compile Include="Requests\GetUsersRequest.cs" />
     <Compile Include="Requests\ImportByUserName.cs" />
     <Compile Include="Requests\ImportContactRequest.cs" />

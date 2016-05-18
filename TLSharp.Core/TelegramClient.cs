@@ -241,6 +241,15 @@ namespace TLSharp.Core
             return request.messages;
         }
 
+        public async Task<UserFull> GetUserFull(int user_id)
+        {
+            var request = new GetUserFullRequest(user_id);
+            await _sender.Send(request);
+            await _sender.Recieve(request);
+
+            return request._userFull;
+        }
+
         private bool validateNumber(string number)
         {
             var regex = new Regex("^\\d{7,20}$");

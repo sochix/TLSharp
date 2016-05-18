@@ -179,6 +179,19 @@ var hist = await client.GetMessagesHistoryForContact(userId, offset, limit);
 
 **Returns**: **List\<Message\>**, message history
 
+####Get UserFull Request
+Returns user's full information for specified userId.
+
+_Example_:
+
+```
+var userFull = await client.GetUserFull(userId);
+``` 
+
+* userId - **int**, user id
+
+**Returns**: **UserFull**, User's information
+
 ## Contributing
 
 Contributing is highly appreciated!
