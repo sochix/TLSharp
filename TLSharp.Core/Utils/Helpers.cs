@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using TLSharp.Core.MTProto.Crypto;
 
@@ -91,6 +92,46 @@ namespace TLSharp.Core.Utils
             {
                 return sha1.ComputeHash(data, offset, limit);
             }
+        }
+
+        public static byte[] extractJpeg(byte[] array)
+        {
+            List<byte> Res = new List<byte>();
+            bool StartFounded = false;
+            bool EndFounded = false;
+
+            for (int i = 0; i < array.Length - 1; i++)
+            {
+                if (!StartFounded)
+                {
+                    if (array[i] == 255 && array[i + 1] == 216) // 0xFF 0xD8
+                    {
+                        Res.Add(array[i]);
+                        StartFounded = true;
+                    }
+                }
+                else
+                {
+                    if (!EndFounded)
+                    {
+                        if (array[i] == 255 && array[i + 1] == 217) // 0xFF 0xD9
+                        {
+                            Res.Add(array[i]);
+                            Res.Add(array[i + 1]);
+                            EndFounded = true;
+                        }
+                        else
+                        {
+                            Res.Add(array[i]);
+                        }
+                    }
+                }
+            }
+
+            if (StartFounded && EndFounded)
+                return Res.ToArray();
+
+            return null;
         }
     }
 }
