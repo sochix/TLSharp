@@ -241,10 +241,43 @@ namespace TLSharp.Core
             return request.messages;
         }
 
+        public async Task DeleteContactById(int user_id)
+        {
+            var request = new DeleteContactRequest(new InputUserContactConstructor(user_id));
+            await _sender.Send(request);
+            await _sender.Recieve(request);
+        }
+
+        public async Task<byte[]> GetUserProfilePhoto(int user_id)
+        {
+            try
+            {
+                var UserConstr = new InputUserContactConstructor(user_id);
+                var UserReq = new GetUsersRequest(new List<InputUser>() { UserConstr });
+                await _sender.Send(UserReq);
+                await _sender.Recieve(UserReq);
+                if (UserReq.users.Count != 1)
+                    return null;
+
+                UserContactConstructor User = (UserContactConstructor)UserReq.users[0];
+                UserProfilePhotoConstructor Photo = (UserProfilePhotoConstructor)User.photo;
+                var BigPhoto = (FileLocationConstructor)Photo.photo_big;
+                InputFileLocationConstructor FileConstr = new InputFileLocationConstructor(BigPhoto.volume_id, BigPhoto.local_id, BigPhoto.secret);
+                var Download = new GetFileRequest(FileConstr, 0, 9000000);
+                await _sender.Send(Download);
+                await _sender.Recieve(Download);
+
+                return Utils.Helpers.extractJpeg(Download.bytes);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         private bool validateNumber(string number)
         {
             var regex = new Regex("^\\d{7,20}$");
-
             return regex.IsMatch(number);
         }
     }
