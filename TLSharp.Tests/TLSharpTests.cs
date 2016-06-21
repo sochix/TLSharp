@@ -19,6 +19,8 @@ namespace TLSharp.Tests
 
         private string UserNameToSendMessage { get; set; }
 
+        private string NumberToGetUserFull { get; set; }
+
         private string apiHash = "";
 
         private int apiId = 0;
@@ -38,6 +40,10 @@ namespace TLSharp.Tests
             UserNameToSendMessage = ConfigurationManager.AppSettings["userNameToSendMessage"];
             if (string.IsNullOrEmpty(UserNameToSendMessage))
                 throw new InvalidOperationException("UserNameToSendMessage is null. Specify userName in app.config");
+
+            NumberToGetUserFull = ConfigurationManager.AppSettings["numberToGetUserFull"];
+            if (string.IsNullOrEmpty(NumberToGetUserFull))
+                throw new InvalidOperationException("NumberToGetUserFull is null. Specify Number in app.config");
 
         }
 
@@ -196,6 +202,24 @@ namespace TLSharp.Tests
 
                 Assert.IsNotNull(authKey.AuthKey.Data);
             }
+        }
+
+        [TestMethod]
+        public async Task GetUserFullRequest()
+        {
+            var store = new FileSessionStore();
+            var client = new TelegramClient(store, "session", apiId, apiHash);
+            await client.Connect();
+
+            Assert.IsTrue(client.IsUserAuthorized());
+
+            var res = await client.ImportContactByPhoneNumber(NumberToGetUserFull);
+
+            Assert.IsNotNull(res);
+
+            var userFull = await client.GetUserFull(res.Value);
+
+            Assert.IsNotNull(userFull);
         }
     }
 }

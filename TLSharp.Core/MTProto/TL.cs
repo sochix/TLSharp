@@ -7126,10 +7126,15 @@ namespace TLSharp.Core.MTProto
 
         public override void Read(BinaryReader reader)
         {
-            this.user = new UserRequestConstructor();
-            uint dataCode = reader.ReadUInt32();
+            if (reader.ReadUInt32() == 0x7007b451)
+            {
+                this.user = new UserSelfConstructor();
+            }
+            else
+            {
+                this.user = new UserRequestConstructor();
+            }
             this.user.Read(reader);
-
             this.link = TL.Parse<contacts_Link>(reader);
             this.profile_photo = TL.Parse<Photo>(reader);
             this.notify_settings = TL.Parse<PeerNotifySettings>(reader);
