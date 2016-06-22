@@ -78,6 +78,7 @@ Currently supported methods:
  - [Send Message to Contact](#send-message-to-contact)
  - [Send Media to Contact](#send-media-to-contact)
  - [Get Messages History for a Contact](#get-messages-history)
+ - [Get user profile photo](#get-user-profile-photo)
 
 ####IsPhoneRegistered
 Check if phone number registered to Telegram.
@@ -178,6 +179,19 @@ var hist = await client.GetMessagesHistoryForContact(userId, offset, limit);
 * limit - **int**, how much items return
 
 **Returns**: **List\<Message\>**, message history
+
+####Get User Profile Photo
+Get profile picture of a user.
+
+_Example_:
+
+```
+var mediaFile = await client.GetUserProfilePhoto(user_id);
+```
+
+* user_id - **int**, user id
+
+**Returns**: **byte[]**, The image, or null if not found.
 
 ## Contributing
 
