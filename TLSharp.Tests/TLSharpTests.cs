@@ -171,7 +171,6 @@ namespace TLSharp.Tests
             var res = await client.ImportContactByPhoneNumber(NumberToSendMessage);
 
             Assert.IsNotNull(res);
-            const string testFile = "TEST";
 
             var file = File.ReadAllBytes("../../data/cat.jpg");
 
@@ -182,6 +181,55 @@ namespace TLSharp.Tests
             var state = await client.SendMediaMessage(res.Value, mediaFile);
 
             Assert.IsTrue(state);
+        }
+
+        [TestMethod]
+        public async Task GetFile()
+        {
+            // Get uploaded file from last message (ie: cat.jpg)
+
+            var store = new FileSessionStore();
+            var client = new TelegramClient(store, "session", apiId, apiHash);
+            await client.Connect();
+            Assert.IsTrue(client.IsUserAuthorized());
+
+            var res = await client.ImportContactByPhoneNumber(NumberToSendMessage);
+            Assert.IsNotNull(res);
+
+            // Get last message
+            var hist = await client.GetMessagesHistoryForContact(res.Value, 0, 1);
+            Assert.AreEqual(1, hist.Count);
+
+            var message = (MessageConstructor) hist[0];
+            Assert.AreEqual(typeof(MessageMediaPhotoConstructor), message.media.GetType());
+
+            var media = (MessageMediaPhotoConstructor) message.media;
+            Assert.AreEqual(typeof(PhotoConstructor), media.photo.GetType());
+
+            var photo = (PhotoConstructor) media.photo;
+            Assert.AreEqual(3, photo.sizes.Count);
+            Assert.AreEqual(typeof(PhotoSizeConstructor), photo.sizes[2].GetType());
+
+            var photoSize = (PhotoSizeConstructor) photo.sizes[2];
+            Assert.AreEqual(typeof(FileLocationConstructor), photoSize.location.GetType());
+
+            var fileLocation = (FileLocationConstructor) photoSize.location;
+            var file = await client.GetFile(fileLocation.volume_id, fileLocation.local_id, fileLocation.secret, 0, photoSize.size + 1024);
+            storage_FileType type = file.Item1;
+            byte[] bytes = file.Item2;
+
+            string name = "../../data/get_file.";
+            if (type.GetType() == typeof(Storage_fileJpegConstructor))
+                name += "jpg";
+            else if (type.GetType() == typeof(Storage_fileGifConstructor))
+                name += "gif";
+            else if (type.GetType() == typeof(Storage_filePngConstructor))
+                name += "png";
+
+            using (var fileStream = new FileStream(name, FileMode.Create, FileAccess.Write))
+            {
+                fileStream.Write(bytes, 4, photoSize.size); // The first 4 bytes seem to be the error code
+            }
         }
 
         [TestMethod]
