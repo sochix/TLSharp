@@ -11,6 +11,7 @@ namespace TLSharp.Core.Requests
         int _max_id;
         int _limit;
 
+        public int count;
         public List<Dialog> dialogs;
         public List<Message> messages;
         public List<Chat> chats;
@@ -35,7 +36,7 @@ namespace TLSharp.Core.Requests
         {
             bool dialogsSlice = reader.ReadUInt32() == 0x71e094f3; // else dialogs#15ba6c40
 
-            if (dialogsSlice) reader.ReadInt32(); // count
+            if (dialogsSlice) count = reader.ReadInt32(); // count
 
             // dialogs
             var result = reader.ReadUInt32(); // vector#1cb5c415
@@ -48,7 +49,7 @@ namespace TLSharp.Core.Requests
                 dialogs.Add(dialog_element);
             }
             // messages
-            var count = reader.ReadInt32();
+            result = reader.ReadUInt32(); // vector#1cb5c415
             int messages_len = reader.ReadInt32();
             messages = new List<Message>(messages_len);
             for (int message_index = 0; message_index < messages_len; message_index++)
@@ -58,7 +59,7 @@ namespace TLSharp.Core.Requests
                 messages.Add(messages_element);
             }
             // chats
-            count = reader.ReadInt32();
+            result = reader.ReadUInt32(); // vector#1cb5c415
             int chats_len = reader.ReadInt32();
             chats = new List<Chat>(chats_len);
             for (int chat_index = 0; chat_index < chats_len; chat_index++)
@@ -68,7 +69,7 @@ namespace TLSharp.Core.Requests
                 chats.Add(chats_element);
             }
             // users
-            count = reader.ReadInt32();
+            result = reader.ReadUInt32(); // vector#1cb5c415
             int users_len = reader.ReadInt32();
             users = new List<User>(users_len);
             for (int users_index = 0; users_index < users_len; users_index++)

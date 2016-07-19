@@ -250,13 +250,19 @@ namespace TLSharp.Core
             return Tuple.Create(request.type, request.bytes);
         }
 
-        public async Task<List<Dialog>> GetDialogs(int offset, int limit, int max_id = -1)
+        public async Task<MessageDialogs> GetDialogs(int offset, int limit, int max_id = 0)
         {
             var request = new GetDialogsRequest(offset, max_id, limit);
             await _sender.Send(request);
             await _sender.Recieve(request);
 
-            return request.dialogs;
+            return new MessageDialogs
+            {
+                Dialogs = request.dialogs,
+                Messages = request.messages,
+                Chats = request.chats,
+                Users = request.users,
+           };
         }
 
         public async Task<UserFull> GetUserFull(int user_id)

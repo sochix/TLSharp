@@ -537,6 +537,9 @@ namespace TLSharp.Core.MTProto
             {0x427425e7, typeof (AudioConstructor)},
             {0x36f8c871, typeof (DocumentEmptyConstructor)},
             {0xf9a39f4f, typeof (DocumentConstructor)},
+            {0xab3a99ac, typeof (DialogConstructor)},
+            {0xd9ccc4ef, typeof (UserRequestConstructor)},
+            {0x075cf7a8, typeof (UserForeignConstructor)},
         };
 
         public static TLObject Parse(BinaryReader reader, uint code)
@@ -1035,9 +1038,9 @@ namespace TLSharp.Core.MTProto
             return new MessageActionChatDeleteUserConstructor(user_id);
         }
 
-        public static Dialog dialog(Peer peer, int top_message, int unread_count)
+        public static Dialog dialog(Peer peer, int top_message, int unread_count, PeerNotifySettings peerNotifySettings)
         {
-            return new DialogConstructor(peer, top_message, unread_count);
+            return new DialogConstructor(peer, top_message, unread_count, peerNotifySettings);
         }
 
         public static Photo photoEmpty(long id)
@@ -5957,23 +5960,33 @@ namespace TLSharp.Core.MTProto
         }
     }
 
+    public class MessageDialogs
+    {
+        public int? Count { get; set; }
+        public List<Dialog> Dialogs { get; set; }
+        public List<Message> Messages { get; set; }
+        public List<Chat> Chats { get; set; }
+        public List<User> Users { get; set; }
+    }
 
     public class DialogConstructor : Dialog
     {
         public Peer peer;
         public int top_message;
         public int unread_count;
+        public PeerNotifySettings peerNotifySettings;
 
         public DialogConstructor()
         {
 
         }
 
-        public DialogConstructor(Peer peer, int top_message, int unread_count)
+        public DialogConstructor(Peer peer, int top_message, int unread_count, PeerNotifySettings peerNotifySettings)
         {
             this.peer = peer;
             this.top_message = top_message;
             this.unread_count = unread_count;
+            this.peerNotifySettings = peerNotifySettings;
         }
 
 
@@ -5984,10 +5997,11 @@ namespace TLSharp.Core.MTProto
 
         public override void Write(BinaryWriter writer)
         {
-            writer.Write(0x214a8cdf);
+            writer.Write(0xab3a99ac);
             this.peer.Write(writer);
             writer.Write(this.top_message);
             writer.Write(this.unread_count);
+            this.peerNotifySettings.Write(writer);
         }
 
         public override void Read(BinaryReader reader)
@@ -5995,6 +6009,7 @@ namespace TLSharp.Core.MTProto
             this.peer = TL.Parse<Peer>(reader);
             this.top_message = reader.ReadInt32();
             this.unread_count = reader.ReadInt32();
+            this.peerNotifySettings = TL.Parse<PeerNotifySettings>(reader);
         }
 
         public override string ToString()
