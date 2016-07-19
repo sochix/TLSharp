@@ -23,6 +23,8 @@ namespace TLSharp.Core
         private Session _session;
         private List<DcOption> dcOptions;
 
+        public enum sms_type { numeric_code_via_sms = 0, numeric_code_via_telegram = 5 }
+
         public TelegramClient(ISessionStore store, string sessionUserId, int apiId, string apiHash)
         {
             _apiHash = apiHash;
@@ -92,7 +94,7 @@ namespace TLSharp.Core
             return authCheckPhoneRequest._phoneRegistered;
         }
 
-        public async Task<string> SendCodeRequest(string phoneNumber)
+        public async Task<string> SendCodeRequest(string phoneNumber, sms_type tokenDestination = sms_type.numeric_code_via_telegram)
         {
             var completed = false;
 
@@ -100,7 +102,7 @@ namespace TLSharp.Core
 
             while (!completed)
             {
-                request = new AuthSendCodeRequest(phoneNumber, 5, _apiId, _apiHash, "en");
+                request = new AuthSendCodeRequest(phoneNumber, (int)tokenDestination, _apiId, _apiHash, "en");
                 try
                 {
 
