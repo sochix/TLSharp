@@ -295,11 +295,18 @@ namespace TLSharp.Core.Network
                 {
                     // gzip_packed
                     byte[] packedData = Serializers.Bytes.read(messageReader);
-                    using (var packedStream = new MemoryStream(packedData, false))
-                    using (var zipStream = new GZipStream(packedStream, CompressionMode.Decompress))
-                    using (var compressedReader = new BinaryReader(zipStream))
+                    using (var ms = new MemoryStream())
                     {
-                        request.OnResponse(compressedReader);
+                        using (var packedStream = new MemoryStream(packedData, false))
+                        using (var zipStream = new GZipStream(packedStream, CompressionMode.Decompress))
+                        {
+                            zipStream.CopyTo(ms);
+                            ms.Position = 0;
+                        }
+                        using (var compressedReader = new BinaryReader(ms))
+                        {
+                            request.OnResponse(compressedReader);
+                        }
                     }
                 }
                 catch (ZlibException ex)
