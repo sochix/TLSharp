@@ -132,7 +132,7 @@ namespace TLSharp.Core.Network
             return new Tuple<byte[], ulong, int>(message, remoteMessageId, remoteSequence);
         }
 
-        public async Task<byte[]> Recieve(MTProtoRequest request)
+        public async Task<byte[]> Receive(MTProtoRequest request)
         {
             while (!request.ConfirmReceived)
             {

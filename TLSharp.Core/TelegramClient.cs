@@ -55,7 +55,7 @@ namespace TLSharp.Core
                 var request = new InitConnectionRequest(_apiId);
 
                 await _sender.Send(request);
-                await _sender.Recieve(request);
+                await _sender.Receive(request);
 
                 dcOptions = request.ConfigConstructor.dc_options;
             }
@@ -89,7 +89,7 @@ namespace TLSharp.Core
 
             var authCheckPhoneRequest = new AuthCheckPhoneRequest(phoneNumber);
             await _sender.Send(authCheckPhoneRequest);
-            await _sender.Recieve(authCheckPhoneRequest);
+            await _sender.Receive(authCheckPhoneRequest);
 
             return authCheckPhoneRequest._phoneRegistered;
         }
@@ -108,7 +108,7 @@ namespace TLSharp.Core
 
 
                     await _sender.Send(request);
-                    await _sender.Recieve(request);
+                    await _sender.Receive(request);
 
                     completed = true;
                 }
@@ -132,7 +132,7 @@ namespace TLSharp.Core
         {
             var request = new AuthSignInRequest(phoneNumber, phoneHash, code);
             await _sender.Send(request);
-            await _sender.Recieve(request);
+            await _sender.Receive(request);
 
             _session.SessionExpires = request.SessionExpires;
             _session.User = request.user;
@@ -165,7 +165,7 @@ namespace TLSharp.Core
             {
                 var saveFilePartRequest = new Upload_SaveFilePartRequest(file_id, i, partedData[i]);
                 await _sender.Send(saveFilePartRequest);
-                await _sender.Recieve(saveFilePartRequest);
+                await _sender.Receive(saveFilePartRequest);
 
                 if (saveFilePartRequest.Done == false)
                     throw new InvalidOperationException($"File part {i} does not uploaded");
@@ -195,7 +195,7 @@ namespace TLSharp.Core
                 new InputMediaUploadedPhotoConstructor(file));
 
             await _sender.Send(request);
-            await _sender.Recieve(request);
+            await _sender.Receive(request);
 
             return true;
         }
@@ -207,7 +207,7 @@ namespace TLSharp.Core
 
             var request = new ImportContactRequest(new InputPhoneContactConstructor(0, phoneNumber, "My Test Name", String.Empty));
             await _sender.Send(request);
-            await _sender.Recieve(request);
+            await _sender.Receive(request);
 
             var importedUser = (ImportedContactConstructor)request.imported.FirstOrDefault();
 
@@ -221,7 +221,7 @@ namespace TLSharp.Core
 
             var request = new ImportByUserName(username);
             await _sender.Send(request);
-            await _sender.Recieve(request);
+            await _sender.Receive(request);
 
             return request.id;
         }
@@ -231,14 +231,14 @@ namespace TLSharp.Core
             var request = new SendMessageRequest(new InputPeerContactConstructor(id), message);
 
             await _sender.Send(request);
-            await _sender.Recieve(request);
+            await _sender.Receive(request);
         }
 
         public async Task<List<Message>> GetMessagesHistoryForContact(int user_id, int offset, int limit, int max_id = -1)
         {
             var request = new GetHistoryRequest(new InputPeerContactConstructor(user_id), offset, max_id, limit);
             await _sender.Send(request);
-            await _sender.Recieve(request);
+            await _sender.Receive(request);
 
             return request.messages;
         }
@@ -247,7 +247,7 @@ namespace TLSharp.Core
         {
             var request = new GetFileRequest(new InputFileLocationConstructor(volume_id, local_id, secret), offset, limit);
             await _sender.Send(request);
-            await _sender.Recieve(request);
+            await _sender.Receive(request);
 
             return Tuple.Create(request.type, request.bytes);
         }
@@ -256,7 +256,7 @@ namespace TLSharp.Core
         {
             var request = new GetDialogsRequest(offset, max_id, limit);
             await _sender.Send(request);
-            await _sender.Recieve(request);
+            await _sender.Receive(request);
 
             return new MessageDialogs
             {
@@ -271,7 +271,7 @@ namespace TLSharp.Core
         {
             var request = new GetUserFullRequest(user_id);
             await _sender.Send(request);
-            await _sender.Recieve(request);
+            await _sender.Receive(request);
 
             return request._userFull;
         }
