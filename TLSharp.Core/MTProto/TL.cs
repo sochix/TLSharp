@@ -5960,6 +5960,12 @@ namespace TLSharp.Core.MTProto
         }
     }
 
+    public class ContactsContacts
+    {
+        public IList<Contact> Contacts { get; set; }
+        public IList<User> Users { get; set; }
+    }
+
     public class MessageDialogs
     {
         public int? Count { get; set; }

@@ -105,8 +105,6 @@ namespace TLSharp.Core
                 request = new AuthSendCodeRequest(phoneNumber, (int)tokenDestination, _apiId, _apiHash, "en");
                 try
                 {
-
-
                     await _sender.Send(request);
                     await _sender.Receive(request);
 
@@ -282,5 +280,19 @@ namespace TLSharp.Core
 
             return regex.IsMatch(number);
         }
+
+        public async Task<ContactsContacts> GetContacts(IList<int> contactIds = null)
+        {
+            var request = new GetContactsRequest(contactIds);
+            await _sender.Send(request);
+            await _sender.Receive(request);
+
+            return new ContactsContacts
+            {
+                Contacts = request.Contacts,
+                Users = request.Users,
+            };
+        }
+
     }
 }
