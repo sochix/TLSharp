@@ -69,6 +69,7 @@
     <Compile Include="Requests\AuthSendSmsRequest.cs" />
     <Compile Include="Requests\AuthSignInRequest.cs" />
     <Compile Include="Requests\AuthSignUpRequest.cs" />
+    <Compile Include="Requests\GetContactsRequest.cs" />
     <Compile Include="Requests\GetDialogsRequest.cs" />
     <Compile Include="Requests\GetFileRequest.cs" />
     <Compile Include="Requests\GetHistoryRequest.cs" />
