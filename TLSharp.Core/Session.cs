@@ -24,7 +24,11 @@ namespace TLSharp.Core
 
         public Session Load(string sessionUserId)
         {
-            using (var stream = new FileStream($"{sessionUserId}.dat", FileMode.Open))
+            var sessionFileName = $"{sessionUserId}.dat";
+            if (!File.Exists(sessionFileName))
+                return null;
+
+            using (var stream = new FileStream(sessionFileName, FileMode.Open))
             {
                 var buffer = new byte[2048];
                 stream.Read(buffer, 0, 2048);
@@ -43,7 +47,7 @@ namespace TLSharp.Core
 
         public Session Load(string sessionUserId)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 
@@ -151,24 +155,13 @@ namespace TLSharp.Core
 
         public static Session TryLoadOrCreateNew(ISessionStore store, string sessionUserId)
         {
-            Session session;
-
-            try
+            return store.Load(sessionUserId) ?? new Session(store)
             {
-                session = store.Load(sessionUserId);
-            }
-            catch
-            {
-                session = new Session(store)
-                {
-                    Id = GenerateRandomUlong(),
-                    SessionUserId = sessionUserId,
-                    ServerAddress = defaultConnectionAddress,
-                    Port = defaultConnectionPort
-                };
-            }
-
-            return session;
+                Id = GenerateRandomUlong(),
+                SessionUserId = sessionUserId,
+                ServerAddress = defaultConnectionAddress,
+                Port = defaultConnectionPort
+            };
         }
 
         private static ulong GenerateRandomUlong()
