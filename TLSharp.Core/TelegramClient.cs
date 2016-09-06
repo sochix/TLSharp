@@ -126,18 +126,34 @@ namespace TLSharp.Core
             return request._phoneCodeHash;
         }
 
-        public async Task<User> MakeAuth(string phoneNumber, string phoneHash, string code)
+        public async Task<User> MakeAuth(string phoneNumber, string phoneCodeHash, string code)
         {
-            var request = new AuthSignInRequest(phoneNumber, phoneHash, code);
+            var request = new AuthSignInRequest(phoneNumber, phoneCodeHash, code);
             await _sender.Send(request);
             await _sender.Receive(request);
 
-            _session.SessionExpires = request.SessionExpires;
-            _session.User = request.user;
-
-            _session.Save();
+            OnUserAuthenticated(request.user, request.SessionExpires);
 
             return request.user;
+        }
+
+        public async Task<User> SignUp(string phoneNumber, string phoneCodeHash, string code, string firstName, string lastName)
+        {
+            var request = new AuthSignUpRequest(phoneNumber, phoneCodeHash, code, firstName, lastName);
+            await _sender.Send(request);
+            await _sender.Receive(request);
+
+            OnUserAuthenticated(request.user, request.SessionExpires);
+
+            return request.user;
+        }
+
+        private void OnUserAuthenticated(User user, int sessionExpiration)
+        {
+            _session.User = user;
+            _session.SessionExpires = sessionExpiration;
+
+            _session.Save();
         }
 
         public async Task<InputFile> UploadFile(string name, byte[] data)

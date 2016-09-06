@@ -1,5 +1,5 @@
-﻿using System;
-using System.Configuration;
+﻿using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -17,6 +17,8 @@ namespace TLSharp.Tests
 
         private string NumberToAuthenticate { get; set; }
 
+        private string NotRegisteredNumberToSignUp { get; set; }
+
         private string UserNameToSendMessage { get; set; }
 
         private string NumberToGetUserFull { get; set; }
@@ -29,21 +31,25 @@ namespace TLSharp.Tests
         public void Init()
         {
             // Setup your phone numbers in app.config
-            NumberToAuthenticate = ConfigurationManager.AppSettings["numberToAuthenticate"];
+            NumberToAuthenticate = ConfigurationManager.AppSettings[nameof(NumberToAuthenticate)];
             if (string.IsNullOrEmpty(NumberToAuthenticate))
-                throw new InvalidOperationException("NumberToAuthenticate is null. Specify number in app.config");
+                Debug.WriteLine("NumberToAuthenticate not configured in app.config! Some tests may fail.");
 
-            NumberToSendMessage = ConfigurationManager.AppSettings["numberToSendMessage"];
+            NotRegisteredNumberToSignUp = ConfigurationManager.AppSettings[nameof(NotRegisteredNumberToSignUp)];
+            if (string.IsNullOrEmpty(NotRegisteredNumberToSignUp))
+                Debug.WriteLine("NotRegisteredNumberToSignUp not configured in app.config! Some tests may fail.");
+
+            NumberToSendMessage = ConfigurationManager.AppSettings[nameof(NumberToSendMessage)];
             if (string.IsNullOrEmpty(NumberToSendMessage))
-                throw new InvalidOperationException("NumberToSendMessage is null. Specify number in app.config");
+                Debug.WriteLine("NumberToSendMessage not configured in app.config! Some tests may fail.");
 
-            UserNameToSendMessage = ConfigurationManager.AppSettings["userNameToSendMessage"];
+            UserNameToSendMessage = ConfigurationManager.AppSettings[nameof(UserNameToSendMessage)];
             if (string.IsNullOrEmpty(UserNameToSendMessage))
-                throw new InvalidOperationException("UserNameToSendMessage is null. Specify userName in app.config");
+                Debug.WriteLine("UserNameToSendMessage not configured in app.config! Some tests may fail.");
 
-            NumberToGetUserFull = ConfigurationManager.AppSettings["numberToGetUserFull"];
+            NumberToGetUserFull = ConfigurationManager.AppSettings[nameof(NumberToGetUserFull)];
             if (string.IsNullOrEmpty(NumberToGetUserFull))
-                throw new InvalidOperationException("NumberToGetUserFull is null. Specify Number in app.config");
+                Debug.WriteLine("NumberToGetUserFull not configured in app.config! Some tests may fail.");
 
         }
 
@@ -61,6 +67,25 @@ namespace TLSharp.Tests
             var user = await client.MakeAuth(NumberToAuthenticate, hash, code);
 
             Assert.IsNotNull(user);
+            Assert.IsTrue(client.IsUserAuthorized());
+        }
+
+        [TestMethod]
+        public async Task SignUpNewUser()
+        {
+            var store = new FileSessionStore();
+            var client = new TelegramClient(store, "session", apiId, apiHash);
+            await client.Connect();
+
+            var hash = await client.SendCodeRequest(NotRegisteredNumberToSignUp);
+            var code = "";
+
+            var registeredUser = await client.SignUp(NotRegisteredNumberToSignUp, hash, code, "TLSharp", "User");
+            Assert.IsNotNull(registeredUser);
+            Assert.IsTrue(client.IsUserAuthorized());
+
+            var loggedInUser = await client.MakeAuth(NotRegisteredNumberToSignUp, hash, code);
+            Assert.IsNotNull(loggedInUser);
         }
 
         [TestMethod]
