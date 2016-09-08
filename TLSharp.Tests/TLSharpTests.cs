@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -201,17 +203,17 @@ namespace TLSharp.Tests
             Assert.AreEqual(1, hist.Count);
 
             var message = (MessageConstructor) hist[0];
-            Assert.AreEqual(typeof(MessageMediaPhotoConstructor), message.media.GetType());
+            Assert.AreEqual(typeof (MessageMediaPhotoConstructor), message.media.GetType());
 
             var media = (MessageMediaPhotoConstructor) message.media;
-            Assert.AreEqual(typeof(PhotoConstructor), media.photo.GetType());
+            Assert.AreEqual(typeof (PhotoConstructor), media.photo.GetType());
 
             var photo = (PhotoConstructor) media.photo;
             Assert.AreEqual(3, photo.sizes.Count);
-            Assert.AreEqual(typeof(PhotoSizeConstructor), photo.sizes[2].GetType());
+            Assert.AreEqual(typeof (PhotoSizeConstructor), photo.sizes[2].GetType());
 
             var photoSize = (PhotoSizeConstructor) photo.sizes[2];
-            Assert.AreEqual(typeof(FileLocationConstructor), photoSize.location.GetType());
+            Assert.AreEqual(typeof (FileLocationConstructor), photoSize.location.GetType());
 
             var fileLocation = (FileLocationConstructor) photoSize.location;
             var file = await client.GetFile(fileLocation.volume_id, fileLocation.local_id, fileLocation.secret, 0, photoSize.size + 1024);
@@ -219,11 +221,11 @@ namespace TLSharp.Tests
             byte[] bytes = file.Item2;
 
             string name = "../../data/get_file.";
-            if (type.GetType() == typeof(Storage_fileJpegConstructor))
+            if (type.GetType() == typeof (Storage_fileJpegConstructor))
                 name += "jpg";
-            else if (type.GetType() == typeof(Storage_fileGifConstructor))
+            else if (type.GetType() == typeof (Storage_fileGifConstructor))
                 name += "gif";
-            else if (type.GetType() == typeof(Storage_filePngConstructor))
+            else if (type.GetType() == typeof (Storage_filePngConstructor))
                 name += "png";
 
             using (var fileStream = new FileStream(name, FileMode.Create, FileAccess.Write))
@@ -268,6 +270,32 @@ namespace TLSharp.Tests
             var userFull = await client.GetUserFull(res.Value);
 
             Assert.IsNotNull(userFull);
+        }
+
+        [TestMethod]
+        public async Task CreateChatRequest()
+        {
+            var store = new FileSessionStore();
+            var client = new TelegramClient(store, "session", apiId, apiHash);
+            await client.Connect();
+
+            if (!client.IsUserAuthorized())
+            {
+                var hash = await client.SendCodeRequest(NumberToAuthenticate);
+
+                var code = ""; // you can change code in debugger
+                Debugger.Break();
+
+                await client.MakeAuth(NumberToAuthenticate, hash, code);
+            }
+
+            Assert.IsTrue(client.IsUserAuthorized());
+
+            var chatName = Guid.NewGuid().ToString();
+            var chat = await client.CreateChat(chatName, new List<string> {NumberToSendMessage});
+
+            Assert.AreEqual(chatName, chat.title);
+            Assert.AreEqual(2, chat.participants_count);
         }
     }
 }

@@ -351,7 +351,7 @@ namespace TLSharp.Core.MTProto
             {0x83e5de54, typeof (MessageEmptyConstructor)},
             {0x567699B3, typeof (MessageConstructor)},
             {0xa367e716, typeof (MessageForwardedConstructor)},
-            {0x9f8d60bb, typeof (MessageServiceConstructor)},
+            {0x1d86f70e, typeof (MessageServiceConstructor)},
             {0x3ded6320, typeof (MessageMediaEmptyConstructor)},
             {0xc8c45a2a, typeof (MessageMediaPhotoConstructor)},
             {0xa2d24290, typeof (MessageMediaVideoConstructor)},
@@ -967,10 +967,9 @@ namespace TLSharp.Core.MTProto
                 media);
         }
 
-        public static Message messageService(int id, int from_id, Peer to_id, bool output, bool unread, int date,
-            MessageAction action)
+        public static Message messageService(int flags, int id, int from_id, Peer to_id, int date, MessageAction action)
         {
-            return new MessageServiceConstructor(id, from_id, to_id, output, unread, date, action);
+            return new MessageServiceConstructor(flags, id, from_id, to_id, date, action);
         }
 
         public static MessageMedia messageMediaEmpty()
@@ -5394,33 +5393,26 @@ namespace TLSharp.Core.MTProto
     }
 
 
-    public class MessageServiceConstructor : Message
+    public class MessageServiceConstructor : Message // messageService#1d86f70e flags:int id:int from_id:int to_id:Peer date:int action:MessageAction = Message;
     {
+        public int flags;
         public int id;
         public int from_id;
         public Peer to_id;
-        public bool output;
-        public bool unread;
         public int date;
         public MessageAction action;
 
-        public MessageServiceConstructor()
-        {
+        public MessageServiceConstructor() { }
 
-        }
-
-        public MessageServiceConstructor(int id, int from_id, Peer to_id, bool output, bool unread, int date,
-            MessageAction action)
+        public MessageServiceConstructor(int flags, int id, int from_id, Peer to_id, int date, MessageAction action)
         {
+            this.flags = flags;
             this.id = id;
             this.from_id = from_id;
             this.to_id = to_id;
-            this.output = output;
-            this.unread = unread;
             this.date = date;
             this.action = action;
         }
-
 
         public override Constructor Constructor
         {
@@ -5429,31 +5421,29 @@ namespace TLSharp.Core.MTProto
 
         public override void Write(BinaryWriter writer)
         {
-            writer.Write(0x9f8d60bb);
+            writer.Write(0x1d86f70e);
+            writer.Write(this.flags);
             writer.Write(this.id);
             writer.Write(this.from_id);
             this.to_id.Write(writer);
-            writer.Write(this.output ? 0x997275b5 : 0xbc799737);
-            writer.Write(this.unread ? 0x997275b5 : 0xbc799737);
             writer.Write(this.date);
             this.action.Write(writer);
         }
 
         public override void Read(BinaryReader reader)
         {
+            this.flags = reader.ReadInt32();
             this.id = reader.ReadInt32();
             this.from_id = reader.ReadInt32();
             this.to_id = TL.Parse<Peer>(reader);
-            this.output = reader.ReadUInt32() == 0x997275b5;
-            this.unread = reader.ReadUInt32() == 0x997275b5;
             this.date = reader.ReadInt32();
             this.action = TL.Parse<MessageAction>(reader);
         }
 
         public override string ToString()
         {
-            return String.Format("(messageService id:{0} from_id:{1} to_id:{2} out:{3} unread:{4} date:{5} action:{6})", id,
-                from_id, to_id, output, unread, date, action);
+            return String.Format("(messageService flags:{0} id:{1} from_id:{2} to_id:{3} date:{4} action:{5})", 
+                flags, id, from_id, to_id, date, action);
         }
     }
 
@@ -7146,7 +7136,7 @@ namespace TLSharp.Core.MTProto
         }
 
         public override void Read(BinaryReader reader)
-        {
+        { 
             if (reader.ReadUInt32() == 0x7007b451)
             {
                 this.user = new UserSelfConstructor();

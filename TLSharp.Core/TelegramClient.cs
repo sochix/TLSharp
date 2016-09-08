@@ -294,5 +294,33 @@ namespace TLSharp.Core
             };
         }
 
+        public async Task<ChatConstructor> CreateChat(string title, List<string> userPhonesToInvite)
+        {
+            var userIdsToInvite = new List<int>();
+            foreach (var userPhone in userPhonesToInvite)
+            {
+                var uid = await ImportContactByPhoneNumber(userPhone);
+                if (!uid.HasValue)
+                    throw new InvalidOperationException($"Failed to retrieve contact {userPhone}");
+
+                userIdsToInvite.Add(uid.Value);
+            }
+
+            return await CreateChat(title, userIdsToInvite);
+        }
+
+        public async Task<ChatConstructor> CreateChat(string title, List<int> userIdsToInvite)
+        {
+            var request = new CreateChatRequest(userIdsToInvite.Select(uid => new InputUserContactConstructor(uid)).ToList(), title);
+
+            await _sender.Send(request);
+            await _sender.Receive(request);
+
+            var serviceMessage = request.message.message as MessageServiceConstructor;
+            var peerChat = serviceMessage.to_id as PeerChatConstructor;
+
+            var createdChatId = peerChat.chat_id;
+            return request.message.chats.OfType<ChatConstructor>().Single(c => c.id == createdChatId);
+        }
     }
 }
