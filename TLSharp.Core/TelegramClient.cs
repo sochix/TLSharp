@@ -294,7 +294,7 @@ namespace TLSharp.Core
             };
         }
 
-        public async Task<ChatConstructor> CreateChat(string title, List<string> userPhonesToInvite)
+        public async Task<Messages_statedMessageConstructor> CreateChat(string title, List<string> userPhonesToInvite)
         {
             var userIdsToInvite = new List<int>();
             foreach (var userPhone in userPhonesToInvite)
@@ -309,18 +309,39 @@ namespace TLSharp.Core
             return await CreateChat(title, userIdsToInvite);
         }
 
-        public async Task<ChatConstructor> CreateChat(string title, List<int> userIdsToInvite)
+        public async Task<Messages_statedMessageConstructor> CreateChat(string title, List<int> userIdsToInvite)
         {
             var request = new CreateChatRequest(userIdsToInvite.Select(uid => new InputUserContactConstructor(uid)).ToList(), title);
 
             await _sender.Send(request);
             await _sender.Receive(request);
 
-            var serviceMessage = request.message.message as MessageServiceConstructor;
-            var peerChat = serviceMessage.to_id as PeerChatConstructor;
+            return request.message;
+        }
+        
+        public async Task<Messages_statedMessageConstructor> AddChatUser(int chatId, int userId)
+        {
+            var request = new AddChatUserRequest(chatId, new InputUserContactConstructor(userId));
 
-            var createdChatId = peerChat.chat_id;
-            return request.message.chats.OfType<ChatConstructor>().Single(c => c.id == createdChatId);
+            await _sender.Send(request);
+            await _sender.Receive(request);
+
+            return request.message;
+        }
+
+        public async Task<Messages_statedMessageConstructor> DeleteChatUser(int chatId, int userId)
+        {
+            var request = new DeleteChatUserRequest(chatId, new InputUserContactConstructor(userId));
+
+            await _sender.Send(request);
+            await _sender.Receive(request);
+
+            return request.message;
+        }
+
+        public async Task<Messages_statedMessageConstructor> LeaveChat(int chatId)
+        {
+            return await DeleteChatUser(chatId, ((UserSelfConstructor) _session.User).id);
         }
     }
 }

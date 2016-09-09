@@ -77,7 +77,12 @@ Currently supported methods:
  - [Get Contact by Username](#get-contact-by-username)
  - [Send Message to Contact](#send-message-to-contact)
  - [Send Media to Contact](#send-media-to-contact)
- - [Get Messages History for a Contact](#get-messages-history)
+ - [Get Messages History](#get-messages-history)
+ - [Get UserFull](#get-userfull)
+ - [Create Chat](#create-chat)
+ - [Add Chat user](#add-chat-user)
+ - [Delete Chat user](#delete-chat-user)
+ - [Leave Chat](#leave-chat)
 
 ####IsPhoneRegistered
 Check if phone number registered to Telegram.
@@ -179,7 +184,7 @@ var hist = await client.GetMessagesHistoryForContact(userId, offset, limit);
 
 **Returns**: **List\<Message\>**, message history
 
-####Get UserFull Request
+####Get UserFull
 Returns user's full information for specified userId.
 
 _Example_:
@@ -191,6 +196,61 @@ var userFull = await client.GetUserFull(userId);
 * userId - **int**, user id
 
 **Returns**: **UserFull**, User's information
+
+####Create Chat
+Creates a new chat.
+
+_Example_:
+
+```
+var statedMessage = await client.CreateChat(title, new List<string> { userId1, userId2 });
+``` 
+
+* title - **string**, chat name
+* userIdsToInvite - **List<int>**, list of userIds to invite to chat. Current user will be automatically added to this chat.
+
+**Returns**: **Messages_statedMessageConstructor**, Message that contains information about created chat.
+
+####Add Chat user
+Adds a user to a chat and sends a service message on it.
+
+_Example_:
+
+```
+var statedMessage = await client.AddChatUser(chatId, userId);
+``` 
+
+* chatId - **int**, Chat ID
+* userId - **int**, User ID to be added
+
+**Returns**: **Messages_statedMessageConstructor**, Message that contains information about modified chat.
+
+####Delete Chat user
+Deletes a user from a chat and sends a service message on it.
+
+_Example_:
+
+```
+var statedMessage = await client.DeleteChatUser(chatId, userId);
+``` 
+
+* chatId - **int**, Chat ID
+* userId - **int**, User ID to be deleted
+
+**Returns**: **Messages_statedMessageConstructor**, Message that contains information about modified chat.
+
+####Leave Chat
+Leaves the chat by deleting currently authenticated user from it.
+
+_Example_:
+
+```
+var statedMessage = await client.LeaveChat(chatId);
+``` 
+
+* chatId - **int**, Chat ID
+
+**Returns**: **Messages_statedMessageConstructor**, Message that contains information about modified chat.
 
 ## Contributing
 
