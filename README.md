@@ -73,6 +73,7 @@ All methods except [IsPhoneRegistered](#IsPhoneRegistered) requires to authentic
 Currently supported methods:
  - [IsPhoneRegistered - Check if phone is registered in Telegram](#isphoneregistered)
  - [Authenticate user](#authenticate-user)
+ - [SignUp user](#signup-user)
  - [Get Contact by Phone number](#get-contact-by-phone-number)
  - [Get Contact by Username](#get-contact-by-username)
  - [Send Message to Contact](#send-message-to-contact)
@@ -106,6 +107,24 @@ _Example_:
 	var user = await client.MakeAuth(phoneNumber, hash, code); 
 ```
 * phoneNumber - **string**, phone number in international format (eg. 791812312323)
+
+**Returns:** **User**, authenticated User.
+
+####SignUp user
+Register new user by phone number, secret code and first/last name.
+
+_Example_:
+
+```
+	var hash = await client.SendCodeRequest(phoneNumber);
+    
+	var code = "1234"; //code that you receive from Telegram 
+
+	var user = await client.SignUp(phoneNumber, hash, code, "TLSharp", "User"); 
+```
+* phoneNumber - **string**, phone number in international format (eg. 791812312323) that is not yet registered in Telegram.
+* firstName - **string**, new user first name
+* lastName - **string**, new user last name
 
 **Returns:** **User**, authenticated User.
 
