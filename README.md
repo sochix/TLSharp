@@ -78,12 +78,9 @@ Currently supported methods:
  - [Get Contact by Username](#get-contact-by-username)
  - [Send Message to Contact](#send-message-to-contact)
  - [Send Media to Contact](#send-media-to-contact)
- - [Get Messages History](#get-messages-history)
- - [Get UserFull](#get-userfull)
- - [Create Chat](#create-chat)
- - [Add Chat user](#add-chat-user)
- - [Delete Chat user](#delete-chat-user)
- - [Leave Chat](#leave-chat)
+ - [Get Messages History for a Contact](#get-messages-history)
+ - [Get Updates State](#get-updates-state)
+ - [Get Updates Difference](#get-updates-difference)
 
 ####IsPhoneRegistered
 Check if phone number registered to Telegram.
@@ -203,7 +200,7 @@ var hist = await client.GetMessagesHistoryForContact(userId, offset, limit);
 
 **Returns**: **List\<Message\>**, message history
 
-####Get UserFull
+####Get UserFull Request
 Returns user's full information for specified userId.
 
 _Example_:
@@ -216,60 +213,31 @@ var userFull = await client.GetUserFull(userId);
 
 **Returns**: **UserFull**, User's information
 
-####Create Chat
-Creates a new chat.
+####Get Updates State
+Returns a current state of updates.
 
 _Example_:
 
 ```
-var statedMessage = await client.CreateChat(title, new List<string> { userId1, userId2 });
+var userFull = await client.GetUpdatesState();
 ``` 
 
-* title - **string**, chat name
-* userIdsToInvite - **List<int>**, list of userIds to invite to chat. Current user will be automatically added to this chat.
+**Returns**: **UpdatesState**, Object contains info on state for further updates.
 
-**Returns**: **Messages_statedMessageConstructor**, Message that contains information about created chat.
-
-####Add Chat user
-Adds a user to a chat and sends a service message on it.
+####Get Updates Difference
+Returns diffetence between the current state of updates and transmitted.
 
 _Example_:
 
 ```
-var statedMessage = await client.AddChatUser(chatId, userId);
+var userFull = await client.GetUpdatesDifference(currentState.pts, currentState.date, currentState.qts);
 ``` 
 
-* chatId - **int**, Chat ID
-* userId - **int**, User ID to be added
+* lastPts - **int**, The most relevant value of parameter pts of (updates.state)
+* lastDate - **int**, The most relevant value of parameter date of (updates.state)
+* lastQts - **int**, The most relevant value of parameter qts of (updates.state)
 
-**Returns**: **Messages_statedMessageConstructor**, Message that contains information about modified chat.
-
-####Delete Chat user
-Deletes a user from a chat and sends a service message on it.
-
-_Example_:
-
-```
-var statedMessage = await client.DeleteChatUser(chatId, userId);
-``` 
-
-* chatId - **int**, Chat ID
-* userId - **int**, User ID to be deleted
-
-**Returns**: **Messages_statedMessageConstructor**, Message that contains information about modified chat.
-
-####Leave Chat
-Leaves the chat by deleting currently authenticated user from it.
-
-_Example_:
-
-```
-var statedMessage = await client.LeaveChat(chatId);
-``` 
-
-* chatId - **int**, Chat ID
-
-**Returns**: **Messages_statedMessageConstructor**, Message that contains information about modified chat.
+**Returns**: **UpdatesDifference**, Occurred changes.
 
 ## Contributing
 

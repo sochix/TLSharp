@@ -376,5 +376,42 @@ namespace TLSharp.Tests
 
             return client;
         }
+
+        [TestMethod]
+        public async Task GetUpdates()
+        {
+            var store = new FileSessionStore();
+            var client = new TelegramClient(store, "session", apiId, apiHash);
+            await client.Connect();
+
+            Assert.IsTrue(client.IsUserAuthorized());
+
+            var updatesState = await client.GetUpdatesState();
+            var initialState = updatesState as Updates_stateConstructor;
+
+            Assert.IsNotNull(initialState);
+
+            var difference = await client.GetUpdatesDifference(initialState.pts, initialState.date, initialState.qts);
+            Assert.IsNotNull(difference);
+            Assert.AreEqual(difference.Constructor, Constructor.updates_differenceEmpty);
+
+            var userIdToSendMessage = await client.ImportContactByPhoneNumber(NumberToSendMessage);
+
+            await client.SendMessage(userIdToSendMessage.Value, "test");
+
+            var differenceAfterMessage = await client.GetUpdatesDifference(initialState.pts, initialState.date, initialState.qts);
+
+            Assert.IsNotNull(differenceAfterMessage);
+            Assert.AreEqual(differenceAfterMessage.Constructor, Constructor.updates_difference);
+
+            var differenceUpdate = differenceAfterMessage as Updates_differenceConstructor;
+            Assert.IsNotNull(differenceUpdate);
+            Assert.AreEqual(1, differenceUpdate.new_messages.Count);
+
+            var messageUpdate = differenceUpdate.new_messages[0] as MessageConstructor;
+            Assert.IsNotNull(messageUpdate);
+
+            Assert.AreEqual("test", messageUpdate.message);
+        }
     }
 }

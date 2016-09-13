@@ -278,7 +278,7 @@ namespace TLSharp.Core
                 Messages = request.messages,
                 Chats = request.chats,
                 Users = request.users,
-           };
+            };
         }
 
         public async Task<UserFull> GetUserFull(int user_id)
@@ -312,23 +312,23 @@ namespace TLSharp.Core
 
         public async Task<Messages_statedMessageConstructor> CreateChat(string title, List<string> userPhonesToInvite)
         {
-            var userIdsToInvite = new List<int>();
-            foreach (var userPhone in userPhonesToInvite)
-            {
-                var uid = await ImportContactByPhoneNumber(userPhone);
-                if (!uid.HasValue)
-                    throw new InvalidOperationException($"Failed to retrieve contact {userPhone}");
+            var request = new GetUpdatesStateRequest();
 
-                userIdsToInvite.Add(uid.Value);
-            }
+            await _sender.Send(request);
+            await _sender.Receive(request);
 
-            return await CreateChat(title, userIdsToInvite);
+            return request.updates;
         }
 
-        public async Task<Messages_statedMessageConstructor> CreateChat(string title, List<int> userIdsToInvite)
+        public async Task<updates_Difference> GetUpdatesDifference(int lastPts, int lastDate, int lastQts)
         {
-            var request = new CreateChatRequest(userIdsToInvite.Select(uid => new InputUserContactConstructor(uid)).ToList(), title);
+            var request = new GetUpdatesDifferenceRequest(lastPts, lastDate, lastQts);
 
+            await _sender.Send(request);
+            await _sender.Receive(request);
+
+            return request.updatesDifference;
+        }
             await _sender.Send(request);
             await _sender.Receive(request);
 
