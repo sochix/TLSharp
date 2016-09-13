@@ -310,5 +310,54 @@ namespace TLSharp.Core
             };
         }
 
+        public async Task<Messages_statedMessageConstructor> CreateChat(string title, List<string> userPhonesToInvite)
+        {
+            var userIdsToInvite = new List<int>();
+            foreach (var userPhone in userPhonesToInvite)
+            {
+                var uid = await ImportContactByPhoneNumber(userPhone);
+                if (!uid.HasValue)
+                    throw new InvalidOperationException($"Failed to retrieve contact {userPhone}");
+
+                userIdsToInvite.Add(uid.Value);
+            }
+
+            return await CreateChat(title, userIdsToInvite);
+        }
+
+        public async Task<Messages_statedMessageConstructor> CreateChat(string title, List<int> userIdsToInvite)
+        {
+            var request = new CreateChatRequest(userIdsToInvite.Select(uid => new InputUserContactConstructor(uid)).ToList(), title);
+
+            await _sender.Send(request);
+            await _sender.Receive(request);
+
+            return request.message;
+        }
+        
+        public async Task<Messages_statedMessageConstructor> AddChatUser(int chatId, int userId)
+        {
+            var request = new AddChatUserRequest(chatId, new InputUserContactConstructor(userId));
+
+            await _sender.Send(request);
+            await _sender.Receive(request);
+
+            return request.message;
+        }
+
+        public async Task<Messages_statedMessageConstructor> DeleteChatUser(int chatId, int userId)
+        {
+            var request = new DeleteChatUserRequest(chatId, new InputUserContactConstructor(userId));
+
+            await _sender.Send(request);
+            await _sender.Receive(request);
+
+            return request.message;
+        }
+
+        public async Task<Messages_statedMessageConstructor> LeaveChat(int chatId)
+        {
+            return await DeleteChatUser(chatId, ((UserSelfConstructor) _session.User).id);
+        }
     }
 }
