@@ -79,6 +79,8 @@ Currently supported methods:
  - [Send Message to Contact](#send-message-to-contact)
  - [Send Media to Contact](#send-media-to-contact)
  - [Get Messages History for a Contact](#get-messages-history)
+ - [Get Updates State](#get-updates-state)
+ - [Get Updates Difference](#get-updates-difference)
 
 ####IsPhoneRegistered
 Check if phone number registered to Telegram.
@@ -210,6 +212,32 @@ var userFull = await client.GetUserFull(userId);
 * userId - **int**, user id
 
 **Returns**: **UserFull**, User's information
+
+####Get Updates State
+Returns a current state of updates.
+
+_Example_:
+
+```
+var userFull = await client.GetUpdatesState();
+``` 
+
+**Returns**: **UpdatesState**, Object contains info on state for further updates.
+
+####Get Updates Difference
+Returns diffetence between the current state of updates and transmitted.
+
+_Example_:
+
+```
+var userFull = await client.GetUpdatesDifference(currentState.pts, currentState.date, currentState.qts);
+``` 
+
+* lastPts - **int**, The most relevant value of parameter pts of (updates.state)
+* lastDate - **int**, The most relevant value of parameter date of (updates.state)
+* lastQts - **int**, The most relevant value of parameter qts of (updates.state)
+
+**Returns**: **UpdatesDifference**, Occurred changes.
 
 ## Contributing
 
