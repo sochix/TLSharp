@@ -278,7 +278,7 @@ namespace TLSharp.Core
                 Messages = request.messages,
                 Chats = request.chats,
                 Users = request.users,
-           };
+            };
         }
 
         public async Task<UserFull> GetUserFull(int user_id)
@@ -310,5 +310,24 @@ namespace TLSharp.Core
             };
         }
 
+        public async Task<updates_State> GetUpdatesState()
+        {
+            var request = new GetUpdatesStateRequest();
+
+            await _sender.Send(request);
+            await _sender.Receive(request);
+
+            return request.updates;
+        }
+
+        public async Task<updates_Difference> GetUpdatesDifference(int lastPts, int lastDate, int lastQts)
+        {
+            var request = new GetUpdatesDifferenceRequest(lastPts, lastDate, lastQts);
+
+            await _sender.Send(request);
+            await _sender.Receive(request);
+
+            return request.updatesDifference;
+        }
     }
 }

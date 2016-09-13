@@ -69,11 +69,13 @@
     <Compile Include="Requests\AuthSendSmsRequest.cs" />
     <Compile Include="Requests\AuthSignInRequest.cs" />
     <Compile Include="Requests\AuthSignUpRequest.cs" />
+    <Compile Include="Requests\GetUpdatesDifferenceRequest.cs" />
     <Compile Include="Requests\GetContactsRequest.cs" />
     <Compile Include="Requests\GetDialogsRequest.cs" />
     <Compile Include="Requests\GetFileRequest.cs" />
     <Compile Include="Requests\GetHistoryRequest.cs" />
     <Compile Include="Requests\GetNearestDcRequest.cs" />
+    <Compile Include="Requests\GetUpdatesStateRequest.cs" />
     <Compile Include="Requests\GetUserFullRequest.cs" />
     <Compile Include="Requests\GetUsersRequest.cs" />
     <Compile Include="Requests\ImportByUserName.cs" />
