@@ -214,12 +214,15 @@ namespace TLSharp.Core
             return true;
         }
 
-        public async Task<int?> ImportContactByPhoneNumber(string phoneNumber)
+        public async Task<int?> ImportContactByPhoneNumber(string phoneNumber, string contactName = null)
         {
+            if (contactName == null)
+                contactName = "Default Name";
+
             if (!validateNumber(phoneNumber))
                 throw new InvalidOperationException("Invalid phone number. It should be only digit string, from 5 to 20 digits.");
 
-            var request = new ImportContactRequest(new InputPhoneContactConstructor(0, phoneNumber, "My Test Name", String.Empty));
+            var request = new ImportContactRequest(new InputPhoneContactConstructor(0, phoneNumber, contactName, String.Empty));
             await _sender.Send(request);
             await _sender.Receive(request);
 
