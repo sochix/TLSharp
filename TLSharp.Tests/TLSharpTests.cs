@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
@@ -24,6 +25,8 @@ namespace TLSharp.Tests
         private string UserNameToSendMessage { get; set; }
 
         private string NumberToGetUserFull { get; set; }
+
+        private string NumberToAddToChat { get; set; }
 
         private string apiHash = "";
 
@@ -53,6 +56,9 @@ namespace TLSharp.Tests
             if (string.IsNullOrEmpty(NumberToGetUserFull))
                 Debug.WriteLine("NumberToGetUserFull not configured in app.config! Some tests may fail.");
 
+            NumberToAddToChat = ConfigurationManager.AppSettings[nameof(NumberToAddToChat)];
+            if (string.IsNullOrEmpty(NumberToAddToChat))
+                Debug.WriteLine("NumberToAddToChat not configured in app.config! Some tests may fail.");
         }
 
         [TestMethod]
@@ -321,7 +327,7 @@ namespace TLSharp.Tests
 
             var createdChat = GetChatFromStatedMessage(statedMessageAfterCreation);
 
-            var addUserId = await client.ImportContactByPhoneNumber("380685004559");
+            var addUserId = await client.ImportContactByPhoneNumber(NumberToAddToChat);
 
             var statedMessageAfterAddUser = await client.AddChatUser(createdChat.id, addUserId.Value);
             var modifiedChat = GetChatFromStatedMessage(statedMessageAfterAddUser);
