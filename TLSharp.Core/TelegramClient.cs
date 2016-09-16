@@ -312,23 +312,23 @@ namespace TLSharp.Core
 
         public async Task<Messages_statedMessageConstructor> CreateChat(string title, List<string> userPhonesToInvite)
         {
-            var request = new GetUpdatesStateRequest();
+            var userIdsToInvite = new List<int>();
+            foreach (var userPhone in userPhonesToInvite)
+            {
+                var uid = await ImportContactByPhoneNumber(userPhone);
+                if (!uid.HasValue)
+                    throw new InvalidOperationException($"Failed to retrieve contact {userPhone}");
 
-            await _sender.Send(request);
-            await _sender.Receive(request);
+                userIdsToInvite.Add(uid.Value);
+            }
 
-            return request.updates;
+            return await CreateChat(title, userIdsToInvite);
         }
 
-        public async Task<updates_Difference> GetUpdatesDifference(int lastPts, int lastDate, int lastQts)
+        public async Task<Messages_statedMessageConstructor> CreateChat(string title, List<int> userIdsToInvite)
         {
-            var request = new GetUpdatesDifferenceRequest(lastPts, lastDate, lastQts);
+            var request = new CreateChatRequest(userIdsToInvite.Select(uid => new InputUserContactConstructor(uid)).ToList(), title);
 
-            await _sender.Send(request);
-            await _sender.Receive(request);
-
-            return request.updatesDifference;
-        }
             await _sender.Send(request);
             await _sender.Receive(request);
 
@@ -358,6 +358,26 @@ namespace TLSharp.Core
         public async Task<Messages_statedMessageConstructor> LeaveChat(int chatId)
         {
             return await DeleteChatUser(chatId, ((UserSelfConstructor) _session.User).id);
+        }
+
+        public async Task<updates_State> GetUpdatesState()
+        {
+            var request = new GetUpdatesStateRequest();
+
+            await _sender.Send(request);
+            await _sender.Receive(request);
+
+            return request.updates;
+        }
+
+        public async Task<updates_Difference> GetUpdatesDifference(int lastPts, int lastDate, int lastQts)
+        {
+            var request = new GetUpdatesDifferenceRequest(lastPts, lastDate, lastQts);
+
+            await _sender.Send(request);
+            await _sender.Receive(request);
+
+            return request.updatesDifference;
         }
     }
 }
