@@ -23,7 +23,8 @@ namespace TLSharp.Core.Requests
 
         public override void OnResponse(BinaryReader reader)
         {
-            Deserializer.Deserialize(typeof(User), reader);
+            var auth = (Authorization)Deserializer.Deserialize(typeof(Authorization), reader);
+            user = auth.user;
         }
 
         public override void OnException(Exception exception)
