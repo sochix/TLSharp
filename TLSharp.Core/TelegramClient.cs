@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using TeleSharp.TL;
 using TLSharp.Core.Auth;
 using TLSharp.Core.MTProto;
 using TLSharp.Core.MTProto.Crypto;
@@ -21,7 +22,7 @@ namespace TLSharp.Core
         private string _apiHash = "";
         private int _apiId = 0;
         private Session _session;
-        private List<DcOption> dcOptions;
+        private List<TeleSharp.TL.DcOption> dcOptions;
 
         public enum sms_type { numeric_code_via_sms = 0, numeric_code_via_telegram = 5 }
 
@@ -57,7 +58,7 @@ namespace TLSharp.Core
                 await _sender.Send(request);
                 await _sender.Receive(request);
 
-                dcOptions = request.ConfigConstructor.dc_options;
+                dcOptions = (request.Configs).dc_options;
             }
 
             return true;
@@ -68,11 +69,11 @@ namespace TLSharp.Core
             if (dcOptions == null || !dcOptions.Any())
                 throw new InvalidOperationException($"Can't reconnect. Establish initial connection first.");
 
-            var dc = dcOptions.Cast<DcOptionConstructor>().First(d => d.id == dcId);
+            var dc = dcOptions.Cast<DcOption>().First(d => d.id == dcId);
 
-            _transport = new TcpTransport(dc.ip_address, dc.port);
+            _transport = new TcpTransport(dc.ip_address, dc.port.Value);
             _session.ServerAddress = dc.ip_address;
-            _session.Port = dc.port;
+            _session.Port = dc.port.Value;
 
             await Connect(true);
         }
@@ -115,7 +116,7 @@ namespace TLSharp.Core
             return request._phoneCodeHash;
         }
 
-        public async Task<User> MakeAuth(string phoneNumber, string phoneCodeHash, string code)
+        public async Task<TeleSharp.TL.User> MakeAuth(string phoneNumber, string phoneCodeHash, string code)
         {
             var request = new AuthSignInRequest(phoneNumber, phoneCodeHash, code);
             await _sender.Send(request);
@@ -137,7 +138,7 @@ namespace TLSharp.Core
         //    return request.user;
         //}
 
-        private void OnUserAuthenticated(User user, int sessionExpiration)
+        private void OnUserAuthenticated(TeleSharp.TL.User user, int sessionExpiration)
         {
             _session.User = user;
             _session.SessionExpires = sessionExpiration;

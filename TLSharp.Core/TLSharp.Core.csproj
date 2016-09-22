@@ -45,9 +45,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="TeleSharp.TL">
-      <HintPath>..\..\..\NewTeleSharp\TeleSharp.TL\bin\Debug\TeleSharp.TL.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auth\Authenticator.cs" />
@@ -63,7 +60,6 @@
     <Compile Include="MTProto\Crypto\RSA.cs" />
     <Compile Include="MTProto\Crypto\Salt.cs" />
     <Compile Include="MTProto\Serializers.cs" />
-    <Compile Include="MTProto\TL.cs" />
     <Compile Include="Network\MtProtoPlainSender.cs" />
     <Compile Include="Network\MtProtoSender.cs" />
     <Compile Include="Network\TcpMessage.cs" />
@@ -80,6 +76,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\NewTeleSharp\TeleSharp.TL\TeleSharp.TL.csproj">
+      <Project>{d6144517-91d2-4880-86df-e9ff5d7f383a}</Project>
+      <Name>TeleSharp.TL</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
