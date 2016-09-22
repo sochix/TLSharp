@@ -6,7 +6,7 @@ namespace TLSharp.Core.Requests
     public class AuthSignInRequest : MTProtoRequest
     {
         private SignInArgs args = new SignInArgs();
-        public IUser user;
+        public User user;
         public int SessionExpires;
 
         public AuthSignInRequest(string phoneNumber, string phoneCodeHash, string code)
@@ -23,7 +23,7 @@ namespace TLSharp.Core.Requests
 
         public override void OnResponse(BinaryReader reader)
         {
-            Deserializer.Deserialize(typeof(Config), reader);
+            Deserializer.Deserialize(typeof(User), reader);
         }
 
         public override void OnException(Exception exception)
