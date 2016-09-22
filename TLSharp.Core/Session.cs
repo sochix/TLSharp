@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using TeleSharp.TL;
 using TLSharp.Core.MTProto;
 using TLSharp.Core.MTProto.Crypto;
 
@@ -25,7 +26,7 @@ namespace TLSharp.Core
         public Session Load(string sessionUserId)
         {
             var sessionFileName = $"{sessionUserId}.dat";
-            if (!File.Exists(sessionFileName))
+            if (!System.IO.File.Exists(sessionFileName))
                 return null;
 
             using (var stream = new FileStream(sessionFileName, FileMode.Open))
@@ -66,7 +67,7 @@ namespace TLSharp.Core
         public int TimeOffset { get; set; }
         public long LastMessageId { get; set; }
         public int SessionExpires { get; set; }
-        public User User { get; set; }
+        public TeleSharp.TL.User User { get; set; }
         private Random random;
 
         private ISessionStore _store;
@@ -94,7 +95,7 @@ namespace TLSharp.Core
                 {
                     writer.Write(1);
                     writer.Write(SessionExpires);
-                    User.Write(writer);
+                    Serializer.Serialize(User, typeof(TeleSharp.TL.User), writer);
                 }
                 else
                 {
@@ -126,7 +127,7 @@ namespace TLSharp.Core
                 if (isAuthExsist)
                 {
                     sessionExpires = reader.ReadInt32();
-                    user = TL.Parse<User>(reader);
+                    user = (User)Deserializer.Deserialize(typeof(User), reader);
                 }
 
                 var authData = Serializers.Bytes.read(reader);

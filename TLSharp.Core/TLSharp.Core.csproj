@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BigMath, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\BigMath.0.5.0\lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\BigMath.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Ionic.ZLib, Version=2.0.0.14, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MarkerMetro.Unity.Ionic.Zlib.2.0.0.14\lib\net35\Ionic.ZLib.dll</HintPath>
       <Private>True</Private>
@@ -42,6 +46,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="TeleSharp.TL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TeleSharp.TL.1.0.0-CI00000\lib\net452\TeleSharp.TL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auth\Authenticator.cs" />
@@ -57,43 +65,22 @@
     <Compile Include="MTProto\Crypto\RSA.cs" />
     <Compile Include="MTProto\Crypto\Salt.cs" />
     <Compile Include="MTProto\Serializers.cs" />
-    <Compile Include="MTProto\TL.cs" />
     <Compile Include="Network\MtProtoPlainSender.cs" />
     <Compile Include="Network\MtProtoSender.cs" />
     <Compile Include="Network\TcpMessage.cs" />
     <Compile Include="Network\TcpTransport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\AckRequest.cs" />
-    <Compile Include="Requests\AuthCheckPhoneRequest.cs" />
     <Compile Include="Requests\AuthSendCodeRequest.cs" />
-    <Compile Include="Requests\AuthSendSmsRequest.cs" />
     <Compile Include="Requests\AuthSignInRequest.cs" />
-    <Compile Include="Requests\AuthSignUpRequest.cs" />
-    <Compile Include="Requests\GetUpdatesDifferenceRequest.cs" />
-    <Compile Include="Requests\GetContactsRequest.cs" />
-    <Compile Include="Requests\GetDialogsRequest.cs" />
-    <Compile Include="Requests\GetFileRequest.cs" />
-    <Compile Include="Requests\GetHistoryRequest.cs" />
-    <Compile Include="Requests\GetNearestDcRequest.cs" />
-    <Compile Include="Requests\GetUpdatesStateRequest.cs" />
-    <Compile Include="Requests\GetUserFullRequest.cs" />
-    <Compile Include="Requests\GetUsersRequest.cs" />
-    <Compile Include="Requests\ImportByUserName.cs" />
-    <Compile Include="Requests\ImportContactRequest.cs" />
     <Compile Include="Requests\InitConnectionRequest.cs" />
     <Compile Include="Requests\MTProtoRequest.cs" />
-    <Compile Include="Requests\SendMessageRequest.cs" />
-    <Compile Include="Requests\Message_SendMediaRequest.cs" />
-    <Compile Include="Requests\Upload_SaveFilePartRequest.cs" />
     <Compile Include="Session.cs" />
     <Compile Include="TelegramClient.cs" />
     <Compile Include="Utils\Helpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <Compile Include="Requests\CreateChatRequest.cs" />
-    <Compile Include="Requests\AddChatUserRequest.cs" />
-    <Compile Include="Requests\DeleteChatUserRequest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
