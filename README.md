@@ -1,18 +1,15 @@
 #TLSharp
 
-[![Build status](https://ci.appveyor.com/api/projects/status/95rl618ch5c4h2fa?svg=true)](https://ci.appveyor.com/project/sochix/tlsharp)
+[![Build status](https://ci.appveyor.com/api/projects/status/1vm2nj8lr1p8d8mv)](https://ci.appveyor.com/project/aarani/tlsharp)
 
-Telegram (http://telegram.org) client library implemented in C#. Only basic functionality is currently implemented. **Consider donation to speed up development process.** Bitcoin wallet: **3K1ocweFgaHnAibJ3n6hX7RNZWFTFcJjUe**
+
+Telegram (http://telegram.org) client library implemented in C#. Only basic functionality is currently implemented.
 
 It's a perfect fit for any developer who would like to send data directly to Telegram users.
 
 :star: If you :heart: library, please star it! :star:
 
 :exclamation: **Please, don't use it for SPAM!**
-
-[How-To: Send messages to Telegram from C#](http://www.sochix.ru/how-to-send-messages-to-telegram-from-c/)
-
-:ru: Russian description you can find [here](https://habrahabr.ru/post/277079/)
 
 #Table of contents?
 
@@ -23,7 +20,6 @@ It's a perfect fit for any developer who would like to send data directly to Tel
   - [Using TLSharp](#using-tlsharp)
 - [Contributing](#contributing)
 - [FAQ](#faq)
-- [Donations](#donations)
 - [License](#license)
 
 #How do I add this to my project?
@@ -73,19 +69,6 @@ All methods except [IsPhoneRegistered](#IsPhoneRegistered) requires to authentic
 Currently supported methods:
  - [IsPhoneRegistered - Check if phone is registered in Telegram](#isphoneregistered)
  - [Authenticate user](#authenticate-user)
- - [SignUp user](#signup-user)
- - [Get Contact by Phone number](#get-contact-by-phone-number)
- - [Get Contact by Username](#get-contact-by-username)
- - [Send Message to Contact](#send-message-to-contact)
- - [Send Media to Contact](#send-media-to-contact)
- - [Get Messages History for Contact](#get-messages-history-for-contact)
- - [Get UserFull](#get-userfull)
- - [Create Chat](#create-chat)
- - [Add Chat user](#add-chat-user)
- - [Delete Chat user](#delete-chat-user)
- - [Leave Chat](#leave-chat)
- - [Get Updates State](#get-updates-state)
- - [Get Updates Difference](#get-updates-difference)
 
 ####IsPhoneRegistered
 Check if phone number registered to Telegram.
@@ -116,188 +99,6 @@ _Example_:
 * phoneNumber - **string**, phone number in international format (eg. 791812312323)
 
 **Returns:** **User**, authenticated User.
-
-####SignUp user
-Register new user by phone number, secret code and first/last name.
-
-_Example_:
-
-```
-	var hash = await client.SendCodeRequest(phoneNumber);
-    
-	var code = "1234"; //code that you receive from Telegram 
-
-	var user = await client.SignUp(phoneNumber, hash, code, "TLSharp", "User"); 
-```
-* phoneNumber - **string**, phone number in international format (eg. 791812312323) that is not yet registered in Telegram.
-* firstName - **string**, new user first name
-* lastName - **string**, new user last name
-
-**Returns:** **User**, authenticated User.
-
-####Get Contact By Phone number
-Get user id by phone number.
-
-_Example_:
-
-```
-var res = await client.ImportContactByPhoneNumber("791812312323");
-```
-
-* phoneNumber - **string**, phone number in international format (eg. 791812312323)
-
-**Returns**: **int?**, User Id or null if no such user. 
-
-####Get Contact By Username
-Get user id by userName.
-
-_Example_:
-
-```
-var res = await client.ImportByUserName(userName);
-```
-
-* userName - **string**, user name  (eg. telegram_bot)
-
-**Returns**: **int?**, User Id or null if no such user. 
-
-####Send Message To Contact
-Send text message to specified user
-
-_Example_:
-
-```
-await client.SendMessage(userId, message);
-```
-* userId - **int**, user id
-* message - **string**, message
-
-####Send Media To Contact
-Send media file to specified contact.
-
-_Example_:
-
-```
-var mediaFile = await client.UploadFile(file_name, file);
-
-var res = await client.SendMediaMessage(userId, mediaFile);
-```
-
-* file_name - **string**, file name with extension (eg. "file.jpg")
-* file - **byte[]**, file content
-* userId - **int**, user id
-* mediaFile - **InputFile**, reference to uploaded file
-
-**Returns**: **bool**, file sent or not
-
-####Get Messages History for Contact
-Returns messages history for specified userId.
-
-_Example_:
-
-```
-var hist = await client.GetMessagesHistoryForContact(userId, offset, limit);
-``` 
-
-* userId - **int**, user id
-* offset - **int**, from what index start load history
-* limit - **int**, how much items return
-
-**Returns**: **List\<Message\>**, message history
-
-####Get UserFull
-Returns user's full information for specified userId.
-
-_Example_:
-
-```
-var userFull = await client.GetUserFull(userId);
-``` 
-
-* userId - **int**, user id
-
-**Returns**: **UserFull**, User's information
-
-####Create Chat
-Creates a new chat.
-
-_Example_:
-
-```
-var statedMessage = await client.CreateChat(title, new List<string> { userId1, userId2 });
-``` 
-
-* title - **string**, chat name
-* userIdsToInvite - **List<int>**, list of userIds to invite to chat. Current user will be automatically added to this chat.
-
-**Returns**: **Messages_statedMessageConstructor**, Message that contains information about created chat.
-
-####Add Chat user
-Adds a user to a chat and sends a service message on it.
-
-_Example_:
-
-```
-var statedMessage = await client.AddChatUser(chatId, userId);
-``` 
-
-* chatId - **int**, Chat ID
-* userId - **int**, User ID to be added
-
-**Returns**: **Messages_statedMessageConstructor**, Message that contains information about modified chat.
-
-####Delete Chat user
-Deletes a user from a chat and sends a service message on it.
-
-_Example_:
-
-```
-var statedMessage = await client.DeleteChatUser(chatId, userId);
-``` 
-
-* chatId - **int**, Chat ID
-* userId - **int**, User ID to be deleted
-
-**Returns**: **Messages_statedMessageConstructor**, Message that contains information about modified chat.
-
-####Leave Chat
-Leaves the chat by deleting currently authenticated user from it.
-
-_Example_:
-
-```
-var statedMessage = await client.LeaveChat(chatId);
-``` 
-
-* chatId - **int**, Chat ID
-
-**Returns**: **Messages_statedMessageConstructor**, Message that contains information about modified chat.
-
-####Get Updates State
-Returns a current state of updates.
-
-_Example_:
-
-```
-var userFull = await client.GetUpdatesState();
-``` 
-
-**Returns**: **UpdatesState**, Object contains info on state for further updates.
-
-####Get Updates Difference
-Returns diffetence between the current state of updates and transmitted.
-
-_Example_:
-
-```
-var userFull = await client.GetUpdatesDifference(currentState.pts, currentState.date, currentState.qts);
-``` 
-
-* lastPts - **int**, The most relevant value of parameter pts of (updates.state)
-* lastDate - **int**, The most relevant value of parameter date of (updates.state)
-* lastQts - **int**, The most relevant value of parameter qts of (updates.state)
-
-**Returns**: **UpdatesDifference**, Occurred changes.
 
 ## Contributing
 
@@ -385,23 +186,3 @@ Create an issue in project bug tracker.
 * Your code that runs in to this exception
 
 Without information listen above your issue will be closed. 
-# Donations
-Thanks for donations! It's highly appreciated. 
-Bitcoin wallet: **3K1ocweFgaHnAibJ3n6hX7RNZWFTFcJjUe**
-
-List of donators:
-* [mtbitcoin](https://github.com/mtbitcoin)
-
-# License
-
-**Please, provide link to an author when you using library**
-
-The MIT License
-
-Copyright (c) 2015 Ilya Pirozhenko http://www.sochix.ru/
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
