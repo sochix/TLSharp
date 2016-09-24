@@ -4,13 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using TeleSharp.TL;
 using TLSharp.Core.Auth;
 using TLSharp.Core.MTProto;
 using TLSharp.Core.MTProto.Crypto;
 using TLSharp.Core.Network;
 using TLSharp.Core.Requests;
+using TeleSharp.TL;
 using MD5 = System.Security.Cryptography.MD5;
+using TeleSharp.TL.Help;
+using TeleSharp.TL.Auth;
 
 namespace TLSharp.Core
 {
@@ -22,12 +24,11 @@ namespace TLSharp.Core
         private string _apiHash = "";
         private int _apiId = 0;
         private Session _session;
-        private List<TeleSharp.TL.DcOption> dcOptions;
-
-        public enum sms_type { numeric_code_via_sms = 0, numeric_code_via_telegram = 5 }
+        private List<TLDcOption> dcOptions;
 
         public TelegramClient(ISessionStore store, string sessionUserId, int apiId, string apiHash)
         {
+            TLContext.Init();
             _apiHash = apiHash;
             _apiId = apiId;
             if (_apiId == 0)
@@ -35,7 +36,6 @@ namespace TLSharp.Core
 
             if (string.IsNullOrEmpty(_apiHash))
                 throw new InvalidOperationException("Your API_ID is invalid. Do a configuration first https://github.com/sochix/TLSharp#quick-configuration");
-
             _session = Session.TryLoadOrCreateNew(store, sessionUserId);
             _transport = new TcpTransport(_session.ServerAddress, _session.Port);
         }
@@ -53,12 +53,13 @@ namespace TLSharp.Core
 
             if (!reconnect)
             {
-                var request = new InitConnectionRequest(_apiId);
+                var config = new TLRequestGetConfig() ;
+                var request = new TLRequestInitConnection() { api_id = _apiId, app_version = "1.0.0", device_model = "PC", lang_code = "en", query= config, system_version = "Win 10.0" };
+                var invokewithLayer = new TLRequestInvokeWithLayer() { layer = 53, query = request };
+                await _sender.Send(invokewithLayer);
+                await _sender.Receive(invokewithLayer);
 
-                await _sender.Send(request);
-                await _sender.Receive(request);
-
-                dcOptions = (request.Configs).dc_options;
+                dcOptions = ((TLConfig)invokewithLayer.Response).dc_options.lists;
             }
 
             return true;
@@ -69,30 +70,41 @@ namespace TLSharp.Core
             if (dcOptions == null || !dcOptions.Any())
                 throw new InvalidOperationException($"Can't reconnect. Establish initial connection first.");
 
-            var dc = dcOptions.Cast<DcOption>().First(d => d.id == dcId);
+            var dc = dcOptions.First(d => d.id == dcId);
 
-            _transport = new TcpTransport(dc.ip_address, dc.port.Value);
+            _transport = new TcpTransport(dc.ip_address, dc.port);
             _session.ServerAddress = dc.ip_address;
-            _session.Port = dc.port.Value;
+            _session.Port = dc.port;
 
             await Connect(true);
         }
 
         public bool IsUserAuthorized()
         {
-            return _session.User != null;
+            return _session.TLUser != null;
         }
 
-        
-        public async Task<string> SendCodeRequest(string phoneNumber, sms_type tokenDestination = sms_type.numeric_code_via_telegram)
+        public async Task<bool> IsPhoneRegistered(string phoneNumber)
+        {
+            if (_sender == null)
+                throw new InvalidOperationException("Not connected!");
+
+            var authCheckPhoneRequest = new TLRequestCheckPhone() { phone_number = phoneNumber };
+            await _sender.Send(authCheckPhoneRequest);
+            await _sender.Receive(authCheckPhoneRequest);
+
+            return authCheckPhoneRequest.Response.phone_registered;
+        }
+
+        public async Task<string> SendCodeRequest(string phoneNumber)
         {
             var completed = false;
 
-            AuthSendCodeRequest request = null;
+            TLRequestSendCode request = null;
 
             while (!completed)
             {
-                request = new AuthSendCodeRequest(phoneNumber, (int)tokenDestination, _apiId, _apiHash, "en");
+                request = new TLRequestSendCode() { phone_number = phoneNumber, api_id = _apiId, api_hash = _apiHash };
                 try
                 {
                     await _sender.Send(request);
@@ -113,261 +125,43 @@ namespace TLSharp.Core
                 }
             }
 
-            return request._phoneCodeHash;
+            return request.Response.phone_code_hash;
         }
 
-        public async Task<TeleSharp.TL.User> MakeAuth(string phoneNumber, string phoneCodeHash, string code)
+        public async Task<TLUser> MakeAuth(string phoneNumber, string phoneCodeHash, string code)
         {
-            var request = new AuthSignInRequest(phoneNumber, phoneCodeHash, code);
+            var request = new TLRequestSignIn() { phone_number = phoneNumber, phone_code_hash = phoneCodeHash, phone_code = code };
             await _sender.Send(request);
             await _sender.Receive(request);
 
-            OnUserAuthenticated(request.user, request.SessionExpires);
+            OnUserAuthenticated(((TLUser)request.Response.user));
 
-            return request.user;
+            return ((TLUser)request.Response.user);
         }
 
-        //public async Task<User> SignUp(string phoneNumber, string phoneCodeHash, string code, string firstName, string lastName)
-        //{
-        //    var request = new AuthSignUpRequest(phoneNumber, phoneCodeHash, code, firstName, lastName);
-        //    await _sender.Send(request);
-        //    await _sender.Receive(request);
-
-        //    OnUserAuthenticated(request.user, request.SessionExpires);
-
-        //    return request.user;
-        //}
-
-        private void OnUserAuthenticated(TeleSharp.TL.User user, int sessionExpiration)
+        public async Task<TLUser> SignUp(string phoneNumber, string phoneCodeHash, string code, string firstName, string lastName)
         {
-            _session.User = user;
-            _session.SessionExpires = sessionExpiration;
+            var request = new TLRequestSignUp() { phone_number = phoneNumber, phone_code = code, phone_code_hash = phoneCodeHash, first_name = firstName, last_name = lastName };
+            await _sender.Send(request);
+            await _sender.Receive(request);
+
+            OnUserAuthenticated(((TLUser)request.Response.user));
+
+            return ((TLUser)request.Response.user);
+        }
+        public async Task<T> SendRequest<T>(TLMethod methodtoExceute)
+        {
+            await _sender.Send(methodtoExceute);
+            await _sender.Receive(methodtoExceute);
+            return (T)Convert.ChangeType(typeof(TLMethod).GetProperty("Response").GetValue(methodtoExceute),typeof(T));
+        }
+        private void OnUserAuthenticated(TLUser TLUser)
+        {
+            _session.TLUser = TLUser;
+            _session.SessionExpires = int.MaxValue;
 
             _session.Save();
         }
-
-        //public async Task<InputFile> UploadFile(string name, byte[] data)
-        //{
-        //    var partSize = 65536;
-
-        //    var file_id = DateTime.Now.Ticks;
-
-        //    var partedData = new Dictionary<int, byte[]>();
-        //    var parts = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(data.Length) / Convert.ToDouble(partSize)));
-        //    var remainBytes = data.Length;
-        //    for (int i = 0; i < parts; i++)
-        //    {
-        //        partedData.Add(i, data
-        //            .Skip(i * partSize)
-        //            .Take(remainBytes < partSize ? remainBytes : partSize)
-        //            .ToArray());
-
-        //        remainBytes -= partSize;
-        //    }
-
-        //    for (int i = 0; i < parts; i++)
-        //    {
-        //        var saveFilePartRequest = new Upload_SaveFilePartRequest(file_id, i, partedData[i]);
-        //        await _sender.Send(saveFilePartRequest);
-        //        await _sender.Receive(saveFilePartRequest);
-
-        //        if (saveFilePartRequest.Done == false)
-        //            throw new InvalidOperationException($"File part {i} does not uploaded");
-        //    }
-
-        //    string md5_checksum;
-        //    using (var md5 = MD5.Create())
-        //    {
-        //        var hash = md5.ComputeHash(data);
-        //        var hashResult = new StringBuilder(hash.Length * 2);
-
-        //        for (int i = 0; i < hash.Length; i++)
-        //            hashResult.Append(hash[i].ToString("x2"));
-
-        //        md5_checksum = hashResult.ToString();
-        //    }
-
-        //    var inputFile = new InputFileConstructor(file_id, parts, name, md5_checksum);
-
-        //    return inputFile;
-        //}
-
-        //public async Task<bool> SendMediaMessage(int contactId, InputFile file)
-        //{
-        //    var request = new Message_SendMediaRequest(
-        //        new InputPeerContactConstructor(contactId),
-        //        new InputMediaUploadedPhotoConstructor(file));
-
-        //    await _sender.Send(request);
-        //    await _sender.Receive(request);
-
-        //    return true;
-        //}
-
-        //public async Task<int?> ImportContactByPhoneNumber(string phoneNumber)
-        //{
-        //    if (!validateNumber(phoneNumber))
-        //        throw new InvalidOperationException("Invalid phone number. It should be only digit string, from 5 to 20 digits.");
-
-        //    var request = new ImportContactRequest(new InputPhoneContactConstructor(0, phoneNumber, "My Test Name", String.Empty));
-        //    await _sender.Send(request);
-        //    await _sender.Receive(request);
-
-        //    var importedUser = (ImportedContactConstructor)request.imported.FirstOrDefault();
-
-        //    return importedUser?.user_id;
-        //}
-
-        //public async Task<int?> ImportByUserName(string username)
-        //{
-        //    if (string.IsNullOrEmpty(username))
-        //        throw new InvalidOperationException("Username can't be null");
-
-        //    var request = new ImportByUserName(username);
-        //    await _sender.Send(request);
-        //    await _sender.Receive(request);
-
-        //    return request.id;
-        //}
-
-        //public async Task SendMessage(int id, string message)
-        //{
-        //    var request = new SendMessageRequest(new InputPeerContactConstructor(id), message);
-
-        //    await _sender.Send(request);
-        //    await _sender.Receive(request);
-        //}
-
-        //public async Task<List<Message>> GetMessagesHistoryForContact(int user_id, int offset, int limit, int max_id = -1)
-        //{
-        //    var request = new GetHistoryRequest(new InputPeerContactConstructor(user_id), offset, max_id, limit);
-        //    await _sender.Send(request);
-        //    await _sender.Receive(request);
-
-        //    return request.messages;
-        //}
-
-        //public async Task<Tuple<storage_FileType, byte[]>> GetFile(long volume_id, int local_id, long secret, int offset, int limit)
-        //{
-        //    var request = new GetFileRequest(new InputFileLocationConstructor(volume_id, local_id, secret), offset, limit);
-        //    await _sender.Send(request);
-        //    await _sender.Receive(request);
-
-        //    return Tuple.Create(request.type, request.bytes);
-        //}
-
-        //public async Task<MessageDialogs> GetDialogs(int offset, int limit, int max_id = 0)
-        //{
-        //    var request = new GetDialogsRequest(offset, max_id, limit);
-        //    await _sender.Send(request);
-        //    await _sender.Receive(request);
-
-        //    return new MessageDialogs
-        //    {
-        //        Dialogs = request.dialogs,
-        //        Messages = request.messages,
-        //        Chats = request.chats,
-        //        Users = request.users,
-        //    };
-        //}
-
-        //public async Task<UserFull> GetUserFull(int user_id)
-        //{
-        //    var request = new GetUserFullRequest(user_id);
-        //    await _sender.Send(request);
-        //    await _sender.Receive(request);
-
-        //    return request._userFull;
-        //}
-
-        //private bool validateNumber(string number)
-        //{
-        //    var regex = new Regex("^\\d{7,20}$");
-
-        //    return regex.IsMatch(number);
-        //}
-
-        //public async Task<ContactsContacts> GetContacts(IList<int> contactIds = null)
-        //{
-        //    var request = new GetContactsRequest(contactIds);
-        //    await _sender.Send(request);
-        //    await _sender.Receive(request);
-
-        //    return new ContactsContacts
-        //    {
-        //        Contacts = request.Contacts,
-        //        Users = request.Users,
-        //    };
-        //}
-
-        //public async Task<Messages_statedMessageConstructor> CreateChat(string title, List<string> userPhonesToInvite)
-        //{
-        //    var userIdsToInvite = new List<int>();
-        //    foreach (var userPhone in userPhonesToInvite)
-        //    {
-        //        var uid = await ImportContactByPhoneNumber(userPhone);
-        //        if (!uid.HasValue)
-        //            throw new InvalidOperationException($"Failed to retrieve contact {userPhone}");
-
-        //        userIdsToInvite.Add(uid.Value);
-        //    }
-
-        //    return await CreateChat(title, userIdsToInvite);
-        //}
-
-        //public async Task<Messages_statedMessageConstructor> CreateChat(string title, List<int> userIdsToInvite)
-        //{
-        //    var request = new CreateChatRequest(userIdsToInvite.Select(uid => new InputUserContactConstructor(uid)).ToList(), title);
-
-        //    await _sender.Send(request);
-        //    await _sender.Receive(request);
-
-        //    return request.message;
-        //}
-
-        //public async Task<Messages_statedMessageConstructor> AddChatUser(int chatId, int userId)
-        //{
-        //    var request = new AddChatUserRequest(chatId, new InputUserContactConstructor(userId));
-
-        //    await _sender.Send(request);
-        //    await _sender.Receive(request);
-
-        //    return request.message;
-        //}
-
-        //public async Task<Messages_statedMessageConstructor> DeleteChatUser(int chatId, int userId)
-        //{
-        //    var request = new DeleteChatUserRequest(chatId, new InputUserContactConstructor(userId));
-
-        //    await _sender.Send(request);
-        //    await _sender.Receive(request);
-
-        //    return request.message;
-        //}
-
-        //public async Task<Messages_statedMessageConstructor> LeaveChat(int chatId)
-        //{
-        //    return await DeleteChatUser(chatId, ((UserSelfConstructor) _session.User).id);
-        //}
-
-        //public async Task<updates_State> GetUpdatesState()
-        //{
-        //    var request = new GetUpdatesStateRequest();
-
-        //    await _sender.Send(request);
-        //    await _sender.Receive(request);
-
-        //    return request.updates;
-        //}
-
-        //public async Task<updates_Difference> GetUpdatesDifference(int lastPts, int lastDate, int lastQts)
-        //{
-        //    var request = new GetUpdatesDifferenceRequest(lastPts, lastDate, lastQts);
-
-        //    await _sender.Send(request);
-        //    await _sender.Receive(request);
-
-        //    return request.updatesDifference;
-        //}
+       
     }
 }

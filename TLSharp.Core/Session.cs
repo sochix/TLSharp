@@ -26,7 +26,7 @@ namespace TLSharp.Core
         public Session Load(string sessionUserId)
         {
             var sessionFileName = $"{sessionUserId}.dat";
-            if (!System.IO.File.Exists(sessionFileName))
+            if (!File.Exists(sessionFileName))
                 return null;
 
             using (var stream = new FileStream(sessionFileName, FileMode.Open))
@@ -67,7 +67,7 @@ namespace TLSharp.Core
         public int TimeOffset { get; set; }
         public long LastMessageId { get; set; }
         public int SessionExpires { get; set; }
-        public TeleSharp.TL.User User { get; set; }
+        public TLUser TLUser { get; set; }
         private Random random;
 
         private ISessionStore _store;
@@ -91,11 +91,11 @@ namespace TLSharp.Core
                 Serializers.String.write(writer, ServerAddress);
                 writer.Write(Port);
 
-                if (User != null)
+                if (TLUser != null)
                 {
                     writer.Write(1);
                     writer.Write(SessionExpires);
-                    Serializer.Serialize(User, typeof(TeleSharp.TL.User), writer);
+                    ObjectUtils.SerializeObject(TLUser, writer);
                 }
                 else
                 {
@@ -123,11 +123,11 @@ namespace TLSharp.Core
 
                 var isAuthExsist = reader.ReadInt32() == 1;
                 int sessionExpires = 0;
-                User user = null;
+                TLUser TLUser = null;
                 if (isAuthExsist)
                 {
                     sessionExpires = reader.ReadInt32();
-                    user = (User)Deserializer.Deserialize(typeof(User), reader);
+                    TLUser = (TLUser)ObjectUtils.DeserializeObject(reader);
                 }
 
                 var authData = Serializers.Bytes.read(reader);
@@ -141,7 +141,7 @@ namespace TLSharp.Core
                     LastMessageId = lastMessageId,
                     TimeOffset = timeOffset,
                     SessionExpires = sessionExpires,
-                    User = user,
+                    TLUser = TLUser,
                     SessionUserId = sessionUserId,
                     ServerAddress = serverAddress,
                     Port = port
