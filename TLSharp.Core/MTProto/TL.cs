@@ -75,6 +75,9 @@ namespace TLSharp.Core.MTProto
         userStatusEmpty,
         userStatusOnline,
         userStatusOffline,
+        userStatusRecently,
+        userStatusLastWeek,
+        userStatusLastMonth,
         chatEmpty,
         chat,
         chatForbidden,
@@ -339,6 +342,9 @@ namespace TLSharp.Core.MTProto
             {0x09d05049, typeof (UserStatusEmptyConstructor)},
             {0xedb93949, typeof (UserStatusOnlineConstructor)},
             {0x008c703f, typeof (UserStatusOfflineConstructor)},
+            {0xe26f42f1, typeof (userStatusRecentlyConstructor)},
+            {0x07bf09fc, typeof (userStatusLastWeekConstructor)},
+            {0x77ebc742, typeof (userStatusLastMonthConstructor)},
             {0x9ba2d800, typeof (ChatEmptyConstructor)},
             {0x6e9c9bc7, typeof (ChatConstructor)},
             {0xfb0ccc41, typeof (ChatForbiddenConstructor)},
@@ -901,6 +907,20 @@ namespace TLSharp.Core.MTProto
             return new UserStatusOfflineConstructor(was_online);
         }
 
+        public static UserStatus userStatusRecently()
+        {
+            return new userStatusRecentlyConstructor();
+        }
+
+        public static UserStatus userStatusLastWeek()
+        {
+            return new userStatusLastWeekConstructor();
+        }
+
+        public static UserStatus userStatusLastMonth()
+        {
+            return new userStatusLastMonthConstructor();
+        }
         public static Chat chatEmpty(int id)
         {
             return new ChatEmptyConstructor(id);
@@ -4789,7 +4809,89 @@ namespace TLSharp.Core.MTProto
         }
     }
 
+    public class userStatusRecentlyConstructor : UserStatus
+    {
 
+        public userStatusRecentlyConstructor()
+        {
+
+        }
+
+        public override Constructor Constructor
+        {
+            get { return Constructor.userStatusRecently; }
+        }
+
+        public override void Write(BinaryWriter writer)
+        {
+            writer.Write(0xe26f42f1);
+        }
+
+        public override void Read(BinaryReader reader)
+        {
+        }
+
+        public override string ToString()
+        {
+            return String.Format("(userStatusRecently)");
+        }
+    }
+
+    public class userStatusLastWeekConstructor : UserStatus
+    {
+
+        public userStatusLastWeekConstructor()
+        {
+
+        }
+
+        public override Constructor Constructor
+        {
+            get { return Constructor.userStatusLastWeek; }
+        }
+
+        public override void Write(BinaryWriter writer)
+        {
+            writer.Write(0xe26f42f1);
+        }
+
+        public override void Read(BinaryReader reader)
+        {
+        }
+
+        public override string ToString()
+        {
+            return String.Format("(userStatusLastWeek)");
+        }
+    }
+
+    public class userStatusLastMonthConstructor : UserStatus
+    {
+
+        public userStatusLastMonthConstructor()
+        {
+
+        }
+
+        public override Constructor Constructor
+        {
+            get { return Constructor.userStatusLastMonth; }
+        }
+
+        public override void Write(BinaryWriter writer)
+        {
+            writer.Write(0xe26f42f1);
+        }
+
+        public override void Read(BinaryReader reader)
+        {
+        }
+
+        public override string ToString()
+        {
+            return String.Format("(userStatusLastMonth)");
+        }
+    }
     public class ChatEmptyConstructor : Chat
     {
         public int id;
@@ -5442,7 +5544,7 @@ namespace TLSharp.Core.MTProto
 
         public override string ToString()
         {
-            return String.Format("(messageService flags:{0} id:{1} from_id:{2} to_id:{3} date:{4} action:{5})", 
+            return String.Format("(messageService flags:{0} id:{1} from_id:{2} to_id:{3} date:{4} action:{5})",
                 flags, id, from_id, to_id, date, action);
         }
     }
@@ -7136,7 +7238,7 @@ namespace TLSharp.Core.MTProto
         }
 
         public override void Read(BinaryReader reader)
-        { 
+        {
             if (reader.ReadUInt32() == 0x7007b451)
             {
                 this.user = new UserSelfConstructor();
