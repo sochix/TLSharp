@@ -14875,17 +14875,10 @@ namespace TLSharp.Core.MTProto
             writer.Write(this.dc_id);
 
             writer.Write(0x1cb5c415);
-            if (this.attributes != null)
+            writer.Write(this.attributes.Count);
+            foreach (DocumentAttribute attribute_element in this.attributes)
             {
-                writer.Write(this.attributes.Count);
-                foreach (var attribute in attributes)
-                {
-                    attribute.Write(writer);
-                }
-            }
-            else
-            {
-                writer.Write(0);
+                attribute_element.Write(writer);
             }
         }
 
@@ -14899,18 +14892,14 @@ namespace TLSharp.Core.MTProto
             this.thumb = TL.Parse<PhotoSize>(reader);
             this.dc_id = reader.ReadInt32();
 
-            var code = reader.ReadUInt32(); // vector#1cb5c415
-            int attributes_len = reader.ReadInt32(); // vector length
-
-            if (attributes_len != 0)
+            reader.ReadUInt32(); // vector code
+            int attributes_len = reader.ReadInt32();
+            this.attributes = new List<DocumentAttribute>(attributes_len);
+            for (int attributes_index = 0; attributes_index < attributes_len; attributes_index++)
             {
-                attributes = new List<DocumentAttribute>(attributes_len);
-                for (int i = 0; i < attributes_len; i++)
-                    attributes.Add(TL.Parse<DocumentAttribute>(reader));
-            }
-            else
-            {
-                attributes = new List<DocumentAttribute>();
+                DocumentAttribute attribute_element;
+                attribute_element = TL.Parse<DocumentAttribute>(reader);
+                this.attributes.Add(attribute_element);
             }
 
             // stickers appear to have a superfluous 000 at the end of the stream;
