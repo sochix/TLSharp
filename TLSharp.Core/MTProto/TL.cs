@@ -378,7 +378,7 @@ namespace TLSharp.Core.MTProto
             {0x77bfb61b, typeof (PhotoSizeConstructor)},
             {0xe9a734fa, typeof (PhotoCachedSizeConstructor)},
             {0xc10658a8, typeof (VideoEmptyConstructor)},
-            {0x5a04a49f, typeof (VideoConstructor)},
+            {0x388FA391, typeof (VideoConstructor)},
             {0x1117dd5f, typeof (GeoPointEmptyConstructor)},
             {0x2049d70c, typeof (GeoPointConstructor)},
             {0xe300cc3b, typeof (Auth_checkedPhoneConstructor)},
@@ -1085,10 +1085,10 @@ namespace TLSharp.Core.MTProto
             return new VideoEmptyConstructor(id);
         }
 
-        public static Video video(long id, long access_hash, int user_id, int date, string caption, int duration, int size,
-            PhotoSize thumb, int dc_id, int w, int h)
+        public static Video video(long id, long access_hash, int user_id, int date, string caption, int duration, string mime_type,
+            int size, PhotoSize thumb, int dc_id, int w, int h)
         {
-            return new VideoConstructor(id, access_hash, user_id, date, caption, duration, size, thumb, dc_id, w, h);
+            return new VideoConstructor(id, access_hash, user_id, date, caption, duration, mime_type, size, thumb, dc_id, w, h);
         }
 
         public static GeoPoint geoPointEmpty()
@@ -6363,6 +6363,7 @@ namespace TLSharp.Core.MTProto
         public int date;
         public string caption;
         public int duration;
+        public string mime_type;
         public int size;
         public PhotoSize thumb;
         public int dc_id;
@@ -6374,8 +6375,8 @@ namespace TLSharp.Core.MTProto
 
         }
 
-        public VideoConstructor(long id, long access_hash, int user_id, int date, string caption, int duration, int size,
-            PhotoSize thumb, int dc_id, int w, int h)
+        public VideoConstructor(long id, long access_hash, int user_id, int date, string caption, int duration, string mime_type,
+            int size, PhotoSize thumb, int dc_id, int w, int h)
         {
             this.id = id;
             this.access_hash = access_hash;
@@ -6383,6 +6384,7 @@ namespace TLSharp.Core.MTProto
             this.date = date;
             this.caption = caption;
             this.duration = duration;
+            this.mime_type = mime_type;
             this.size = size;
             this.thumb = thumb;
             this.dc_id = dc_id;
@@ -6405,6 +6407,7 @@ namespace TLSharp.Core.MTProto
             writer.Write(this.date);
             Serializers.String.write(writer, this.caption);
             writer.Write(this.duration);
+            Serializers.String.write(writer, this.mime_type);
             writer.Write(this.size);
             this.thumb.Write(writer);
             writer.Write(this.dc_id);
@@ -6420,6 +6423,7 @@ namespace TLSharp.Core.MTProto
             this.date = reader.ReadInt32();
             this.caption = Serializers.String.read(reader);
             this.duration = reader.ReadInt32();
+            this.mime_type = Serializers.String.read(reader);
             this.size = reader.ReadInt32();
             this.thumb = TL.Parse<PhotoSize>(reader);
             this.dc_id = reader.ReadInt32();
@@ -6431,8 +6435,8 @@ namespace TLSharp.Core.MTProto
         {
             return
                 String.Format(
-                    "(video id:{0} access_hash:{1} user_id:{2} date:{3} caption:'{4}' duration:{5} size:{6} thumb:{7} dc_id:{8} w:{9} h:{10})",
-                    id, access_hash, user_id, date, caption, duration, size, thumb, dc_id, w, h);
+                    "(video id:{0} access_hash:{1} user_id:{2} date:{3} caption:'{4}' duration:{5} mime_type:{6} size:{7} thumb:{8} dc_id:{9} w:{10} h:{11})",
+                    id, access_hash, user_id, date, caption, duration, mime_type, size, thumb, dc_id, w, h);
         }
     }
 
