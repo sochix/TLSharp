@@ -272,7 +272,13 @@ namespace TLSharp.Core.MTProto
         audioEmpty,
         audio,
         documentEmpty,
-        document
+        document,
+        documentAttributeImageSize,
+        documentAttributeAnimated,
+        documentAttributeSticker,
+        documentAttributeVideo,
+        documentAttributeAudio,
+        documentAttributeFilename
     }
 
     public class TL
@@ -372,7 +378,7 @@ namespace TLSharp.Core.MTProto
             {0x77bfb61b, typeof (PhotoSizeConstructor)},
             {0xe9a734fa, typeof (PhotoCachedSizeConstructor)},
             {0xc10658a8, typeof (VideoEmptyConstructor)},
-            {0x5a04a49f, typeof (VideoConstructor)},
+            {0x388FA391, typeof (VideoConstructor)},
             {0x1117dd5f, typeof (GeoPointEmptyConstructor)},
             {0x2049d70c, typeof (GeoPointConstructor)},
             {0xe300cc3b, typeof (Auth_checkedPhoneConstructor)},
@@ -540,6 +546,12 @@ namespace TLSharp.Core.MTProto
             {0xab3a99ac, typeof (DialogConstructor)},
             {0xd9ccc4ef, typeof (UserRequestConstructor)},
             {0x075cf7a8, typeof (UserForeignConstructor)},
+            {0x6c37c15c, typeof (DocumentAttributeImageSizeConstructor)},
+            {0x11b58939, typeof (DocumentAttributeAnimatedConstructor)},
+            {0xfb0a5727, typeof (DocumentAttributeStickerConstructor)},
+            {0x5910cccb, typeof (DocumentAttributeVideoConstructor)},
+            {0x51448e5, typeof (DocumentAttributeAudioConstructor)},
+            {0x15590068, typeof (DocumentAttributeFilenameConstructor)}
         };
 
         public static TLObject Parse(BinaryReader reader, uint code)
@@ -1073,10 +1085,10 @@ namespace TLSharp.Core.MTProto
             return new VideoEmptyConstructor(id);
         }
 
-        public static Video video(long id, long access_hash, int user_id, int date, string caption, int duration, int size,
-            PhotoSize thumb, int dc_id, int w, int h)
+        public static Video video(long id, long access_hash, int user_id, int date, string caption, int duration, string mime_type,
+            int size, PhotoSize thumb, int dc_id, int w, int h)
         {
-            return new VideoConstructor(id, access_hash, user_id, date, caption, duration, size, thumb, dc_id, w, h);
+            return new VideoConstructor(id, access_hash, user_id, date, caption, duration, mime_type, size, thumb, dc_id, w, h);
         }
 
         public static GeoPoint geoPointEmpty()
@@ -1928,12 +1940,40 @@ namespace TLSharp.Core.MTProto
             return new DocumentEmptyConstructor(id);
         }
 
-        public static Document document(long id, long access_hash, int user_id, int date, string file_name, string mime_type,
-            int size, PhotoSize thumb, int dc_id)
+        public static Document document(long id, long access_hash, int date, string mime_type, int size, PhotoSize thumb, int dc_id, List<DocumentAttribute> attributes)
         {
-            return new DocumentConstructor(id, access_hash, user_id, date, file_name, mime_type, size, thumb, dc_id);
+            return new DocumentConstructor(id, access_hash, date, mime_type, size, thumb, dc_id, attributes);
         }
 
+        public static DocumentAttribute documentAttributeImageSize(int w, int h)
+        {
+            return new DocumentAttributeImageSizeConstructor(w, h);
+        }
+
+        public static DocumentAttribute documentAttributeAnimated()
+        {
+            return new DocumentAttributeAnimatedConstructor();
+        }
+
+        public static DocumentAttribute documentAttributeSticker()
+        {
+            return new DocumentAttributeStickerConstructor();
+        }
+
+        public static DocumentAttribute documentAttributeVideo(int duration, int w, int h)
+        {
+            return new DocumentAttributeVideoConstructor(duration, w, h);
+        }
+
+        public static DocumentAttribute documentAttributeAudio(int duration)
+        {
+            return new DocumentAttributeAudioConstructor(duration);
+        }
+
+        public static DocumentAttribute documentAttributeFilename(string file_name)
+        {
+            return new DocumentAttributeFilenameConstructor(file_name);
+        }
     }
 
     // abstract types
@@ -6323,6 +6363,7 @@ namespace TLSharp.Core.MTProto
         public int date;
         public string caption;
         public int duration;
+        public string mime_type;
         public int size;
         public PhotoSize thumb;
         public int dc_id;
@@ -6334,8 +6375,8 @@ namespace TLSharp.Core.MTProto
 
         }
 
-        public VideoConstructor(long id, long access_hash, int user_id, int date, string caption, int duration, int size,
-            PhotoSize thumb, int dc_id, int w, int h)
+        public VideoConstructor(long id, long access_hash, int user_id, int date, string caption, int duration, string mime_type,
+            int size, PhotoSize thumb, int dc_id, int w, int h)
         {
             this.id = id;
             this.access_hash = access_hash;
@@ -6343,6 +6384,7 @@ namespace TLSharp.Core.MTProto
             this.date = date;
             this.caption = caption;
             this.duration = duration;
+            this.mime_type = mime_type;
             this.size = size;
             this.thumb = thumb;
             this.dc_id = dc_id;
@@ -6365,6 +6407,7 @@ namespace TLSharp.Core.MTProto
             writer.Write(this.date);
             Serializers.String.write(writer, this.caption);
             writer.Write(this.duration);
+            Serializers.String.write(writer, this.mime_type);
             writer.Write(this.size);
             this.thumb.Write(writer);
             writer.Write(this.dc_id);
@@ -6380,6 +6423,7 @@ namespace TLSharp.Core.MTProto
             this.date = reader.ReadInt32();
             this.caption = Serializers.String.read(reader);
             this.duration = reader.ReadInt32();
+            this.mime_type = Serializers.String.read(reader);
             this.size = reader.ReadInt32();
             this.thumb = TL.Parse<PhotoSize>(reader);
             this.dc_id = reader.ReadInt32();
@@ -6391,8 +6435,8 @@ namespace TLSharp.Core.MTProto
         {
             return
                 String.Format(
-                    "(video id:{0} access_hash:{1} user_id:{2} date:{3} caption:'{4}' duration:{5} size:{6} thumb:{7} dc_id:{8} w:{9} h:{10})",
-                    id, access_hash, user_id, date, caption, duration, size, thumb, dc_id, w, h);
+                    "(video id:{0} access_hash:{1} user_id:{2} date:{3} caption:'{4}' duration:{5} mime_type:{6} size:{7} thumb:{8} dc_id:{9} w:{10} h:{11})",
+                    id, access_hash, user_id, date, caption, duration, mime_type, size, thumb, dc_id, w, h);
         }
     }
 
@@ -14792,31 +14836,29 @@ namespace TLSharp.Core.MTProto
     {
         public long id;
         public long access_hash;
-        public int user_id;
         public int date;
-        public string file_name;
         public string mime_type;
         public int size;
         public PhotoSize thumb;
         public int dc_id;
+        public List<DocumentAttribute> attributes;
 
         public DocumentConstructor()
         {
 
         }
 
-        public DocumentConstructor(long id, long access_hash, int user_id, int date, string file_name, string mime_type,
-            int size, PhotoSize thumb, int dc_id)
+        public DocumentConstructor(long id, long access_hash, int date, string mime_type,
+            int size, PhotoSize thumb, int dc_id, List<DocumentAttribute> attributes)
         {
             this.id = id;
             this.access_hash = access_hash;
-            this.user_id = user_id;
             this.date = date;
-            this.file_name = file_name;
             this.mime_type = mime_type;
             this.size = size;
             this.thumb = thumb;
             this.dc_id = dc_id;
+            this.attributes = attributes;
         }
 
 
@@ -14827,38 +14869,230 @@ namespace TLSharp.Core.MTProto
 
         public override void Write(BinaryWriter writer)
         {
-            writer.Write(0x9efc6326);
+            writer.Write(0xf9a39f4f);
             writer.Write(this.id);
             writer.Write(this.access_hash);
-            writer.Write(this.user_id);
             writer.Write(this.date);
-            Serializers.String.write(writer, this.file_name);
             Serializers.String.write(writer, this.mime_type);
             writer.Write(this.size);
             this.thumb.Write(writer);
             writer.Write(this.dc_id);
+
+            writer.Write(0x1cb5c415);
+            writer.Write(this.attributes.Count);
+            foreach (DocumentAttribute attribute_element in this.attributes)
+            {
+                attribute_element.Write(writer);
+            }
         }
 
         public override void Read(BinaryReader reader)
         {
             this.id = reader.ReadInt64();
             this.access_hash = reader.ReadInt64();
-            this.user_id = reader.ReadInt32();
             this.date = reader.ReadInt32();
-            this.file_name = Serializers.String.read(reader);
             this.mime_type = Serializers.String.read(reader);
             this.size = reader.ReadInt32();
-            var tst = Serializers.String.read(reader);
             this.thumb = TL.Parse<PhotoSize>(reader);
             this.dc_id = reader.ReadInt32();
+
+            reader.ReadUInt32(); // vector code
+            int attributes_len = reader.ReadInt32();
+            this.attributes = new List<DocumentAttribute>(attributes_len);
+            for (int attributes_index = 0; attributes_index < attributes_len; attributes_index++)
+            {
+                DocumentAttribute attribute_element;
+                attribute_element = TL.Parse<DocumentAttribute>(reader);
+                this.attributes.Add(attribute_element);
+            }
+
+            // stickers appear to have a superfluous 000 at the end of the stream;
+            // unclear if this matches the 3 DocumentAttributes or is always just 000,
+            // but there should be nothing after 'attributes' according to the spec.
+            // we've got all the data we need for this document, so keep reading
+            // until we locate the next constructor
+            while (reader.PeekChar() == 0)
+            {
+                reader.ReadChar();
+            }
         }
 
         public override string ToString()
         {
             return
                 String.Format(
-                    "(document id:{0} access_hash:{1} user_id:{2} date:{3} file_name:'{4}' mime_type:'{5}' size:{6} thumb:{7} dc_id:{8})",
-                    id, access_hash, user_id, date, file_name, mime_type, size, thumb, dc_id);
+                    "(document id:{0} access_hash:{1} date:{2} mime_type:'{3}' size:{4} thumb:{5} dc_id:{6})",
+                    id, access_hash, date, mime_type, size, thumb, dc_id);
+        }
+    }
+
+    public abstract class DocumentAttribute : TLObject
+    {
+    }
+
+    public class DocumentAttributeImageSizeConstructor : DocumentAttribute
+    {
+        public int w;
+        public int h;
+
+        public DocumentAttributeImageSizeConstructor()
+        {
+        }
+
+        public DocumentAttributeImageSizeConstructor(int w, int h)
+        {
+            this.w = w;
+            this.h = h;
+        }
+
+        public override Constructor Constructor
+        {
+            get { return Constructor.documentAttributeImageSize; }
+            
+        }
+        public override void Write(BinaryWriter writer)
+        {
+            writer.Write(0x6c37c15c);
+            writer.Write(w);
+            writer.Write(h);
+        }
+
+        public override void Read(BinaryReader reader)
+        {
+            this.w = reader.ReadInt32();
+            this.h = reader.ReadInt32();
+        }
+    }
+
+    public class DocumentAttributeAnimatedConstructor : DocumentAttribute
+    {
+        public override Constructor Constructor
+        {
+            get { return Constructor.documentAttributeAnimated; }
+
+        }
+        public override void Write(BinaryWriter writer)
+        {
+            writer.Write(0x11b58939);
+        }
+
+        public override void Read(BinaryReader reader)
+        {
+        }
+    }
+
+    public class DocumentAttributeStickerConstructor : DocumentAttribute
+    {
+        public override Constructor Constructor
+        {
+            get { return Constructor.documentAttributeSticker; }
+
+        }
+        public override void Write(BinaryWriter writer)
+        {
+            writer.Write(0xfb0a5727);
+        }
+
+        public override void Read(BinaryReader reader)
+        {
+        }
+    }
+
+    public class DocumentAttributeVideoConstructor : DocumentAttribute
+    {
+        public int duration;
+        public int w;
+        public int h;
+
+        public DocumentAttributeVideoConstructor()
+        {
+        }
+
+        public DocumentAttributeVideoConstructor(int duration, int w, int h)
+        {
+            this.duration = duration;
+            this.w = w;
+            this.h = h;
+        }
+
+        public override Constructor Constructor
+        {
+            get { return Constructor.documentAttributeVideo; }
+
+        }
+        public override void Write(BinaryWriter writer)
+        {
+            writer.Write(0x5910cccb);
+            writer.Write(duration);
+            writer.Write(w);
+            writer.Write(h);
+        }
+
+        public override void Read(BinaryReader reader)
+        {
+            this.duration = reader.ReadInt32();
+            this.w = reader.ReadInt32();
+            this.h = reader.ReadInt32();
+        }
+    }
+
+    public class DocumentAttributeAudioConstructor : DocumentAttribute
+    {
+        public int duration;
+
+        public DocumentAttributeAudioConstructor()
+        {
+        }
+
+        public DocumentAttributeAudioConstructor(int duration)
+        {
+            this.duration = duration;
+        }
+
+        public override Constructor Constructor
+        {
+            get { return Constructor.documentAttributeAudio; }
+
+        }
+        public override void Write(BinaryWriter writer)
+        {
+            writer.Write(0x51448e5);
+            writer.Write(duration);
+        }
+
+        public override void Read(BinaryReader reader)
+        {
+            this.duration = reader.ReadInt32();
+        }
+    }
+
+    public class DocumentAttributeFilenameConstructor : DocumentAttribute
+    {
+        public string file_name;
+
+        public DocumentAttributeFilenameConstructor()
+        {
+        }
+
+        public DocumentAttributeFilenameConstructor(string file_name)
+        {
+            this.file_name = file_name;
+        }
+
+        public override Constructor Constructor
+        {
+            get { return Constructor.documentAttributeFilename; }
+
+        }
+        public override void Write(BinaryWriter writer)
+        {
+            writer.Write(0x15590068);
+            writer.Write(file_name);
+        }
+
+        public override void Read(BinaryReader reader)
+        {
+            this.file_name = reader.ReadString();
         }
     }
 }
