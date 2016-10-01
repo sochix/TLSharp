@@ -39,7 +39,7 @@ namespace TLSharp.Core.Network
             return confirmed ? _session.Sequence++ * 2 + 1 : _session.Sequence * 2;
         }
 
-        public async Task Send(MTProtoRequest request)
+        public async Task Send(TeleSharp.TL.TLMethod request)
         {
             // TODO: refactor
             if (needConfirmation.Any())
@@ -48,7 +48,7 @@ namespace TLSharp.Core.Network
                 using (var memory = new MemoryStream())
                 using (var writer = new BinaryWriter(memory))
                 {
-                    ackRequest.OnSend(writer);
+                    ackRequest.SerializeBody(writer);
                     await Send(memory.ToArray(), ackRequest);
                     needConfirmation.Clear();
                 }
@@ -58,14 +58,14 @@ namespace TLSharp.Core.Network
             using (var memory = new MemoryStream())
             using (var writer = new BinaryWriter(memory))
             {
-                request.OnSend(writer);
+                request.SerializeBody(writer);
                 await Send(memory.ToArray(), request);
             }
 
             _session.Save();
         }
 
-        public async Task Send(byte[] packet, MTProtoRequest request)
+        public async Task Send(byte[] packet, TeleSharp.TL.TLMethod request)
         {
             request.MessageId = _session.GetNewMessageId();
 
@@ -132,7 +132,7 @@ namespace TLSharp.Core.Network
             return new Tuple<byte[], ulong, int>(message, remoteMessageId, remoteSequence);
         }
 
-        public async Task<byte[]> Receive(MTProtoRequest request)
+        public async Task<byte[]> Receive(TeleSharp.TL.TLMethod request)
         {
             while (!request.ConfirmReceived)
             {
@@ -148,7 +148,7 @@ namespace TLSharp.Core.Network
             return null;
         }
 
-        private bool processMessage(ulong messageId, int sequence, BinaryReader messageReader, MTProtoRequest request)
+        private bool processMessage(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
         {
             // TODO: check salt
             // TODO: check sessionid
@@ -225,7 +225,7 @@ namespace TLSharp.Core.Network
 			*/
         }
 
-        private bool HandleGzipPacked(ulong messageId, int sequence, BinaryReader messageReader, MTProtoRequest request)
+        private bool HandleGzipPacked(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
         {
             uint code = messageReader.ReadUInt32();
             byte[] packedData = GZipStream.UncompressBuffer(Serializers.Bytes.read(messageReader));
@@ -238,7 +238,7 @@ namespace TLSharp.Core.Network
             return true;
         }
 
-        private bool HandleRpcResult(ulong messageId, int sequence, BinaryReader messageReader, MTProtoRequest request)
+        private bool HandleRpcResult(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
         {
             uint code = messageReader.ReadUInt32();
             ulong requestId = messageReader.ReadUInt64();
@@ -305,7 +305,7 @@ namespace TLSharp.Core.Network
                         }
                         using (var compressedReader = new BinaryReader(ms))
                         {
-                            request.OnResponse(compressedReader);
+                            request.deserializeResponse(compressedReader);
                         }
                     }
                 }
@@ -317,8 +317,7 @@ namespace TLSharp.Core.Network
             else
             {
                 messageReader.BaseStream.Position -= 4;
-
-                request.OnResponse(messageReader);
+                request.deserializeResponse(messageReader);
             }
 
             return false;
@@ -382,7 +381,7 @@ namespace TLSharp.Core.Network
             return true;
         }
 
-        private bool HandleBadServerSalt(ulong messageId, int sequence, BinaryReader messageReader, MTProtoRequest request)
+        private bool HandleBadServerSalt(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
         {
             uint code = messageReader.ReadUInt32();
             ulong badMsgId = messageReader.ReadUInt64();
@@ -453,7 +452,7 @@ namespace TLSharp.Core.Network
             return false;
         }
 
-        private bool HandleContainer(ulong messageId, int sequence, BinaryReader messageReader, MTProtoRequest request)
+        private bool HandleContainer(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
         {
             uint code = messageReader.ReadUInt32();
             int size = messageReader.ReadInt32();

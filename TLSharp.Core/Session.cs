@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using TeleSharp.TL;
 using TLSharp.Core.MTProto;
 using TLSharp.Core.MTProto.Crypto;
 
@@ -66,7 +67,7 @@ namespace TLSharp.Core
         public int TimeOffset { get; set; }
         public long LastMessageId { get; set; }
         public int SessionExpires { get; set; }
-        public User User { get; set; }
+        public TLUser TLUser { get; set; }
         private Random random;
 
         private ISessionStore _store;
@@ -90,11 +91,11 @@ namespace TLSharp.Core
                 Serializers.String.write(writer, ServerAddress);
                 writer.Write(Port);
 
-                if (User != null)
+                if (TLUser != null)
                 {
                     writer.Write(1);
                     writer.Write(SessionExpires);
-                    User.Write(writer);
+                    ObjectUtils.SerializeObject(TLUser, writer);
                 }
                 else
                 {
@@ -122,11 +123,11 @@ namespace TLSharp.Core
 
                 var isAuthExsist = reader.ReadInt32() == 1;
                 int sessionExpires = 0;
-                User user = null;
+                TLUser TLUser = null;
                 if (isAuthExsist)
                 {
                     sessionExpires = reader.ReadInt32();
-                    user = TL.Parse<User>(reader);
+                    TLUser = (TLUser)ObjectUtils.DeserializeObject(reader);
                 }
 
                 var authData = Serializers.Bytes.read(reader);
@@ -140,7 +141,7 @@ namespace TLSharp.Core
                     LastMessageId = lastMessageId,
                     TimeOffset = timeOffset,
                     SessionExpires = sessionExpires,
-                    User = user,
+                    TLUser = TLUser,
                     SessionUserId = sessionUserId,
                     ServerAddress = serverAddress,
                     Port = port
