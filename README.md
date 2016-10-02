@@ -10,9 +10,7 @@ It's a perfect fit for any developer who would like to send data directly to Tel
 
 :exclamation: **Please, don't use it for SPAM!**
 
-[How-To: Send messages to Telegram from C#](http://www.sochix.ru/how-to-send-messages-to-telegram-from-c/)
-
-:ru: Russian description you can find [here](https://habrahabr.ru/post/277079/)
+# The Docuemention Moved to [TLSharp.aarani.ir](tlsharp.aarani.ir)
 
 #Table of contents?
 
@@ -20,7 +18,6 @@ It's a perfect fit for any developer who would like to send data directly to Tel
 - [Dependencies](#dependencies)
 - [Starter Guide](#starter-guide)
   - [Quick configuration](#quick-configuration)
-  - [Using TLSharp](#using-tlsharp)
 - [Contributing](#contributing)
 - [FAQ](#faq)
 - [Donations](#donations)
@@ -48,80 +45,6 @@ Telegram API isn't that easy to start. You need to do some configuration first.
 
 1. Create a [developer account](https://my.telegram.org/) in Telegram. 
 1. Goto [API development tools](https://my.telegram.org/apps) and copy **API_ID** and **API_HASH** from your account. You'll need it later.
-
-## Using TLSharp
-
-###Initializing client
-
-To initialize client you need to create a store in which TLSharp will save Session info.
-
-```
-var store = new FileSessionStore();
-```
-
-Next, create client instance and connect to Telegram server. You need your **API_ID** and **API_HASH** for this step.
-
-```
-var client = new TelegramClient(store, "session", API_ID, "API_HASH");
-await client.Connect();
-```
-Now, you can call methods.
-
-All methods except [IsPhoneRegistered](#IsPhoneRegistered) requires to authenticated user. Example usage of all methods you can find in [Tests].
-
-###Supported methods
-Currently supported methods:
- - [IsPhoneRegistered - Check if phone is registered in Telegram](#isphoneregistered)
- - [Authenticate user](#authenticate-user)
- - [SignUp user](#signup-user)
-
-####IsPhoneRegistered
-Check if phone number registered to Telegram.
-
-_Example_:
-
-```
-var result = await client.IsPhoneRegistered(phoneNumber)
-```
-
-* phoneNumber - **string**, phone number in international format (eg. 791812312323)
-
-**Returns:** **bool**, is phone registerd in Telegram or not.
-
-
-####Authenticate user
-Authenticate user by phone number and secret code.
-
-_Example_:
-
-```
-	var hash = await client.SendCodeRequest(phoneNumber);
-    
-	var code = "1234"; //code that you receive from Telegram 
-
-	var user = await client.MakeAuth(phoneNumber, hash, code); 
-```
-* phoneNumber - **string**, phone number in international format (eg. 791812312323)
-
-**Returns:** **User**, authenticated User.
-
-####SignUp user
-Register new user by phone number, secret code and first/last name.
-
-_Example_:
-
-```
-	var hash = await client.SendCodeRequest(phoneNumber);
-    
-	var code = "1234"; //code that you receive from Telegram 
-
-	var user = await client.SignUp(phoneNumber, hash, code, "TLSharp", "User"); 
-```
-* phoneNumber - **string**, phone number in international format (eg. 791812312323) that is not yet registered in Telegram.
-* firstName - **string**, new user first name
-* lastName - **string**, new user last name
-
-**Returns:** **User**, authenticated User.
 
 ## Contributing
 
