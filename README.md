@@ -10,7 +10,7 @@ It's a perfect fit for any developer who would like to send data directly to Tel
 
 :exclamation: **Please, don't use it for SPAM!**
 
-# The Docuemention Moved to [TLSharp.aarani.ir](tlsharp.aarani.ir)
+# The Docuemention Moved to [TLSharp.aarani.ir](http://tlsharp.aarani.ir)
 
 #Table of contents?
 
@@ -60,7 +60,7 @@ Contributing is highly appreciated!
 
 TLSharp library should automatically handle this errors. If you see such errors, pls create a new issue.
 
-#### I get an exception: System.IO.EndOfStreamException: Unable to read beyond the end of the stream. All test methos except that AuthenticationWorks and TestConnection return same error. I did every thing including setting api id and hash, and setting server address.
+#### I get an exception: System.IO.EndOfStreamException: Unable to read beyond the end of the stream. All test methos except that AuthenticationWorks and TestConnection return same error. I did every thing including setting api id and hash, and setting server address.-
 
 You should create a Telegram session. See [configuration guide](#sending-messages-set-up)
 
