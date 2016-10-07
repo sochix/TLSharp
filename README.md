@@ -55,13 +55,13 @@ Telegram API isn't that easy to start. You need to do some configuration first.
 
 To initialize client you need to create a store in which TLSharp will save Session info.
 
-```
+```csharp
 var store = new FileSessionStore();
 ```
 
 Next, create client instance and connect to Telegram server. You need your **API_ID** and **API_HASH** for this step.
 
-```
+```csharp
 var client = new TelegramClient(store, "session", API_ID, "API_HASH");
 await client.Connect();
 ```
@@ -92,7 +92,7 @@ Check if phone number registered to Telegram.
 
 _Example_:
 
-```
+```csharp
 var result = await client.IsPhoneRegistered(phoneNumber)
 ```
 
@@ -106,12 +106,12 @@ Authenticate user by phone number and secret code.
 
 _Example_:
 
-```
-	var hash = await client.SendCodeRequest(phoneNumber);
+```csharp
+var hash = await client.SendCodeRequest(phoneNumber);
     
-	var code = "1234"; //code that you receive from Telegram 
+var code = "1234"; //code that you receive from Telegram 
 
-	var user = await client.MakeAuth(phoneNumber, hash, code); 
+var user = await client.MakeAuth(phoneNumber, hash, code); 
 ```
 * phoneNumber - **string**, phone number in international format (eg. 791812312323)
 
@@ -122,12 +122,12 @@ Register new user by phone number, secret code and first/last name.
 
 _Example_:
 
-```
-	var hash = await client.SendCodeRequest(phoneNumber);
+```csharp
+var hash = await client.SendCodeRequest(phoneNumber);
     
-	var code = "1234"; //code that you receive from Telegram 
+var code = "1234"; //code that you receive from Telegram 
 
-	var user = await client.SignUp(phoneNumber, hash, code, "TLSharp", "User"); 
+var user = await client.SignUp(phoneNumber, hash, code, "TLSharp", "User"); 
 ```
 * phoneNumber - **string**, phone number in international format (eg. 791812312323) that is not yet registered in Telegram.
 * firstName - **string**, new user first name
@@ -140,7 +140,7 @@ Get user id by phone number.
 
 _Example_:
 
-```
+```csharp
 var res = await client.ImportContactByPhoneNumber("791812312323");
 ```
 
@@ -153,7 +153,7 @@ Get user id by userName.
 
 _Example_:
 
-```
+```csharp
 var res = await client.ImportByUserName(userName);
 ```
 
@@ -166,7 +166,7 @@ Send text message to specified user
 
 _Example_:
 
-```
+```csharp
 await client.SendMessage(userId, message);
 ```
 * userId - **int**, user id
@@ -177,7 +177,7 @@ Send media file to specified contact.
 
 _Example_:
 
-```
+```csharp
 var mediaFile = await client.UploadFile(file_name, file);
 
 var res = await client.SendMediaMessage(userId, mediaFile);
@@ -195,7 +195,7 @@ Returns messages history for specified userId.
 
 _Example_:
 
-```
+```csharp
 var hist = await client.GetMessagesHistoryForContact(userId, offset, limit);
 ``` 
 
@@ -210,7 +210,7 @@ Returns user's full information for specified userId.
 
 _Example_:
 
-```
+```csharp
 var userFull = await client.GetUserFull(userId);
 ``` 
 
@@ -223,7 +223,7 @@ Creates a new chat.
 
 _Example_:
 
-```
+```csharp
 var statedMessage = await client.CreateChat(title, new List<string> { userId1, userId2 });
 ``` 
 
@@ -237,7 +237,7 @@ Adds a user to a chat and sends a service message on it.
 
 _Example_:
 
-```
+```csharp
 var statedMessage = await client.AddChatUser(chatId, userId);
 ``` 
 
@@ -251,7 +251,7 @@ Deletes a user from a chat and sends a service message on it.
 
 _Example_:
 
-```
+```csharp
 var statedMessage = await client.DeleteChatUser(chatId, userId);
 ``` 
 
@@ -265,7 +265,7 @@ Leaves the chat by deleting currently authenticated user from it.
 
 _Example_:
 
-```
+```csharp
 var statedMessage = await client.LeaveChat(chatId);
 ``` 
 
@@ -278,7 +278,7 @@ Returns a current state of updates.
 
 _Example_:
 
-```
+```csharp
 var userFull = await client.GetUpdatesState();
 ``` 
 
@@ -289,7 +289,7 @@ Returns diffetence between the current state of updates and transmitted.
 
 _Example_:
 
-```
+```csharp
 var userFull = await client.GetUpdatesDifference(currentState.pts, currentState.date, currentState.qts);
 ``` 
 
@@ -314,7 +314,7 @@ Requests specification you can find in [Telegram API](https://core.telegram.org/
 
 _Example_:
 
-```
+```csharp
 public class ExampleRequest : MTProtoRequest
 {
     private int _someParameter;
