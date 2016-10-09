@@ -80,9 +80,29 @@ namespace TeleSharp.Generator
                     string fields = "";
                     foreach (var tmp in c.Params)
                     {
-                        fields += $"     public {CheckForFlagBase(tmp.type, GetTypeName(tmp.type))} {CheckForKeyword(tmp.name)} " + "{get;set;}" + Environment.NewLine;
+                        fields += $"     private {CheckForFlagBase(tmp.type, GetTypeName(tmp.type))} {CheckForKeyword(tmp.name)} " + "{get;set;}" + Environment.NewLine;
                     }
                     temp = temp.Replace("/* PARAMS */", fields);
+                    #endregion
+                    #region Parameters
+                    string paramters = "";
+                    foreach (var tmp in c.Params)
+                    {
+                        if (tmp.name == "flags") continue;
+                        paramters += $"{CheckForFlagBase(tmp.type, GetTypeName(tmp.type))} {CheckForKeyword(tmp.name)} ,";
+                    }
+                    if (paramters.EndsWith(",")) paramters = paramters.Substring(0, paramters.Length - 1);
+                    temp = temp.Replace("/* Parameters */",paramters);
+                    
+                    #endregion
+                    #region AssignParamters
+                    string assign = "";
+                    foreach (var tmp in c.Params)
+                    {
+                        if (tmp.name == "flags") continue;
+                        assign += $"this.{CheckForKeyword(tmp.name)} = {CheckForKeyword(tmp.name)}; {Environment.NewLine}";
+                    }
+                    temp = temp.Replace("/* Assign */", assign);
                     #endregion
                     #region ComputeFlagFunc
                     if (!c.Params.Any(x => x.name == "flags")) temp = temp.Replace("/* COMPUTE */", "");
@@ -150,10 +170,30 @@ namespace TeleSharp.Generator
                     string fields = "";
                     foreach (var tmp in c.Params)
                     {
-                        fields += $"        public {CheckForFlagBase(tmp.type, GetTypeName(tmp.type))} {CheckForKeyword(tmp.name)} " + "{get;set;}" + Environment.NewLine;
+                        fields += $"        private {CheckForFlagBase(tmp.type, GetTypeName(tmp.type))} {CheckForKeyword(tmp.name)} " + "{get;set;}" + Environment.NewLine;
                     }
                     fields += $"        public {CheckForFlagBase(c.type, GetTypeName(c.type))} Response" + "{ get; set;}" + Environment.NewLine;
                     temp = temp.Replace("/* PARAMS */", fields);
+                    #endregion
+                    #region Parameters
+                    string paramters = "";
+                    foreach (var tmp in c.Params)
+                    {
+                        if (tmp.name == "flags") continue;
+                        paramters += $"{CheckForFlagBase(tmp.type, GetTypeName(tmp.type))} {CheckForKeyword(tmp.name)} ,";
+                    }
+                    if (paramters.EndsWith(",")) paramters = paramters.Substring(0, paramters.Length - 1);
+                    temp = temp.Replace("/* Parameters */", paramters);
+
+                    #endregion
+                    #region AssignParamters
+                    string assign = "";
+                    foreach (var tmp in c.Params)
+                    {
+                        if (tmp.name == "flags") continue;
+                        assign += $"this.{CheckForKeyword(tmp.name)} = {CheckForKeyword(tmp.name)}; {Environment.NewLine}";
+                    }
+                    temp = temp.Replace("/* Assign */", assign);
                     #endregion
                     #region ComputeFlagFunc
                     if (!c.Params.Any(x => x.name == "flags")) temp = temp.Replace("/* COMPUTE */", "");
@@ -280,7 +320,7 @@ namespace TeleSharp.Generator
         }
         public static string GetTypeName(string type)
         {
-            if (type.ToLower().Contains("inputcontact")) return "TLInputPhoneContact";
+            if (type.ToLower().StartsWith("inputcontact")) return "TLInputPhoneContact";
             switch (type.ToLower())
             {
                 case "#":

@@ -10,6 +10,8 @@ namespace /* NAMESPACE */
 	[TLObject(/*Constructor*/)]
     public class /* NAME */ : /* PARENT */
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,9 @@ namespace /* NAMESPACE */
         }
 
         /* PARAMS */
-
+		public /* NAME */ (/* Parameters */){
+			/* Assign */	
+		}
 		public void ComputeFlags()
 		{
 			/* COMPUTE */

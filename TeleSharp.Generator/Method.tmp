@@ -19,6 +19,10 @@ namespace /* NAMESPACE */
         }
 
         /* PARAMS */
+		
+		public /* NAME */ (/* Parameters */){
+			/* Assign */	
+		}
 
 		public void ComputeFlags()
 		{
