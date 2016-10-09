@@ -34,6 +34,9 @@ namespace TeleSharp.TL
      public string country {get;set;}
      public string region {get;set;}
 
+		public TLAuthorization (){
+			
+		}
 		public TLAuthorization (long hash ,string device_model ,string platform ,string system_version ,int api_id ,string app_name ,string app_version ,int date_created ,int date_active ,string ip ,string country ,string region ){
 			this.hash = hash; 
 this.device_model = device_model; 

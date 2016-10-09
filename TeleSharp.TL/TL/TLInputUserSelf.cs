@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLInputUserSelf (){
+			
+		}
+		public TLInputUserSelf (){
 				
 		}
 		public void ComputeFlags()

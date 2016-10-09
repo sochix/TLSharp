@@ -24,6 +24,9 @@ namespace TeleSharp.TL.Messages
      public int pts_count {get;set;}
      public int offset {get;set;}
 
+		public TLAffectedHistory (){
+			
+		}
 		public TLAffectedHistory (int pts ,int pts_count ,int offset ){
 			this.pts = pts; 
 this.pts_count = pts_count; 

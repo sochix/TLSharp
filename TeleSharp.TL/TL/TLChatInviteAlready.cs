@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
              public TLAbsChat chat {get;set;}
 
+		public TLChatInviteAlready (){
+			
+		}
 		public TLChatInviteAlready (TLAbsChat chat ){
 			this.chat = chat; 
 	

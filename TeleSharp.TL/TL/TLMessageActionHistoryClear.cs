@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLMessageActionHistoryClear (){
+			
+		}
+		public TLMessageActionHistoryClear (){
 				
 		}
 		public void ComputeFlags()

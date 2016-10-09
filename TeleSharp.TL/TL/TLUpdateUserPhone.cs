@@ -23,6 +23,9 @@ namespace TeleSharp.TL
              public int user_id {get;set;}
      public string phone {get;set;}
 
+		public TLUpdateUserPhone (){
+			
+		}
 		public TLUpdateUserPhone (int user_id ,string phone ){
 			this.user_id = user_id; 
 this.phone = phone; 

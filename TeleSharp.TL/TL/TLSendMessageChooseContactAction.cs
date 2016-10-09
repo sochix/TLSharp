@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLSendMessageChooseContactAction (){
+			
+		}
+		public TLSendMessageChooseContactAction (){
 				
 		}
 		public void ComputeFlags()

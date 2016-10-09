@@ -24,6 +24,9 @@ namespace TeleSharp.TL
      public int w {get;set;}
      public int h {get;set;}
 
+		public TLDocumentAttributeVideo (){
+			
+		}
 		public TLDocumentAttributeVideo (int duration ,int w ,int h ){
 			this.duration = duration; 
 this.w = w; 

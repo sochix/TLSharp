@@ -23,6 +23,9 @@ namespace TeleSharp.TL
              public int offset {get;set;}
      public int length {get;set;}
 
+		public TLMessageEntityHashtag (){
+			
+		}
 		public TLMessageEntityHashtag (int offset ,int length ){
 			this.offset = offset; 
 this.length = length; 

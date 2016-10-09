@@ -37,6 +37,9 @@ namespace TeleSharp.TL
      public int? reply_to_msg_id {get;set;}
      public TLVector<TLAbsMessageEntity> entities {get;set;}
 
+		public TLUpdateShortChatMessage (){
+			
+		}
 		public TLUpdateShortChatMessage (bool @out ,bool mentioned ,bool media_unread ,bool silent ,int id ,int from_id ,int chat_id ,string message ,int pts ,int pts_count ,int date ,TLMessageFwdHeader fwd_from ,int? via_bot_id ,int? reply_to_msg_id ,TLVector<TLAbsMessageEntity> entities ){
 			this.@out = @out; 
 this.mentioned = mentioned; 

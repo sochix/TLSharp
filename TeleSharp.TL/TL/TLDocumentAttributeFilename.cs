@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
              public string file_name {get;set;}
 
+		public TLDocumentAttributeFilename (){
+			
+		}
 		public TLDocumentAttributeFilename (string file_name ){
 			this.file_name = file_name; 
 	

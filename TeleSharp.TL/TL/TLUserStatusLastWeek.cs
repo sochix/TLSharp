@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLUserStatusLastWeek (){
+			
+		}
+		public TLUserStatusLastWeek (){
 				
 		}
 		public void ComputeFlags()

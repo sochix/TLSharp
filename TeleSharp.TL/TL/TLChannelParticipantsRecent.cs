@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLChannelParticipantsRecent (){
+			
+		}
+		public TLChannelParticipantsRecent (){
 				
 		}
 		public void ComputeFlags()

@@ -23,6 +23,9 @@ namespace TeleSharp.TL
              public int w {get;set;}
      public int h {get;set;}
 
+		public TLDocumentAttributeImageSize (){
+			
+		}
 		public TLDocumentAttributeImageSize (int w ,int h ){
 			this.w = w; 
 this.h = h; 

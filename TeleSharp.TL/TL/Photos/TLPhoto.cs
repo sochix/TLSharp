@@ -23,6 +23,9 @@ namespace TeleSharp.TL.Photos
              public TLAbsPhoto photo {get;set;}
      public TLVector<TLAbsUser> users {get;set;}
 
+		public TLPhoto (){
+			
+		}
 		public TLPhoto (TLAbsPhoto photo ,TLVector<TLAbsUser> users ){
 			this.photo = photo; 
 this.users = users; 

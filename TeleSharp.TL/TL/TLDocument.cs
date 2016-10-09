@@ -29,6 +29,9 @@ namespace TeleSharp.TL
      public int dc_id {get;set;}
      public TLVector<TLAbsDocumentAttribute> attributes {get;set;}
 
+		public TLDocument (){
+			
+		}
 		public TLDocument (long id ,long access_hash ,int date ,string mime_type ,int size ,TLAbsPhotoSize thumb ,int dc_id ,TLVector<TLAbsDocumentAttribute> attributes ){
 			this.id = id; 
 this.access_hash = access_hash; 

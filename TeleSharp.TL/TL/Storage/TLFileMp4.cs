@@ -22,6 +22,9 @@ namespace TeleSharp.TL.Storage
 
         
 		public TLFileMp4 (){
+			
+		}
+		public TLFileMp4 (){
 				
 		}
 		public void ComputeFlags()

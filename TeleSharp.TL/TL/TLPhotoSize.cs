@@ -26,6 +26,9 @@ namespace TeleSharp.TL
      public int h {get;set;}
      public int size {get;set;}
 
+		public TLPhotoSize (){
+			
+		}
 		public TLPhotoSize (string type ,TLAbsFileLocation location ,int w ,int h ,int size ){
 			this.type = type; 
 this.location = location; 

@@ -23,6 +23,9 @@ namespace TeleSharp.TL
              public int user_id {get;set;}
      public bool mutual {get;set;}
 
+		public TLContact (){
+			
+		}
 		public TLContact (int user_id ,bool mutual ){
 			this.user_id = user_id; 
 this.mutual = mutual; 

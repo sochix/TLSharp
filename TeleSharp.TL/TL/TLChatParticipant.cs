@@ -24,6 +24,9 @@ namespace TeleSharp.TL
      public int inviter_id {get;set;}
      public int date {get;set;}
 
+		public TLChatParticipant (){
+			
+		}
 		public TLChatParticipant (int user_id ,int inviter_id ,int date ){
 			this.user_id = user_id; 
 this.inviter_id = inviter_id; 

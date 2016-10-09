@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLInputMediaEmpty (){
+			
+		}
+		public TLInputMediaEmpty (){
 				
 		}
 		public void ComputeFlags()

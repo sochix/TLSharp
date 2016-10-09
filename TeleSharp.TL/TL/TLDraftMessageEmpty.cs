@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLDraftMessageEmpty (){
+			
+		}
+		public TLDraftMessageEmpty (){
 				
 		}
 		public void ComputeFlags()

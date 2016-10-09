@@ -23,6 +23,9 @@ namespace TeleSharp.TL.Messages
              public int flags {get;set;}
      public bool caption {get;set;}
 
+		public TLMessageEditData (){
+			
+		}
 		public TLMessageEditData (bool caption ){
 			this.caption = caption; 
 	

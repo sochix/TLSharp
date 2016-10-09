@@ -22,6 +22,9 @@ namespace TeleSharp.TL.Storage
 
         
 		public TLFilePdf (){
+			
+		}
+		public TLFilePdf (){
 				
 		}
 		public void ComputeFlags()

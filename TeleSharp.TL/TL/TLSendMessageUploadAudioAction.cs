@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
              public int progress {get;set;}
 
+		public TLSendMessageUploadAudioAction (){
+			
+		}
 		public TLSendMessageUploadAudioAction (int progress ){
 			this.progress = progress; 
 	

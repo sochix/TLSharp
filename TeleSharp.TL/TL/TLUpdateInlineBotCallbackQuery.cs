@@ -25,6 +25,9 @@ namespace TeleSharp.TL
      public TLInputBotInlineMessageID msg_id {get;set;}
      public byte[] data {get;set;}
 
+		public TLUpdateInlineBotCallbackQuery (){
+			
+		}
 		public TLUpdateInlineBotCallbackQuery (long query_id ,int user_id ,TLInputBotInlineMessageID msg_id ,byte[] data ){
 			this.query_id = query_id; 
 this.user_id = user_id; 

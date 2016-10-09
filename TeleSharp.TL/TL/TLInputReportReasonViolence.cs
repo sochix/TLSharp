@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLInputReportReasonViolence (){
+			
+		}
+		public TLInputReportReasonViolence (){
 				
 		}
 		public void ComputeFlags()

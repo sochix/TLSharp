@@ -23,6 +23,9 @@ namespace TeleSharp.TL
              public string command {get;set;}
      public string description {get;set;}
 
+		public TLBotCommand (){
+			
+		}
 		public TLBotCommand (string command ,string description ){
 			this.command = command; 
 this.description = description; 

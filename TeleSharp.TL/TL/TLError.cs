@@ -23,6 +23,9 @@ namespace TeleSharp.TL
              public int code {get;set;}
      public string text {get;set;}
 
+		public TLError (){
+			
+		}
 		public TLError (int code ,string text ){
 			this.code = code; 
 this.text = text; 

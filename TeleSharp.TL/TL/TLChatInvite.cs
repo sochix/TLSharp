@@ -27,6 +27,9 @@ namespace TeleSharp.TL
      public bool megagroup {get;set;}
      public string title {get;set;}
 
+		public TLChatInvite (){
+			
+		}
 		public TLChatInvite (bool channel ,bool broadcast ,bool @public ,bool megagroup ,string title ){
 			this.channel = channel; 
 this.broadcast = broadcast; 

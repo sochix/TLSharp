@@ -37,6 +37,9 @@ namespace TeleSharp.TL
      public string author {get;set;}
      public TLAbsDocument document {get;set;}
 
+		public TLWebPage (){
+			
+		}
 		public TLWebPage (long id ,string url ,string display_url ,string type ,string site_name ,string title ,string description ,TLAbsPhoto photo ,string embed_url ,string embed_type ,int? embed_width ,int? embed_height ,int? duration ,string author ,TLAbsDocument document ){
 			this.id = id; 
 this.url = url; 

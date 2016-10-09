@@ -22,6 +22,9 @@ namespace TeleSharp.TL.Contacts
 
         
 		public TLTopPeersNotModified (){
+			
+		}
+		public TLTopPeersNotModified (){
 				
 		}
 		public void ComputeFlags()

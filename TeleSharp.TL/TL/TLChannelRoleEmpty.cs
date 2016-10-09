@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLChannelRoleEmpty (){
+			
+		}
+		public TLChannelRoleEmpty (){
 				
 		}
 		public void ComputeFlags()

@@ -25,6 +25,9 @@ namespace TeleSharp.TL.Messages
      public int version {get;set;}
      public byte[] random {get;set;}
 
+		public TLDhConfig (){
+			
+		}
 		public TLDhConfig (int g ,byte[] p ,int version ,byte[] random ){
 			this.g = g; 
 this.p = p; 

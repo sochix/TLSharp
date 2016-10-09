@@ -26,6 +26,9 @@ namespace TeleSharp.TL.Messages
      public TLVector<TLAbsUser> users {get;set;}
      public Updates.TLState state {get;set;}
 
+		public TLPeerDialogs (){
+			
+		}
 		public TLPeerDialogs (TLVector<TLDialog> dialogs ,TLVector<TLAbsMessage> messages ,TLVector<TLAbsChat> chats ,TLVector<TLAbsUser> users ,Updates.TLState state ){
 			this.dialogs = dialogs; 
 this.messages = messages; 

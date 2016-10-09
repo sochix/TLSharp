@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
              public TLAbsChatParticipants participants {get;set;}
 
+		public TLUpdateChatParticipants (){
+			
+		}
 		public TLUpdateChatParticipants (TLAbsChatParticipants participants ){
 			this.participants = participants; 
 	

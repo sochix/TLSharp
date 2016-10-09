@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLInputEncryptedFileEmpty (){
+			
+		}
+		public TLInputEncryptedFileEmpty (){
 				
 		}
 		public void ComputeFlags()

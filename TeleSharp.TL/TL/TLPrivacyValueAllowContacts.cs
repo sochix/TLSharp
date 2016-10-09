@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLPrivacyValueAllowContacts (){
+			
+		}
+		public TLPrivacyValueAllowContacts (){
 				
 		}
 		public void ComputeFlags()

@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
              public int id {get;set;}
 
+		public TLEncryptedChatDiscarded (){
+			
+		}
 		public TLEncryptedChatDiscarded (int id ){
 			this.id = id; 
 	

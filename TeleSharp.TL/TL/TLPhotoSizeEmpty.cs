@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
              public string type {get;set;}
 
+		public TLPhotoSizeEmpty (){
+			
+		}
 		public TLPhotoSizeEmpty (string type ){
 			this.type = type; 
 	

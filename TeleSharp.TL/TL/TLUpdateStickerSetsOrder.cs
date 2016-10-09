@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
              public TLVector<long> order {get;set;}
 
+		public TLUpdateStickerSetsOrder (){
+			
+		}
 		public TLUpdateStickerSetsOrder (TLVector<long> order ){
 			this.order = order; 
 	

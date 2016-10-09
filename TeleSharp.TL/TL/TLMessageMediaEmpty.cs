@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLMessageMediaEmpty (){
+			
+		}
+		public TLMessageMediaEmpty (){
 				
 		}
 		public void ComputeFlags()

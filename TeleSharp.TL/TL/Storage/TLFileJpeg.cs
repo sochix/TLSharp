@@ -22,6 +22,9 @@ namespace TeleSharp.TL.Storage
 
         
 		public TLFileJpeg (){
+			
+		}
+		public TLFileJpeg (){
 				
 		}
 		public void ComputeFlags()

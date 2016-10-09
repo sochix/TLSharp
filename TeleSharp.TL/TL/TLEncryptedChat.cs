@@ -28,6 +28,9 @@ namespace TeleSharp.TL
      public byte[] g_a_or_b {get;set;}
      public long key_fingerprint {get;set;}
 
+		public TLEncryptedChat (){
+			
+		}
 		public TLEncryptedChat (int id ,long access_hash ,int date ,int admin_id ,int participant_id ,byte[] g_a_or_b ,long key_fingerprint ){
 			this.id = id; 
 this.access_hash = access_hash; 

@@ -23,6 +23,9 @@ namespace TeleSharp.TL.Messages
              public int hash {get;set;}
      public TLVector<TLStickerSet> sets {get;set;}
 
+		public TLAllStickers (){
+			
+		}
 		public TLAllStickers (int hash ,TLVector<TLStickerSet> sets ){
 			this.hash = hash; 
 this.sets = sets; 

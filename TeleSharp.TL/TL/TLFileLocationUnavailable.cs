@@ -24,6 +24,9 @@ namespace TeleSharp.TL
      public int local_id {get;set;}
      public long secret {get;set;}
 
+		public TLFileLocationUnavailable (){
+			
+		}
 		public TLFileLocationUnavailable (long volume_id ,int local_id ,long secret ){
 			this.volume_id = volume_id; 
 this.local_id = local_id; 

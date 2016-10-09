@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
              public string link {get;set;}
 
+		public TLExportedMessageLink (){
+			
+		}
 		public TLExportedMessageLink (string link ){
 			this.link = link; 
 	

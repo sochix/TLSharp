@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLInputPrivacyValueAllowAll (){
+			
+		}
+		public TLInputPrivacyValueAllowAll (){
 				
 		}
 		public void ComputeFlags()

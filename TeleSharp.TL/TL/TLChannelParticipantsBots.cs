@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLChannelParticipantsBots (){
+			
+		}
+		public TLChannelParticipantsBots (){
 				
 		}
 		public void ComputeFlags()

@@ -26,6 +26,9 @@ namespace TeleSharp.TL.Account
      public string hint {get;set;}
      public string email {get;set;}
 
+		public TLPasswordInputSettings (){
+			
+		}
 		public TLPasswordInputSettings (byte[] new_salt ,byte[] new_password_hash ,string hint ,string email ){
 			this.new_salt = new_salt; 
 this.new_password_hash = new_password_hash; 

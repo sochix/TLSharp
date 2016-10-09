@@ -22,6 +22,9 @@ namespace TeleSharp.TL.Storage
 
         
 		public TLFileUnknown (){
+			
+		}
+		public TLFileUnknown (){
 				
 		}
 		public void ComputeFlags()

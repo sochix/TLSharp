@@ -22,6 +22,9 @@ namespace TeleSharp.TL.Messages
 
         
 		public TLSavedGifsNotModified (){
+			
+		}
+		public TLSavedGifsNotModified (){
 				
 		}
 		public void ComputeFlags()

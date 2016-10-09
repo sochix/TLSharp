@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLNull (){
+			
+		}
+		public TLNull (){
 				
 		}
 		public void ComputeFlags()

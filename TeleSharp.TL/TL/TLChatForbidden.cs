@@ -23,6 +23,9 @@ namespace TeleSharp.TL
              public int id {get;set;}
      public string title {get;set;}
 
+		public TLChatForbidden (){
+			
+		}
 		public TLChatForbidden (int id ,string title ){
 			this.id = id; 
 this.title = title; 

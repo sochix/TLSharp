@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLMessageMediaUnsupported (){
+			
+		}
+		public TLMessageMediaUnsupported (){
 				
 		}
 		public void ComputeFlags()

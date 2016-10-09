@@ -22,6 +22,9 @@ namespace TeleSharp.TL.Storage
 
         
 		public TLFileMov (){
+			
+		}
+		public TLFileMov (){
 				
 		}
 		public void ComputeFlags()

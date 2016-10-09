@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
              public int channel_id {get;set;}
 
+		public TLMessageActionChatMigrateTo (){
+			
+		}
 		public TLMessageActionChatMigrateTo (int channel_id ){
 			this.channel_id = channel_id; 
 	

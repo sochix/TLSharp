@@ -23,6 +23,9 @@ namespace TeleSharp.TL
              public int user_id {get;set;}
      public long access_hash {get;set;}
 
+		public TLInputPeerUser (){
+			
+		}
 		public TLInputPeerUser (int user_id ,long access_hash ){
 			this.user_id = user_id; 
 this.access_hash = access_hash; 

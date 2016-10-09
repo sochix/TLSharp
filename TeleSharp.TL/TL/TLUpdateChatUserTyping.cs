@@ -24,6 +24,9 @@ namespace TeleSharp.TL
      public int user_id {get;set;}
      public TLAbsSendMessageAction action {get;set;}
 
+		public TLUpdateChatUserTyping (){
+			
+		}
 		public TLUpdateChatUserTyping (int chat_id ,int user_id ,TLAbsSendMessageAction action ){
 			this.chat_id = chat_id; 
 this.user_id = user_id; 

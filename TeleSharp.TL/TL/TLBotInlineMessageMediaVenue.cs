@@ -28,6 +28,9 @@ namespace TeleSharp.TL
      public string venue_id {get;set;}
      public TLAbsReplyMarkup reply_markup {get;set;}
 
+		public TLBotInlineMessageMediaVenue (){
+			
+		}
 		public TLBotInlineMessageMediaVenue (TLAbsGeoPoint geo ,string title ,string address ,string provider ,string venue_id ,TLAbsReplyMarkup reply_markup ){
 			this.geo = geo; 
 this.title = title; 

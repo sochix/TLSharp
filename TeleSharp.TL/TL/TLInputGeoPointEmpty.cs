@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLInputGeoPointEmpty (){
+			
+		}
+		public TLInputGeoPointEmpty (){
 				
 		}
 		public void ComputeFlags()

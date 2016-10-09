@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLChannelParticipantsKicked (){
+			
+		}
+		public TLChannelParticipantsKicked (){
 				
 		}
 		public void ComputeFlags()

@@ -27,6 +27,9 @@ namespace TeleSharp.TL.Messages
      public TLInlineBotSwitchPM switch_pm {get;set;}
      public TLVector<TLAbsBotInlineResult> results {get;set;}
 
+		public TLBotResults (){
+			
+		}
 		public TLBotResults (bool gallery ,long query_id ,string next_offset ,TLInlineBotSwitchPM switch_pm ,TLVector<TLAbsBotInlineResult> results ){
 			this.gallery = gallery; 
 this.query_id = query_id; 

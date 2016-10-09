@@ -23,6 +23,9 @@ namespace TeleSharp.TL
              public TLAbsEncryptedChat chat {get;set;}
      public int date {get;set;}
 
+		public TLUpdateEncryption (){
+			
+		}
 		public TLUpdateEncryption (TLAbsEncryptedChat chat ,int date ){
 			this.chat = chat; 
 this.date = date; 

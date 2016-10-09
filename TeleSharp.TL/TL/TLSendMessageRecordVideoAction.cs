@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLSendMessageRecordVideoAction (){
+			
+		}
+		public TLSendMessageRecordVideoAction (){
 				
 		}
 		public void ComputeFlags()

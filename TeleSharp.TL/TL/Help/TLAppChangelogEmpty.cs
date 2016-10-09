@@ -22,6 +22,9 @@ namespace TeleSharp.TL.Help
 
         
 		public TLAppChangelogEmpty (){
+			
+		}
+		public TLAppChangelogEmpty (){
 				
 		}
 		public void ComputeFlags()

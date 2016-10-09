@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
              public string text {get;set;}
 
+		public TLInputReportReasonOther (){
+			
+		}
 		public TLInputReportReasonOther (string text ){
 			this.text = text; 
 	

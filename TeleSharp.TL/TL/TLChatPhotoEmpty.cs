@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLChatPhotoEmpty (){
+			
+		}
+		public TLChatPhotoEmpty (){
 				
 		}
 		public void ComputeFlags()

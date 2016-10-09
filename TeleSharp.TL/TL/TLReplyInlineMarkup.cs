@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
              public TLVector<TLKeyboardButtonRow> rows {get;set;}
 
+		public TLReplyInlineMarkup (){
+			
+		}
 		public TLReplyInlineMarkup (TLVector<TLKeyboardButtonRow> rows ){
 			this.rows = rows; 
 	

@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
              public TLAbsWebPage webpage {get;set;}
 
+		public TLMessageMediaWebPage (){
+			
+		}
 		public TLMessageMediaWebPage (TLAbsWebPage webpage ){
 			this.webpage = webpage; 
 	

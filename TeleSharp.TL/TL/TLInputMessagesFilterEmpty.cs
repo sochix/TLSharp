@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLInputMessagesFilterEmpty (){
+			
+		}
+		public TLInputMessagesFilterEmpty (){
 				
 		}
 		public void ComputeFlags()

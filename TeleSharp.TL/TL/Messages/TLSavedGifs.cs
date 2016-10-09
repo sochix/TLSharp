@@ -23,6 +23,9 @@ namespace TeleSharp.TL.Messages
              public int hash {get;set;}
      public TLVector<TLAbsDocument> gifs {get;set;}
 
+		public TLSavedGifs (){
+			
+		}
 		public TLSavedGifs (int hash ,TLVector<TLAbsDocument> gifs ){
 			this.hash = hash; 
 this.gifs = gifs; 

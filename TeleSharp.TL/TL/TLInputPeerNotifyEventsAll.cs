@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLInputPeerNotifyEventsAll (){
+			
+		}
+		public TLInputPeerNotifyEventsAll (){
 				
 		}
 		public void ComputeFlags()

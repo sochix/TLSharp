@@ -29,6 +29,9 @@ namespace TeleSharp.TL
      public TLAbsMessageMedia media {get;set;}
      public TLVector<TLAbsMessageEntity> entities {get;set;}
 
+		public TLUpdateShortSentMessage (){
+			
+		}
 		public TLUpdateShortSentMessage (bool @out ,int id ,int pts ,int pts_count ,int date ,TLAbsMessageMedia media ,TLVector<TLAbsMessageEntity> entities ){
 			this.@out = @out; 
 this.id = id; 

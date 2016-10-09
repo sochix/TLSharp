@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLUserStatusEmpty (){
+			
+		}
+		public TLUserStatusEmpty (){
 				
 		}
 		public void ComputeFlags()

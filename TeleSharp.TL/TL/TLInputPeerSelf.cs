@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLInputPeerSelf (){
+			
+		}
+		public TLInputPeerSelf (){
 				
 		}
 		public void ComputeFlags()

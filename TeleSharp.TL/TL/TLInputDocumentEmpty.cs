@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLInputDocumentEmpty (){
+			
+		}
+		public TLInputDocumentEmpty (){
 				
 		}
 		public void ComputeFlags()

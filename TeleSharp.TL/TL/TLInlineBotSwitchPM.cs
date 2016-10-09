@@ -23,6 +23,9 @@ namespace TeleSharp.TL
              public string text {get;set;}
      public string start_param {get;set;}
 
+		public TLInlineBotSwitchPM (){
+			
+		}
 		public TLInlineBotSwitchPM (string text ,string start_param ){
 			this.text = text; 
 this.start_param = start_param; 

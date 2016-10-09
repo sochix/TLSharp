@@ -25,6 +25,9 @@ namespace TeleSharp.TL
      public int bg_color {get;set;}
      public int color {get;set;}
 
+		public TLWallPaperSolid (){
+			
+		}
 		public TLWallPaperSolid (int id ,string title ,int bg_color ,int color ){
 			this.id = id; 
 this.title = title; 

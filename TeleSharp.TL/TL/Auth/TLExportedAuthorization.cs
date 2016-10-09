@@ -23,6 +23,9 @@ namespace TeleSharp.TL.Auth
              public int id {get;set;}
      public byte[] bytes {get;set;}
 
+		public TLExportedAuthorization (){
+			
+		}
 		public TLExportedAuthorization (int id ,byte[] bytes ){
 			this.id = id; 
 this.bytes = bytes; 

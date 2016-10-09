@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
              public int expires {get;set;}
 
+		public TLUserStatusOnline (){
+			
+		}
 		public TLUserStatusOnline (int expires ){
 			this.expires = expires; 
 	

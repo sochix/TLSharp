@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLUpdateSavedGifs (){
+			
+		}
+		public TLUpdateSavedGifs (){
 				
 		}
 		public void ComputeFlags()

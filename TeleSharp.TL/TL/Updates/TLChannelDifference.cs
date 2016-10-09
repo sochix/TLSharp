@@ -29,6 +29,9 @@ namespace TeleSharp.TL.Updates
      public TLVector<TLAbsChat> chats {get;set;}
      public TLVector<TLAbsUser> users {get;set;}
 
+		public TLChannelDifference (){
+			
+		}
 		public TLChannelDifference (bool final ,int pts ,int? timeout ,TLVector<TLAbsMessage> new_messages ,TLVector<TLAbsUpdate> other_updates ,TLVector<TLAbsChat> chats ,TLVector<TLAbsUser> users ){
 			this.final = final; 
 this.pts = pts; 

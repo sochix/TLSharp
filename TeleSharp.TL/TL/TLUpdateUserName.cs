@@ -25,6 +25,9 @@ namespace TeleSharp.TL
      public string last_name {get;set;}
      public string username {get;set;}
 
+		public TLUpdateUserName (){
+			
+		}
 		public TLUpdateUserName (int user_id ,string first_name ,string last_name ,string username ){
 			this.user_id = user_id; 
 this.first_name = first_name; 

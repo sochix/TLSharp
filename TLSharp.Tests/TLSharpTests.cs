@@ -28,9 +28,9 @@ namespace TLSharp.Tests
 
         private string NumberToAddToChat { get; set; }
 
-        private string apiHash = "";
+        private string apiHash = "dbdf13b57be9f01b0af80f3e51d7ab62";
 
-        private int apiId;
+        private int apiId = 43555;
 
         [TestInitialize]
         public void Init()

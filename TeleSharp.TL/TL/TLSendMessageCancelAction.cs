@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLSendMessageCancelAction (){
+			
+		}
+		public TLSendMessageCancelAction (){
 				
 		}
 		public void ComputeFlags()

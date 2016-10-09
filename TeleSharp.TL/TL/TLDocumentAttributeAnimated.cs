@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLDocumentAttributeAnimated (){
+			
+		}
+		public TLDocumentAttributeAnimated (){
 				
 		}
 		public void ComputeFlags()

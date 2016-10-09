@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
              public int days {get;set;}
 
+		public TLAccountDaysTTL (){
+			
+		}
 		public TLAccountDaysTTL (int days ){
 			this.days = days; 
 	

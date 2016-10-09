@@ -24,6 +24,9 @@ namespace TeleSharp.TL
      public int length {get;set;}
      public TLAbsInputUser user_id {get;set;}
 
+		public TLInputMessageEntityMentionName (){
+			
+		}
 		public TLInputMessageEntityMentionName (int offset ,int length ,TLAbsInputUser user_id ){
 			this.offset = offset; 
 this.length = length; 

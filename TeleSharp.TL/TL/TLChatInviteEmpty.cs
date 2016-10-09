@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLChatInviteEmpty (){
+			
+		}
+		public TLChatInviteEmpty (){
 				
 		}
 		public void ComputeFlags()

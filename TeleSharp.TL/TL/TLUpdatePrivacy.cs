@@ -23,6 +23,9 @@ namespace TeleSharp.TL
              public TLAbsPrivacyKey key {get;set;}
      public TLVector<TLAbsPrivacyRule> rules {get;set;}
 
+		public TLUpdatePrivacy (){
+			
+		}
 		public TLUpdatePrivacy (TLAbsPrivacyKey key ,TLVector<TLAbsPrivacyRule> rules ){
 			this.key = key; 
 this.rules = rules; 

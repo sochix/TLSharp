@@ -22,6 +22,9 @@ namespace TeleSharp.TL.Help
 
         
 		public TLNoAppUpdate (){
+			
+		}
+		public TLNoAppUpdate (){
 				
 		}
 		public void ComputeFlags()

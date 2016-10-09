@@ -22,6 +22,9 @@ namespace TeleSharp.TL.Auth
 
         
 		public TLCodeTypeSms (){
+			
+		}
+		public TLCodeTypeSms (){
 				
 		}
 		public void ComputeFlags()

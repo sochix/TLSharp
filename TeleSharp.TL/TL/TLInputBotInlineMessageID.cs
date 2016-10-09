@@ -24,6 +24,9 @@ namespace TeleSharp.TL
      public long id {get;set;}
      public long access_hash {get;set;}
 
+		public TLInputBotInlineMessageID (){
+			
+		}
 		public TLInputBotInlineMessageID (int dc_id ,long id ,long access_hash ){
 			this.dc_id = dc_id; 
 this.id = id; 

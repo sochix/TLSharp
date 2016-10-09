@@ -27,6 +27,9 @@ namespace TeleSharp.TL
      public long access_hash {get;set;}
      public string title {get;set;}
 
+		public TLChannelForbidden (){
+			
+		}
 		public TLChannelForbidden (bool broadcast ,bool megagroup ,int id ,long access_hash ,string title ){
 			this.broadcast = broadcast; 
 this.megagroup = megagroup; 

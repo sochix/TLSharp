@@ -25,6 +25,9 @@ namespace TeleSharp.TL
      public string md5_checksum {get;set;}
      public int key_fingerprint {get;set;}
 
+		public TLInputEncryptedFileUploaded (){
+			
+		}
 		public TLInputEncryptedFileUploaded (long id ,int parts ,string md5_checksum ,int key_fingerprint ){
 			this.id = id; 
 this.parts = parts; 

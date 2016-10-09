@@ -27,6 +27,9 @@ namespace TeleSharp.TL
      public TLAbsExportedChatInvite exported_invite {get;set;}
      public TLVector<TLBotInfo> bot_info {get;set;}
 
+		public TLChatFull (){
+			
+		}
 		public TLChatFull (int id ,TLAbsChatParticipants participants ,TLAbsPhoto chat_photo ,TLAbsPeerNotifySettings notify_settings ,TLAbsExportedChatInvite exported_invite ,TLVector<TLBotInfo> bot_info ){
 			this.id = id; 
 this.participants = participants; 

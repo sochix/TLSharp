@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
              public TLAbsInputPeer peer {get;set;}
 
+		public TLInputNotifyPeer (){
+			
+		}
 		public TLInputNotifyPeer (TLAbsInputPeer peer ){
 			this.peer = peer; 
 	

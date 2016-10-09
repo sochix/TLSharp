@@ -22,6 +22,9 @@ namespace TeleSharp.TL.Messages
 
         
 		public TLAllStickersNotModified (){
+			
+		}
+		public TLAllStickersNotModified (){
 				
 		}
 		public void ComputeFlags()

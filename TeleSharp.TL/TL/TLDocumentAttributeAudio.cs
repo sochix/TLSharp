@@ -27,6 +27,9 @@ namespace TeleSharp.TL
      public string performer {get;set;}
      public byte[] waveform {get;set;}
 
+		public TLDocumentAttributeAudio (){
+			
+		}
 		public TLDocumentAttributeAudio (bool voice ,int duration ,string title ,string performer ,byte[] waveform ){
 			this.voice = voice; 
 this.duration = duration; 

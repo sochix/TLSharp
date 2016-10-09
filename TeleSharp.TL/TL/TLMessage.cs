@@ -40,6 +40,9 @@ namespace TeleSharp.TL
      public int? views {get;set;}
      public int? edit_date {get;set;}
 
+		public TLMessage (){
+			
+		}
 		public TLMessage (bool @out ,bool mentioned ,bool media_unread ,bool silent ,bool post ,int id ,int? from_id ,TLAbsPeer to_id ,TLMessageFwdHeader fwd_from ,int? via_bot_id ,int? reply_to_msg_id ,int date ,string message ,TLAbsMessageMedia media ,TLAbsReplyMarkup reply_markup ,TLVector<TLAbsMessageEntity> entities ,int? views ,int? edit_date ){
 			this.@out = @out; 
 this.mentioned = mentioned; 

@@ -25,6 +25,9 @@ namespace TeleSharp.TL
      public string first_name {get;set;}
      public string last_name {get;set;}
 
+		public TLInputPhoneContact (){
+			
+		}
 		public TLInputPhoneContact (long client_id ,string phone ,string first_name ,string last_name ){
 			this.client_id = client_id; 
 this.phone = phone; 

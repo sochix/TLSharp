@@ -22,6 +22,9 @@ namespace TeleSharp.TL.Auth
 
              public string pattern {get;set;}
 
+		public TLSentCodeTypeFlashCall (){
+			
+		}
 		public TLSentCodeTypeFlashCall (string pattern ){
 			this.pattern = pattern; 
 	

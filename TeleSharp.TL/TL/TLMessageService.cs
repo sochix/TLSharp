@@ -33,6 +33,9 @@ namespace TeleSharp.TL
      public int date {get;set;}
      public TLAbsMessageAction action {get;set;}
 
+		public TLMessageService (){
+			
+		}
 		public TLMessageService (bool @out ,bool mentioned ,bool media_unread ,bool silent ,bool post ,int id ,int? from_id ,TLAbsPeer to_id ,int? reply_to_msg_id ,int date ,TLAbsMessageAction action ){
 			this.@out = @out; 
 this.mentioned = mentioned; 

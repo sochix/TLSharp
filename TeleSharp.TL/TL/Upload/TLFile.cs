@@ -24,6 +24,9 @@ namespace TeleSharp.TL.Upload
      public int mtime {get;set;}
      public byte[] bytes {get;set;}
 
+		public TLFile (){
+			
+		}
 		public TLFile (Storage.TLAbsFileType type ,int mtime ,byte[] bytes ){
 			this.type = type; 
 this.mtime = mtime; 

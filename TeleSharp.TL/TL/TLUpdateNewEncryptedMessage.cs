@@ -23,6 +23,9 @@ namespace TeleSharp.TL
              public TLAbsEncryptedMessage message {get;set;}
      public int qts {get;set;}
 
+		public TLUpdateNewEncryptedMessage (){
+			
+		}
 		public TLUpdateNewEncryptedMessage (TLAbsEncryptedMessage message ,int qts ){
 			this.message = message; 
 this.qts = qts; 

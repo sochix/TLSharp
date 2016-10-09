@@ -24,6 +24,9 @@ namespace TeleSharp.TL
      public int length {get;set;}
      public int user_id {get;set;}
 
+		public TLMessageEntityMentionName (){
+			
+		}
 		public TLMessageEntityMentionName (int offset ,int length ,int user_id ){
 			this.offset = offset; 
 this.length = length; 

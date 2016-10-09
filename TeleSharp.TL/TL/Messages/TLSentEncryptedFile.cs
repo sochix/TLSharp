@@ -23,6 +23,9 @@ namespace TeleSharp.TL.Messages
              public int date {get;set;}
      public TLAbsEncryptedFile file {get;set;}
 
+		public TLSentEncryptedFile (){
+			
+		}
 		public TLSentEncryptedFile (int date ,TLAbsEncryptedFile file ){
 			this.date = date; 
 this.file = file; 

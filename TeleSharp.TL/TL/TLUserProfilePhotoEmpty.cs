@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLUserProfilePhotoEmpty (){
+			
+		}
+		public TLUserProfilePhotoEmpty (){
 				
 		}
 		public void ComputeFlags()

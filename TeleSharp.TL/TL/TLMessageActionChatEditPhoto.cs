@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
              public TLAbsPhoto photo {get;set;}
 
+		public TLMessageActionChatEditPhoto (){
+			
+		}
 		public TLMessageActionChatEditPhoto (TLAbsPhoto photo ){
 			this.photo = photo; 
 	

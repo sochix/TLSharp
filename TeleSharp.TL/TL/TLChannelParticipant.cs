@@ -23,6 +23,9 @@ namespace TeleSharp.TL
              public int user_id {get;set;}
      public int date {get;set;}
 
+		public TLChannelParticipant (){
+			
+		}
 		public TLChannelParticipant (int user_id ,int date ){
 			this.user_id = user_id; 
 this.date = date; 

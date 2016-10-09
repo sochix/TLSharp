@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
              public string text {get;set;}
 
+		public TLKeyboardButtonRequestPhone (){
+			
+		}
 		public TLKeyboardButtonRequestPhone (string text ){
 			this.text = text; 
 	

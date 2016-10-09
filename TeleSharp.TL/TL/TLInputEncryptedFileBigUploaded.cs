@@ -24,6 +24,9 @@ namespace TeleSharp.TL
      public int parts {get;set;}
      public int key_fingerprint {get;set;}
 
+		public TLInputEncryptedFileBigUploaded (){
+			
+		}
 		public TLInputEncryptedFileBigUploaded (long id ,int parts ,int key_fingerprint ){
 			this.id = id; 
 this.parts = parts; 

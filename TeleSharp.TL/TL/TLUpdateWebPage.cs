@@ -24,6 +24,9 @@ namespace TeleSharp.TL
      public int pts {get;set;}
      public int pts_count {get;set;}
 
+		public TLUpdateWebPage (){
+			
+		}
 		public TLUpdateWebPage (TLAbsWebPage webpage ,int pts ,int pts_count ){
 			this.webpage = webpage; 
 this.pts = pts; 

@@ -25,6 +25,9 @@ namespace TeleSharp.TL.Messages
      public TLVector<TLAbsChat> chats {get;set;}
      public TLVector<TLAbsUser> users {get;set;}
 
+		public TLDialogs (){
+			
+		}
 		public TLDialogs (TLVector<TLDialog> dialogs ,TLVector<TLAbsMessage> messages ,TLVector<TLAbsChat> chats ,TLVector<TLAbsUser> users ){
 			this.dialogs = dialogs; 
 this.messages = messages; 

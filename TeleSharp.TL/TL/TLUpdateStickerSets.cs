@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLUpdateStickerSets (){
+			
+		}
+		public TLUpdateStickerSets (){
 				
 		}
 		public void ComputeFlags()

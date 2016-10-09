@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLTopPeerCategoryCorrespondents (){
+			
+		}
+		public TLTopPeerCategoryCorrespondents (){
 				
 		}
 		public void ComputeFlags()

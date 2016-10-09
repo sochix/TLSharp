@@ -23,6 +23,9 @@ namespace TeleSharp.TL
              public TLAbsPhoto photo {get;set;}
      public string caption {get;set;}
 
+		public TLMessageMediaPhoto (){
+			
+		}
 		public TLMessageMediaPhoto (TLAbsPhoto photo ,string caption ){
 			this.photo = photo; 
 this.caption = caption; 

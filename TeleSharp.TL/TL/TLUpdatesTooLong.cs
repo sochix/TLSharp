@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLUpdatesTooLong (){
+			
+		}
+		public TLUpdatesTooLong (){
 				
 		}
 		public void ComputeFlags()

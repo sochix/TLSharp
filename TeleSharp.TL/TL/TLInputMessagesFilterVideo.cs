@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLInputMessagesFilterVideo (){
+			
+		}
+		public TLInputMessagesFilterVideo (){
 				
 		}
 		public void ComputeFlags()

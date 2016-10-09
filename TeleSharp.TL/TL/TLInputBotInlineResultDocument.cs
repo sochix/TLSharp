@@ -28,6 +28,9 @@ namespace TeleSharp.TL
      public TLAbsInputDocument document {get;set;}
      public TLAbsInputBotInlineMessage send_message {get;set;}
 
+		public TLInputBotInlineResultDocument (){
+			
+		}
 		public TLInputBotInlineResultDocument (string id ,string type ,string title ,string description ,TLAbsInputDocument document ,TLAbsInputBotInlineMessage send_message ){
 			this.id = id; 
 this.type = type; 

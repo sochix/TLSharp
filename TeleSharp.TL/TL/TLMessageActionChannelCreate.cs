@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
              public string title {get;set;}
 
+		public TLMessageActionChannelCreate (){
+			
+		}
 		public TLMessageActionChannelCreate (string title ){
 			this.title = title; 
 	

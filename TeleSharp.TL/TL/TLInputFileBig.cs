@@ -24,6 +24,9 @@ namespace TeleSharp.TL
      public int parts {get;set;}
      public string name {get;set;}
 
+		public TLInputFileBig (){
+			
+		}
 		public TLInputFileBig (long id ,int parts ,string name ){
 			this.id = id; 
 this.parts = parts; 

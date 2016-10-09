@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLInputMessagesFilterMusic (){
+			
+		}
+		public TLInputMessagesFilterMusic (){
 				
 		}
 		public void ComputeFlags()

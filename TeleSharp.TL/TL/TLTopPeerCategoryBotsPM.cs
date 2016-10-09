@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLTopPeerCategoryBotsPM (){
+			
+		}
+		public TLTopPeerCategoryBotsPM (){
 				
 		}
 		public void ComputeFlags()

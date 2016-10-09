@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
              public TLVector<TLAbsInputUser> users {get;set;}
 
+		public TLInputPrivacyValueAllowUsers (){
+			
+		}
 		public TLInputPrivacyValueAllowUsers (TLVector<TLAbsInputUser> users ){
 			this.users = users; 
 	

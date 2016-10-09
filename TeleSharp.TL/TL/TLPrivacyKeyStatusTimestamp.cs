@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLPrivacyKeyStatusTimestamp (){
+			
+		}
+		public TLPrivacyKeyStatusTimestamp (){
 				
 		}
 		public void ComputeFlags()

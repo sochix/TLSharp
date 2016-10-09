@@ -23,6 +23,9 @@ namespace TeleSharp.TL
              public double @long {get;set;}
      public double lat {get;set;}
 
+		public TLGeoPoint (){
+			
+		}
 		public TLGeoPoint (double @long ,double lat ){
 			this.@long = @long; 
 this.lat = lat; 

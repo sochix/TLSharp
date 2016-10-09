@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLUserStatusRecently (){
+			
+		}
+		public TLUserStatusRecently (){
 				
 		}
 		public void ComputeFlags()

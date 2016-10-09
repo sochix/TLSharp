@@ -25,6 +25,9 @@ namespace TeleSharp.TL
      public long peer {get;set;}
      public string data {get;set;}
 
+		public TLInputAppEvent (){
+			
+		}
 		public TLInputAppEvent (double time ,string type ,long peer ,string data ){
 			this.time = time; 
 this.type = type; 

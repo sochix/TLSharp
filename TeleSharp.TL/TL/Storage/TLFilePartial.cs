@@ -22,6 +22,9 @@ namespace TeleSharp.TL.Storage
 
         
 		public TLFilePartial (){
+			
+		}
+		public TLFilePartial (){
 				
 		}
 		public void ComputeFlags()

@@ -23,6 +23,9 @@ namespace TeleSharp.TL.Channels
              public TLAbsChannelParticipant participant {get;set;}
      public TLVector<TLAbsUser> users {get;set;}
 
+		public TLChannelParticipant (){
+			
+		}
 		public TLChannelParticipant (TLAbsChannelParticipant participant ,TLVector<TLAbsUser> users ){
 			this.participant = participant; 
 this.users = users; 

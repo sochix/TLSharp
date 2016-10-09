@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLNotifyAll (){
+			
+		}
+		public TLNotifyAll (){
 				
 		}
 		public void ComputeFlags()

@@ -25,6 +25,9 @@ namespace TeleSharp.TL
      public TLAbsUserProfilePhoto photo {get;set;}
      public bool previous {get;set;}
 
+		public TLUpdateUserPhoto (){
+			
+		}
 		public TLUpdateUserPhoto (int user_id ,int date ,TLAbsUserProfilePhoto photo ,bool previous ){
 			this.user_id = user_id; 
 this.date = date; 

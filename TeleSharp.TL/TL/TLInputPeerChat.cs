@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
              public int chat_id {get;set;}
 
+		public TLInputPeerChat (){
+			
+		}
 		public TLInputPeerChat (int chat_id ){
 			this.chat_id = chat_id; 
 	

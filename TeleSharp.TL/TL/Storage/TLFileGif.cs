@@ -22,6 +22,9 @@ namespace TeleSharp.TL.Storage
 
         
 		public TLFileGif (){
+			
+		}
+		public TLFileGif (){
 				
 		}
 		public void ComputeFlags()

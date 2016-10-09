@@ -26,6 +26,9 @@ namespace TeleSharp.TL
      public string last_name {get;set;}
      public TLAbsReplyMarkup reply_markup {get;set;}
 
+		public TLBotInlineMessageMediaContact (){
+			
+		}
 		public TLBotInlineMessageMediaContact (string phone_number ,string first_name ,string last_name ,TLAbsReplyMarkup reply_markup ){
 			this.phone_number = phone_number; 
 this.first_name = first_name; 

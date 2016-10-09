@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
              public int inviter_id {get;set;}
 
+		public TLMessageActionChatJoinedByLink (){
+			
+		}
 		public TLMessageActionChatJoinedByLink (int inviter_id ){
 			this.inviter_id = inviter_id; 
 	

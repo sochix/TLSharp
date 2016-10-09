@@ -24,6 +24,9 @@ namespace TeleSharp.TL
      public int kicked_by {get;set;}
      public int date {get;set;}
 
+		public TLChannelParticipantKicked (){
+			
+		}
 		public TLChannelParticipantKicked (int user_id ,int kicked_by ,int date ){
 			this.user_id = user_id; 
 this.kicked_by = kicked_by; 

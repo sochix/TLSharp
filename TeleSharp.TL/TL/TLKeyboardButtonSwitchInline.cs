@@ -23,6 +23,9 @@ namespace TeleSharp.TL
              public string text {get;set;}
      public string query {get;set;}
 
+		public TLKeyboardButtonSwitchInline (){
+			
+		}
 		public TLKeyboardButtonSwitchInline (string text ,string query ){
 			this.text = text; 
 this.query = query; 

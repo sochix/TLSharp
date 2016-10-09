@@ -23,6 +23,9 @@ namespace TeleSharp.TL.Messages
              public int pts {get;set;}
      public int pts_count {get;set;}
 
+		public TLAffectedMessages (){
+			
+		}
 		public TLAffectedMessages (int pts ,int pts_count ){
 			this.pts = pts; 
 this.pts_count = pts_count; 

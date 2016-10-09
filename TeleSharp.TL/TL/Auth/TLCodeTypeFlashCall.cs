@@ -22,6 +22,9 @@ namespace TeleSharp.TL.Auth
 
         
 		public TLCodeTypeFlashCall (){
+			
+		}
+		public TLCodeTypeFlashCall (){
 				
 		}
 		public void ComputeFlags()

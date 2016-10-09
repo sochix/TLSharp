@@ -23,6 +23,9 @@ namespace TeleSharp.TL
              public TLAbsInputPhoto id {get;set;}
      public TLAbsInputPhotoCrop crop {get;set;}
 
+		public TLInputChatPhoto (){
+			
+		}
 		public TLInputChatPhoto (TLAbsInputPhoto id ,TLAbsInputPhotoCrop crop ){
 			this.id = id; 
 this.crop = crop; 

@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
              public TLVector<TLDcOption> dc_options {get;set;}
 
+		public TLUpdateDcOptions (){
+			
+		}
 		public TLUpdateDcOptions (TLVector<TLDcOption> dc_options ){
 			this.dc_options = dc_options; 
 	

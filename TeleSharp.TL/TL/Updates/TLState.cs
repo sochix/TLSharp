@@ -26,6 +26,9 @@ namespace TeleSharp.TL.Updates
      public int seq {get;set;}
      public int unread_count {get;set;}
 
+		public TLState (){
+			
+		}
 		public TLState (int pts ,int qts ,int date ,int seq ,int unread_count ){
 			this.pts = pts; 
 this.qts = qts; 

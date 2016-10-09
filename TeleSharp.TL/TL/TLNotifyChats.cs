@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLNotifyChats (){
+			
+		}
+		public TLNotifyChats (){
 				
 		}
 		public void ComputeFlags()

@@ -22,6 +22,9 @@ namespace TeleSharp.TL.Messages
 
              public byte[] random {get;set;}
 
+		public TLDhConfigNotModified (){
+			
+		}
 		public TLDhConfigNotModified (byte[] random ){
 			this.random = random; 
 	

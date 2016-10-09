@@ -27,6 +27,9 @@ namespace TeleSharp.TL
      public string id {get;set;}
      public TLInputBotInlineMessageID msg_id {get;set;}
 
+		public TLUpdateBotInlineSend (){
+			
+		}
 		public TLUpdateBotInlineSend (int user_id ,string query ,TLAbsGeoPoint geo ,string id ,TLInputBotInlineMessageID msg_id ){
 			this.user_id = user_id; 
 this.query = query; 

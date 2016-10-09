@@ -24,6 +24,9 @@ namespace TeleSharp.TL
      public int channel_id {get;set;}
      public int? pts {get;set;}
 
+		public TLUpdateChannelTooLong (){
+			
+		}
 		public TLUpdateChannelTooLong (int channel_id ,int? pts ){
 			this.channel_id = channel_id; 
 this.pts = pts; 

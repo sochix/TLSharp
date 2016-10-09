@@ -23,6 +23,9 @@ namespace TeleSharp.TL
              public int id {get;set;}
      public long random_id {get;set;}
 
+		public TLUpdateMessageID (){
+			
+		}
 		public TLUpdateMessageID (int id ,long random_id ){
 			this.id = id; 
 this.random_id = random_id; 

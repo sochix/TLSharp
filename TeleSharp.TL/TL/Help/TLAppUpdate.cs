@@ -25,6 +25,9 @@ namespace TeleSharp.TL.Help
      public string url {get;set;}
      public string text {get;set;}
 
+		public TLAppUpdate (){
+			
+		}
 		public TLAppUpdate (int id ,bool critical ,string url ,string text ){
 			this.id = id; 
 this.critical = critical; 

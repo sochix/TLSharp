@@ -24,6 +24,9 @@ namespace TeleSharp.TL.Contacts
      public TLVector<TLAbsChat> chats {get;set;}
      public TLVector<TLAbsUser> users {get;set;}
 
+		public TLFound (){
+			
+		}
 		public TLFound (TLVector<TLAbsPeer> results ,TLVector<TLAbsChat> chats ,TLVector<TLAbsUser> users ){
 			this.results = results; 
 this.chats = chats; 

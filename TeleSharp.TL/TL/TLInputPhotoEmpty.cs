@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLInputPhotoEmpty (){
+			
+		}
+		public TLInputPhotoEmpty (){
 				
 		}
 		public void ComputeFlags()

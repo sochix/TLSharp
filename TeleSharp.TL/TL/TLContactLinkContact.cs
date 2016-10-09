@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLContactLinkContact (){
+			
+		}
+		public TLContactLinkContact (){
 				
 		}
 		public void ComputeFlags()

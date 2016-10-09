@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLChannelParticipantsAdmins (){
+			
+		}
+		public TLChannelParticipantsAdmins (){
 				
 		}
 		public void ComputeFlags()

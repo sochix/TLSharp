@@ -23,6 +23,9 @@ namespace TeleSharp.TL
              public int channel_id {get;set;}
      public int max_id {get;set;}
 
+		public TLUpdateReadChannelInbox (){
+			
+		}
 		public TLUpdateReadChannelInbox (int channel_id ,int max_id ){
 			this.channel_id = channel_id; 
 this.max_id = max_id; 

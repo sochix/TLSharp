@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLMessageActionChatDeletePhoto (){
+			
+		}
+		public TLMessageActionChatDeletePhoto (){
 				
 		}
 		public void ComputeFlags()

@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLInputNotifyUsers (){
+			
+		}
+		public TLInputNotifyUsers (){
 				
 		}
 		public void ComputeFlags()

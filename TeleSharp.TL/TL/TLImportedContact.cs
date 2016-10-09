@@ -23,6 +23,9 @@ namespace TeleSharp.TL
              public int user_id {get;set;}
      public long client_id {get;set;}
 
+		public TLImportedContact (){
+			
+		}
 		public TLImportedContact (int user_id ,long client_id ){
 			this.user_id = user_id; 
 this.client_id = client_id; 

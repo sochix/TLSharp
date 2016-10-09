@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLInputMessagesFilterPhotos (){
+			
+		}
+		public TLInputMessagesFilterPhotos (){
 				
 		}
 		public void ComputeFlags()

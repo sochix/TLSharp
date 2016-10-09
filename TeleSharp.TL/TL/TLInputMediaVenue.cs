@@ -26,6 +26,9 @@ namespace TeleSharp.TL
      public string provider {get;set;}
      public string venue_id {get;set;}
 
+		public TLInputMediaVenue (){
+			
+		}
 		public TLInputMediaVenue (TLAbsInputGeoPoint geo_point ,string title ,string address ,string provider ,string venue_id ){
 			this.geo_point = geo_point; 
 this.title = title; 

@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
              public TLVector<TLAbsKeyboardButton> buttons {get;set;}
 
+		public TLKeyboardButtonRow (){
+			
+		}
 		public TLKeyboardButtonRow (TLVector<TLAbsKeyboardButton> buttons ){
 			this.buttons = buttons; 
 	

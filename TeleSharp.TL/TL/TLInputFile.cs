@@ -25,6 +25,9 @@ namespace TeleSharp.TL
      public string name {get;set;}
      public string md5_checksum {get;set;}
 
+		public TLInputFile (){
+			
+		}
 		public TLInputFile (long id ,int parts ,string name ,string md5_checksum ){
 			this.id = id; 
 this.parts = parts; 

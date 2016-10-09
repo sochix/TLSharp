@@ -23,6 +23,9 @@ namespace TeleSharp.TL
              public TLAbsPeer peer {get;set;}
      public TLAbsDraftMessage draft {get;set;}
 
+		public TLUpdateDraftMessage (){
+			
+		}
 		public TLUpdateDraftMessage (TLAbsPeer peer ,TLAbsDraftMessage draft ){
 			this.peer = peer; 
 this.draft = draft; 

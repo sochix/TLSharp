@@ -22,6 +22,9 @@ namespace TeleSharp.TL.Storage
 
         
 		public TLFileWebp (){
+			
+		}
+		public TLFileWebp (){
 				
 		}
 		public void ComputeFlags()

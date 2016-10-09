@@ -22,6 +22,9 @@ namespace TeleSharp.TL
 
         
 		public TLInputPrivacyKeyChatInvite (){
+			
+		}
+		public TLInputPrivacyKeyChatInvite (){
 				
 		}
 		public void ComputeFlags()
