@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Messages
 {
-	[TLObject(189033187)]
+    [TLObject(189033187)]
     public class TLMessagesSlice : TLAbsMessages
     {
         public override int Constructor
@@ -18,33 +18,33 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-             public int count {get;set;}
-     public TLVector<TLAbsMessage> messages {get;set;}
-     public TLVector<TLAbsChat> chats {get;set;}
-     public TLVector<TLAbsUser> users {get;set;}
+        public int count { get; set; }
+        public TLVector<TLAbsMessage> messages { get; set; }
+        public TLVector<TLAbsChat> chats { get; set; }
+        public TLVector<TLAbsUser> users { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
             count = br.ReadInt32();
-messages = (TLVector<TLAbsMessage>)ObjectUtils.DeserializeVector<TLAbsMessage>(br);
-chats = (TLVector<TLAbsChat>)ObjectUtils.DeserializeVector<TLAbsChat>(br);
-users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
+            messages = (TLVector<TLAbsMessage>)ObjectUtils.DeserializeVector<TLAbsMessage>(br);
+            chats = (TLVector<TLAbsChat>)ObjectUtils.DeserializeVector<TLAbsChat>(br);
+            users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
+            bw.Write(Constructor);
             bw.Write(count);
-ObjectUtils.SerializeObject(messages,bw);
-ObjectUtils.SerializeObject(chats,bw);
-ObjectUtils.SerializeObject(users,bw);
+            ObjectUtils.SerializeObject(messages, bw);
+            ObjectUtils.SerializeObject(chats, bw);
+            ObjectUtils.SerializeObject(users, bw);
 
         }
     }

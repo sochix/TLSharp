@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(-367298028)]
+    [TLObject(-367298028)]
     public class TLKeyboardButtonSwitchInline : TLAbsKeyboardButton
     {
         public override int Constructor
@@ -18,27 +18,27 @@ namespace TeleSharp.TL
             }
         }
 
-             public string text {get;set;}
-     public string query {get;set;}
+        public string text { get; set; }
+        public string query { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
             text = StringUtil.Deserialize(br);
-query = StringUtil.Deserialize(br);
+            query = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            StringUtil.Serialize(text,bw);
-StringUtil.Serialize(query,bw);
+            bw.Write(Constructor);
+            StringUtil.Serialize(text, bw);
+            StringUtil.Serialize(query, bw);
 
         }
     }

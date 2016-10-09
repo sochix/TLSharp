@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(-2044933984)]
+    [TLObject(-2044933984)]
     public class TLInputStickerSetShortName : TLAbsInputStickerSet
     {
         public override int Constructor
@@ -18,13 +18,13 @@ namespace TeleSharp.TL
             }
         }
 
-             public string short_name {get;set;}
+        public string short_name { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,8 +34,8 @@ namespace TeleSharp.TL
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            StringUtil.Serialize(short_name,bw);
+            bw.Write(Constructor);
+            StringUtil.Serialize(short_name, bw);
 
         }
     }

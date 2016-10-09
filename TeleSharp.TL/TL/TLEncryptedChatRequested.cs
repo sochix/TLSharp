@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(-931638658)]
+    [TLObject(-931638658)]
     public class TLEncryptedChatRequested : TLAbsEncryptedChat
     {
         public override int Constructor
@@ -18,39 +18,39 @@ namespace TeleSharp.TL
             }
         }
 
-             public int id {get;set;}
-     public long access_hash {get;set;}
-     public int date {get;set;}
-     public int admin_id {get;set;}
-     public int participant_id {get;set;}
-     public byte[] g_a {get;set;}
+        public int id { get; set; }
+        public long access_hash { get; set; }
+        public int date { get; set; }
+        public int admin_id { get; set; }
+        public int participant_id { get; set; }
+        public byte[] g_a { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
             id = br.ReadInt32();
-access_hash = br.ReadInt64();
-date = br.ReadInt32();
-admin_id = br.ReadInt32();
-participant_id = br.ReadInt32();
-g_a = BytesUtil.Deserialize(br);
+            access_hash = br.ReadInt64();
+            date = br.ReadInt32();
+            admin_id = br.ReadInt32();
+            participant_id = br.ReadInt32();
+            g_a = BytesUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
+            bw.Write(Constructor);
             bw.Write(id);
-bw.Write(access_hash);
-bw.Write(date);
-bw.Write(admin_id);
-bw.Write(participant_id);
-BytesUtil.Serialize(g_a,bw);
+            bw.Write(access_hash);
+            bw.Write(date);
+            bw.Write(admin_id);
+            bw.Write(participant_id);
+            BytesUtil.Serialize(g_a, bw);
 
         }
     }

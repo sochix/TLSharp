@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(978674434)]
+    [TLObject(978674434)]
     public class TLDocumentAttributeSticker : TLAbsDocumentAttribute
     {
         public override int Constructor
@@ -18,27 +18,27 @@ namespace TeleSharp.TL
             }
         }
 
-             public string alt {get;set;}
-     public TLAbsInputStickerSet stickerset {get;set;}
+        public string alt { get; set; }
+        public TLAbsInputStickerSet stickerset { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
             alt = StringUtil.Deserialize(br);
-stickerset = (TLAbsInputStickerSet)ObjectUtils.DeserializeObject(br);
+            stickerset = (TLAbsInputStickerSet)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            StringUtil.Serialize(alt,bw);
-ObjectUtils.SerializeObject(stickerset,bw);
+            bw.Write(Constructor);
+            StringUtil.Serialize(alt, bw);
+            ObjectUtils.SerializeObject(stickerset, bw);
 
         }
     }

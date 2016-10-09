@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Help
 {
-	[TLObject(-1350696044)]
+    [TLObject(-1350696044)]
     public class TLAppChangelogEmpty : TLAbsAppChangelog
     {
         public override int Constructor
@@ -18,22 +18,22 @@ namespace TeleSharp.TL.Help
             }
         }
 
-        
 
-		public void ComputeFlags()
-		{
-			
-		}
+
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            
+
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            
+            bw.Write(Constructor);
+
         }
     }
 }

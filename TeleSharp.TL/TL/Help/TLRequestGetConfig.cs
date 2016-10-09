@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Help
 {
-	[TLObject(-990308245)]
+    [TLObject(-990308245)]
     public class TLRequestGetConfig : TLMethod
     {
         public override int Constructor
@@ -18,28 +18,28 @@ namespace TeleSharp.TL.Help
             }
         }
 
-                public TLConfig Response{ get; set;}
+        public TLConfig Response { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            
+
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            
-        }
-		public override void deserializeResponse(BinaryReader br)
-		{
-			Response = (TLConfig)ObjectUtils.DeserializeObject(br);
+            bw.Write(Constructor);
 
-		}
+        }
+        public override void deserializeResponse(BinaryReader br)
+        {
+            Response = (TLConfig)ObjectUtils.DeserializeObject(br);
+
+        }
     }
 }

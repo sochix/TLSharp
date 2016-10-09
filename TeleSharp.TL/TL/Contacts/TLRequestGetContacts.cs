@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Contacts
 {
-	[TLObject(583445000)]
+    [TLObject(583445000)]
     public class TLRequestGetContacts : TLMethod
     {
         public override int Constructor
@@ -18,14 +18,14 @@ namespace TeleSharp.TL.Contacts
             }
         }
 
-                public string hash {get;set;}
-        public Contacts.TLAbsContacts Response{ get; set;}
+        public string hash { get; set; }
+        public Contacts.TLAbsContacts Response { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -35,14 +35,14 @@ namespace TeleSharp.TL.Contacts
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            StringUtil.Serialize(hash,bw);
+            bw.Write(Constructor);
+            StringUtil.Serialize(hash, bw);
 
         }
-		public override void deserializeResponse(BinaryReader br)
-		{
-			Response = (Contacts.TLAbsContacts)ObjectUtils.DeserializeObject(br);
+        public override void deserializeResponse(BinaryReader br)
+        {
+            Response = (Contacts.TLAbsContacts)ObjectUtils.DeserializeObject(br);
 
-		}
+        }
     }
 }

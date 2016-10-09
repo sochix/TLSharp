@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Messages
 {
-	[TLObject(-820669733)]
+    [TLObject(-820669733)]
     public class TLRequestReportSpam : TLMethod
     {
         public override int Constructor
@@ -18,14 +18,14 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public TLAbsInputPeer peer {get;set;}
-        public bool Response{ get; set;}
+        public TLAbsInputPeer peer { get; set; }
+        public bool Response { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -35,14 +35,14 @@ namespace TeleSharp.TL.Messages
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            ObjectUtils.SerializeObject(peer,bw);
+            bw.Write(Constructor);
+            ObjectUtils.SerializeObject(peer, bw);
 
         }
-		public override void deserializeResponse(BinaryReader br)
-		{
-			Response = BoolUtil.Deserialize(br);
+        public override void deserializeResponse(BinaryReader br)
+        {
+            Response = BoolUtil.Deserialize(br);
 
-		}
+        }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Auth
 {
-	[TLObject(1461180992)]
+    [TLObject(1461180992)]
     public class TLRequestLogOut : TLMethod
     {
         public override int Constructor
@@ -18,28 +18,28 @@ namespace TeleSharp.TL.Auth
             }
         }
 
-                public bool Response{ get; set;}
+        public bool Response { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            
+
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            
-        }
-		public override void deserializeResponse(BinaryReader br)
-		{
-			Response = BoolUtil.Deserialize(br);
+            bw.Write(Constructor);
 
-		}
+        }
+        public override void deserializeResponse(BinaryReader br)
+        {
+            Response = BoolUtil.Deserialize(br);
+
+        }
     }
 }

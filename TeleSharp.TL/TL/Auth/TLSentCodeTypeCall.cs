@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Auth
 {
-	[TLObject(1398007207)]
+    [TLObject(1398007207)]
     public class TLSentCodeTypeCall : TLAbsSentCodeType
     {
         public override int Constructor
@@ -18,13 +18,13 @@ namespace TeleSharp.TL.Auth
             }
         }
 
-             public int length {get;set;}
+        public int length { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,7 +34,7 @@ namespace TeleSharp.TL.Auth
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
+            bw.Write(Constructor);
             bw.Write(length);
 
         }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Messages
 {
-	[TLObject(1051570619)]
+    [TLObject(1051570619)]
     public class TLRequestCheckChatInvite : TLMethod
     {
         public override int Constructor
@@ -18,14 +18,14 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public string hash {get;set;}
-        public TLAbsChatInvite Response{ get; set;}
+        public string hash { get; set; }
+        public TLAbsChatInvite Response { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -35,14 +35,14 @@ namespace TeleSharp.TL.Messages
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            StringUtil.Serialize(hash,bw);
+            bw.Write(Constructor);
+            StringUtil.Serialize(hash, bw);
 
         }
-		public override void deserializeResponse(BinaryReader br)
-		{
-			Response = (TLAbsChatInvite)ObjectUtils.DeserializeObject(br);
+        public override void deserializeResponse(BinaryReader br)
+        {
+            Response = (TLAbsChatInvite)ObjectUtils.DeserializeObject(br);
 
-		}
+        }
     }
 }

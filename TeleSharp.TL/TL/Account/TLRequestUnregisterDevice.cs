@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Account
 {
-	[TLObject(1707432768)]
+    [TLObject(1707432768)]
     public class TLRequestUnregisterDevice : TLMethod
     {
         public override int Constructor
@@ -18,34 +18,34 @@ namespace TeleSharp.TL.Account
             }
         }
 
-                public int token_type {get;set;}
-        public string token {get;set;}
-        public bool Response{ get; set;}
+        public int token_type { get; set; }
+        public string token { get; set; }
+        public bool Response { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
             token_type = br.ReadInt32();
-token = StringUtil.Deserialize(br);
+            token = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
+            bw.Write(Constructor);
             bw.Write(token_type);
-StringUtil.Serialize(token,bw);
+            StringUtil.Serialize(token, bw);
 
         }
-		public override void deserializeResponse(BinaryReader br)
-		{
-			Response = BoolUtil.Deserialize(br);
+        public override void deserializeResponse(BinaryReader br)
+        {
+            Response = BoolUtil.Deserialize(br);
 
-		}
+        }
     }
 }

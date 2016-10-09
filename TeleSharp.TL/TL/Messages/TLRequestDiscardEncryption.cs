@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Messages
 {
-	[TLObject(-304536635)]
+    [TLObject(-304536635)]
     public class TLRequestDiscardEncryption : TLMethod
     {
         public override int Constructor
@@ -18,14 +18,14 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public int chat_id {get;set;}
-        public bool Response{ get; set;}
+        public int chat_id { get; set; }
+        public bool Response { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -35,14 +35,14 @@ namespace TeleSharp.TL.Messages
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
+            bw.Write(Constructor);
             bw.Write(chat_id);
 
         }
-		public override void deserializeResponse(BinaryReader br)
-		{
-			Response = BoolUtil.Deserialize(br);
+        public override void deserializeResponse(BinaryReader br)
+        {
+            Response = BoolUtil.Deserialize(br);
 
-		}
+        }
     }
 }

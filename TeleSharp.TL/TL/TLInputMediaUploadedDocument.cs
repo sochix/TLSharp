@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(495530093)]
+    [TLObject(495530093)]
     public class TLInputMediaUploadedDocument : TLAbsInputMedia
     {
         public override int Constructor
@@ -18,33 +18,33 @@ namespace TeleSharp.TL
             }
         }
 
-             public TLAbsInputFile file {get;set;}
-     public string mime_type {get;set;}
-     public TLVector<TLAbsDocumentAttribute> attributes {get;set;}
-     public string caption {get;set;}
+        public TLAbsInputFile file { get; set; }
+        public string mime_type { get; set; }
+        public TLVector<TLAbsDocumentAttribute> attributes { get; set; }
+        public string caption { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
             file = (TLAbsInputFile)ObjectUtils.DeserializeObject(br);
-mime_type = StringUtil.Deserialize(br);
-attributes = (TLVector<TLAbsDocumentAttribute>)ObjectUtils.DeserializeVector<TLAbsDocumentAttribute>(br);
-caption = StringUtil.Deserialize(br);
+            mime_type = StringUtil.Deserialize(br);
+            attributes = (TLVector<TLAbsDocumentAttribute>)ObjectUtils.DeserializeVector<TLAbsDocumentAttribute>(br);
+            caption = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            ObjectUtils.SerializeObject(file,bw);
-StringUtil.Serialize(mime_type,bw);
-ObjectUtils.SerializeObject(attributes,bw);
-StringUtil.Serialize(caption,bw);
+            bw.Write(Constructor);
+            ObjectUtils.SerializeObject(file, bw);
+            StringUtil.Serialize(mime_type, bw);
+            ObjectUtils.SerializeObject(attributes, bw);
+            StringUtil.Serialize(caption, bw);
 
         }
     }

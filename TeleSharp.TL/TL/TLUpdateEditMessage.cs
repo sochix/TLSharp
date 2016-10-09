@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(-469536605)]
+    [TLObject(-469536605)]
     public class TLUpdateEditMessage : TLAbsUpdate
     {
         public override int Constructor
@@ -18,30 +18,30 @@ namespace TeleSharp.TL
             }
         }
 
-             public TLAbsMessage message {get;set;}
-     public int pts {get;set;}
-     public int pts_count {get;set;}
+        public TLAbsMessage message { get; set; }
+        public int pts { get; set; }
+        public int pts_count { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
             message = (TLAbsMessage)ObjectUtils.DeserializeObject(br);
-pts = br.ReadInt32();
-pts_count = br.ReadInt32();
+            pts = br.ReadInt32();
+            pts_count = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            ObjectUtils.SerializeObject(message,bw);
-bw.Write(pts);
-bw.Write(pts_count);
+            bw.Write(Constructor);
+            ObjectUtils.SerializeObject(message, bw);
+            bw.Write(pts);
+            bw.Write(pts_count);
 
         }
     }

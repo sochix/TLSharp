@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Contacts
 {
-	[TLObject(1504393374)]
+    [TLObject(1504393374)]
     public class TLRequestDeleteContacts : TLMethod
     {
         public override int Constructor
@@ -18,14 +18,14 @@ namespace TeleSharp.TL.Contacts
             }
         }
 
-                public TLVector<TLAbsInputUser> id {get;set;}
-        public bool Response{ get; set;}
+        public TLVector<TLAbsInputUser> id { get; set; }
+        public bool Response { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -35,14 +35,14 @@ namespace TeleSharp.TL.Contacts
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            ObjectUtils.SerializeObject(id,bw);
+            bw.Write(Constructor);
+            ObjectUtils.SerializeObject(id, bw);
 
         }
-		public override void deserializeResponse(BinaryReader br)
-		{
-			Response = BoolUtil.Deserialize(br);
+        public override void deserializeResponse(BinaryReader br)
+        {
+            Response = BoolUtil.Deserialize(br);
 
-		}
+        }
     }
 }

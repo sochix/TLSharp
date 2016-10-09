@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Storage
 {
-	[TLObject(-1278304028)]
+    [TLObject(-1278304028)]
     public class TLFileMp4 : TLAbsFileType
     {
         public override int Constructor
@@ -18,22 +18,22 @@ namespace TeleSharp.TL.Storage
             }
         }
 
-        
 
-		public void ComputeFlags()
-		{
-			
-		}
+
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            
+
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            
+            bw.Write(Constructor);
+
         }
     }
 }

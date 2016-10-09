@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(524838915)]
+    [TLObject(524838915)]
     public class TLExportedMessageLink : TLObject
     {
         public override int Constructor
@@ -18,13 +18,13 @@ namespace TeleSharp.TL
             }
         }
 
-             public string link {get;set;}
+        public string link { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,8 +34,8 @@ namespace TeleSharp.TL
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            StringUtil.Serialize(link,bw);
+            bw.Write(Constructor);
+            StringUtil.Serialize(link, bw);
 
         }
     }

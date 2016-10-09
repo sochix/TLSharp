@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(9203775)]
+    [TLObject(9203775)]
     public class TLUserStatusOffline : TLAbsUserStatus
     {
         public override int Constructor
@@ -18,13 +18,13 @@ namespace TeleSharp.TL
             }
         }
 
-             public int was_online {get;set;}
+        public int was_online { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,7 +34,7 @@ namespace TeleSharp.TL
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
+            bw.Write(Constructor);
             bw.Write(was_online);
 
         }

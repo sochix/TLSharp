@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Photos
 {
-	[TLObject(-2016444625)]
+    [TLObject(-2016444625)]
     public class TLRequestDeletePhotos : TLMethod
     {
         public override int Constructor
@@ -18,14 +18,14 @@ namespace TeleSharp.TL.Photos
             }
         }
 
-                public TLVector<TLAbsInputPhoto> id {get;set;}
-        public TLVector<long> Response{ get; set;}
+        public TLVector<TLAbsInputPhoto> id { get; set; }
+        public TLVector<long> Response { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -35,14 +35,14 @@ namespace TeleSharp.TL.Photos
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            ObjectUtils.SerializeObject(id,bw);
+            bw.Write(Constructor);
+            ObjectUtils.SerializeObject(id, bw);
 
         }
-		public override void deserializeResponse(BinaryReader br)
-		{
-			Response = (TLVector<long>)ObjectUtils.DeserializeVector<long>(br);
+        public override void deserializeResponse(BinaryReader br)
+        {
+            Response = (TLVector<long>)ObjectUtils.DeserializeVector<long>(br);
 
-		}
+        }
     }
 }

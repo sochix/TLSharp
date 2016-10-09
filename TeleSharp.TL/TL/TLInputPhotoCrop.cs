@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(-644787419)]
+    [TLObject(-644787419)]
     public class TLInputPhotoCrop : TLAbsInputPhotoCrop
     {
         public override int Constructor
@@ -18,30 +18,30 @@ namespace TeleSharp.TL
             }
         }
 
-             public double crop_left {get;set;}
-     public double crop_top {get;set;}
-     public double crop_width {get;set;}
+        public double crop_left { get; set; }
+        public double crop_top { get; set; }
+        public double crop_width { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
             crop_left = br.ReadDouble();
-crop_top = br.ReadDouble();
-crop_width = br.ReadDouble();
+            crop_top = br.ReadDouble();
+            crop_width = br.ReadDouble();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
+            bw.Write(Constructor);
             bw.Write(crop_left);
-bw.Write(crop_top);
-bw.Write(crop_width);
+            bw.Write(crop_top);
+            bw.Write(crop_width);
 
         }
     }

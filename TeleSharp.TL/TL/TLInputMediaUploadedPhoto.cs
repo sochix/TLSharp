@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(-139464256)]
+    [TLObject(-139464256)]
     public class TLInputMediaUploadedPhoto : TLAbsInputMedia
     {
         public override int Constructor
@@ -18,27 +18,27 @@ namespace TeleSharp.TL
             }
         }
 
-             public TLAbsInputFile file {get;set;}
-     public string caption {get;set;}
+        public TLAbsInputFile file { get; set; }
+        public string caption { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
             file = (TLAbsInputFile)ObjectUtils.DeserializeObject(br);
-caption = StringUtil.Deserialize(br);
+            caption = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            ObjectUtils.SerializeObject(file,bw);
-StringUtil.Serialize(caption,bw);
+            bw.Write(Constructor);
+            ObjectUtils.SerializeObject(file, bw);
+            StringUtil.Serialize(caption, bw);
 
         }
     }

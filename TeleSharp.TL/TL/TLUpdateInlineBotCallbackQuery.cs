@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(750622127)]
+    [TLObject(750622127)]
     public class TLUpdateInlineBotCallbackQuery : TLAbsUpdate
     {
         public override int Constructor
@@ -18,33 +18,33 @@ namespace TeleSharp.TL
             }
         }
 
-             public long query_id {get;set;}
-     public int user_id {get;set;}
-     public TLInputBotInlineMessageID msg_id {get;set;}
-     public byte[] data {get;set;}
+        public long query_id { get; set; }
+        public int user_id { get; set; }
+        public TLInputBotInlineMessageID msg_id { get; set; }
+        public byte[] data { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
             query_id = br.ReadInt64();
-user_id = br.ReadInt32();
-msg_id = (TLInputBotInlineMessageID)ObjectUtils.DeserializeObject(br);
-data = BytesUtil.Deserialize(br);
+            user_id = br.ReadInt32();
+            msg_id = (TLInputBotInlineMessageID)ObjectUtils.DeserializeObject(br);
+            data = BytesUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
+            bw.Write(Constructor);
             bw.Write(query_id);
-bw.Write(user_id);
-ObjectUtils.SerializeObject(msg_id,bw);
-BytesUtil.Serialize(data,bw);
+            bw.Write(user_id);
+            ObjectUtils.SerializeObject(msg_id, bw);
+            BytesUtil.Serialize(data, bw);
 
         }
     }

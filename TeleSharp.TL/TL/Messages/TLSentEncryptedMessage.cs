@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Messages
 {
-	[TLObject(1443858741)]
+    [TLObject(1443858741)]
     public class TLSentEncryptedMessage : TLAbsSentEncryptedMessage
     {
         public override int Constructor
@@ -18,13 +18,13 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-             public int date {get;set;}
+        public int date { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,7 +34,7 @@ namespace TeleSharp.TL.Messages
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
+            bw.Write(Constructor);
             bw.Write(date);
 
         }
