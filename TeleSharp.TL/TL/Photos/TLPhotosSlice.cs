@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Photos
 	[TLObject(352657236)]
     public class TLPhotosSlice : TLAbsPhotos
     {
+
+		
         public override int Constructor
         {
             get
@@ -22,7 +24,13 @@ namespace TeleSharp.TL.Photos
      public TLVector<TLAbsPhoto> photos {get;set;}
      public TLVector<TLAbsUser> users {get;set;}
 
-
+		public TLPhotosSlice (){}
+		public TLPhotosSlice (int count ,TLVector<TLAbsPhoto> photos ,TLVector<TLAbsUser> users ){
+			this.count = count; 
+this.photos = photos; 
+this.users = users; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

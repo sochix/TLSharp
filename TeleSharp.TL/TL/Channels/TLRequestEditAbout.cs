@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Channels
             }
         }
 
-                public TLAbsInputChannel channel {get;set;}
-        public string about {get;set;}
+                private TLAbsInputChannel channel {get;set;}
+        private string about {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestEditAbout (TLAbsInputChannel channel ,string about ){
+			this.channel = channel; 
+this.about = about; 
+	
+		}
 
 		public void ComputeFlags()
 		{

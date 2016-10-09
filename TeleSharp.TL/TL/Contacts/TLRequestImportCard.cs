@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Contacts
             }
         }
 
-                public TLVector<int> export_card {get;set;}
+                private TLVector<int> export_card {get;set;}
         public TLAbsUser Response{ get; set;}
 
+		
+		public TLRequestImportCard (TLVector<int> export_card ){
+			this.export_card = export_card; 
+	
+		}
 
 		public void ComputeFlags()
 		{

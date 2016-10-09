@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1494273227)]
     public class TLDocumentAttributeVideo : TLAbsDocumentAttribute
     {
+
+		
         public override int Constructor
         {
             get
@@ -22,7 +24,13 @@ namespace TeleSharp.TL
      public int w {get;set;}
      public int h {get;set;}
 
-
+		public TLDocumentAttributeVideo (){}
+		public TLDocumentAttributeVideo (int duration ,int w ,int h ){
+			this.duration = duration; 
+this.w = w; 
+this.h = h; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1032140601)]
     public class TLBotCommand : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL
              public string command {get;set;}
      public string description {get;set;}
 
-
+		public TLBotCommand (){}
+		public TLBotCommand (string command ,string description ){
+			this.command = command; 
+this.description = description; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

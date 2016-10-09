@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1218642516)]
     public class TLReplyInlineMarkup : TLAbsReplyMarkup
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public TLVector<TLKeyboardButtonRow> rows {get;set;}
 
-
+		public TLReplyInlineMarkup (){}
+		public TLReplyInlineMarkup (TLVector<TLKeyboardButtonRow> rows ){
+			this.rows = rows; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

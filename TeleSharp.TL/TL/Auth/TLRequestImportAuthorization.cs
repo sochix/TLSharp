@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Auth
             }
         }
 
-                public int id {get;set;}
-        public byte[] bytes {get;set;}
+                private int id {get;set;}
+        private byte[] bytes {get;set;}
         public Auth.TLAuthorization Response{ get; set;}
 
+		
+		public TLRequestImportAuthorization (int id ,byte[] bytes ){
+			this.id = id; 
+this.bytes = bytes; 
+	
+		}
 
 		public void ComputeFlags()
 		{

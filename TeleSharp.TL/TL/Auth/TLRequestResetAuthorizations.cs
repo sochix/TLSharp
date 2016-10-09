@@ -20,6 +20,10 @@ namespace TeleSharp.TL.Auth
 
                 public bool Response{ get; set;}
 
+		
+		public TLRequestResetAuthorizations (){
+				
+		}
 
 		public void ComputeFlags()
 		{

@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public int chat_id {get;set;}
-        public string title {get;set;}
+                private int chat_id {get;set;}
+        private string title {get;set;}
         public TLAbsUpdates Response{ get; set;}
 
+		
+		public TLRequestEditChatTitle (int chat_id ,string title ){
+			this.chat_id = chat_id; 
+this.title = title; 
+	
+		}
 
 		public void ComputeFlags()
 		{

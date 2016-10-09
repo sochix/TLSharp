@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-3644025)]
     public class TLInputMessagesFilterGif : TLAbsMessagesFilter
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLInputMessagesFilterGif (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

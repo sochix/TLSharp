@@ -18,11 +18,18 @@ namespace TeleSharp.TL.Channels
             }
         }
 
-                public TLAbsInputChannel channel {get;set;}
-        public TLAbsInputUser user_id {get;set;}
-        public TLVector<int> id {get;set;}
+                private TLAbsInputChannel channel {get;set;}
+        private TLAbsInputUser user_id {get;set;}
+        private TLVector<int> id {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestReportSpam (TLAbsInputChannel channel ,TLAbsInputUser user_id ,TLVector<int> id ){
+			this.channel = channel; 
+this.user_id = user_id; 
+this.id = id; 
+	
+		}
 
 		public void ComputeFlags()
 		{

@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Messages
 	[TLObject(-1269012015)]
     public class TLAffectedHistory : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -22,7 +24,13 @@ namespace TeleSharp.TL.Messages
      public int pts_count {get;set;}
      public int offset {get;set;}
 
-
+		public TLAffectedHistory (){}
+		public TLAffectedHistory (int pts ,int pts_count ,int offset ){
+			this.pts = pts; 
+this.pts_count = pts_count; 
+this.offset = offset; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

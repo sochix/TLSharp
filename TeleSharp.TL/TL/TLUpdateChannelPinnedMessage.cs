@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1738988427)]
     public class TLUpdateChannelPinnedMessage : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL
              public int channel_id {get;set;}
      public int id {get;set;}
 
-
+		public TLUpdateChannelPinnedMessage (){}
+		public TLUpdateChannelPinnedMessage (int channel_id ,int id ){
+			this.channel_id = channel_id; 
+this.id = id; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

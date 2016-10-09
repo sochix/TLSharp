@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Account
             }
         }
 
-                public int period {get;set;}
+                private int period {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestUpdateDeviceLocked (int period ){
+			this.period = period; 
+	
+		}
 
 		public void ComputeFlags()
 		{

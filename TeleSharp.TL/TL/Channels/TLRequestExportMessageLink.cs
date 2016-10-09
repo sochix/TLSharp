@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Channels
             }
         }
 
-                public TLAbsInputChannel channel {get;set;}
-        public int id {get;set;}
+                private TLAbsInputChannel channel {get;set;}
+        private int id {get;set;}
         public TLExportedMessageLink Response{ get; set;}
 
+		
+		public TLRequestExportMessageLink (TLAbsInputChannel channel ,int id ){
+			this.channel = channel; 
+this.id = id; 
+	
+		}
 
 		public void ComputeFlags()
 		{

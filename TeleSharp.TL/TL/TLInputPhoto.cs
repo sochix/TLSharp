@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-74070332)]
     public class TLInputPhoto : TLAbsInputPhoto
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL
              public long id {get;set;}
      public long access_hash {get;set;}
 
-
+		public TLInputPhoto (){}
+		public TLInputPhoto (long id ,long access_hash ){
+			this.id = id; 
+this.access_hash = access_hash; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

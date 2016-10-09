@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1500747636)]
     public class TLUpdateBotCallbackQuery : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -24,7 +26,15 @@ namespace TeleSharp.TL
      public int msg_id {get;set;}
      public byte[] data {get;set;}
 
-
+		public TLUpdateBotCallbackQuery (){}
+		public TLUpdateBotCallbackQuery (long query_id ,int user_id ,TLAbsPeer peer ,int msg_id ,byte[] data ){
+			this.query_id = query_id; 
+this.user_id = user_id; 
+this.peer = peer; 
+this.msg_id = msg_id; 
+this.data = data; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

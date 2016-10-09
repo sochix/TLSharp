@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1551583367)]
     public class TLReceivedNotifyMessage : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,11 @@ namespace TeleSharp.TL
              public int id {get;set;}
      public int flags {get;set;}
 
-
+		public TLReceivedNotifyMessage (){}
+		public TLReceivedNotifyMessage (int id ){
+			this.id = id; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

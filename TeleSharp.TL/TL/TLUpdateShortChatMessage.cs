@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(377562760)]
     public class TLUpdateShortChatMessage : TLAbsUpdates
     {
+
+		
         public override int Constructor
         {
             get
@@ -35,7 +37,25 @@ namespace TeleSharp.TL
      public int? reply_to_msg_id {get;set;}
      public TLVector<TLAbsMessageEntity> entities {get;set;}
 
-
+		public TLUpdateShortChatMessage (){}
+		public TLUpdateShortChatMessage (bool @out ,bool mentioned ,bool media_unread ,bool silent ,int id ,int from_id ,int chat_id ,string message ,int pts ,int pts_count ,int date ,TLMessageFwdHeader fwd_from ,int? via_bot_id ,int? reply_to_msg_id ,TLVector<TLAbsMessageEntity> entities ){
+			this.@out = @out; 
+this.mentioned = mentioned; 
+this.media_unread = media_unread; 
+this.silent = silent; 
+this.id = id; 
+this.from_id = from_id; 
+this.chat_id = chat_id; 
+this.message = message; 
+this.pts = pts; 
+this.pts_count = pts_count; 
+this.date = date; 
+this.fwd_from = fwd_from; 
+this.via_bot_id = via_bot_id; 
+this.reply_to_msg_id = reply_to_msg_id; 
+this.entities = entities; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

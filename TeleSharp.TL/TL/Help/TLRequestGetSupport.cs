@@ -20,6 +20,10 @@ namespace TeleSharp.TL.Help
 
                 public Help.TLSupport Response{ get; set;}
 
+		
+		public TLRequestGetSupport (){
+				
+		}
 
 		public void ComputeFlags()
 		{

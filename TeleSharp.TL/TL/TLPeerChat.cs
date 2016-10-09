@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1160714821)]
     public class TLPeerChat : TLAbsPeer
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public int chat_id {get;set;}
 
-
+		public TLPeerChat (){}
+		public TLPeerChat (int chat_id ){
+			this.chat_id = chat_id; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

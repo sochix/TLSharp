@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1377390588)]
     public class TLInputPhotoCropAuto : TLAbsInputPhotoCrop
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLInputPhotoCropAuto (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

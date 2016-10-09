@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1996904104)]
     public class TLInputAppEvent : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -23,7 +25,14 @@ namespace TeleSharp.TL
      public long peer {get;set;}
      public string data {get;set;}
 
-
+		public TLInputAppEvent (){}
+		public TLInputAppEvent (double time ,string type ,long peer ,string data ){
+			this.time = time; 
+this.type = type; 
+this.peer = peer; 
+this.data = data; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

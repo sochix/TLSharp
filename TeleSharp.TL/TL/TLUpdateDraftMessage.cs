@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-299124375)]
     public class TLUpdateDraftMessage : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL
              public TLAbsPeer peer {get;set;}
      public TLAbsDraftMessage draft {get;set;}
 
-
+		public TLUpdateDraftMessage (){}
+		public TLUpdateDraftMessage (TLAbsPeer peer ,TLAbsDraftMessage draft ){
+			this.peer = peer; 
+this.draft = draft; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

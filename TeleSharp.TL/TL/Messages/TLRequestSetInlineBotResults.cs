@@ -18,16 +18,27 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public int flags {get;set;}
-        public bool gallery {get;set;}
-        public bool @private {get;set;}
-        public long query_id {get;set;}
-        public TLVector<TLAbsInputBotInlineResult> results {get;set;}
-        public int cache_time {get;set;}
-        public string next_offset {get;set;}
-        public TLInlineBotSwitchPM switch_pm {get;set;}
+                private int flags {get;set;}
+        private bool gallery {get;set;}
+        private bool @private {get;set;}
+        private long query_id {get;set;}
+        private TLVector<TLAbsInputBotInlineResult> results {get;set;}
+        private int cache_time {get;set;}
+        private string next_offset {get;set;}
+        private TLInlineBotSwitchPM switch_pm {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestSetInlineBotResults (bool gallery ,bool @private ,long query_id ,TLVector<TLAbsInputBotInlineResult> results ,int cache_time ,string next_offset ,TLInlineBotSwitchPM switch_pm ){
+			this.gallery = gallery; 
+this.@private = @private; 
+this.query_id = query_id; 
+this.results = results; 
+this.cache_time = cache_time; 
+this.next_offset = next_offset; 
+this.switch_pm = switch_pm; 
+	
+		}
 
 		public void ComputeFlags()
 		{

@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(537022650)]
     public class TLUserEmpty : TLAbsUser
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public int id {get;set;}
 
-
+		public TLUserEmpty (){}
+		public TLUserEmpty (int id ){
+			this.id = id; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

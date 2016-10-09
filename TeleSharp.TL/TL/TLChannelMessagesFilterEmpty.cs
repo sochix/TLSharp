@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1798033689)]
     public class TLChannelMessagesFilterEmpty : TLAbsChannelMessagesFilter
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLChannelMessagesFilterEmpty (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

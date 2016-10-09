@@ -13,31 +13,31 @@ namespace TeleSharp.TL
         
         public abstract void deserializeResponse(BinaryReader stream);
         #region MTPROTO
-        public long MessageId { get; set; }
-        public int Sequence { get; set; }
-        public bool Dirty { get; set; }
-        public bool Sended { get; private set; }
-        public DateTime SendTime { get; private set; }
-        public bool ConfirmReceived { get; set; }
-        public virtual bool Confirmed { get; } = true;
-        public virtual bool Responded { get; } = false;
+        public long MTMessageId { get; set; }
+        public int MTSequence { get; set; }
+        public bool MTDirty { get; set; }
+        public bool MTSended { get; private set; }
+        public DateTime MTSendTime { get; private set; }
+        public bool MTConfirmReceived { get; set; }
+        public virtual bool MTConfirmed { get; } = true;
+        public virtual bool MTResponded { get; } = false;
 
         public virtual void OnSendSuccess()
         {
-            SendTime = DateTime.Now;
-            Sended = true;
+            MTSendTime = DateTime.Now;
+            MTSended = true;
         }
 
         public virtual void OnConfirm()
         {
-            ConfirmReceived = true;
+            MTConfirmReceived = true;
         }
 
         public bool NeedResend
         {
             get
             {
-                return Dirty || (Confirmed && !ConfirmReceived && DateTime.Now - SendTime > TimeSpan.FromSeconds(3));
+                return MTDirty || (MTConfirmed && !MTConfirmReceived && DateTime.Now - MTSendTime > TimeSpan.FromSeconds(3));
             }
         }
         #endregion

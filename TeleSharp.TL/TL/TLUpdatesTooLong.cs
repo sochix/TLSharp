@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-484987010)]
     public class TLUpdatesTooLong : TLAbsUpdates
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLUpdatesTooLong (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Auth
 	[TLObject(1035688326)]
     public class TLSentCodeTypeApp : TLAbsSentCodeType
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL.Auth
 
              public int length {get;set;}
 
-
+		public TLSentCodeTypeApp (){}
+		public TLSentCodeTypeApp (int length ){
+			this.length = length; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

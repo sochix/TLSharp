@@ -18,12 +18,20 @@ namespace TeleSharp.TL.Auth
             }
         }
 
-                public long perm_auth_key_id {get;set;}
-        public long nonce {get;set;}
-        public int expires_at {get;set;}
-        public byte[] encrypted_message {get;set;}
+                private long perm_auth_key_id {get;set;}
+        private long nonce {get;set;}
+        private int expires_at {get;set;}
+        private byte[] encrypted_message {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestBindTempAuthKey (long perm_auth_key_id ,long nonce ,int expires_at ,byte[] encrypted_message ){
+			this.perm_auth_key_id = perm_auth_key_id; 
+this.nonce = nonce; 
+this.expires_at = expires_at; 
+this.encrypted_message = encrypted_message; 
+	
+		}
 
 		public void ComputeFlags()
 		{

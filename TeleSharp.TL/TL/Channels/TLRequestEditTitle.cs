@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Channels
             }
         }
 
-                public TLAbsInputChannel channel {get;set;}
-        public string title {get;set;}
+                private TLAbsInputChannel channel {get;set;}
+        private string title {get;set;}
         public TLAbsUpdates Response{ get; set;}
 
+		
+		public TLRequestEditTitle (TLAbsInputChannel channel ,string title ){
+			this.channel = channel; 
+this.title = title; 
+	
+		}
 
 		public void ComputeFlags()
 		{

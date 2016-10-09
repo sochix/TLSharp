@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(393186209)]
     public class TLSendMessageGeoLocationAction : TLAbsSendMessageAction
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLSendMessageGeoLocationAction (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(2002815875)]
     public class TLKeyboardButtonRow : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public TLVector<TLAbsKeyboardButton> buttons {get;set;}
 
-
+		public TLKeyboardButtonRow (){}
+		public TLKeyboardButtonRow (TLVector<TLAbsKeyboardButton> buttons ){
+			this.buttons = buttons; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

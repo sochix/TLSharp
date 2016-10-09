@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-64092740)]
     public class TLChatInviteExported : TLAbsExportedChatInvite
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public string link {get;set;}
 
-
+		public TLChatInviteExported (){}
+		public TLChatInviteExported (string link ){
+			this.link = link; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

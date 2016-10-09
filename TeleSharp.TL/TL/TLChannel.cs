@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1588737454)]
     public class TLChannel : TLAbsChat
     {
+
+		
         public override int Constructor
         {
             get
@@ -40,7 +42,30 @@ namespace TeleSharp.TL
      public int version {get;set;}
      public string restriction_reason {get;set;}
 
-
+		public TLChannel (){}
+		public TLChannel (bool creator ,bool kicked ,bool left ,bool editor ,bool moderator ,bool broadcast ,bool verified ,bool megagroup ,bool restricted ,bool democracy ,bool signatures ,bool min ,int id ,long? access_hash ,string title ,string username ,TLAbsChatPhoto photo ,int date ,int version ,string restriction_reason ){
+			this.creator = creator; 
+this.kicked = kicked; 
+this.left = left; 
+this.editor = editor; 
+this.moderator = moderator; 
+this.broadcast = broadcast; 
+this.verified = verified; 
+this.megagroup = megagroup; 
+this.restricted = restricted; 
+this.democracy = democracy; 
+this.signatures = signatures; 
+this.min = min; 
+this.id = id; 
+this.access_hash = access_hash; 
+this.title = title; 
+this.username = username; 
+this.photo = photo; 
+this.date = date; 
+this.version = version; 
+this.restriction_reason = restriction_reason; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

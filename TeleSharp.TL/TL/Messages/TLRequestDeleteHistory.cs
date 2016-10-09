@@ -18,12 +18,19 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public int flags {get;set;}
-        public bool just_clear {get;set;}
-        public TLAbsInputPeer peer {get;set;}
-        public int max_id {get;set;}
+                private int flags {get;set;}
+        private bool just_clear {get;set;}
+        private TLAbsInputPeer peer {get;set;}
+        private int max_id {get;set;}
         public Messages.TLAffectedHistory Response{ get; set;}
 
+		
+		public TLRequestDeleteHistory (bool just_clear ,TLAbsInputPeer peer ,int max_id ){
+			this.just_clear = just_clear; 
+this.peer = peer; 
+this.max_id = max_id; 
+	
+		}
 
 		public void ComputeFlags()
 		{

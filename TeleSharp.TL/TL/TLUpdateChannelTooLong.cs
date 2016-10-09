@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-352032773)]
     public class TLUpdateChannelTooLong : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -22,7 +24,12 @@ namespace TeleSharp.TL
      public int channel_id {get;set;}
      public int? pts {get;set;}
 
-
+		public TLUpdateChannelTooLong (){}
+		public TLUpdateChannelTooLong (int channel_id ,int? pts ){
+			this.channel_id = channel_id; 
+this.pts = pts; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(372165663)]
     public class TLFoundGif : TLAbsFoundGif
     {
+
+		
         public override int Constructor
         {
             get
@@ -25,7 +27,16 @@ namespace TeleSharp.TL
      public int w {get;set;}
      public int h {get;set;}
 
-
+		public TLFoundGif (){}
+		public TLFoundGif (string url ,string thumb_url ,string content_url ,string content_type ,int w ,int h ){
+			this.url = url; 
+this.thumb_url = thumb_url; 
+this.content_url = content_url; 
+this.content_type = content_type; 
+this.w = w; 
+this.h = h; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

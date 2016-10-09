@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1548249383)]
     public class TLUpdateUserTyping : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL
              public int user_id {get;set;}
      public TLAbsSendMessageAction action {get;set;}
 
-
+		public TLUpdateUserTyping (){}
+		public TLUpdateUserTyping (int user_id ,TLAbsSendMessageAction action ){
+			this.user_id = user_id; 
+this.action = action; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

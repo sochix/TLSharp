@@ -18,19 +18,33 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public int flags {get;set;}
-        public bool no_webpage {get;set;}
-        public bool silent {get;set;}
-        public bool background {get;set;}
-        public bool clear_draft {get;set;}
-        public TLAbsInputPeer peer {get;set;}
-        public int? reply_to_msg_id {get;set;}
-        public string message {get;set;}
-        public long random_id {get;set;}
-        public TLAbsReplyMarkup reply_markup {get;set;}
-        public TLVector<TLAbsMessageEntity> entities {get;set;}
+                private int flags {get;set;}
+        private bool no_webpage {get;set;}
+        private bool silent {get;set;}
+        private bool background {get;set;}
+        private bool clear_draft {get;set;}
+        private TLAbsInputPeer peer {get;set;}
+        private int? reply_to_msg_id {get;set;}
+        private string message {get;set;}
+        private long random_id {get;set;}
+        private TLAbsReplyMarkup reply_markup {get;set;}
+        private TLVector<TLAbsMessageEntity> entities {get;set;}
         public TLAbsUpdates Response{ get; set;}
 
+		
+		public TLRequestSendMessage (bool no_webpage ,bool silent ,bool background ,bool clear_draft ,TLAbsInputPeer peer ,int? reply_to_msg_id ,string message ,long random_id ,TLAbsReplyMarkup reply_markup ,TLVector<TLAbsMessageEntity> entities ){
+			this.no_webpage = no_webpage; 
+this.silent = silent; 
+this.background = background; 
+this.clear_draft = clear_draft; 
+this.peer = peer; 
+this.reply_to_msg_id = reply_to_msg_id; 
+this.message = message; 
+this.random_id = random_id; 
+this.reply_markup = reply_markup; 
+this.entities = entities; 
+	
+		}
 
 		public void ComputeFlags()
 		{

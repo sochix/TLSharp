@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(286776671)]
     public class TLGeoPointEmpty : TLAbsGeoPoint
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLGeoPointEmpty (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

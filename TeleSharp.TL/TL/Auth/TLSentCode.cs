@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Auth
 	[TLObject(1577067778)]
     public class TLSentCode : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -25,7 +27,15 @@ namespace TeleSharp.TL.Auth
      public Auth.TLAbsCodeType next_type {get;set;}
      public int? timeout {get;set;}
 
-
+		public TLSentCode (){}
+		public TLSentCode (bool phone_registered ,Auth.TLAbsSentCodeType type ,string phone_code_hash ,Auth.TLAbsCodeType next_type ,int? timeout ){
+			this.phone_registered = phone_registered; 
+this.type = type; 
+this.phone_code_hash = phone_code_hash; 
+this.next_type = next_type; 
+this.timeout = timeout; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

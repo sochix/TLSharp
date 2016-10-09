@@ -20,6 +20,10 @@ namespace TeleSharp.TL.Help
 
                 public Help.TLTermsOfService Response{ get; set;}
 
+		
+		public TLRequestGetTermsOfService (){
+				
+		}
 
 		public void ComputeFlags()
 		{

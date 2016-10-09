@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(949182130)]
     public class TLInputPeerNotifySettings : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -24,7 +26,14 @@ namespace TeleSharp.TL
      public int mute_until {get;set;}
      public string sound {get;set;}
 
-
+		public TLInputPeerNotifySettings (){}
+		public TLInputPeerNotifySettings (bool show_previews ,bool silent ,int mute_until ,string sound ){
+			this.show_previews = show_previews; 
+this.silent = silent; 
+this.mute_until = mute_until; 
+this.sound = sound; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

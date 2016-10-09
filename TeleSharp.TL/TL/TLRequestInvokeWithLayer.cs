@@ -18,10 +18,16 @@ namespace TeleSharp.TL
             }
         }
 
-                public int layer {get;set;}
-        public TLObject query {get;set;}
+                private int layer {get;set;}
+        private TLObject query {get;set;}
         public TLObject Response{ get; set;}
 
+		
+		public TLRequestInvokeWithLayer (int layer ,TLObject query ){
+			this.layer = layer; 
+this.query = query; 
+	
+		}
 
 		public void ComputeFlags()
 		{

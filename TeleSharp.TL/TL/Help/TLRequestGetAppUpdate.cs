@@ -20,6 +20,10 @@ namespace TeleSharp.TL.Help
 
                 public Help.TLAbsAppUpdate Response{ get; set;}
 
+		
+		public TLRequestGetAppUpdate (){
+				
+		}
 
 		public void ComputeFlags()
 		{

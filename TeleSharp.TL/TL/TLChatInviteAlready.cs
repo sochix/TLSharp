@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1516793212)]
     public class TLChatInviteAlready : TLAbsChatInvite
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public TLAbsChat chat {get;set;}
 
-
+		public TLChatInviteAlready (){}
+		public TLChatInviteAlready (TLAbsChat chat ){
+			this.chat = chat; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

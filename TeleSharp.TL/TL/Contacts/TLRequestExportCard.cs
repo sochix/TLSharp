@@ -20,6 +20,10 @@ namespace TeleSharp.TL.Contacts
 
                 public TLVector<int> Response{ get; set;}
 
+		
+		public TLRequestExportCard (){
+				
+		}
 
 		public void ComputeFlags()
 		{

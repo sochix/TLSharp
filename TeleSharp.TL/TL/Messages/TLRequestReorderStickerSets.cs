@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public TLVector<long> order {get;set;}
+                private TLVector<long> order {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestReorderStickerSets (TLVector<long> order ){
+			this.order = order; 
+	
+		}
 
 		public void ComputeFlags()
 		{

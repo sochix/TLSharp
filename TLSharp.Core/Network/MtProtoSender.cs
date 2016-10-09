@@ -67,7 +67,7 @@ namespace TLSharp.Core.Network
 
         public async Task Send(byte[] packet, TeleSharp.TL.TLMethod request)
         {
-            request.MessageId = _session.GetNewMessageId();
+            request.MTMessageId = _session.GetNewMessageId();
 
             byte[] msgKey;
             byte[] ciphertext;
@@ -77,8 +77,8 @@ namespace TLSharp.Core.Network
                 {
                     plaintextWriter.Write(_session.Salt);
                     plaintextWriter.Write(_session.Id);
-                    plaintextWriter.Write(request.MessageId);
-                    plaintextWriter.Write(GenerateSequence(request.Confirmed));
+                    plaintextWriter.Write(request.MTMessageId);
+                    plaintextWriter.Write(GenerateSequence(request.MTConfirmed));
                     plaintextWriter.Write(packet.Length);
                     plaintextWriter.Write(packet);
 
@@ -134,7 +134,7 @@ namespace TLSharp.Core.Network
 
         public async Task<byte[]> Receive(TeleSharp.TL.TLMethod request)
         {
-            while (!request.ConfirmReceived)
+            while (!request.MTConfirmReceived)
             {
                 var result = DecodeMessage((await _transport.Receieve()).Body);
 
@@ -243,8 +243,8 @@ namespace TLSharp.Core.Network
             uint code = messageReader.ReadUInt32();
             ulong requestId = messageReader.ReadUInt64();
 
-            if (requestId == (ulong)request.MessageId)
-                request.ConfirmReceived = true;
+            if (requestId == (ulong)request.MTMessageId)
+                request.MTConfirmReceived = true;
 
             //throw new NotImplementedException();
             /*

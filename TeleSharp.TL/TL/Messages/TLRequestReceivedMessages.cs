@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public int max_id {get;set;}
+                private int max_id {get;set;}
         public TLVector<TLReceivedNotifyMessage> Response{ get; set;}
 
+		
+		public TLRequestReceivedMessages (int max_id ){
+			this.max_id = max_id; 
+	
+		}
 
 		public void ComputeFlags()
 		{

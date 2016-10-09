@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(791617983)]
     public class TLUpdateReadHistoryOutbox : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -23,7 +25,14 @@ namespace TeleSharp.TL
      public int pts {get;set;}
      public int pts_count {get;set;}
 
-
+		public TLUpdateReadHistoryOutbox (){}
+		public TLUpdateReadHistoryOutbox (TLAbsPeer peer ,int max_id ,int pts ,int pts_count ){
+			this.peer = peer; 
+this.max_id = max_id; 
+this.pts = pts; 
+this.pts_count = pts_count; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

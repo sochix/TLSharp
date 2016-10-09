@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-897446185)]
     public class TLWebPage : TLAbsWebPage
     {
+
+		
         public override int Constructor
         {
             get
@@ -35,7 +37,25 @@ namespace TeleSharp.TL
      public string author {get;set;}
      public TLAbsDocument document {get;set;}
 
-
+		public TLWebPage (){}
+		public TLWebPage (long id ,string url ,string display_url ,string type ,string site_name ,string title ,string description ,TLAbsPhoto photo ,string embed_url ,string embed_type ,int? embed_width ,int? embed_height ,int? duration ,string author ,TLAbsDocument document ){
+			this.id = id; 
+this.url = url; 
+this.display_url = display_url; 
+this.type = type; 
+this.site_name = site_name; 
+this.title = title; 
+this.description = description; 
+this.photo = photo; 
+this.embed_url = embed_url; 
+this.embed_type = embed_type; 
+this.embed_width = embed_width; 
+this.embed_height = embed_height; 
+this.duration = duration; 
+this.author = author; 
+this.document = document; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

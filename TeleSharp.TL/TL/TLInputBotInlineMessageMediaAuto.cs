@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(691006739)]
     public class TLInputBotInlineMessageMediaAuto : TLAbsInputBotInlineMessage
     {
+
+		
         public override int Constructor
         {
             get
@@ -22,7 +24,12 @@ namespace TeleSharp.TL
      public string caption {get;set;}
      public TLAbsReplyMarkup reply_markup {get;set;}
 
-
+		public TLInputBotInlineMessageMediaAuto (){}
+		public TLInputBotInlineMessageMediaAuto (string caption ,TLAbsReplyMarkup reply_markup ){
+			this.caption = caption; 
+this.reply_markup = reply_markup; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Channels
 	[TLObject(-177282392)]
     public class TLChannelParticipants : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -22,7 +24,13 @@ namespace TeleSharp.TL.Channels
      public TLVector<TLAbsChannelParticipant> participants {get;set;}
      public TLVector<TLAbsUser> users {get;set;}
 
-
+		public TLChannelParticipants (){}
+		public TLChannelParticipants (int count ,TLVector<TLAbsChannelParticipant> participants ,TLVector<TLAbsUser> users ){
+			this.count = count; 
+this.participants = participants; 
+this.users = users; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

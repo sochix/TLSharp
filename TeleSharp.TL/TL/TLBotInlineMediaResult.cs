@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(400266251)]
     public class TLBotInlineMediaResult : TLAbsBotInlineResult
     {
+
+		
         public override int Constructor
         {
             get
@@ -27,7 +29,17 @@ namespace TeleSharp.TL
      public string description {get;set;}
      public TLAbsBotInlineMessage send_message {get;set;}
 
-
+		public TLBotInlineMediaResult (){}
+		public TLBotInlineMediaResult (string id ,string type ,TLAbsPhoto photo ,TLAbsDocument document ,string title ,string description ,TLAbsBotInlineMessage send_message ){
+			this.id = id; 
+this.type = type; 
+this.photo = photo; 
+this.document = document; 
+this.title = title; 
+this.description = description; 
+this.send_message = send_message; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

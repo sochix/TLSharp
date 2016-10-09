@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Updates
 	[TLObject(-1519637954)]
     public class TLState : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -24,7 +26,15 @@ namespace TeleSharp.TL.Updates
      public int seq {get;set;}
      public int unread_count {get;set;}
 
-
+		public TLState (){}
+		public TLState (int pts ,int qts ,int date ,int seq ,int unread_count ){
+			this.pts = pts; 
+this.qts = qts; 
+this.date = date; 
+this.seq = seq; 
+this.unread_count = unread_count; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

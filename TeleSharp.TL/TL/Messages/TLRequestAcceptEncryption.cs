@@ -18,11 +18,18 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public TLInputEncryptedChat peer {get;set;}
-        public byte[] g_b {get;set;}
-        public long key_fingerprint {get;set;}
+                private TLInputEncryptedChat peer {get;set;}
+        private byte[] g_b {get;set;}
+        private long key_fingerprint {get;set;}
         public TLAbsEncryptedChat Response{ get; set;}
 
+		
+		public TLRequestAcceptEncryption (TLInputEncryptedChat peer ,byte[] g_b ,long key_fingerprint ){
+			this.peer = peer; 
+this.g_b = g_b; 
+this.key_fingerprint = key_fingerprint; 
+	
+		}
 
 		public void ComputeFlags()
 		{

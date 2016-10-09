@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-847783593)]
     public class TLChannelMessagesFilter : TLAbsChannelMessagesFilter
     {
+
+		
         public override int Constructor
         {
             get
@@ -22,7 +24,12 @@ namespace TeleSharp.TL
      public bool exclude_new_messages {get;set;}
      public TLVector<TLMessageRange> ranges {get;set;}
 
-
+		public TLChannelMessagesFilter (){}
+		public TLChannelMessagesFilter (bool exclude_new_messages ,TLVector<TLMessageRange> ranges ){
+			this.exclude_new_messages = exclude_new_messages; 
+this.ranges = ranges; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

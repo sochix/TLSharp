@@ -18,15 +18,26 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public TLAbsInputPeer peer {get;set;}
-        public int offset_id {get;set;}
-        public int offset_date {get;set;}
-        public int add_offset {get;set;}
-        public int limit {get;set;}
-        public int max_id {get;set;}
-        public int min_id {get;set;}
+                private TLAbsInputPeer peer {get;set;}
+        private int offset_id {get;set;}
+        private int offset_date {get;set;}
+        private int add_offset {get;set;}
+        private int limit {get;set;}
+        private int max_id {get;set;}
+        private int min_id {get;set;}
         public Messages.TLAbsMessages Response{ get; set;}
 
+		
+		public TLRequestGetHistory (TLAbsInputPeer peer ,int offset_id ,int offset_date ,int add_offset ,int limit ,int max_id ,int min_id ){
+			this.peer = peer; 
+this.offset_id = offset_id; 
+this.offset_date = offset_date; 
+this.add_offset = add_offset; 
+this.limit = limit; 
+this.max_id = max_id; 
+this.min_id = min_id; 
+	
+		}
 
 		public void ComputeFlags()
 		{

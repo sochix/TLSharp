@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Account
 	[TLObject(-1212732749)]
     public class TLPasswordSettings : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL.Account
 
              public string email {get;set;}
 
-
+		public TLPasswordSettings (){}
+		public TLPasswordSettings (string email ){
+			this.email = email; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1063525281)]
     public class TLMessage : TLAbsMessage
     {
+
+		
         public override int Constructor
         {
             get
@@ -38,7 +40,28 @@ namespace TeleSharp.TL
      public int? views {get;set;}
      public int? edit_date {get;set;}
 
-
+		public TLMessage (){}
+		public TLMessage (bool @out ,bool mentioned ,bool media_unread ,bool silent ,bool post ,int id ,int? from_id ,TLAbsPeer to_id ,TLMessageFwdHeader fwd_from ,int? via_bot_id ,int? reply_to_msg_id ,int date ,string message ,TLAbsMessageMedia media ,TLAbsReplyMarkup reply_markup ,TLVector<TLAbsMessageEntity> entities ,int? views ,int? edit_date ){
+			this.@out = @out; 
+this.mentioned = mentioned; 
+this.media_unread = media_unread; 
+this.silent = silent; 
+this.post = post; 
+this.id = id; 
+this.from_id = from_id; 
+this.to_id = to_id; 
+this.fwd_from = fwd_from; 
+this.via_bot_id = via_bot_id; 
+this.reply_to_msg_id = reply_to_msg_id; 
+this.date = date; 
+this.message = message; 
+this.media = media; 
+this.reply_markup = reply_markup; 
+this.entities = entities; 
+this.views = views; 
+this.edit_date = edit_date; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

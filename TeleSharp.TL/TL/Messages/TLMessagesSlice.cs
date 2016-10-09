@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Messages
 	[TLObject(189033187)]
     public class TLMessagesSlice : TLAbsMessages
     {
+
+		
         public override int Constructor
         {
             get
@@ -23,7 +25,14 @@ namespace TeleSharp.TL.Messages
      public TLVector<TLAbsChat> chats {get;set;}
      public TLVector<TLAbsUser> users {get;set;}
 
-
+		public TLMessagesSlice (){}
+		public TLMessagesSlice (int count ,TLVector<TLAbsMessage> messages ,TLVector<TLAbsChat> chats ,TLVector<TLAbsUser> users ){
+			this.count = count; 
+this.messages = messages; 
+this.chats = chats; 
+this.users = users; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

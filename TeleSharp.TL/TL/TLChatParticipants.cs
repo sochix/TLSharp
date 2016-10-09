@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1061556205)]
     public class TLChatParticipants : TLAbsChatParticipants
     {
+
+		
         public override int Constructor
         {
             get
@@ -22,7 +24,13 @@ namespace TeleSharp.TL
      public TLVector<TLAbsChatParticipant> participants {get;set;}
      public int version {get;set;}
 
-
+		public TLChatParticipants (){}
+		public TLChatParticipants (int chat_id ,TLVector<TLAbsChatParticipant> participants ,int version ){
+			this.chat_id = chat_id; 
+this.participants = participants; 
+this.version = version; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(182649427)]
     public class TLMessageRange : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL
              public int min_id {get;set;}
      public int max_id {get;set;}
 
-
+		public TLMessageRange (){}
+		public TLMessageRange (int min_id ,int max_id ){
+			this.min_id = min_id; 
+this.max_id = max_id; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

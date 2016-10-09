@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Help
 	[TLObject(-236044656)]
     public class TLTermsOfService : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL.Help
 
              public string text {get;set;}
 
-
+		public TLTermsOfService (){}
+		public TLTermsOfService (string text ){
+			this.text = text; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

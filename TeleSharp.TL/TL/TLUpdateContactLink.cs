@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1657903163)]
     public class TLUpdateContactLink : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -22,7 +24,13 @@ namespace TeleSharp.TL
      public TLAbsContactLink my_link {get;set;}
      public TLAbsContactLink foreign_link {get;set;}
 
-
+		public TLUpdateContactLink (){}
+		public TLUpdateContactLink (int user_id ,TLAbsContactLink my_link ,TLAbsContactLink foreign_link ){
+			this.user_id = user_id; 
+this.my_link = my_link; 
+this.foreign_link = foreign_link; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

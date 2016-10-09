@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public TLInputEncryptedChat peer {get;set;}
-        public bool typing {get;set;}
+                private TLInputEncryptedChat peer {get;set;}
+        private bool typing {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestSetEncryptedTyping (TLInputEncryptedChat peer ,bool typing ){
+			this.peer = peer; 
+this.typing = typing; 
+	
+		}
 
 		public void ComputeFlags()
 		{

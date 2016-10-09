@@ -18,14 +18,23 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public int flags {get;set;}
-        public TLAbsInputUser bot {get;set;}
-        public TLAbsInputPeer peer {get;set;}
-        public TLAbsInputGeoPoint geo_point {get;set;}
-        public string query {get;set;}
-        public string offset {get;set;}
+                private int flags {get;set;}
+        private TLAbsInputUser bot {get;set;}
+        private TLAbsInputPeer peer {get;set;}
+        private TLAbsInputGeoPoint geo_point {get;set;}
+        private string query {get;set;}
+        private string offset {get;set;}
         public Messages.TLBotResults Response{ get; set;}
 
+		
+		public TLRequestGetInlineBotResults (TLAbsInputUser bot ,TLAbsInputPeer peer ,TLAbsInputGeoPoint geo_point ,string query ,string offset ){
+			this.bot = bot; 
+this.peer = peer; 
+this.geo_point = geo_point; 
+this.query = query; 
+this.offset = offset; 
+	
+		}
 
 		public void ComputeFlags()
 		{

@@ -18,12 +18,19 @@ namespace TeleSharp.TL.Auth
             }
         }
 
-                public int flags {get;set;}
-        public int api_id {get;set;}
-        public string api_hash {get;set;}
-        public string bot_auth_token {get;set;}
+                private int flags {get;set;}
+        private int api_id {get;set;}
+        private string api_hash {get;set;}
+        private string bot_auth_token {get;set;}
         public Auth.TLAuthorization Response{ get; set;}
 
+		
+		public TLRequestImportBotAuthorization (int api_id ,string api_hash ,string bot_auth_token ){
+			this.api_id = api_id; 
+this.api_hash = api_hash; 
+this.bot_auth_token = bot_auth_token; 
+	
+		}
 
 		public void ComputeFlags()
 		{

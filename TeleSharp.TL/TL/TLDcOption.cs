@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(98092748)]
     public class TLDcOption : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -26,7 +28,16 @@ namespace TeleSharp.TL
      public string ip_address {get;set;}
      public int port {get;set;}
 
-
+		public TLDcOption (){}
+		public TLDcOption (bool ipv6 ,bool media_only ,bool tcpo_only ,int id ,string ip_address ,int port ){
+			this.ipv6 = ipv6; 
+this.media_only = media_only; 
+this.tcpo_only = tcpo_only; 
+this.id = id; 
+this.ip_address = ip_address; 
+this.port = port; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

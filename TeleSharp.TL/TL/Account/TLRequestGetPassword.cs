@@ -20,6 +20,10 @@ namespace TeleSharp.TL.Account
 
                 public Account.TLAbsPassword Response{ get; set;}
 
+		
+		public TLRequestGetPassword (){
+				
+		}
 
 		public void ComputeFlags()
 		{

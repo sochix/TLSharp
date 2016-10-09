@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-947462709)]
     public class TLMessageFwdHeader : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -24,7 +26,14 @@ namespace TeleSharp.TL
      public int? channel_id {get;set;}
      public int? channel_post {get;set;}
 
-
+		public TLMessageFwdHeader (){}
+		public TLMessageFwdHeader (int? from_id ,int date ,int? channel_id ,int? channel_post ){
+			this.from_id = from_id; 
+this.date = date; 
+this.channel_id = channel_id; 
+this.channel_post = channel_post; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

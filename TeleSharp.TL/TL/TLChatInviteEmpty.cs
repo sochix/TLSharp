@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1776236393)]
     public class TLChatInviteEmpty : TLAbsExportedChatInvite
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLChatInviteEmpty (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

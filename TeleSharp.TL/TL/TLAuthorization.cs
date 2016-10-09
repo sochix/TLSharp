@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(2079516406)]
     public class TLAuthorization : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -32,7 +34,22 @@ namespace TeleSharp.TL
      public string country {get;set;}
      public string region {get;set;}
 
-
+		public TLAuthorization (){}
+		public TLAuthorization (long hash ,string device_model ,string platform ,string system_version ,int api_id ,string app_name ,string app_version ,int date_created ,int date_active ,string ip ,string country ,string region ){
+			this.hash = hash; 
+this.device_model = device_model; 
+this.platform = platform; 
+this.system_version = system_version; 
+this.api_id = api_id; 
+this.app_name = app_name; 
+this.app_version = app_version; 
+this.date_created = date_created; 
+this.date_active = date_active; 
+this.ip = ip; 
+this.country = country; 
+this.region = region; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1955338397)]
     public class TLPrivacyValueDisallowAll : TLAbsPrivacyRule
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLPrivacyValueDisallowAll (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

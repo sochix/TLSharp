@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(922273905)]
     public class TLDocumentEmpty : TLAbsDocument
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public long id {get;set;}
 
-
+		public TLDocumentEmpty (){}
+		public TLDocumentEmpty (long id ){
+			this.id = id; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

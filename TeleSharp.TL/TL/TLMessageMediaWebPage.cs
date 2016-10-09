@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1557277184)]
     public class TLMessageMediaWebPage : TLAbsMessageMedia
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public TLAbsWebPage webpage {get;set;}
 
-
+		public TLMessageMediaWebPage (){}
+		public TLMessageMediaWebPage (TLAbsWebPage webpage ){
+			this.webpage = webpage; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public TLAbsInputPeer peer {get;set;}
-        public TLAbsSendMessageAction action {get;set;}
+                private TLAbsInputPeer peer {get;set;}
+        private TLAbsSendMessageAction action {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestSetTyping (TLAbsInputPeer peer ,TLAbsSendMessageAction action ){
+			this.peer = peer; 
+this.action = action; 
+	
+		}
 
 		public void ComputeFlags()
 		{

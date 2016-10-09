@@ -20,6 +20,10 @@ namespace TeleSharp.TL.Help
 
                 public TLNearestDc Response{ get; set;}
 
+		
+		public TLRequestGetNearestDc (){
+				
+		}
 
 		public void ComputeFlags()
 		{

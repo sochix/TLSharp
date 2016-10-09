@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Auth
 	[TLObject(326715557)]
     public class TLPasswordRecovery : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL.Auth
 
              public string email_pattern {get;set;}
 
-
+		public TLPasswordRecovery (){}
+		public TLPasswordRecovery (string email_pattern ){
+			this.email_pattern = email_pattern; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

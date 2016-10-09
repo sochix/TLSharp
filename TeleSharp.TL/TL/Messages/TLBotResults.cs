@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Messages
 	[TLObject(627509670)]
     public class TLBotResults : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -25,7 +27,15 @@ namespace TeleSharp.TL.Messages
      public TLInlineBotSwitchPM switch_pm {get;set;}
      public TLVector<TLAbsBotInlineResult> results {get;set;}
 
-
+		public TLBotResults (){}
+		public TLBotResults (bool gallery ,long query_id ,string next_offset ,TLInlineBotSwitchPM switch_pm ,TLVector<TLAbsBotInlineResult> results ){
+			this.gallery = gallery; 
+this.query_id = query_id; 
+this.next_offset = next_offset; 
+this.switch_pm = switch_pm; 
+this.results = results; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1791935732)]
     public class TLUpdateUserPhoto : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -23,7 +25,14 @@ namespace TeleSharp.TL
      public TLAbsUserProfilePhoto photo {get;set;}
      public bool previous {get;set;}
 
-
+		public TLUpdateUserPhoto (){}
+		public TLUpdateUserPhoto (int user_id ,int date ,TLAbsUserProfilePhoto photo ,bool previous ){
+			this.user_id = user_id; 
+this.date = date; 
+this.photo = photo; 
+this.previous = previous; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(546203849)]
     public class TLInputMessageEntityMentionName : TLAbsMessageEntity
     {
+
+		
         public override int Constructor
         {
             get
@@ -22,7 +24,13 @@ namespace TeleSharp.TL
      public int length {get;set;}
      public TLAbsInputUser user_id {get;set;}
 
-
+		public TLInputMessageEntityMentionName (){}
+		public TLInputMessageEntityMentionName (int offset ,int length ,TLAbsInputUser user_id ){
+			this.offset = offset; 
+this.length = length; 
+this.user_id = user_id; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

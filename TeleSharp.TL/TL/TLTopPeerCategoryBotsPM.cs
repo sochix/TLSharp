@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1419371685)]
     public class TLTopPeerCategoryBotsPM : TLAbsTopPeerCategory
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLTopPeerCategoryBotsPM (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

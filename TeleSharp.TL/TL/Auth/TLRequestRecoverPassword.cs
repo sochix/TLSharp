@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Auth
             }
         }
 
-                public string code {get;set;}
+                private string code {get;set;}
         public Auth.TLAuthorization Response{ get; set;}
 
+		
+		public TLRequestRecoverPassword (string code ){
+			this.code = code; 
+	
+		}
 
 		public void ComputeFlags()
 		{

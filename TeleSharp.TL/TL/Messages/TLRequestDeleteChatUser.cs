@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public int chat_id {get;set;}
-        public TLAbsInputUser user_id {get;set;}
+                private int chat_id {get;set;}
+        private TLAbsInputUser user_id {get;set;}
         public TLAbsUpdates Response{ get; set;}
 
+		
+		public TLRequestDeleteChatUser (int chat_id ,TLAbsInputUser user_id ){
+			this.chat_id = chat_id; 
+this.user_id = user_id; 
+	
+		}
 
 		public void ComputeFlags()
 		{

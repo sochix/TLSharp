@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Updates
 	[TLObject(1567990072)]
     public class TLDifferenceEmpty : TLAbsDifference
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL.Updates
              public int date {get;set;}
      public int seq {get;set;}
 
-
+		public TLDifferenceEmpty (){}
+		public TLDifferenceEmpty (int date ,int seq ){
+			this.date = date; 
+this.seq = seq; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

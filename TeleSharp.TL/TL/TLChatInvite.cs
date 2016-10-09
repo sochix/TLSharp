@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1813406880)]
     public class TLChatInvite : TLAbsChatInvite
     {
+
+		
         public override int Constructor
         {
             get
@@ -25,7 +27,15 @@ namespace TeleSharp.TL
      public bool megagroup {get;set;}
      public string title {get;set;}
 
-
+		public TLChatInvite (){}
+		public TLChatInvite (bool channel ,bool broadcast ,bool @public ,bool megagroup ,string title ){
+			this.channel = channel; 
+this.broadcast = broadcast; 
+this.@public = @public; 
+this.megagroup = megagroup; 
+this.title = title; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(301019932)]
     public class TLUpdateShortSentMessage : TLAbsUpdates
     {
+
+		
         public override int Constructor
         {
             get
@@ -27,7 +29,17 @@ namespace TeleSharp.TL
      public TLAbsMessageMedia media {get;set;}
      public TLVector<TLAbsMessageEntity> entities {get;set;}
 
-
+		public TLUpdateShortSentMessage (){}
+		public TLUpdateShortSentMessage (bool @out ,int id ,int pts ,int pts_count ,int date ,TLAbsMessageMedia media ,TLVector<TLAbsMessageEntity> entities ){
+			this.@out = @out; 
+this.id = id; 
+this.pts = pts; 
+this.pts_count = pts_count; 
+this.date = date; 
+this.media = media; 
+this.entities = entities; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

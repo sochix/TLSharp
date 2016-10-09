@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Photos
             }
         }
 
-                public TLVector<TLAbsInputPhoto> id {get;set;}
+                private TLVector<TLAbsInputPhoto> id {get;set;}
         public TLVector<long> Response{ get; set;}
 
+		
+		public TLRequestDeletePhotos (TLVector<TLAbsInputPhoto> id ){
+			this.id = id; 
+	
+		}
 
 		public void ComputeFlags()
 		{

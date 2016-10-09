@@ -18,11 +18,18 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public TLAbsInputPeer peer {get;set;}
-        public TLVector<int> id {get;set;}
-        public bool increment {get;set;}
+                private TLAbsInputPeer peer {get;set;}
+        private TLVector<int> id {get;set;}
+        private bool increment {get;set;}
         public TLVector<int> Response{ get; set;}
 
+		
+		public TLRequestGetMessagesViews (TLAbsInputPeer peer ,TLVector<int> id ,bool increment ){
+			this.peer = peer; 
+this.id = id; 
+this.increment = increment; 
+	
+		}
 
 		public void ComputeFlags()
 		{

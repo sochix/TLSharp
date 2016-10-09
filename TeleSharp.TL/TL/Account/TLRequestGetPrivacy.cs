@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Account
             }
         }
 
-                public TLAbsInputPrivacyKey key {get;set;}
+                private TLAbsInputPrivacyKey key {get;set;}
         public Account.TLPrivacyRules Response{ get; set;}
 
+		
+		public TLRequestGetPrivacy (TLAbsInputPrivacyKey key ){
+			this.key = key; 
+	
+		}
 
 		public void ComputeFlags()
 		{

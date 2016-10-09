@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-373312269)]
     public class TLInputMediaPhoto : TLAbsInputMedia
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL
              public TLAbsInputPhoto id {get;set;}
      public string caption {get;set;}
 
-
+		public TLInputMediaPhoto (){}
+		public TLInputMediaPhoto (TLAbsInputPhoto id ,string caption ){
+			this.id = id; 
+this.caption = caption; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

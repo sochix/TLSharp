@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Users
             }
         }
 
-                public TLVector<TLAbsInputUser> id {get;set;}
+                private TLVector<TLAbsInputUser> id {get;set;}
         public TLVector<TLAbsUser> Response{ get; set;}
 
+		
+		public TLRequestGetUsers (TLVector<TLAbsInputUser> id ){
+			this.id = id; 
+	
+		}
 
 		public void ComputeFlags()
 		{

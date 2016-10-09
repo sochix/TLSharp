@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-469536605)]
     public class TLUpdateEditMessage : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -22,7 +24,13 @@ namespace TeleSharp.TL
      public int pts {get;set;}
      public int pts_count {get;set;}
 
-
+		public TLUpdateEditMessage (){}
+		public TLUpdateEditMessage (TLAbsMessage message ,int pts ,int pts_count ){
+			this.message = message; 
+this.pts = pts; 
+this.pts_count = pts_count; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

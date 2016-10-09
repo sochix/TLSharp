@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Messages
 	[TLObject(772213157)]
     public class TLSavedGifs : TLAbsSavedGifs
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL.Messages
              public int hash {get;set;}
      public TLVector<TLAbsDocument> gifs {get;set;}
 
-
+		public TLSavedGifs (){}
+		public TLSavedGifs (int hash ,TLVector<TLAbsDocument> gifs ){
+			this.hash = hash; 
+this.gifs = gifs; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

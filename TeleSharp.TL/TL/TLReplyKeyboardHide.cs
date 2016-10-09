@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1606526075)]
     public class TLReplyKeyboardHide : TLAbsReplyMarkup
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,11 @@ namespace TeleSharp.TL
              public int flags {get;set;}
      public bool selective {get;set;}
 
-
+		public TLReplyKeyboardHide (){}
+		public TLReplyKeyboardHide (bool selective ){
+			this.selective = selective; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

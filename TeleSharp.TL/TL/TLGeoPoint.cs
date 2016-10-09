@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(541710092)]
     public class TLGeoPoint : TLAbsGeoPoint
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL
              public double @long {get;set;}
      public double lat {get;set;}
 
-
+		public TLGeoPoint (){}
+		public TLGeoPoint (double @long ,double lat ){
+			this.@long = @long; 
+this.lat = lat; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

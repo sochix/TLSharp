@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1868782349)]
     public class TLMessageEntityHashtag : TLAbsMessageEntity
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL
              public int offset {get;set;}
      public int length {get;set;}
 
-
+		public TLMessageEntityHashtag (){}
+		public TLMessageEntityHashtag (int offset ,int length ){
+			this.offset = offset; 
+this.length = length; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

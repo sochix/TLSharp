@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Messages
 	[TLObject(-402498398)]
     public class TLSavedGifsNotModified : TLAbsSavedGifs
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL.Messages
         }
 
         
-
+		
+		public TLSavedGifsNotModified (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

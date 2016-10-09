@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-306628279)]
     public class TLUserStatusOnline : TLAbsUserStatus
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public int expires {get;set;}
 
-
+		public TLUserStatusOnline (){}
+		public TLUserStatusOnline (int expires ){
+			this.expires = expires; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

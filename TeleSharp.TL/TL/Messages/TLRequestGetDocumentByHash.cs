@@ -18,11 +18,18 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public byte[] sha256 {get;set;}
-        public int size {get;set;}
-        public string mime_type {get;set;}
+                private byte[] sha256 {get;set;}
+        private int size {get;set;}
+        private string mime_type {get;set;}
         public TLAbsDocument Response{ get; set;}
 
+		
+		public TLRequestGetDocumentByHash (byte[] sha256 ,int size ,string mime_type ){
+			this.sha256 = sha256; 
+this.size = size; 
+this.mime_type = mime_type; 
+	
+		}
 
 		public void ComputeFlags()
 		{

@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Contacts
 	[TLObject(-1878523231)]
     public class TLBlockedSlice : TLAbsBlocked
     {
+
+		
         public override int Constructor
         {
             get
@@ -22,7 +24,13 @@ namespace TeleSharp.TL.Contacts
      public TLVector<TLContactBlocked> blocked {get;set;}
      public TLVector<TLAbsUser> users {get;set;}
 
-
+		public TLBlockedSlice (){}
+		public TLBlockedSlice (int count ,TLVector<TLContactBlocked> blocked ,TLVector<TLAbsUser> users ){
+			this.count = count; 
+this.blocked = blocked; 
+this.users = users; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

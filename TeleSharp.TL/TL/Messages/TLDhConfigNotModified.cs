@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Messages
 	[TLObject(-1058912715)]
     public class TLDhConfigNotModified : TLAbsDhConfig
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL.Messages
 
              public byte[] random {get;set;}
 
-
+		public TLDhConfigNotModified (){}
+		public TLDhConfigNotModified (byte[] random ){
+			this.random = random; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

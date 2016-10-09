@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Channels
             }
         }
 
-                public TLAbsInputChannel channel {get;set;}
-        public int max_id {get;set;}
+                private TLAbsInputChannel channel {get;set;}
+        private int max_id {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestReadHistory (TLAbsInputChannel channel ,int max_id ){
+			this.channel = channel; 
+this.max_id = max_id; 
+	
+		}
 
 		public void ComputeFlags()
 		{

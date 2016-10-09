@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(956179895)]
     public class TLUpdateEncryptedMessagesRead : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -22,7 +24,13 @@ namespace TeleSharp.TL
      public int max_date {get;set;}
      public int date {get;set;}
 
-
+		public TLUpdateEncryptedMessagesRead (){}
+		public TLUpdateEncryptedMessagesRead (int chat_id ,int max_date ,int date ){
+			this.chat_id = chat_id; 
+this.max_date = max_date; 
+this.date = date; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

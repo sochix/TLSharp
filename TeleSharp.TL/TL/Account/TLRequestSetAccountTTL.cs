@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Account
             }
         }
 
-                public TLAccountDaysTTL ttl {get;set;}
+                private TLAccountDaysTTL ttl {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestSetAccountTTL (TLAccountDaysTTL ttl ){
+			this.ttl = ttl; 
+	
+		}
 
 		public void ComputeFlags()
 		{

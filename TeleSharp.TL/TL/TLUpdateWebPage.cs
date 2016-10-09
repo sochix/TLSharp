@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(2139689491)]
     public class TLUpdateWebPage : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -22,7 +24,13 @@ namespace TeleSharp.TL
      public int pts {get;set;}
      public int pts_count {get;set;}
 
-
+		public TLUpdateWebPage (){}
+		public TLUpdateWebPage (TLAbsWebPage webpage ,int pts ,int pts_count ){
+			this.webpage = webpage; 
+this.pts = pts; 
+this.pts_count = pts_count; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

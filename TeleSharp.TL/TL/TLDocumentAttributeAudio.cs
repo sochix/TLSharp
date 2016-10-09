@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1739392570)]
     public class TLDocumentAttributeAudio : TLAbsDocumentAttribute
     {
+
+		
         public override int Constructor
         {
             get
@@ -25,7 +27,15 @@ namespace TeleSharp.TL
      public string performer {get;set;}
      public byte[] waveform {get;set;}
 
-
+		public TLDocumentAttributeAudio (){}
+		public TLDocumentAttributeAudio (bool voice ,int duration ,string title ,string performer ,byte[] waveform ){
+			this.voice = voice; 
+this.duration = duration; 
+this.title = title; 
+this.performer = performer; 
+this.waveform = waveform; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Auth
             }
         }
 
-                public byte[] password_hash {get;set;}
+                private byte[] password_hash {get;set;}
         public Auth.TLAuthorization Response{ get; set;}
 
+		
+		public TLRequestCheckPassword (byte[] password_hash ){
+			this.password_hash = password_hash; 
+	
+		}
 
 		public void ComputeFlags()
 		{

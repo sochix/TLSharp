@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-2044933984)]
     public class TLInputStickerSetShortName : TLAbsInputStickerSet
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public string short_name {get;set;}
 
-
+		public TLInputStickerSetShortName (){}
+		public TLInputStickerSetShortName (string short_name ){
+			this.short_name = short_name; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

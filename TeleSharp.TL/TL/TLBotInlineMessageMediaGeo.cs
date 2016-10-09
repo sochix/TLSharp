@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(982505656)]
     public class TLBotInlineMessageMediaGeo : TLAbsBotInlineMessage
     {
+
+		
         public override int Constructor
         {
             get
@@ -22,7 +24,12 @@ namespace TeleSharp.TL
      public TLAbsGeoPoint geo {get;set;}
      public TLAbsReplyMarkup reply_markup {get;set;}
 
-
+		public TLBotInlineMessageMediaGeo (){}
+		public TLBotInlineMessageMediaGeo (TLAbsGeoPoint geo ,TLAbsReplyMarkup reply_markup ){
+			this.geo = geo; 
+this.reply_markup = reply_markup; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

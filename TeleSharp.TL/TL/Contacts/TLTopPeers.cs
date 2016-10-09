@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Contacts
 	[TLObject(1891070632)]
     public class TLTopPeers : TLAbsTopPeers
     {
+
+		
         public override int Constructor
         {
             get
@@ -22,7 +24,13 @@ namespace TeleSharp.TL.Contacts
      public TLVector<TLAbsChat> chats {get;set;}
      public TLVector<TLAbsUser> users {get;set;}
 
-
+		public TLTopPeers (){}
+		public TLTopPeers (TLVector<TLTopPeerCategoryPeers> categories ,TLVector<TLAbsChat> chats ,TLVector<TLAbsUser> users ){
+			this.categories = categories; 
+this.chats = chats; 
+this.users = users; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

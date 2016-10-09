@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Storage
 	[TLObject(8322574)]
     public class TLFileJpeg : TLAbsFileType
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL.Storage
         }
 
         
-
+		
+		public TLFileJpeg (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

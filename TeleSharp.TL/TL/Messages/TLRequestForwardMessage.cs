@@ -18,11 +18,18 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public TLAbsInputPeer peer {get;set;}
-        public int id {get;set;}
-        public long random_id {get;set;}
+                private TLAbsInputPeer peer {get;set;}
+        private int id {get;set;}
+        private long random_id {get;set;}
         public TLAbsUpdates Response{ get; set;}
 
+		
+		public TLRequestForwardMessage (TLAbsInputPeer peer ,int id ,long random_id ){
+			this.peer = peer; 
+this.id = id; 
+this.random_id = random_id; 
+	
+		}
 
 		public void ComputeFlags()
 		{

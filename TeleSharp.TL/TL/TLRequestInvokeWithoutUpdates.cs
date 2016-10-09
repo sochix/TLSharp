@@ -18,9 +18,14 @@ namespace TeleSharp.TL
             }
         }
 
-                public TLObject query {get;set;}
+                private TLObject query {get;set;}
         public TLObject Response{ get; set;}
 
+		
+		public TLRequestInvokeWithoutUpdates (TLObject query ){
+			this.query = query; 
+	
+		}
 
 		public void ComputeFlags()
 		{

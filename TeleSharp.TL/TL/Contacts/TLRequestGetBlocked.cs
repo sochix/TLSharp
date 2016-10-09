@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Contacts
             }
         }
 
-                public int offset {get;set;}
-        public int limit {get;set;}
+                private int offset {get;set;}
+        private int limit {get;set;}
         public Contacts.TLAbsBlocked Response{ get; set;}
 
+		
+		public TLRequestGetBlocked (int offset ,int limit ){
+			this.offset = offset; 
+this.limit = limit; 
+	
+		}
 
 		public void ComputeFlags()
 		{

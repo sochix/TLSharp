@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(766443943)]
     public class TLInputBotInlineMessageMediaContact : TLAbsInputBotInlineMessage
     {
+
+		
         public override int Constructor
         {
             get
@@ -24,7 +26,14 @@ namespace TeleSharp.TL
      public string last_name {get;set;}
      public TLAbsReplyMarkup reply_markup {get;set;}
 
-
+		public TLInputBotInlineMessageMediaContact (){}
+		public TLInputBotInlineMessageMediaContact (string phone_number ,string first_name ,string last_name ,TLAbsReplyMarkup reply_markup ){
+			this.phone_number = phone_number; 
+this.first_name = first_name; 
+this.last_name = last_name; 
+this.reply_markup = reply_markup; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

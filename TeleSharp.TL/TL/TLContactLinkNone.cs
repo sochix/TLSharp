@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-17968211)]
     public class TLContactLinkNone : TLAbsContactLink
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLContactLinkNone (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

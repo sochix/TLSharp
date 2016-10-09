@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Channels
             }
         }
 
-                public TLAbsInputChannel channel {get;set;}
-        public TLAbsInputChatPhoto photo {get;set;}
+                private TLAbsInputChannel channel {get;set;}
+        private TLAbsInputChatPhoto photo {get;set;}
         public TLAbsUpdates Response{ get; set;}
 
+		
+		public TLRequestEditPhoto (TLAbsInputChannel channel ,TLAbsInputChatPhoto photo ){
+			this.channel = channel; 
+this.photo = photo; 
+	
+		}
 
 		public void ComputeFlags()
 		{

@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-918482040)]
     public class TLConfig : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -40,7 +42,31 @@ namespace TeleSharp.TL
      public int rating_e_decay {get;set;}
      public TLVector<TLDisabledFeature> disabled_features {get;set;}
 
-
+		public TLConfig (){}
+		public TLConfig (int date ,int expires ,bool test_mode ,int this_dc ,TLVector<TLDcOption> dc_options ,int chat_size_max ,int megagroup_size_max ,int forwarded_count_max ,int online_update_period_ms ,int offline_blur_timeout_ms ,int offline_idle_timeout_ms ,int online_cloud_timeout_ms ,int notify_cloud_delay_ms ,int notify_default_delay_ms ,int chat_big_size ,int push_chat_period_ms ,int push_chat_limit ,int saved_gifs_limit ,int edit_time_limit ,int rating_e_decay ,TLVector<TLDisabledFeature> disabled_features ){
+			this.date = date; 
+this.expires = expires; 
+this.test_mode = test_mode; 
+this.this_dc = this_dc; 
+this.dc_options = dc_options; 
+this.chat_size_max = chat_size_max; 
+this.megagroup_size_max = megagroup_size_max; 
+this.forwarded_count_max = forwarded_count_max; 
+this.online_update_period_ms = online_update_period_ms; 
+this.offline_blur_timeout_ms = offline_blur_timeout_ms; 
+this.offline_idle_timeout_ms = offline_idle_timeout_ms; 
+this.online_cloud_timeout_ms = online_cloud_timeout_ms; 
+this.notify_cloud_delay_ms = notify_cloud_delay_ms; 
+this.notify_default_delay_ms = notify_default_delay_ms; 
+this.chat_big_size = chat_big_size; 
+this.push_chat_period_ms = push_chat_period_ms; 
+this.push_chat_limit = push_chat_limit; 
+this.saved_gifs_limit = saved_gifs_limit; 
+this.edit_time_limit = edit_time_limit; 
+this.rating_e_decay = rating_e_decay; 
+this.disabled_features = disabled_features; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

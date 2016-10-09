@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1135492588)]
     public class TLUpdateStickerSets : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLUpdateStickerSets (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

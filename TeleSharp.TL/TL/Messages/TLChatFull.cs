@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Messages
 	[TLObject(-438840932)]
     public class TLChatFull : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -22,7 +24,13 @@ namespace TeleSharp.TL.Messages
      public TLVector<TLAbsChat> chats {get;set;}
      public TLVector<TLAbsUser> users {get;set;}
 
-
+		public TLChatFull (){}
+		public TLChatFull (TLAbsChatFull full_chat ,TLVector<TLAbsChat> chats ,TLVector<TLAbsUser> users ){
+			this.full_chat = full_chat; 
+this.chats = chats; 
+this.users = users; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

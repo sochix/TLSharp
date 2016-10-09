@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Storage
 	[TLObject(1258941372)]
     public class TLFileMov : TLAbsFileType
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL.Storage
         }
 
         
-
+		
+		public TLFileMov (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

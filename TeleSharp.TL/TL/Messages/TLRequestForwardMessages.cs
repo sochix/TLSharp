@@ -18,15 +18,25 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public int flags {get;set;}
-        public bool silent {get;set;}
-        public bool background {get;set;}
-        public TLAbsInputPeer from_peer {get;set;}
-        public TLVector<int> id {get;set;}
-        public TLVector<long> random_id {get;set;}
-        public TLAbsInputPeer to_peer {get;set;}
+                private int flags {get;set;}
+        private bool silent {get;set;}
+        private bool background {get;set;}
+        private TLAbsInputPeer from_peer {get;set;}
+        private TLVector<int> id {get;set;}
+        private TLVector<long> random_id {get;set;}
+        private TLAbsInputPeer to_peer {get;set;}
         public TLAbsUpdates Response{ get; set;}
 
+		
+		public TLRequestForwardMessages (bool silent ,bool background ,TLAbsInputPeer from_peer ,TLVector<int> id ,TLVector<long> random_id ,TLAbsInputPeer to_peer ){
+			this.silent = silent; 
+this.background = background; 
+this.from_peer = from_peer; 
+this.id = id; 
+this.random_id = random_id; 
+this.to_peer = to_peer; 
+	
+		}
 
 		public void ComputeFlags()
 		{

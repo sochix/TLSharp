@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1462213465)]
     public class TLInputBotInlineResultPhoto : TLAbsInputBotInlineResult
     {
+
+		
         public override int Constructor
         {
             get
@@ -23,7 +25,14 @@ namespace TeleSharp.TL
      public TLAbsInputPhoto photo {get;set;}
      public TLAbsInputBotInlineMessage send_message {get;set;}
 
-
+		public TLInputBotInlineResultPhoto (){}
+		public TLInputBotInlineResultPhoto (string id ,string type ,TLAbsInputPhoto photo ,TLAbsInputBotInlineMessage send_message ){
+			this.id = id; 
+this.type = type; 
+this.photo = photo; 
+this.send_message = send_message; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

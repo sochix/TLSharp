@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1008755359)]
     public class TLInlineBotSwitchPM : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL
              public string text {get;set;}
      public string start_param {get;set;}
 
-
+		public TLInlineBotSwitchPM (){}
+		public TLInlineBotSwitchPM (string text ,string start_param ){
+			this.text = text; 
+this.start_param = start_param; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1230047312)]
     public class TLMessageActionEmpty : TLAbsMessageAction
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLMessageActionEmpty (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

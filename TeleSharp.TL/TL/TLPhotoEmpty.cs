@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(590459437)]
     public class TLPhotoEmpty : TLAbsPhoto
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public long id {get;set;}
 
-
+		public TLPhotoEmpty (){}
+		public TLPhotoEmpty (long id ){
+			this.id = id; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

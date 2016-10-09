@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1343524562)]
     public class TLInputChannel : TLAbsInputChannel
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL
              public int channel_id {get;set;}
      public long access_hash {get;set;}
 
-
+		public TLInputChannel (){}
+		public TLInputChannel (int channel_id ,long access_hash ){
+			this.channel_id = channel_id; 
+this.access_hash = access_hash; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

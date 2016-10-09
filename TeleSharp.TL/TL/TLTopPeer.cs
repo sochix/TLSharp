@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-305282981)]
     public class TLTopPeer : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL
              public TLAbsPeer peer {get;set;}
      public double rating {get;set;}
 
-
+		public TLTopPeer (){}
+		public TLTopPeer (TLAbsPeer peer ,double rating ){
+			this.peer = peer; 
+this.rating = rating; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

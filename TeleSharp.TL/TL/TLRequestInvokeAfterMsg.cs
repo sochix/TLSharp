@@ -18,10 +18,16 @@ namespace TeleSharp.TL
             }
         }
 
-                public long msg_id {get;set;}
-        public TLObject query {get;set;}
+                private long msg_id {get;set;}
+        private TLObject query {get;set;}
         public TLObject Response{ get; set;}
 
+		
+		public TLRequestInvokeAfterMsg (long msg_id ,TLObject query ){
+			this.msg_id = msg_id; 
+this.query = query; 
+	
+		}
 
 		public void ComputeFlags()
 		{

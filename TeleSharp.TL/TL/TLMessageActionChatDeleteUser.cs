@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1297179892)]
     public class TLMessageActionChatDeleteUser : TLAbsMessageAction
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public int user_id {get;set;}
 
-
+		public TLMessageActionChatDeleteUser (){}
+		public TLMessageActionChatDeleteUser (int user_id ){
+			this.user_id = user_id; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

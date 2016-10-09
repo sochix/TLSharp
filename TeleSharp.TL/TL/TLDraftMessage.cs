@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-40996577)]
     public class TLDraftMessage : TLAbsDraftMessage
     {
+
+		
         public override int Constructor
         {
             get
@@ -25,7 +27,15 @@ namespace TeleSharp.TL
      public TLVector<TLAbsMessageEntity> entities {get;set;}
      public int date {get;set;}
 
-
+		public TLDraftMessage (){}
+		public TLDraftMessage (bool no_webpage ,int? reply_to_msg_id ,string message ,TLVector<TLAbsMessageEntity> entities ,int date ){
+			this.no_webpage = no_webpage; 
+this.reply_to_msg_id = reply_to_msg_id; 
+this.message = message; 
+this.entities = entities; 
+this.date = date; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

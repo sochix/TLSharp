@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Auth
             }
         }
 
-                public int dc_id {get;set;}
+                private int dc_id {get;set;}
         public Auth.TLExportedAuthorization Response{ get; set;}
 
+		
+		public TLRequestExportAuthorization (int dc_id ){
+			this.dc_id = dc_id; 
+	
+		}
 
 		public void ComputeFlags()
 		{

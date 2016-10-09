@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public TLInputEncryptedChat peer {get;set;}
-        public int max_date {get;set;}
+                private TLInputEncryptedChat peer {get;set;}
+        private int max_date {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestReadEncryptedHistory (TLInputEncryptedChat peer ,int max_date ){
+			this.peer = peer; 
+this.max_date = max_date; 
+	
+		}
 
 		public void ComputeFlags()
 		{

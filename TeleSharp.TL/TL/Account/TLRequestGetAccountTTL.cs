@@ -20,6 +20,10 @@ namespace TeleSharp.TL.Account
 
                 public TLAccountDaysTTL Response{ get; set;}
 
+		
+		public TLRequestGetAccountTTL (){
+				
+		}
 
 		public void ComputeFlags()
 		{

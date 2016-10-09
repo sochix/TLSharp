@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public int chat_id {get;set;}
-        public bool enabled {get;set;}
+                private int chat_id {get;set;}
+        private bool enabled {get;set;}
         public TLAbsUpdates Response{ get; set;}
 
+		
+		public TLRequestToggleChatAdmins (int chat_id ,bool enabled ){
+			this.chat_id = chat_id; 
+this.enabled = enabled; 
+	
+		}
 
 		public void ComputeFlags()
 		{

@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(386986326)]
     public class TLUpdateEncryptedChatTyping : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public int chat_id {get;set;}
 
-
+		public TLUpdateEncryptedChatTyping (){}
+		public TLUpdateEncryptedChatTyping (int chat_id ){
+			this.chat_id = chat_id; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(942527460)]
     public class TLUpdateServiceNotification : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -23,7 +25,14 @@ namespace TeleSharp.TL
      public TLAbsMessageMedia media {get;set;}
      public bool popup {get;set;}
 
-
+		public TLUpdateServiceNotification (){}
+		public TLUpdateServiceNotification (string type ,string message ,TLAbsMessageMedia media ,bool popup ){
+			this.type = type; 
+this.message = message; 
+this.media = media; 
+this.popup = popup; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

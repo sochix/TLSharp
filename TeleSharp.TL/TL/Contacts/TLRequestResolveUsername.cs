@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Contacts
             }
         }
 
-                public string username {get;set;}
+                private string username {get;set;}
         public Contacts.TLResolvedPeer Response{ get; set;}
 
+		
+		public TLRequestResolveUsername (string username ){
+			this.username = username; 
+	
+		}
 
 		public void ComputeFlags()
 		{

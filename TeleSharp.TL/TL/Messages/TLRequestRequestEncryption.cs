@@ -18,11 +18,18 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public TLAbsInputUser user_id {get;set;}
-        public int random_id {get;set;}
-        public byte[] g_a {get;set;}
+                private TLAbsInputUser user_id {get;set;}
+        private int random_id {get;set;}
+        private byte[] g_a {get;set;}
         public TLAbsEncryptedChat Response{ get; set;}
 
+		
+		public TLRequestRequestEncryption (TLAbsInputUser user_id ,int random_id ,byte[] g_a ){
+			this.user_id = user_id; 
+this.random_id = random_id; 
+this.g_a = g_a; 
+	
+		}
 
 		public void ComputeFlags()
 		{

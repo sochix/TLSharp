@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public int max_qts {get;set;}
+                private int max_qts {get;set;}
         public TLVector<long> Response{ get; set;}
 
+		
+		public TLRequestReceivedQueue (int max_qts ){
+			this.max_qts = max_qts; 
+	
+		}
 
 		public void ComputeFlags()
 		{

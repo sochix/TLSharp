@@ -20,6 +20,10 @@ namespace TeleSharp.TL.Messages
 
                 public TLAbsUpdates Response{ get; set;}
 
+		
+		public TLRequestGetAllDrafts (){
+				
+		}
 
 		public void ComputeFlags()
 		{

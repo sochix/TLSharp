@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-378127636)]
     public class TLSendMessageUploadVideoAction : TLAbsSendMessageAction
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public int progress {get;set;}
 
-
+		public TLSendMessageUploadVideoAction (){}
+		public TLSendMessageUploadVideoAction (int progress ){
+			this.progress = progress; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

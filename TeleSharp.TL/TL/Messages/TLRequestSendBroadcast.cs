@@ -18,12 +18,20 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public TLVector<TLAbsInputUser> contacts {get;set;}
-        public TLVector<long> random_id {get;set;}
-        public string message {get;set;}
-        public TLAbsInputMedia media {get;set;}
+                private TLVector<TLAbsInputUser> contacts {get;set;}
+        private TLVector<long> random_id {get;set;}
+        private string message {get;set;}
+        private TLAbsInputMedia media {get;set;}
         public TLAbsUpdates Response{ get; set;}
 
+		
+		public TLRequestSendBroadcast (TLVector<TLAbsInputUser> contacts ,TLVector<long> random_id ,string message ,TLAbsInputMedia media ){
+			this.contacts = contacts; 
+this.random_id = random_id; 
+this.message = message; 
+this.media = media; 
+	
+		}
 
 		public void ComputeFlags()
 		{

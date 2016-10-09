@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(771925524)]
     public class TLChatFull : TLAbsChatFull
     {
+
+		
         public override int Constructor
         {
             get
@@ -25,7 +27,16 @@ namespace TeleSharp.TL
      public TLAbsExportedChatInvite exported_invite {get;set;}
      public TLVector<TLBotInfo> bot_info {get;set;}
 
-
+		public TLChatFull (){}
+		public TLChatFull (int id ,TLAbsChatParticipants participants ,TLAbsPhoto chat_photo ,TLAbsPeerNotifySettings notify_settings ,TLAbsExportedChatInvite exported_invite ,TLVector<TLBotInfo> bot_info ){
+			this.id = id; 
+this.participants = participants; 
+this.chat_photo = chat_photo; 
+this.notify_settings = notify_settings; 
+this.exported_invite = exported_invite; 
+this.bot_info = bot_info; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

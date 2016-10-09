@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Auth
 	[TLObject(-16553231)]
     public class TLAuthorization : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL.Auth
 
              public TLAbsUser user {get;set;}
 
-
+		public TLAuthorization (){}
+		public TLAuthorization (TLAbsUser user ){
+			this.user = user; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-840088834)]
     public class TLPhoto : TLAbsPhoto
     {
+
+		
         public override int Constructor
         {
             get
@@ -23,7 +25,14 @@ namespace TeleSharp.TL
      public int date {get;set;}
      public TLVector<TLAbsPhotoSize> sizes {get;set;}
 
-
+		public TLPhoto (){}
+		public TLPhoto (long id ,long access_hash ,int date ,TLVector<TLAbsPhotoSize> sizes ){
+			this.id = id; 
+this.access_hash = access_hash; 
+this.date = date; 
+this.sizes = sizes; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1457575028)]
     public class TLMessageMediaGeo : TLAbsMessageMedia
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public TLAbsGeoPoint geo {get;set;}
 
-
+		public TLMessageMediaGeo (){}
+		public TLMessageMediaGeo (TLAbsGeoPoint geo ){
+			this.geo = geo; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

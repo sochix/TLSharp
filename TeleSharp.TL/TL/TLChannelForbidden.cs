@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-2059962289)]
     public class TLChannelForbidden : TLAbsChat
     {
+
+		
         public override int Constructor
         {
             get
@@ -25,7 +27,15 @@ namespace TeleSharp.TL
      public long access_hash {get;set;}
      public string title {get;set;}
 
-
+		public TLChannelForbidden (){}
+		public TLChannelForbidden (bool broadcast ,bool megagroup ,int id ,long access_hash ,string title ){
+			this.broadcast = broadcast; 
+this.megagroup = megagroup; 
+this.id = id; 
+this.access_hash = access_hash; 
+this.title = title; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

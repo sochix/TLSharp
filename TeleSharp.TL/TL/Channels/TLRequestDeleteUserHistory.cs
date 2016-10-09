@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Channels
             }
         }
 
-                public TLAbsInputChannel channel {get;set;}
-        public TLAbsInputUser user_id {get;set;}
+                private TLAbsInputChannel channel {get;set;}
+        private TLAbsInputUser user_id {get;set;}
         public Messages.TLAffectedHistory Response{ get; set;}
 
+		
+		public TLRequestDeleteUserHistory (TLAbsInputChannel channel ,TLAbsInputUser user_id ){
+			this.channel = channel; 
+this.user_id = user_id; 
+	
+		}
 
 		public void ComputeFlags()
 		{

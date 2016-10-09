@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Contacts
 	[TLObject(-1387117803)]
     public class TLImportedContacts : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -22,7 +24,13 @@ namespace TeleSharp.TL.Contacts
      public TLVector<long> retry_contacts {get;set;}
      public TLVector<TLAbsUser> users {get;set;}
 
-
+		public TLImportedContacts (){}
+		public TLImportedContacts (TLVector<TLImportedContact> imported ,TLVector<long> retry_contacts ,TLVector<TLAbsUser> users ){
+			this.imported = imported; 
+this.retry_contacts = retry_contacts; 
+this.users = users; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

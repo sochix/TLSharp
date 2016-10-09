@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Channels
             }
         }
 
-                public TLAbsInputChannel channel {get;set;}
-        public TLVector<TLAbsInputUser> users {get;set;}
+                private TLAbsInputChannel channel {get;set;}
+        private TLVector<TLAbsInputUser> users {get;set;}
         public TLAbsUpdates Response{ get; set;}
 
+		
+		public TLRequestInviteToChannel (TLAbsInputChannel channel ,TLVector<TLAbsInputUser> users ){
+			this.channel = channel; 
+this.users = users; 
+	
+		}
 
 		public void ComputeFlags()
 		{

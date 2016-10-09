@@ -18,13 +18,22 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public string q {get;set;}
-        public int offset_date {get;set;}
-        public TLAbsInputPeer offset_peer {get;set;}
-        public int offset_id {get;set;}
-        public int limit {get;set;}
+                private string q {get;set;}
+        private int offset_date {get;set;}
+        private TLAbsInputPeer offset_peer {get;set;}
+        private int offset_id {get;set;}
+        private int limit {get;set;}
         public Messages.TLAbsMessages Response{ get; set;}
 
+		
+		public TLRequestSearchGlobal (string q ,int offset_date ,TLAbsInputPeer offset_peer ,int offset_id ,int limit ){
+			this.q = q; 
+this.offset_date = offset_date; 
+this.offset_peer = offset_peer; 
+this.offset_id = offset_id; 
+this.limit = limit; 
+	
+		}
 
 		public void ComputeFlags()
 		{

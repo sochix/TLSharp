@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-364179876)]
     public class TLUpdateChatParticipantAdd : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -24,7 +26,15 @@ namespace TeleSharp.TL
      public int date {get;set;}
      public int version {get;set;}
 
-
+		public TLUpdateChatParticipantAdd (){}
+		public TLUpdateChatParticipantAdd (int chat_id ,int user_id ,int inviter_id ,int date ,int version ){
+			this.chat_id = chat_id; 
+this.user_id = user_id; 
+this.inviter_id = inviter_id; 
+this.date = date; 
+this.version = version; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-181407105)]
     public class TLInputFile : TLAbsInputFile
     {
+
+		
         public override int Constructor
         {
             get
@@ -23,7 +25,14 @@ namespace TeleSharp.TL
      public string name {get;set;}
      public string md5_checksum {get;set;}
 
-
+		public TLInputFile (){}
+		public TLInputFile (long id ,int parts ,string name ,string md5_checksum ){
+			this.id = id; 
+this.parts = parts; 
+this.name = name; 
+this.md5_checksum = md5_checksum; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

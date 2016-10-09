@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Storage
 	[TLObject(1086091090)]
     public class TLFilePartial : TLAbsFileType
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL.Storage
         }
 
         
-
+		
+		public TLFilePartial (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

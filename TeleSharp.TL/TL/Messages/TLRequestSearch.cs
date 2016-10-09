@@ -18,17 +18,29 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public int flags {get;set;}
-        public TLAbsInputPeer peer {get;set;}
-        public string q {get;set;}
-        public TLAbsMessagesFilter filter {get;set;}
-        public int min_date {get;set;}
-        public int max_date {get;set;}
-        public int offset {get;set;}
-        public int max_id {get;set;}
-        public int limit {get;set;}
+                private int flags {get;set;}
+        private TLAbsInputPeer peer {get;set;}
+        private string q {get;set;}
+        private TLAbsMessagesFilter filter {get;set;}
+        private int min_date {get;set;}
+        private int max_date {get;set;}
+        private int offset {get;set;}
+        private int max_id {get;set;}
+        private int limit {get;set;}
         public Messages.TLAbsMessages Response{ get; set;}
 
+		
+		public TLRequestSearch (TLAbsInputPeer peer ,string q ,TLAbsMessagesFilter filter ,int min_date ,int max_date ,int offset ,int max_id ,int limit ){
+			this.peer = peer; 
+this.q = q; 
+this.filter = filter; 
+this.min_date = min_date; 
+this.max_date = max_date; 
+this.offset = offset; 
+this.max_id = max_id; 
+this.limit = limit; 
+	
+		}
 
 		public void ComputeFlags()
 		{

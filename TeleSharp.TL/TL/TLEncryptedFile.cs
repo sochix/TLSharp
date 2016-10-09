@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1248893260)]
     public class TLEncryptedFile : TLAbsEncryptedFile
     {
+
+		
         public override int Constructor
         {
             get
@@ -24,7 +26,15 @@ namespace TeleSharp.TL
      public int dc_id {get;set;}
      public int key_fingerprint {get;set;}
 
-
+		public TLEncryptedFile (){}
+		public TLEncryptedFile (long id ,long access_hash ,int size ,int dc_id ,int key_fingerprint ){
+			this.id = id; 
+this.access_hash = access_hash; 
+this.size = size; 
+this.dc_id = dc_id; 
+this.key_fingerprint = key_fingerprint; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

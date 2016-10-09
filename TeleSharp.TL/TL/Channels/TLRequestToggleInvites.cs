@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Channels
             }
         }
 
-                public TLAbsInputChannel channel {get;set;}
-        public bool enabled {get;set;}
+                private TLAbsInputChannel channel {get;set;}
+        private bool enabled {get;set;}
         public TLAbsUpdates Response{ get; set;}
 
+		
+		public TLRequestToggleInvites (TLAbsInputChannel channel ,bool enabled ){
+			this.channel = channel; 
+this.enabled = enabled; 
+	
+		}
 
 		public void ComputeFlags()
 		{

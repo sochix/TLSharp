@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(358154344)]
     public class TLDocumentAttributeFilename : TLAbsDocumentAttribute
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public string file_name {get;set;}
 
-
+		public TLDocumentAttributeFilename (){}
+		public TLDocumentAttributeFilename (string file_name ){
+			this.file_name = file_name; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

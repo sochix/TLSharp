@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1038967584)]
     public class TLMessageMediaEmpty : TLAbsMessageMedia
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLMessageMediaEmpty (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

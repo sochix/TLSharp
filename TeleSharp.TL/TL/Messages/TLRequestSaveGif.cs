@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public TLAbsInputDocument id {get;set;}
-        public bool unsave {get;set;}
+                private TLAbsInputDocument id {get;set;}
+        private bool unsave {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestSaveGif (TLAbsInputDocument id ,bool unsave ){
+			this.id = id; 
+this.unsave = unsave; 
+	
+		}
 
 		public void ComputeFlags()
 		{

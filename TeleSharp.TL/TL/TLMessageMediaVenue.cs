@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(2031269663)]
     public class TLMessageMediaVenue : TLAbsMessageMedia
     {
+
+		
         public override int Constructor
         {
             get
@@ -24,7 +26,15 @@ namespace TeleSharp.TL
      public string provider {get;set;}
      public string venue_id {get;set;}
 
-
+		public TLMessageMediaVenue (){}
+		public TLMessageMediaVenue (TLAbsGeoPoint geo ,string title ,string address ,string provider ,string venue_id ){
+			this.geo = geo; 
+this.title = title; 
+this.address = address; 
+this.provider = provider; 
+this.venue_id = venue_id; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

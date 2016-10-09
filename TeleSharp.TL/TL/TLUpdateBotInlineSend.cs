@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(239663460)]
     public class TLUpdateBotInlineSend : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -25,7 +27,15 @@ namespace TeleSharp.TL
      public string id {get;set;}
      public TLInputBotInlineMessageID msg_id {get;set;}
 
-
+		public TLUpdateBotInlineSend (){}
+		public TLUpdateBotInlineSend (int user_id ,string query ,TLAbsGeoPoint geo ,string id ,TLInputBotInlineMessageID msg_id ){
+			this.user_id = user_id; 
+this.query = query; 
+this.geo = geo; 
+this.id = id; 
+this.msg_id = msg_id; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

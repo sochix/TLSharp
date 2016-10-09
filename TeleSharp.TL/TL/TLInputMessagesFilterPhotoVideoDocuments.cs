@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-648121413)]
     public class TLInputMessagesFilterPhotoVideoDocuments : TLAbsMessagesFilter
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLInputMessagesFilterPhotoVideoDocuments (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

@@ -18,12 +18,19 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public int flags {get;set;}
-        public bool alert {get;set;}
-        public long query_id {get;set;}
-        public string message {get;set;}
+                private int flags {get;set;}
+        private bool alert {get;set;}
+        private long query_id {get;set;}
+        private string message {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestSetBotCallbackAnswer (bool alert ,long query_id ,string message ){
+			this.alert = alert; 
+this.query_id = query_id; 
+this.message = message; 
+	
+		}
 
 		public void ComputeFlags()
 		{

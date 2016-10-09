@@ -18,11 +18,18 @@ namespace TeleSharp.TL.Updates
             }
         }
 
-                public int pts {get;set;}
-        public int date {get;set;}
-        public int qts {get;set;}
+                private int pts {get;set;}
+        private int date {get;set;}
+        private int qts {get;set;}
         public Updates.TLAbsDifference Response{ get; set;}
 
+		
+		public TLRequestGetDifference (int pts ,int date ,int qts ){
+			this.pts = pts; 
+this.date = date; 
+this.qts = qts; 
+	
+		}
 
 		public void ComputeFlags()
 		{

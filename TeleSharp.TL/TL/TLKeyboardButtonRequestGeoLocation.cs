@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-59151553)]
     public class TLKeyboardButtonRequestGeoLocation : TLAbsKeyboardButton
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public string text {get;set;}
 
-
+		public TLKeyboardButtonRequestGeoLocation (){}
+		public TLKeyboardButtonRequestGeoLocation (string text ){
+			this.text = text; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

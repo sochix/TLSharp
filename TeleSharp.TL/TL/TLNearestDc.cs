@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1910892683)]
     public class TLNearestDc : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -22,7 +24,13 @@ namespace TeleSharp.TL
      public int this_dc {get;set;}
      public int nearest_dc {get;set;}
 
-
+		public TLNearestDc (){}
+		public TLNearestDc (string country ,int this_dc ,int nearest_dc ){
+			this.country = country; 
+this.this_dc = this_dc; 
+this.nearest_dc = nearest_dc; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

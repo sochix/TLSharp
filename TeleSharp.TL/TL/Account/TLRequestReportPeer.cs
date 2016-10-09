@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Account
             }
         }
 
-                public TLAbsInputPeer peer {get;set;}
-        public TLAbsReportReason reason {get;set;}
+                private TLAbsInputPeer peer {get;set;}
+        private TLAbsReportReason reason {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestReportPeer (TLAbsInputPeer peer ,TLAbsReportReason reason ){
+			this.peer = peer; 
+this.reason = reason; 
+	
+		}
 
 		public void ComputeFlags()
 		{

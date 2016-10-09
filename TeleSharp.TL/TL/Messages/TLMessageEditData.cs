@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Messages
 	[TLObject(649453030)]
     public class TLMessageEditData : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,11 @@ namespace TeleSharp.TL.Messages
              public int flags {get;set;}
      public bool caption {get;set;}
 
-
+		public TLMessageEditData (){}
+		public TLMessageEditData (bool caption ){
+			this.caption = caption; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

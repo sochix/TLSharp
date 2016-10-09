@@ -18,11 +18,18 @@ namespace TeleSharp.TL.Upload
             }
         }
 
-                public TLAbsInputFileLocation location {get;set;}
-        public int offset {get;set;}
-        public int limit {get;set;}
+                private TLAbsInputFileLocation location {get;set;}
+        private int offset {get;set;}
+        private int limit {get;set;}
         public Upload.TLFile Response{ get; set;}
 
+		
+		public TLRequestGetFile (TLAbsInputFileLocation location ,int offset ,int limit ){
+			this.location = location; 
+this.offset = offset; 
+this.limit = limit; 
+	
+		}
 
 		public void ComputeFlags()
 		{

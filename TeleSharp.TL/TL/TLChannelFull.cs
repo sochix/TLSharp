@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1009430225)]
     public class TLChannelFull : TLAbsChatFull
     {
+
+		
         public override int Constructor
         {
             get
@@ -37,7 +39,27 @@ namespace TeleSharp.TL
      public int? migrated_from_max_id {get;set;}
      public int? pinned_msg_id {get;set;}
 
-
+		public TLChannelFull (){}
+		public TLChannelFull (bool can_view_participants ,bool can_set_username ,int id ,string about ,int? participants_count ,int? admins_count ,int? kicked_count ,int read_inbox_max_id ,int read_outbox_max_id ,int unread_count ,TLAbsPhoto chat_photo ,TLAbsPeerNotifySettings notify_settings ,TLAbsExportedChatInvite exported_invite ,TLVector<TLBotInfo> bot_info ,int? migrated_from_chat_id ,int? migrated_from_max_id ,int? pinned_msg_id ){
+			this.can_view_participants = can_view_participants; 
+this.can_set_username = can_set_username; 
+this.id = id; 
+this.about = about; 
+this.participants_count = participants_count; 
+this.admins_count = admins_count; 
+this.kicked_count = kicked_count; 
+this.read_inbox_max_id = read_inbox_max_id; 
+this.read_outbox_max_id = read_outbox_max_id; 
+this.unread_count = unread_count; 
+this.chat_photo = chat_photo; 
+this.notify_settings = notify_settings; 
+this.exported_invite = exported_invite; 
+this.bot_info = bot_info; 
+this.migrated_from_chat_id = migrated_from_chat_id; 
+this.migrated_from_max_id = migrated_from_max_id; 
+this.pinned_msg_id = pinned_msg_id; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

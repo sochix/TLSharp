@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Contacts
             }
         }
 
-                public TLVector<TLInputPhoneContact> contacts {get;set;}
-        public bool replace {get;set;}
+                private TLVector<TLInputPhoneContact> contacts {get;set;}
+        private bool replace {get;set;}
         public Contacts.TLImportedContacts Response{ get; set;}
 
+		
+		public TLRequestImportContacts (TLVector<TLInputPhoneContact> contacts ,bool replace ){
+			this.contacts = contacts; 
+this.replace = replace; 
+	
+		}
 
 		public void ComputeFlags()
 		{

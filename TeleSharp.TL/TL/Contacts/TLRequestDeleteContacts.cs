@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Contacts
             }
         }
 
-                public TLVector<TLAbsInputUser> id {get;set;}
+                private TLVector<TLAbsInputUser> id {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestDeleteContacts (TLVector<TLAbsInputUser> id ){
+			this.id = id; 
+	
+		}
 
 		public void ComputeFlags()
 		{

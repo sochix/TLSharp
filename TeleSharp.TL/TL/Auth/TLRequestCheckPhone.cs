@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Auth
             }
         }
 
-                public string phone_number {get;set;}
+                private string phone_number {get;set;}
         public Auth.TLCheckedPhone Response{ get; set;}
 
+		
+		public TLRequestCheckPhone (string phone_number ){
+			this.phone_number = phone_number; 
+	
+		}
 
 		public void ComputeFlags()
 		{

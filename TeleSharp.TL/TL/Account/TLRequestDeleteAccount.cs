@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Account
             }
         }
 
-                public string reason {get;set;}
+                private string reason {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestDeleteAccount (string reason ){
+			this.reason = reason; 
+	
+		}
 
 		public void ComputeFlags()
 		{

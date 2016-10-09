@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public string emoticon {get;set;}
-        public string hash {get;set;}
+                private string emoticon {get;set;}
+        private string hash {get;set;}
         public Messages.TLAbsStickers Response{ get; set;}
 
+		
+		public TLRequestGetStickers (string emoticon ,string hash ){
+			this.emoticon = emoticon; 
+this.hash = hash; 
+	
+		}
 
 		public void ComputeFlags()
 		{

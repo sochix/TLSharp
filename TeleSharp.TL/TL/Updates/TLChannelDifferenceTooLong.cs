@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Updates
 	[TLObject(1091431943)]
     public class TLChannelDifferenceTooLong : TLAbsChannelDifference
     {
+
+		
         public override int Constructor
         {
             get
@@ -30,7 +32,20 @@ namespace TeleSharp.TL.Updates
      public TLVector<TLAbsChat> chats {get;set;}
      public TLVector<TLAbsUser> users {get;set;}
 
-
+		public TLChannelDifferenceTooLong (){}
+		public TLChannelDifferenceTooLong (bool final ,int pts ,int? timeout ,int top_message ,int read_inbox_max_id ,int read_outbox_max_id ,int unread_count ,TLVector<TLAbsMessage> messages ,TLVector<TLAbsChat> chats ,TLVector<TLAbsUser> users ){
+			this.final = final; 
+this.pts = pts; 
+this.timeout = timeout; 
+this.top_message = top_message; 
+this.read_inbox_max_id = read_inbox_max_id; 
+this.read_outbox_max_id = read_outbox_max_id; 
+this.unread_count = unread_count; 
+this.messages = messages; 
+this.chats = chats; 
+this.users = users; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

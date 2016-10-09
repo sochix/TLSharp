@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(928101534)]
     public class TLInputMessagesFilterMusic : TLAbsMessagesFilter
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLInputMessagesFilterMusic (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

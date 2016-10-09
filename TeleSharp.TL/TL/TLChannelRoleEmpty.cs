@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1299865402)]
     public class TLChannelRoleEmpty : TLAbsChannelParticipantRole
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLChannelRoleEmpty (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

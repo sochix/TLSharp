@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Contacts
             }
         }
 
-                public TLAbsTopPeerCategory category {get;set;}
-        public TLAbsInputPeer peer {get;set;}
+                private TLAbsTopPeerCategory category {get;set;}
+        private TLAbsInputPeer peer {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestResetTopPeerRating (TLAbsTopPeerCategory category ,TLAbsInputPeer peer ){
+			this.category = category; 
+this.peer = peer; 
+	
+		}
 
 		public void ComputeFlags()
 		{

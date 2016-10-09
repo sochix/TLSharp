@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1371385889)]
     public class TLMessageActionChatMigrateTo : TLAbsMessageAction
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public int channel_id {get;set;}
 
-
+		public TLMessageActionChatMigrateTo (){}
+		public TLMessageActionChatMigrateTo (int channel_id ){
+			this.channel_id = channel_id; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

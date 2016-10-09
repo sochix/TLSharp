@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-718310409)]
     public class TLSendMessageRecordAudioAction : TLAbsSendMessageAction
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLSendMessageRecordAudioAction (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

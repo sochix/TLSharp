@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1038136962)]
     public class TLEncryptedFileEmpty : TLAbsEncryptedFile
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLEncryptedFileEmpty (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

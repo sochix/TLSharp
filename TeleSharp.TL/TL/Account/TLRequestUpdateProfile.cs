@@ -18,12 +18,19 @@ namespace TeleSharp.TL.Account
             }
         }
 
-                public int flags {get;set;}
-        public string first_name {get;set;}
-        public string last_name {get;set;}
-        public string about {get;set;}
+                private int flags {get;set;}
+        private string first_name {get;set;}
+        private string last_name {get;set;}
+        private string about {get;set;}
         public TLAbsUser Response{ get; set;}
 
+		
+		public TLRequestUpdateProfile (string first_name ,string last_name ,string about ){
+			this.first_name = first_name; 
+this.last_name = last_name; 
+this.about = about; 
+	
+		}
 
 		public void ComputeFlags()
 		{

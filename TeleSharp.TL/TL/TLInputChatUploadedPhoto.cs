@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1809496270)]
     public class TLInputChatUploadedPhoto : TLAbsInputChatPhoto
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL
              public TLAbsInputFile file {get;set;}
      public TLAbsInputPhotoCrop crop {get;set;}
 
-
+		public TLInputChatUploadedPhoto (){}
+		public TLInputChatUploadedPhoto (TLAbsInputFile file ,TLAbsInputPhotoCrop crop ){
+			this.file = file; 
+this.crop = crop; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

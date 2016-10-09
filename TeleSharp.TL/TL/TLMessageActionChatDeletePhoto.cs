@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1780220945)]
     public class TLMessageActionChatDeletePhoto : TLAbsMessageAction
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLMessageActionChatDeletePhoto (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

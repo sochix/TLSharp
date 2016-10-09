@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1326562017)]
     public class TLUserProfilePhotoEmpty : TLAbsUserProfilePhoto
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLUserProfilePhotoEmpty (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

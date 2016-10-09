@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1406570614)]
     public class TLFileLocation : TLAbsFileLocation
     {
+
+		
         public override int Constructor
         {
             get
@@ -23,7 +25,14 @@ namespace TeleSharp.TL
      public int local_id {get;set;}
      public long secret {get;set;}
 
-
+		public TLFileLocation (){}
+		public TLFileLocation (int dc_id ,long volume_id ,int local_id ,long secret ){
+			this.dc_id = dc_id; 
+this.volume_id = volume_id; 
+this.local_id = local_id; 
+this.secret = secret; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

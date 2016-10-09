@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1503425638)]
     public class TLMessageActionChatCreate : TLAbsMessageAction
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL
              public string title {get;set;}
      public TLVector<int> users {get;set;}
 
-
+		public TLMessageActionChatCreate (){}
+		public TLMessageActionChatCreate (string title ,TLVector<int> users ){
+			this.title = title; 
+this.users = users; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

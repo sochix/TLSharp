@@ -22,14 +22,11 @@ namespace TeleSharp.Generator
             string AbsStyle = File.ReadAllText("ConstructorAbs.tmp");
             string NormalStyle = File.ReadAllText("Constructor.tmp");
             string MethodStyle = File.ReadAllText("Method.tmp");
-            //string method = File.ReadAllText("constructor.tt");
             string Json = "";
             string url;
             if (args.Count() == 0) url = "tl-schema.json"; else url = args[0];
 
             Json = File.ReadAllText(url);
-            FileStream file = File.OpenWrite("Result.cs");
-            StreamWriter sw = new StreamWriter(file);
             Schema schema = JsonConvert.DeserializeObject<Schema>(Json);
             foreach (var c in schema.constructors)
             {
@@ -84,6 +81,30 @@ namespace TeleSharp.Generator
                     }
                     temp = temp.Replace("/* PARAMS */", fields);
                     #endregion
+                    #region Parameters
+                    string paramters = "";
+                    foreach (var tmp in c.Params)
+                    {
+                        if (tmp.name == "flags") continue;
+                        paramters += $"{CheckForFlagBase(tmp.type, GetTypeName(tmp.type))} {CheckForKeyword(tmp.name)} ,";
+                    }
+                    if (paramters.EndsWith(",")) paramters = paramters.Substring(0, paramters.Length - 1);
+                    temp = temp.Replace("/* Parameters */",paramters);
+                    if (c.Params.Count != 0)
+                        temp = temp.Replace("/* PARAMETERLESS */", $"public {GetNameofClass(c.predicate, false)} ()"+"{}");
+                    else
+                        temp = temp.Replace("/* PARAMETERLESS */", "");
+                    #endregion
+                    #region AssignParamters
+                    string assign = "";
+                    foreach (var tmp in c.Params)
+                    {
+                        if (tmp.name == "flags") continue;
+                        assign += $"this.{CheckForKeyword(tmp.name)} = {CheckForKeyword(tmp.name)}; {Environment.NewLine}";
+                    }
+                    temp = temp.Replace("/* Assign */", assign);
+                    #endregion
+                    
                     #region ComputeFlagFunc
                     if (!c.Params.Any(x => x.name == "flags")) temp = temp.Replace("/* COMPUTE */", "");
                     else
@@ -150,10 +171,30 @@ namespace TeleSharp.Generator
                     string fields = "";
                     foreach (var tmp in c.Params)
                     {
-                        fields += $"        public {CheckForFlagBase(tmp.type, GetTypeName(tmp.type))} {CheckForKeyword(tmp.name)} " + "{get;set;}" + Environment.NewLine;
+                        fields += $"        private {CheckForFlagBase(tmp.type, GetTypeName(tmp.type))} {CheckForKeyword(tmp.name)} " + "{get;set;}" + Environment.NewLine;
                     }
                     fields += $"        public {CheckForFlagBase(c.type, GetTypeName(c.type))} Response" + "{ get; set;}" + Environment.NewLine;
                     temp = temp.Replace("/* PARAMS */", fields);
+                    #endregion
+                    #region Parameters
+                    string paramters = "";
+                    foreach (var tmp in c.Params)
+                    {
+                        if (tmp.name == "flags") continue;
+                        paramters += $"{CheckForFlagBase(tmp.type, GetTypeName(tmp.type))} {CheckForKeyword(tmp.name)} ,";
+                    }
+                    if (paramters.EndsWith(",")) paramters = paramters.Substring(0, paramters.Length - 1);
+                    temp = temp.Replace("/* Parameters */", paramters);
+
+                    #endregion
+                    #region AssignParamters
+                    string assign = "";
+                    foreach (var tmp in c.Params)
+                    {
+                        if (tmp.name == "flags") continue;
+                        assign += $"this.{CheckForKeyword(tmp.name)} = {CheckForKeyword(tmp.name)}; {Environment.NewLine}";
+                    }
+                    temp = temp.Replace("/* Assign */", assign);
                     #endregion
                     #region ComputeFlagFunc
                     if (!c.Params.Any(x => x.name == "flags")) temp = temp.Replace("/* COMPUTE */", "");
@@ -280,7 +321,7 @@ namespace TeleSharp.Generator
         }
         public static string GetTypeName(string type)
         {
-            if (type.ToLower().Contains("inputcontact")) return "TLInputPhoneContact";
+            if (type.ToLower().StartsWith("inputcontact")) return "TLInputPhoneContact";
             switch (type.ToLower())
             {
                 case "#":

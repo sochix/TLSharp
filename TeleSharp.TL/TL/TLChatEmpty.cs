@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1683826688)]
     public class TLChatEmpty : TLAbsChat
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public int id {get;set;}
 
-
+		public TLChatEmpty (){}
+		public TLChatEmpty (int id ){
+			this.id = id; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

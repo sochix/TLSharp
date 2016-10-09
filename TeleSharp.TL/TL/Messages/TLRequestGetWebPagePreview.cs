@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public string message {get;set;}
+                private string message {get;set;}
         public TLAbsMessageMedia Response{ get; set;}
 
+		
+		public TLRequestGetWebPagePreview (string message ){
+			this.message = message; 
+	
+		}
 
 		public void ComputeFlags()
 		{

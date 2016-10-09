@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(524838915)]
     public class TLExportedMessageLink : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public string link {get;set;}
 
-
+		public TLExportedMessageLink (){}
+		public TLExportedMessageLink (string link ){
+			this.link = link; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

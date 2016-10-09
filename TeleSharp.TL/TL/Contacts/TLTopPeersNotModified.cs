@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Contacts
 	[TLObject(-567906571)]
     public class TLTopPeersNotModified : TLAbsTopPeers
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL.Contacts
         }
 
         
-
+		
+		public TLTopPeersNotModified (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

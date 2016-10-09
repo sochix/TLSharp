@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1137792208)]
     public class TLPrivacyKeyStatusTimestamp : TLAbsPrivacyKey
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLPrivacyKeyStatusTimestamp (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

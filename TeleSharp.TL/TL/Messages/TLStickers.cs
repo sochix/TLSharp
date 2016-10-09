@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Messages
 	[TLObject(-1970352846)]
     public class TLStickers : TLAbsStickers
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL.Messages
              public string hash {get;set;}
      public TLVector<TLAbsDocument> stickers {get;set;}
 
-
+		public TLStickers (){}
+		public TLStickers (string hash ,TLVector<TLAbsDocument> stickers ){
+			this.hash = hash; 
+this.stickers = stickers; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

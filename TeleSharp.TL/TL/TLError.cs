@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-994444869)]
     public class TLError : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL
              public int code {get;set;}
      public string text {get;set;}
 
-
+		public TLError (){}
+		public TLError (int code ,string text ){
+			this.code = code; 
+this.text = text; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

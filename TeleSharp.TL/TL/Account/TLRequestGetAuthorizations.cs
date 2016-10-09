@@ -20,6 +20,10 @@ namespace TeleSharp.TL.Account
 
                 public Account.TLAuthorizations Response{ get; set;}
 
+		
+		public TLRequestGetAuthorizations (){
+				
+		}
 
 		public void ComputeFlags()
 		{

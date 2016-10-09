@@ -20,6 +20,10 @@ namespace TeleSharp.TL.Help
 
                 public Help.TLAbsAppChangelog Response{ get; set;}
 
+		
+		public TLRequestGetAppChangelog (){
+				
+		}
 
 		public void ComputeFlags()
 		{

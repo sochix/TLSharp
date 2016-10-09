@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1369215196)]
     public class TLDisabledFeature : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL
              public string feature {get;set;}
      public string description {get;set;}
 
-
+		public TLDisabledFeature (){}
+		public TLDisabledFeature (string feature ,string description ){
+			this.feature = feature; 
+this.description = description; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1642487306)]
     public class TLMessageService : TLAbsMessage
     {
+
+		
         public override int Constructor
         {
             get
@@ -31,7 +33,21 @@ namespace TeleSharp.TL
      public int date {get;set;}
      public TLAbsMessageAction action {get;set;}
 
-
+		public TLMessageService (){}
+		public TLMessageService (bool @out ,bool mentioned ,bool media_unread ,bool silent ,bool post ,int id ,int? from_id ,TLAbsPeer to_id ,int? reply_to_msg_id ,int date ,TLAbsMessageAction action ){
+			this.@out = @out; 
+this.mentioned = mentioned; 
+this.media_unread = media_unread; 
+this.silent = silent; 
+this.post = post; 
+this.id = id; 
+this.from_id = from_id; 
+this.to_id = to_id; 
+this.reply_to_msg_id = reply_to_msg_id; 
+this.date = date; 
+this.action = action; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

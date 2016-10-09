@@ -18,12 +18,19 @@ namespace TeleSharp.TL.Account
             }
         }
 
-                public int flags {get;set;}
-        public bool allow_flashcall {get;set;}
-        public string phone_number {get;set;}
-        public bool? current_number {get;set;}
+                private int flags {get;set;}
+        private bool allow_flashcall {get;set;}
+        private string phone_number {get;set;}
+        private bool? current_number {get;set;}
         public Auth.TLSentCode Response{ get; set;}
 
+		
+		public TLRequestSendChangePhoneCode (bool allow_flashcall ,string phone_number ,bool? current_number ){
+			this.allow_flashcall = allow_flashcall; 
+this.phone_number = phone_number; 
+this.current_number = current_number; 
+	
+		}
 
 		public void ComputeFlags()
 		{

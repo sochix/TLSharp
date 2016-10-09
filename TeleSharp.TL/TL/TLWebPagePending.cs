@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-981018084)]
     public class TLWebPagePending : TLAbsWebPage
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL
              public long id {get;set;}
      public int date {get;set;}
 
-
+		public TLWebPagePending (){}
+		public TLWebPagePending (long id ,int date ){
+			this.id = id; 
+this.date = date; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

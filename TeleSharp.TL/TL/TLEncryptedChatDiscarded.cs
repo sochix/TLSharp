@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(332848423)]
     public class TLEncryptedChatDiscarded : TLAbsEncryptedChat
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public int id {get;set;}
 
-
+		public TLEncryptedChatDiscarded (){}
+		public TLEncryptedChatDiscarded (int id ){
+			this.id = id; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

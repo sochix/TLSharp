@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Users
             }
         }
 
-                public TLAbsInputUser id {get;set;}
+                private TLAbsInputUser id {get;set;}
         public TLUserFull Response{ get; set;}
 
+		
+		public TLRequestGetFullUser (TLAbsInputUser id ){
+			this.id = id; 
+	
+		}
 
 		public void ComputeFlags()
 		{

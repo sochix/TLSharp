@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Account
             }
         }
 
-                public int token_type {get;set;}
-        public string token {get;set;}
+                private int token_type {get;set;}
+        private string token {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestRegisterDevice (int token_type ,string token ){
+			this.token_type = token_type; 
+this.token = token; 
+	
+		}
 
 		public void ComputeFlags()
 		{

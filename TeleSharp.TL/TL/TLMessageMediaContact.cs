@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1585262393)]
     public class TLMessageMediaContact : TLAbsMessageMedia
     {
+
+		
         public override int Constructor
         {
             get
@@ -23,7 +25,14 @@ namespace TeleSharp.TL
      public string last_name {get;set;}
      public int user_id {get;set;}
 
-
+		public TLMessageMediaContact (){}
+		public TLMessageMediaContact (string phone_number ,string first_name ,string last_name ,int user_id ){
+			this.phone_number = phone_number; 
+this.first_name = first_name; 
+this.last_name = last_name; 
+this.user_id = user_id; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

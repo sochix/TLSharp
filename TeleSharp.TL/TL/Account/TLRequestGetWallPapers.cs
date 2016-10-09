@@ -20,6 +20,10 @@ namespace TeleSharp.TL.Account
 
                 public TLVector<TLAbsWallPaper> Response{ get; set;}
 
+		
+		public TLRequestGetWallPapers (){
+				
+		}
 
 		public void ComputeFlags()
 		{

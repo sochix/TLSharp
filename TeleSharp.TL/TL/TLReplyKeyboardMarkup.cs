@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(889353612)]
     public class TLReplyKeyboardMarkup : TLAbsReplyMarkup
     {
+
+		
         public override int Constructor
         {
             get
@@ -24,7 +26,14 @@ namespace TeleSharp.TL
      public bool selective {get;set;}
      public TLVector<TLKeyboardButtonRow> rows {get;set;}
 
-
+		public TLReplyKeyboardMarkup (){}
+		public TLReplyKeyboardMarkup (bool resize ,bool single_use ,bool selective ,TLVector<TLKeyboardButtonRow> rows ){
+			this.resize = resize; 
+this.single_use = single_use; 
+this.selective = selective; 
+this.rows = rows; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

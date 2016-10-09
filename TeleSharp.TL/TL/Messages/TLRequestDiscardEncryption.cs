@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public int chat_id {get;set;}
+                private int chat_id {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestDiscardEncryption (int chat_id ){
+			this.chat_id = chat_id; 
+	
+		}
 
 		public void ComputeFlags()
 		{

@@ -20,6 +20,10 @@ namespace TeleSharp.TL.Account
 
                 public bool Response{ get; set;}
 
+		
+		public TLRequestResetNotifySettings (){
+				
+		}
 
 		public void ComputeFlags()
 		{

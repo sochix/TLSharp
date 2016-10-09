@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public int hash {get;set;}
+                private int hash {get;set;}
         public Messages.TLAbsSavedGifs Response{ get; set;}
 
+		
+		public TLRequestGetSavedGifs (int hash ){
+			this.hash = hash; 
+	
+		}
 
 		public void ComputeFlags()
 		{

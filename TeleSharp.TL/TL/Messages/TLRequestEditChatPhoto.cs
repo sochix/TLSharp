@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public int chat_id {get;set;}
-        public TLAbsInputChatPhoto photo {get;set;}
+                private int chat_id {get;set;}
+        private TLAbsInputChatPhoto photo {get;set;}
         public TLAbsUpdates Response{ get; set;}
 
+		
+		public TLRequestEditChatPhoto (int chat_id ,TLAbsInputChatPhoto photo ){
+			this.chat_id = chat_id; 
+this.photo = photo; 
+	
+		}
 
 		public void ComputeFlags()
 		{

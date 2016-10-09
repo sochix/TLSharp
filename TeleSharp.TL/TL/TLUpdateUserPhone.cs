@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(314130811)]
     public class TLUpdateUserPhone : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL
              public int user_id {get;set;}
      public string phone {get;set;}
 
-
+		public TLUpdateUserPhone (){}
+		public TLUpdateUserPhone (int user_id ,string phone ){
+			this.user_id = user_id; 
+this.phone = phone; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

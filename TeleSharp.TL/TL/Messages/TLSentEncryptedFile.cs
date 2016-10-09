@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Messages
 	[TLObject(-1802240206)]
     public class TLSentEncryptedFile : TLAbsSentEncryptedMessage
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL.Messages
              public int date {get;set;}
      public TLAbsEncryptedFile file {get;set;}
 
-
+		public TLSentEncryptedFile (){}
+		public TLSentEncryptedFile (int date ,TLAbsEncryptedFile file ){
+			this.date = date; 
+this.file = file; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

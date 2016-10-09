@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Messages
 	[TLObject(-1240849242)]
     public class TLStickerSet : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -22,7 +24,13 @@ namespace TeleSharp.TL.Messages
      public TLVector<TLStickerPack> packs {get;set;}
      public TLVector<TLAbsDocument> documents {get;set;}
 
-
+		public TLStickerSet (){}
+		public TLStickerSet (TLStickerSet @set ,TLVector<TLStickerPack> packs ,TLVector<TLAbsDocument> documents ){
+			this.@set = @set; 
+this.packs = packs; 
+this.documents = documents; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

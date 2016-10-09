@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(297109817)]
     public class TLDocumentAttributeAnimated : TLAbsDocumentAttribute
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLDocumentAttributeAnimated (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

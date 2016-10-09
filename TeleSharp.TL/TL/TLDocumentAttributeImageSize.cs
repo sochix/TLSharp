@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1815593308)]
     public class TLDocumentAttributeImageSize : TLAbsDocumentAttribute
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL
              public int w {get;set;}
      public int h {get;set;}
 
-
+		public TLDocumentAttributeImageSize (){}
+		public TLDocumentAttributeImageSize (int w ,int h ){
+			this.w = w; 
+this.h = h; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

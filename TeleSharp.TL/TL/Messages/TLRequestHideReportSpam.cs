@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public TLAbsInputPeer peer {get;set;}
+                private TLAbsInputPeer peer {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestHideReportSpam (TLAbsInputPeer peer ){
+			this.peer = peer; 
+	
+		}
 
 		public void ComputeFlags()
 		{

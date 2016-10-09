@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public TLVector<int> id {get;set;}
+                private TLVector<int> id {get;set;}
         public Messages.TLAffectedMessages Response{ get; set;}
 
+		
+		public TLRequestDeleteMessages (TLVector<int> id ){
+			this.id = id; 
+	
+		}
 
 		public void ComputeFlags()
 		{

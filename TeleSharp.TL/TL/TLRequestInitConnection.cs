@@ -18,14 +18,24 @@ namespace TeleSharp.TL
             }
         }
 
-                public int api_id {get;set;}
-        public string device_model {get;set;}
-        public string system_version {get;set;}
-        public string app_version {get;set;}
-        public string lang_code {get;set;}
-        public TLObject query {get;set;}
+                private int api_id {get;set;}
+        private string device_model {get;set;}
+        private string system_version {get;set;}
+        private string app_version {get;set;}
+        private string lang_code {get;set;}
+        private TLObject query {get;set;}
         public TLObject Response{ get; set;}
 
+		
+		public TLRequestInitConnection (int api_id ,string device_model ,string system_version ,string app_version ,string lang_code ,TLObject query ){
+			this.api_id = api_id; 
+this.device_model = device_model; 
+this.system_version = system_version; 
+this.app_version = app_version; 
+this.lang_code = lang_code; 
+this.query = query; 
+	
+		}
 
 		public void ComputeFlags()
 		{

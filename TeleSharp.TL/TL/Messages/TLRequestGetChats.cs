@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public TLVector<int> id {get;set;}
+                private TLVector<int> id {get;set;}
         public Messages.TLChats Response{ get; set;}
 
+		
+		public TLRequestGetChats (TLVector<int> id ){
+			this.id = id; 
+	
+		}
 
 		public void ComputeFlags()
 		{

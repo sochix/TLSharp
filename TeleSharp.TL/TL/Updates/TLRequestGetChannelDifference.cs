@@ -18,12 +18,20 @@ namespace TeleSharp.TL.Updates
             }
         }
 
-                public TLAbsInputChannel channel {get;set;}
-        public TLAbsChannelMessagesFilter filter {get;set;}
-        public int pts {get;set;}
-        public int limit {get;set;}
+                private TLAbsInputChannel channel {get;set;}
+        private TLAbsChannelMessagesFilter filter {get;set;}
+        private int pts {get;set;}
+        private int limit {get;set;}
         public Updates.TLAbsChannelDifference Response{ get; set;}
 
+		
+		public TLRequestGetChannelDifference (TLAbsInputChannel channel ,TLAbsChannelMessagesFilter filter ,int pts ,int limit ){
+			this.channel = channel; 
+this.filter = filter; 
+this.pts = pts; 
+this.limit = limit; 
+	
+		}
 
 		public void ComputeFlags()
 		{

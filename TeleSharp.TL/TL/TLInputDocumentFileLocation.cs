@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1313188841)]
     public class TLInputDocumentFileLocation : TLAbsInputFileLocation
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL
              public long id {get;set;}
      public long access_hash {get;set;}
 
-
+		public TLInputDocumentFileLocation (){}
+		public TLInputDocumentFileLocation (long id ,long access_hash ){
+			this.id = id; 
+this.access_hash = access_hash; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

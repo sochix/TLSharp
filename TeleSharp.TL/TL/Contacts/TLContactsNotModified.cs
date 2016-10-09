@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Contacts
 	[TLObject(-1219778094)]
     public class TLContactsNotModified : TLAbsContacts
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL.Contacts
         }
 
         
-
+		
+		public TLContactsNotModified (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

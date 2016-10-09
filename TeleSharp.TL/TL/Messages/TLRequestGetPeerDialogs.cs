@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public TLVector<TLAbsInputPeer> peers {get;set;}
+                private TLVector<TLAbsInputPeer> peers {get;set;}
         public Messages.TLPeerDialogs Response{ get; set;}
 
+		
+		public TLRequestGetPeerDialogs (TLVector<TLAbsInputPeer> peers ){
+			this.peers = peers; 
+	
+		}
 
 		public void ComputeFlags()
 		{

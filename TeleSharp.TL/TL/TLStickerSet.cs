@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-852477119)]
     public class TLStickerSet : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -29,7 +31,19 @@ namespace TeleSharp.TL
      public int count {get;set;}
      public int hash {get;set;}
 
-
+		public TLStickerSet (){}
+		public TLStickerSet (bool installed ,bool disabled ,bool official ,long id ,long access_hash ,string title ,string short_name ,int count ,int hash ){
+			this.installed = installed; 
+this.disabled = disabled; 
+this.official = official; 
+this.id = id; 
+this.access_hash = access_hash; 
+this.title = title; 
+this.short_name = short_name; 
+this.count = count; 
+this.hash = hash; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

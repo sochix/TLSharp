@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public string hash {get;set;}
+                private string hash {get;set;}
         public TLAbsUpdates Response{ get; set;}
 
+		
+		public TLRequestImportChatInvite (string hash ){
+			this.hash = hash; 
+	
+		}
 
 		public void ComputeFlags()
 		{

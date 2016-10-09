@@ -18,13 +18,21 @@ namespace TeleSharp.TL.Channels
             }
         }
 
-                public int flags {get;set;}
-        public bool broadcast {get;set;}
-        public bool megagroup {get;set;}
-        public string title {get;set;}
-        public string about {get;set;}
+                private int flags {get;set;}
+        private bool broadcast {get;set;}
+        private bool megagroup {get;set;}
+        private string title {get;set;}
+        private string about {get;set;}
         public TLAbsUpdates Response{ get; set;}
 
+		
+		public TLRequestCreateChannel (bool broadcast ,bool megagroup ,string title ,string about ){
+			this.broadcast = broadcast; 
+this.megagroup = megagroup; 
+this.title = title; 
+this.about = about; 
+	
+		}
 
 		public void ComputeFlags()
 		{

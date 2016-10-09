@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Help
             }
         }
 
-                public TLVector<TLInputAppEvent> events {get;set;}
+                private TLVector<TLInputAppEvent> events {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestSaveAppLog (TLVector<TLInputAppEvent> events ){
+			this.events = events; 
+	
+		}
 
 		public void ComputeFlags()
 		{

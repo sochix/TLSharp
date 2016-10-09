@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1496513539)]
     public class TLUserFull : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -27,7 +29,17 @@ namespace TeleSharp.TL
      public TLAbsPeerNotifySettings notify_settings {get;set;}
      public TLBotInfo bot_info {get;set;}
 
-
+		public TLUserFull (){}
+		public TLUserFull (bool blocked ,TLAbsUser user ,string about ,Contacts.TLLink link ,TLAbsPhoto profile_photo ,TLAbsPeerNotifySettings notify_settings ,TLBotInfo bot_info ){
+			this.blocked = blocked; 
+this.user = user; 
+this.about = about; 
+this.link = link; 
+this.profile_photo = profile_photo; 
+this.notify_settings = notify_settings; 
+this.bot_info = bot_info; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

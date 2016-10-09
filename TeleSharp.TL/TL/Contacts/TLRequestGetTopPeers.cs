@@ -18,17 +18,29 @@ namespace TeleSharp.TL.Contacts
             }
         }
 
-                public int flags {get;set;}
-        public bool correspondents {get;set;}
-        public bool bots_pm {get;set;}
-        public bool bots_inline {get;set;}
-        public bool groups {get;set;}
-        public bool channels {get;set;}
-        public int offset {get;set;}
-        public int limit {get;set;}
-        public int hash {get;set;}
+                private int flags {get;set;}
+        private bool correspondents {get;set;}
+        private bool bots_pm {get;set;}
+        private bool bots_inline {get;set;}
+        private bool groups {get;set;}
+        private bool channels {get;set;}
+        private int offset {get;set;}
+        private int limit {get;set;}
+        private int hash {get;set;}
         public Contacts.TLAbsTopPeers Response{ get; set;}
 
+		
+		public TLRequestGetTopPeers (bool correspondents ,bool bots_pm ,bool bots_inline ,bool groups ,bool channels ,int offset ,int limit ,int hash ){
+			this.correspondents = correspondents; 
+this.bots_pm = bots_pm; 
+this.bots_inline = bots_inline; 
+this.groups = groups; 
+this.channels = channels; 
+this.offset = offset; 
+this.limit = limit; 
+this.hash = hash; 
+	
+		}
 
 		public void ComputeFlags()
 		{

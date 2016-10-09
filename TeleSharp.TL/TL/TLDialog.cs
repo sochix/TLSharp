@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1728035348)]
     public class TLDialog : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -28,7 +30,18 @@ namespace TeleSharp.TL
      public int? pts {get;set;}
      public TLAbsDraftMessage draft {get;set;}
 
-
+		public TLDialog (){}
+		public TLDialog (TLAbsPeer peer ,int top_message ,int read_inbox_max_id ,int read_outbox_max_id ,int unread_count ,TLAbsPeerNotifySettings notify_settings ,int? pts ,TLAbsDraftMessage draft ){
+			this.peer = peer; 
+this.top_message = top_message; 
+this.read_inbox_max_id = read_inbox_max_id; 
+this.read_outbox_max_id = read_outbox_max_id; 
+this.unread_count = unread_count; 
+this.notify_settings = notify_settings; 
+this.pts = pts; 
+this.draft = draft; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

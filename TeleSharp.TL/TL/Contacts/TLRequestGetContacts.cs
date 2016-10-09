@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Contacts
             }
         }
 
-                public string hash {get;set;}
+                private string hash {get;set;}
         public Contacts.TLAbsContacts Response{ get; set;}
 
+		
+		public TLRequestGetContacts (string hash ){
+			this.hash = hash; 
+	
+		}
 
 		public void ComputeFlags()
 		{

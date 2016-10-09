@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Auth
 	[TLObject(1948046307)]
     public class TLCodeTypeCall : TLAbsCodeType
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL.Auth
         }
 
         
-
+		
+		public TLCodeTypeCall (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

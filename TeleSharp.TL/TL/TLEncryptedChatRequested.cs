@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-931638658)]
     public class TLEncryptedChatRequested : TLAbsEncryptedChat
     {
+
+		
         public override int Constructor
         {
             get
@@ -25,7 +27,16 @@ namespace TeleSharp.TL
      public int participant_id {get;set;}
      public byte[] g_a {get;set;}
 
-
+		public TLEncryptedChatRequested (){}
+		public TLEncryptedChatRequested (int id ,long access_hash ,int date ,int admin_id ,int participant_id ,byte[] g_a ){
+			this.id = id; 
+this.access_hash = access_hash; 
+this.date = date; 
+this.admin_id = admin_id; 
+this.participant_id = participant_id; 
+this.g_a = g_a; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

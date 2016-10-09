@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Account
             }
         }
 
-                public byte[] current_password_hash {get;set;}
-        public Account.TLPasswordInputSettings new_settings {get;set;}
+                private byte[] current_password_hash {get;set;}
+        private Account.TLPasswordInputSettings new_settings {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestUpdatePasswordSettings (byte[] current_password_hash ,Account.TLPasswordInputSettings new_settings ){
+			this.current_password_hash = current_password_hash; 
+this.new_settings = new_settings; 
+	
+		}
 
 		public void ComputeFlags()
 		{

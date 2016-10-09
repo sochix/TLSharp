@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Messages
 	[TLObject(-395967805)]
     public class TLAllStickersNotModified : TLAbsAllStickers
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL.Messages
         }
 
         
-
+		
+		public TLAllStickersNotModified (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

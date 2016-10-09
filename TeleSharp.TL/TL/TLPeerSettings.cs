@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-2122045747)]
     public class TLPeerSettings : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,11 @@ namespace TeleSharp.TL
              public int flags {get;set;}
      public bool report_spam {get;set;}
 
-
+		public TLPeerSettings (){}
+		public TLPeerSettings (bool report_spam ){
+			this.report_spam = report_spam; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

@@ -18,11 +18,18 @@ namespace TeleSharp.TL.Channels
             }
         }
 
-                public TLAbsInputChannel channel {get;set;}
-        public TLAbsInputUser user_id {get;set;}
-        public bool kicked {get;set;}
+                private TLAbsInputChannel channel {get;set;}
+        private TLAbsInputUser user_id {get;set;}
+        private bool kicked {get;set;}
         public TLAbsUpdates Response{ get; set;}
 
+		
+		public TLRequestKickFromChannel (TLAbsInputChannel channel ,TLAbsInputUser user_id ,bool kicked ){
+			this.channel = channel; 
+this.user_id = user_id; 
+this.kicked = kicked; 
+	
+		}
 
 		public void ComputeFlags()
 		{

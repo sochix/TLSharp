@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1937807902)]
     public class TLBotInlineMessageText : TLAbsBotInlineMessage
     {
+
+		
         public override int Constructor
         {
             get
@@ -24,7 +26,14 @@ namespace TeleSharp.TL
      public TLVector<TLAbsMessageEntity> entities {get;set;}
      public TLAbsReplyMarkup reply_markup {get;set;}
 
-
+		public TLBotInlineMessageText (){}
+		public TLBotInlineMessageText (bool no_webpage ,string message ,TLVector<TLAbsMessageEntity> entities ,TLAbsReplyMarkup reply_markup ){
+			this.no_webpage = no_webpage; 
+this.message = message; 
+this.entities = entities; 
+this.reply_markup = reply_markup; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

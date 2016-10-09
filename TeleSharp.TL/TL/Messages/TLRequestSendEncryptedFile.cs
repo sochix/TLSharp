@@ -18,12 +18,20 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public TLInputEncryptedChat peer {get;set;}
-        public long random_id {get;set;}
-        public byte[] data {get;set;}
-        public TLAbsInputEncryptedFile file {get;set;}
+                private TLInputEncryptedChat peer {get;set;}
+        private long random_id {get;set;}
+        private byte[] data {get;set;}
+        private TLAbsInputEncryptedFile file {get;set;}
         public Messages.TLAbsSentEncryptedMessage Response{ get; set;}
 
+		
+		public TLRequestSendEncryptedFile (TLInputEncryptedChat peer ,long random_id ,byte[] data ,TLAbsInputEncryptedFile file ){
+			this.peer = peer; 
+this.random_id = random_id; 
+this.data = data; 
+this.file = file; 
+	
+		}
 
 		public void ComputeFlags()
 		{

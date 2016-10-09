@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(164646985)]
     public class TLUserStatusEmpty : TLAbsUserStatus
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLUserStatusEmpty (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

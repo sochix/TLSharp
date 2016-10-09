@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Channels
             }
         }
 
-                public TLAbsInputChannel channel {get;set;}
+                private TLAbsInputChannel channel {get;set;}
         public TLAbsUpdates Response{ get; set;}
 
+		
+		public TLRequestDeleteChannel (TLAbsInputChannel channel ){
+			this.channel = channel; 
+	
+		}
 
 		public void ComputeFlags()
 		{

@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public int hash {get;set;}
+                private int hash {get;set;}
         public Messages.TLAbsAllStickers Response{ get; set;}
 
+		
+		public TLRequestGetAllStickers (int hash ){
+			this.hash = hash; 
+	
+		}
 
 		public void ComputeFlags()
 		{

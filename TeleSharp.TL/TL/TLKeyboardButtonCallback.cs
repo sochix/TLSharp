@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1748655686)]
     public class TLKeyboardButtonCallback : TLAbsKeyboardButton
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL
              public string text {get;set;}
      public byte[] data {get;set;}
 
-
+		public TLKeyboardButtonCallback (){}
+		public TLKeyboardButtonCallback (string text ,byte[] data ){
+			this.text = text; 
+this.data = data; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

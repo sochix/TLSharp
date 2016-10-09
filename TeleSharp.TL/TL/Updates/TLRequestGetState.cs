@@ -20,6 +20,10 @@ namespace TeleSharp.TL.Updates
 
                 public Updates.TLState Response{ get; set;}
 
+		
+		public TLRequestGetState (){
+				
+		}
 
 		public void ComputeFlags()
 		{

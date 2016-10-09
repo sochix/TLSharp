@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Upload
 	[TLObject(157948117)]
     public class TLFile : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -22,7 +24,13 @@ namespace TeleSharp.TL.Upload
      public int mtime {get;set;}
      public byte[] bytes {get;set;}
 
-
+		public TLFile (){}
+		public TLFile (Storage.TLAbsFileType type ,int mtime ,byte[] bytes ){
+			this.type = type; 
+this.mtime = mtime; 
+this.bytes = bytes; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

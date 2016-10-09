@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(634833351)]
     public class TLUpdateReadChannelOutbox : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL
              public int channel_id {get;set;}
      public int max_id {get;set;}
 
-
+		public TLUpdateReadChannelOutbox (){}
+		public TLUpdateReadChannelOutbox (int channel_id ,int max_id ){
+			this.channel_id = channel_id; 
+this.max_id = max_id; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

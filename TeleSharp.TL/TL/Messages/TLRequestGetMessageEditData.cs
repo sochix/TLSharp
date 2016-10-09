@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public TLAbsInputPeer peer {get;set;}
-        public int id {get;set;}
+                private TLAbsInputPeer peer {get;set;}
+        private int id {get;set;}
         public Messages.TLMessageEditData Response{ get; set;}
 
+		
+		public TLRequestGetMessageEditData (TLAbsInputPeer peer ,int id ){
+			this.peer = peer; 
+this.id = id; 
+	
+		}
 
 		public void ComputeFlags()
 		{

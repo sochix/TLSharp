@@ -20,6 +20,10 @@ namespace TeleSharp.TL.Auth
 
                 public Auth.TLPasswordRecovery Response{ get; set;}
 
+		
+		public TLRequestRequestPasswordRecovery (){
+				
+		}
 
 		public void ComputeFlags()
 		{

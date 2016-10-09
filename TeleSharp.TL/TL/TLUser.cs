@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-787638374)]
     public class TLUser : TLAbsUser
     {
+
+		
         public override int Constructor
         {
             get
@@ -42,7 +44,32 @@ namespace TeleSharp.TL
      public string restriction_reason {get;set;}
      public string bot_inline_placeholder {get;set;}
 
-
+		public TLUser (){}
+		public TLUser (bool self ,bool contact ,bool mutual_contact ,bool deleted ,bool bot ,bool bot_chat_history ,bool bot_nochats ,bool verified ,bool restricted ,bool min ,bool bot_inline_geo ,int id ,long? access_hash ,string first_name ,string last_name ,string username ,string phone ,TLAbsUserProfilePhoto photo ,TLAbsUserStatus status ,int? bot_info_version ,string restriction_reason ,string bot_inline_placeholder ){
+			this.self = self; 
+this.contact = contact; 
+this.mutual_contact = mutual_contact; 
+this.deleted = deleted; 
+this.bot = bot; 
+this.bot_chat_history = bot_chat_history; 
+this.bot_nochats = bot_nochats; 
+this.verified = verified; 
+this.restricted = restricted; 
+this.min = min; 
+this.bot_inline_geo = bot_inline_geo; 
+this.id = id; 
+this.access_hash = access_hash; 
+this.first_name = first_name; 
+this.last_name = last_name; 
+this.username = username; 
+this.phone = phone; 
+this.photo = photo; 
+this.status = status; 
+this.bot_info_version = bot_info_version; 
+this.restriction_reason = restriction_reason; 
+this.bot_inline_placeholder = bot_inline_placeholder; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public TLVector<TLAbsInputUser> users {get;set;}
-        public string title {get;set;}
+                private TLVector<TLAbsInputUser> users {get;set;}
+        private string title {get;set;}
         public TLAbsUpdates Response{ get; set;}
 
+		
+		public TLRequestCreateChat (TLVector<TLAbsInputUser> users ,string title ){
+			this.users = users; 
+this.title = title; 
+	
+		}
 
 		public void ComputeFlags()
 		{

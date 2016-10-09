@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(314359194)]
     public class TLUpdateNewEncryptedMessage : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL
              public TLAbsEncryptedMessage message {get;set;}
      public int qts {get;set;}
 
-
+		public TLUpdateNewEncryptedMessage (){}
+		public TLUpdateNewEncryptedMessage (TLAbsEncryptedMessage message ,int qts ){
+			this.message = message; 
+this.qts = qts; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

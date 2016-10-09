@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(628472761)]
     public class TLUpdateContactRegistered : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL
              public int user_id {get;set;}
      public int date {get;set;}
 
-
+		public TLUpdateContactRegistered (){}
+		public TLUpdateContactRegistered (int user_id ,int date ){
+			this.user_id = user_id; 
+this.date = date; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

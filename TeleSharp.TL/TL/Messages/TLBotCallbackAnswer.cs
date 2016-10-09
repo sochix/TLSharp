@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Messages
 	[TLObject(308605382)]
     public class TLBotCallbackAnswer : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -22,7 +24,12 @@ namespace TeleSharp.TL.Messages
      public bool alert {get;set;}
      public string message {get;set;}
 
-
+		public TLBotCallbackAnswer (){}
+		public TLBotCallbackAnswer (bool alert ,string message ){
+			this.alert = alert; 
+this.message = message; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

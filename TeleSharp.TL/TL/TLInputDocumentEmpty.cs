@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1928391342)]
     public class TLInputDocumentEmpty : TLAbsInputDocument
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLInputDocumentEmpty (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

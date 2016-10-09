@@ -18,11 +18,18 @@ namespace TeleSharp.TL.Channels
             }
         }
 
-                public TLAbsInputChannel channel {get;set;}
-        public TLAbsInputUser user_id {get;set;}
-        public TLAbsChannelParticipantRole role {get;set;}
+                private TLAbsInputChannel channel {get;set;}
+        private TLAbsInputUser user_id {get;set;}
+        private TLAbsChannelParticipantRole role {get;set;}
         public TLAbsUpdates Response{ get; set;}
 
+		
+		public TLRequestEditAdmin (TLAbsInputChannel channel ,TLAbsInputUser user_id ,TLAbsChannelParticipantRole role ){
+			this.channel = channel; 
+this.user_id = user_id; 
+this.role = role; 
+	
+		}
 
 		public void ComputeFlags()
 		{

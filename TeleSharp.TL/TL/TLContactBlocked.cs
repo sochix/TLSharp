@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1444661369)]
     public class TLContactBlocked : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL
              public int user_id {get;set;}
      public int date {get;set;}
 
-
+		public TLContactBlocked (){}
+		public TLContactBlocked (int user_id ,int date ){
+			this.user_id = user_id; 
+this.date = date; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

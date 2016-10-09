@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Contacts
             }
         }
 
-                public string q {get;set;}
-        public int limit {get;set;}
+                private string q {get;set;}
+        private int limit {get;set;}
         public Contacts.TLFound Response{ get; set;}
 
+		
+		public TLRequestSearch (string q ,int limit ){
+			this.q = q; 
+this.limit = limit; 
+	
+		}
 
 		public void ComputeFlags()
 		{

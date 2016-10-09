@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(2134579434)]
     public class TLInputPeerEmpty : TLAbsInputPeer
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLInputPeerEmpty (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

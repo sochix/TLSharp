@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1194283041)]
     public class TLAccountDaysTTL : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public int days {get;set;}
 
-
+		public TLAccountDaysTTL (){}
+		public TLAccountDaysTTL (int days ){
+			this.days = days; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

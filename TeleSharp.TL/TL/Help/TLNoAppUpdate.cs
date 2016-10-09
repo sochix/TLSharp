@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Help
 	[TLObject(-1000708810)]
     public class TLNoAppUpdate : TLAbsAppUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL.Help
         }
 
         
-
+		
+		public TLNoAppUpdate (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

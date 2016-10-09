@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1690108678)]
     public class TLInputEncryptedFileUploaded : TLAbsInputEncryptedFile
     {
+
+		
         public override int Constructor
         {
             get
@@ -23,7 +25,14 @@ namespace TeleSharp.TL
      public string md5_checksum {get;set;}
      public int key_fingerprint {get;set;}
 
-
+		public TLInputEncryptedFileUploaded (){}
+		public TLInputEncryptedFileUploaded (long id ,int parts ,string md5_checksum ,int key_fingerprint ){
+			this.id = id; 
+this.parts = parts; 
+this.md5_checksum = md5_checksum; 
+this.key_fingerprint = key_fingerprint; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

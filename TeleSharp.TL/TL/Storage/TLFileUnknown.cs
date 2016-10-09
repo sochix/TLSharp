@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Storage
 	[TLObject(-1432995067)]
     public class TLFileUnknown : TLAbsFileType
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL.Storage
         }
 
         
-
+		
+		public TLFileUnknown (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

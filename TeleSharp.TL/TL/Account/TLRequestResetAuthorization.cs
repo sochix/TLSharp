@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Account
             }
         }
 
-                public long hash {get;set;}
+                private long hash {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestResetAuthorization (long hash ){
+			this.hash = hash; 
+	
+		}
 
 		public void ComputeFlags()
 		{

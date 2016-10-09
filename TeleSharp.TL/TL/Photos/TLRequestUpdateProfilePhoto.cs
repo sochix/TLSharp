@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Photos
             }
         }
 
-                public TLAbsInputPhoto id {get;set;}
-        public TLAbsInputPhotoCrop crop {get;set;}
+                private TLAbsInputPhoto id {get;set;}
+        private TLAbsInputPhotoCrop crop {get;set;}
         public TLAbsUserProfilePhoto Response{ get; set;}
 
+		
+		public TLRequestUpdateProfilePhoto (TLAbsInputPhoto id ,TLAbsInputPhotoCrop crop ){
+			this.id = id; 
+this.crop = crop; 
+	
+		}
 
 		public void ComputeFlags()
 		{

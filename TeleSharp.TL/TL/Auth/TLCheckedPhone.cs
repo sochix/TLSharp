@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Auth
 	[TLObject(-2128698738)]
     public class TLCheckedPhone : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL.Auth
 
              public bool phone_registered {get;set;}
 
-
+		public TLCheckedPhone (){}
+		public TLCheckedPhone (bool phone_registered ){
+			this.phone_registered = phone_registered; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

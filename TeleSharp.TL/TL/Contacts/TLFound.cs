@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Contacts
 	[TLObject(446822276)]
     public class TLFound : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -22,7 +24,13 @@ namespace TeleSharp.TL.Contacts
      public TLVector<TLAbsChat> chats {get;set;}
      public TLVector<TLAbsUser> users {get;set;}
 
-
+		public TLFound (){}
+		public TLFound (TLVector<TLAbsPeer> results ,TLVector<TLAbsChat> chats ,TLVector<TLAbsUser> users ){
+			this.results = results; 
+this.chats = chats; 
+this.users = users; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

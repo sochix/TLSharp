@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(9203775)]
     public class TLUserStatusOffline : TLAbsUserStatus
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public int was_online {get;set;}
 
-
+		public TLUserStatusOffline (){}
+		public TLUserStatusOffline (int was_online ){
+			this.was_online = was_online; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

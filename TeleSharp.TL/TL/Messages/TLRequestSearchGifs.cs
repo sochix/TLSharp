@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public string q {get;set;}
-        public int offset {get;set;}
+                private string q {get;set;}
+        private int offset {get;set;}
         public Messages.TLFoundGifs Response{ get; set;}
 
+		
+		public TLRequestSearchGifs (string q ,int offset ){
+			this.q = q; 
+this.offset = offset; 
+	
+		}
 
 		public void ComputeFlags()
 		{

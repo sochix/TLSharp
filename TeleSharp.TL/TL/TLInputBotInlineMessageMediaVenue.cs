@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1431327288)]
     public class TLInputBotInlineMessageMediaVenue : TLAbsInputBotInlineMessage
     {
+
+		
         public override int Constructor
         {
             get
@@ -26,7 +28,16 @@ namespace TeleSharp.TL
      public string venue_id {get;set;}
      public TLAbsReplyMarkup reply_markup {get;set;}
 
-
+		public TLInputBotInlineMessageMediaVenue (){}
+		public TLInputBotInlineMessageMediaVenue (TLAbsInputGeoPoint geo_point ,string title ,string address ,string provider ,string venue_id ,TLAbsReplyMarkup reply_markup ){
+			this.geo_point = geo_point; 
+this.title = title; 
+this.address = address; 
+this.provider = provider; 
+this.venue_id = venue_id; 
+this.reply_markup = reply_markup; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

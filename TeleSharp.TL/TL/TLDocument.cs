@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-106717361)]
     public class TLDocument : TLAbsDocument
     {
+
+		
         public override int Constructor
         {
             get
@@ -27,7 +29,18 @@ namespace TeleSharp.TL
      public int dc_id {get;set;}
      public TLVector<TLAbsDocumentAttribute> attributes {get;set;}
 
-
+		public TLDocument (){}
+		public TLDocument (long id ,long access_hash ,int date ,string mime_type ,int size ,TLAbsPhotoSize thumb ,int dc_id ,TLVector<TLAbsDocumentAttribute> attributes ){
+			this.id = id; 
+this.access_hash = access_hash; 
+this.date = date; 
+this.mime_type = mime_type; 
+this.size = size; 
+this.thumb = thumb; 
+this.dc_id = dc_id; 
+this.attributes = attributes; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

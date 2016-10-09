@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1653390447)]
     public class TLSendMessageChooseContactAction : TLAbsSendMessageAction
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLSendMessageChooseContactAction (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

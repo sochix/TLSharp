@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Auth
             }
         }
 
-                public TLVector<string> phone_numbers {get;set;}
-        public string message {get;set;}
+                private TLVector<string> phone_numbers {get;set;}
+        private string message {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestSendInvites (TLVector<string> phone_numbers ,string message ){
+			this.phone_numbers = phone_numbers; 
+this.message = message; 
+	
+		}
 
 		public void ComputeFlags()
 		{

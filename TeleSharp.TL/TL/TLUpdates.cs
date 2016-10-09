@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1957577280)]
     public class TLUpdates : TLAbsUpdates
     {
+
+		
         public override int Constructor
         {
             get
@@ -24,7 +26,15 @@ namespace TeleSharp.TL
      public int date {get;set;}
      public int seq {get;set;}
 
-
+		public TLUpdates (){}
+		public TLUpdates (TLVector<TLAbsUpdate> updates ,TLVector<TLAbsUser> users ,TLVector<TLAbsChat> chats ,int date ,int seq ){
+			this.updates = updates; 
+this.users = users; 
+this.chats = chats; 
+this.date = date; 
+this.seq = seq; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

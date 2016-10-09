@@ -18,13 +18,22 @@ namespace TeleSharp.TL.Auth
             }
         }
 
-                public string phone_number {get;set;}
-        public string phone_code_hash {get;set;}
-        public string phone_code {get;set;}
-        public string first_name {get;set;}
-        public string last_name {get;set;}
+                private string phone_number {get;set;}
+        private string phone_code_hash {get;set;}
+        private string phone_code {get;set;}
+        private string first_name {get;set;}
+        private string last_name {get;set;}
         public Auth.TLAuthorization Response{ get; set;}
 
+		
+		public TLRequestSignUp (string phone_number ,string phone_code_hash ,string phone_code ,string first_name ,string last_name ){
+			this.phone_number = phone_number; 
+this.phone_code_hash = phone_code_hash; 
+this.phone_code = phone_code; 
+this.first_name = first_name; 
+this.last_name = last_name; 
+	
+		}
 
 		public void ComputeFlags()
 		{

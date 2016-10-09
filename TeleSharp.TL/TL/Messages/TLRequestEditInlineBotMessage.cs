@@ -18,14 +18,23 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public int flags {get;set;}
-        public bool no_webpage {get;set;}
-        public TLInputBotInlineMessageID id {get;set;}
-        public string message {get;set;}
-        public TLAbsReplyMarkup reply_markup {get;set;}
-        public TLVector<TLAbsMessageEntity> entities {get;set;}
+                private int flags {get;set;}
+        private bool no_webpage {get;set;}
+        private TLInputBotInlineMessageID id {get;set;}
+        private string message {get;set;}
+        private TLAbsReplyMarkup reply_markup {get;set;}
+        private TLVector<TLAbsMessageEntity> entities {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestEditInlineBotMessage (bool no_webpage ,TLInputBotInlineMessageID id ,string message ,TLAbsReplyMarkup reply_markup ,TLVector<TLAbsMessageEntity> entities ){
+			this.no_webpage = no_webpage; 
+this.id = id; 
+this.message = message; 
+this.reply_markup = reply_markup; 
+this.entities = entities; 
+	
+		}
 
 		public void ComputeFlags()
 		{

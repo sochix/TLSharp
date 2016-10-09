@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Account
             }
         }
 
-                public bool offline {get;set;}
+                private bool offline {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestUpdateStatus (bool offline ){
+			this.offline = offline; 
+	
+		}
 
 		public void ComputeFlags()
 		{

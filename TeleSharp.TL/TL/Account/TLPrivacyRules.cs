@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Account
 	[TLObject(1430961007)]
     public class TLPrivacyRules : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL.Account
              public TLVector<TLAbsPrivacyRule> rules {get;set;}
      public TLVector<TLAbsUser> users {get;set;}
 
-
+		public TLPrivacyRules (){}
+		public TLPrivacyRules (TLVector<TLAbsPrivacyRule> rules ,TLVector<TLAbsUser> users ){
+			this.rules = rules; 
+this.users = users; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

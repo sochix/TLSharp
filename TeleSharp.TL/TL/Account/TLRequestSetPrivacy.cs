@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Account
             }
         }
 
-                public TLAbsInputPrivacyKey key {get;set;}
-        public TLVector<TLAbsInputPrivacyRule> rules {get;set;}
+                private TLAbsInputPrivacyKey key {get;set;}
+        private TLVector<TLAbsInputPrivacyRule> rules {get;set;}
         public Account.TLPrivacyRules Response{ get; set;}
 
+		
+		public TLRequestSetPrivacy (TLAbsInputPrivacyKey key ,TLVector<TLAbsInputPrivacyRule> rules ){
+			this.key = key; 
+this.rules = rules; 
+	
+		}
 
 		public void ComputeFlags()
 		{

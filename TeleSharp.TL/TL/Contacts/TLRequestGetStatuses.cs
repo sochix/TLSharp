@@ -20,6 +20,10 @@ namespace TeleSharp.TL.Contacts
 
                 public TLVector<TLContactStatus> Response{ get; set;}
 
+		
+		public TLRequestGetStatuses (){
+				
+		}
 
 		public void ComputeFlags()
 		{

@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-459324)]
     public class TLInputBotInlineResultDocument : TLAbsInputBotInlineResult
     {
+
+		
         public override int Constructor
         {
             get
@@ -26,7 +28,16 @@ namespace TeleSharp.TL
      public TLAbsInputDocument document {get;set;}
      public TLAbsInputBotInlineMessage send_message {get;set;}
 
-
+		public TLInputBotInlineResultDocument (){}
+		public TLInputBotInlineResultDocument (string id ,string type ,string title ,string description ,TLAbsInputDocument document ,TLAbsInputBotInlineMessage send_message ){
+			this.id = id; 
+this.type = type; 
+this.title = title; 
+this.description = description; 
+this.document = document; 
+this.send_message = send_message; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

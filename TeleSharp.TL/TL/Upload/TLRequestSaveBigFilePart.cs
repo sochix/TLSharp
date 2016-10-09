@@ -18,12 +18,20 @@ namespace TeleSharp.TL.Upload
             }
         }
 
-                public long file_id {get;set;}
-        public int file_part {get;set;}
-        public int file_total_parts {get;set;}
-        public byte[] bytes {get;set;}
+                private long file_id {get;set;}
+        private int file_part {get;set;}
+        private int file_total_parts {get;set;}
+        private byte[] bytes {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestSaveBigFilePart (long file_id ,int file_part ,int file_total_parts ,byte[] bytes ){
+			this.file_id = file_id; 
+this.file_part = file_part; 
+this.file_total_parts = file_total_parts; 
+this.bytes = bytes; 
+	
+		}
 
 		public void ComputeFlags()
 		{

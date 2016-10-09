@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1328445861)]
     public class TLChannelParticipantsBots : TLAbsChannelParticipantsFilter
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLChannelParticipantsBots (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

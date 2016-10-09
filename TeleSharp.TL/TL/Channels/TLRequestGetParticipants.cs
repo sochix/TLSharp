@@ -18,12 +18,20 @@ namespace TeleSharp.TL.Channels
             }
         }
 
-                public TLAbsInputChannel channel {get;set;}
-        public TLAbsChannelParticipantsFilter filter {get;set;}
-        public int offset {get;set;}
-        public int limit {get;set;}
+                private TLAbsInputChannel channel {get;set;}
+        private TLAbsChannelParticipantsFilter filter {get;set;}
+        private int offset {get;set;}
+        private int limit {get;set;}
         public Channels.TLChannelParticipants Response{ get; set;}
 
+		
+		public TLRequestGetParticipants (TLAbsInputChannel channel ,TLAbsChannelParticipantsFilter filter ,int offset ,int limit ){
+			this.channel = channel; 
+this.filter = filter; 
+this.offset = offset; 
+this.limit = limit; 
+	
+		}
 
 		public void ComputeFlags()
 		{

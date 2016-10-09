@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-104578748)]
     public class TLInputMediaGeoPoint : TLAbsInputMedia
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public TLAbsInputGeoPoint geo_point {get;set;}
 
-
+		public TLInputMediaGeoPoint (){}
+		public TLInputMediaGeoPoint (TLAbsInputGeoPoint geo_point ){
+			this.geo_point = geo_point; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

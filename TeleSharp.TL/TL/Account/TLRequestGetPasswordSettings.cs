@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Account
             }
         }
 
-                public byte[] current_password_hash {get;set;}
+                private byte[] current_password_hash {get;set;}
         public Account.TLPasswordSettings Response{ get; set;}
 
+		
+		public TLRequestGetPasswordSettings (byte[] current_password_hash ){
+			this.current_password_hash = current_password_hash; 
+	
+		}
 
 		public void ComputeFlags()
 		{

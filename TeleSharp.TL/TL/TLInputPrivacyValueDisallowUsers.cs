@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1877932953)]
     public class TLInputPrivacyValueDisallowUsers : TLAbsInputPrivacyRule
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public TLVector<TLAbsInputUser> users {get;set;}
 
-
+		public TLInputPrivacyValueDisallowUsers (){}
+		public TLInputPrivacyValueDisallowUsers (TLVector<TLAbsInputUser> users ){
+			this.users = users; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

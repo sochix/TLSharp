@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-4838507)]
     public class TLInputStickerSetEmpty : TLAbsInputStickerSet
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLInputStickerSetEmpty (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

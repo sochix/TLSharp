@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public TLAbsInputStickerSet stickerset {get;set;}
-        public bool disabled {get;set;}
+                private TLAbsInputStickerSet stickerset {get;set;}
+        private bool disabled {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestInstallStickerSet (TLAbsInputStickerSet stickerset ,bool disabled ){
+			this.stickerset = stickerset; 
+this.disabled = disabled; 
+	
+		}
 
 		public void ComputeFlags()
 		{

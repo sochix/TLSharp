@@ -20,6 +20,10 @@ namespace TeleSharp.TL.Help
 
                 public Help.TLInviteText Response{ get; set;}
 
+		
+		public TLRequestGetInviteText (){
+				
+		}
 
 		public void ComputeFlags()
 		{

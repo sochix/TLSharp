@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-367298028)]
     public class TLKeyboardButtonSwitchInline : TLAbsKeyboardButton
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL
              public string text {get;set;}
      public string query {get;set;}
 
-
+		public TLKeyboardButtonSwitchInline (){}
+		public TLKeyboardButtonSwitchInline (string text ,string query ){
+			this.text = text; 
+this.query = query; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

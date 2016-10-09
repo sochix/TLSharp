@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Channels
             }
         }
 
-                public TLAbsInputChannel channel {get;set;}
-        public TLVector<int> id {get;set;}
+                private TLAbsInputChannel channel {get;set;}
+        private TLVector<int> id {get;set;}
         public Messages.TLAbsMessages Response{ get; set;}
 
+		
+		public TLRequestGetMessages (TLAbsInputChannel channel ,TLVector<int> id ){
+			this.channel = channel; 
+this.id = id; 
+	
+		}
 
 		public void ComputeFlags()
 		{

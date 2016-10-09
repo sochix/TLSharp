@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-715532088)]
     public class TLUserProfilePhoto : TLAbsUserProfilePhoto
     {
+
+		
         public override int Constructor
         {
             get
@@ -22,7 +24,13 @@ namespace TeleSharp.TL
      public TLAbsFileLocation photo_small {get;set;}
      public TLAbsFileLocation photo_big {get;set;}
 
-
+		public TLUserProfilePhoto (){}
+		public TLUserProfilePhoto (long photo_id ,TLAbsFileLocation photo_small ,TLAbsFileLocation photo_big ){
+			this.photo_id = photo_id; 
+this.photo_small = photo_small; 
+this.photo_big = photo_big; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

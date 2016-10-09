@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public TLAbsInputStickerSet stickerset {get;set;}
+                private TLAbsInputStickerSet stickerset {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestUninstallStickerSet (TLAbsInputStickerSet stickerset ){
+			this.stickerset = stickerset; 
+	
+		}
 
 		public void ComputeFlags()
 		{

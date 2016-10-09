@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-512463606)]
     public class TLInputReportReasonOther : TLAbsReportReason
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public string text {get;set;}
 
-
+		public TLInputReportReasonOther (){}
+		public TLInputReportReasonOther (string text ){
+			this.text = text; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

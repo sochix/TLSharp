@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Contacts
             }
         }
 
-                public TLAbsInputUser id {get;set;}
+                private TLAbsInputUser id {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestBlock (TLAbsInputUser id ){
+			this.id = id; 
+	
+		}
 
 		public void ComputeFlags()
 		{

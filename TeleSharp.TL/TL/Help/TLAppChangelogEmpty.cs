@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Help
 	[TLObject(-1350696044)]
     public class TLAppChangelogEmpty : TLAbsAppChangelog
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL.Help
         }
 
         
-
+		
+		public TLAppChangelogEmpty (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1560655744)]
     public class TLKeyboardButton : TLAbsKeyboardButton
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public string text {get;set;}
 
-
+		public TLKeyboardButton (){}
+		public TLKeyboardButton (string text ){
+			this.text = text; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

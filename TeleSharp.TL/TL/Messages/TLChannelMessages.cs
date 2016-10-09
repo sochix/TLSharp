@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Messages
 	[TLObject(-1725551049)]
     public class TLChannelMessages : TLAbsMessages
     {
+
+		
         public override int Constructor
         {
             get
@@ -25,7 +27,15 @@ namespace TeleSharp.TL.Messages
      public TLVector<TLAbsChat> chats {get;set;}
      public TLVector<TLAbsUser> users {get;set;}
 
-
+		public TLChannelMessages (){}
+		public TLChannelMessages (int pts ,int count ,TLVector<TLAbsMessage> messages ,TLVector<TLAbsChat> chats ,TLVector<TLAbsUser> users ){
+			this.pts = pts; 
+this.count = count; 
+this.messages = messages; 
+this.chats = chats; 
+this.users = users; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Updates
 	[TLObject(-1459938943)]
     public class TLDifferenceSlice : TLAbsDifference
     {
+
+		
         public override int Constructor
         {
             get
@@ -25,7 +27,16 @@ namespace TeleSharp.TL.Updates
      public TLVector<TLAbsUser> users {get;set;}
      public Updates.TLState intermediate_state {get;set;}
 
-
+		public TLDifferenceSlice (){}
+		public TLDifferenceSlice (TLVector<TLAbsMessage> new_messages ,TLVector<TLAbsEncryptedMessage> new_encrypted_messages ,TLVector<TLAbsUpdate> other_updates ,TLVector<TLAbsChat> chats ,TLVector<TLAbsUser> users ,Updates.TLState intermediate_state ){
+			this.new_messages = new_messages; 
+this.new_encrypted_messages = new_encrypted_messages; 
+this.other_updates = other_updates; 
+this.chats = chats; 
+this.users = users; 
+this.intermediate_state = intermediate_state; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

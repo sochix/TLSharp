@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-496024847)]
     public class TLUserStatusRecently : TLAbsUserStatus
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLUserStatusRecently (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

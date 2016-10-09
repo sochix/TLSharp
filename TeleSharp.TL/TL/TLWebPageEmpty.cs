@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-350980120)]
     public class TLWebPageEmpty : TLAbsWebPage
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public long id {get;set;}
 
-
+		public TLWebPageEmpty (){}
+		public TLWebPageEmpty (long id ){
+			this.id = id; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

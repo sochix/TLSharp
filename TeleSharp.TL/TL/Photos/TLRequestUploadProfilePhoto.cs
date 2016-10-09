@@ -18,12 +18,20 @@ namespace TeleSharp.TL.Photos
             }
         }
 
-                public TLAbsInputFile file {get;set;}
-        public string caption {get;set;}
-        public TLAbsInputGeoPoint geo_point {get;set;}
-        public TLAbsInputPhotoCrop crop {get;set;}
+                private TLAbsInputFile file {get;set;}
+        private string caption {get;set;}
+        private TLAbsInputGeoPoint geo_point {get;set;}
+        private TLAbsInputPhotoCrop crop {get;set;}
         public Photos.TLPhoto Response{ get; set;}
 
+		
+		public TLRequestUploadProfilePhoto (TLAbsInputFile file ,string caption ,TLAbsInputGeoPoint geo_point ,TLAbsInputPhotoCrop crop ){
+			this.file = file; 
+this.caption = caption; 
+this.geo_point = geo_point; 
+this.crop = crop; 
+	
+		}
 
 		public void ComputeFlags()
 		{

@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Storage
 	[TLObject(-891180321)]
     public class TLFileGif : TLAbsFileType
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL.Storage
         }
 
         
-
+		
+		public TLFileGif (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1417832080)]
     public class TLUpdateBotInlineQuery : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -25,7 +27,15 @@ namespace TeleSharp.TL
      public TLAbsGeoPoint geo {get;set;}
      public string offset {get;set;}
 
-
+		public TLUpdateBotInlineQuery (){}
+		public TLUpdateBotInlineQuery (long query_id ,int user_id ,string query ,TLAbsGeoPoint geo ,string offset ){
+			this.query_id = query_id; 
+this.user_id = user_id; 
+this.query = query; 
+this.geo = geo; 
+this.offset = offset; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

@@ -18,12 +18,19 @@ namespace TeleSharp.TL.Channels
             }
         }
 
-                public int flags {get;set;}
-        public bool silent {get;set;}
-        public TLAbsInputChannel channel {get;set;}
-        public int id {get;set;}
+                private int flags {get;set;}
+        private bool silent {get;set;}
+        private TLAbsInputChannel channel {get;set;}
+        private int id {get;set;}
         public TLAbsUpdates Response{ get; set;}
 
+		
+		public TLRequestUpdatePinnedMessage (bool silent ,TLAbsInputChannel channel ,int id ){
+			this.silent = silent; 
+this.channel = channel; 
+this.id = id; 
+	
+		}
 
 		public void ComputeFlags()
 		{

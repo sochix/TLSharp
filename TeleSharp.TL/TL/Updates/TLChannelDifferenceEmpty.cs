@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Updates
 	[TLObject(1041346555)]
     public class TLChannelDifferenceEmpty : TLAbsChannelDifference
     {
+
+		
         public override int Constructor
         {
             get
@@ -23,7 +25,13 @@ namespace TeleSharp.TL.Updates
      public int pts {get;set;}
      public int? timeout {get;set;}
 
-
+		public TLChannelDifferenceEmpty (){}
+		public TLChannelDifferenceEmpty (bool final ,int pts ,int? timeout ){
+			this.final = final; 
+this.pts = pts; 
+this.timeout = timeout; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

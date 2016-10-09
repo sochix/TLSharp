@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(777640226)]
     public class TLInputReportReasonPornography : TLAbsReportReason
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLInputReportReasonPornography (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

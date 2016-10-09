@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-75283823)]
     public class TLTopPeerCategoryPeers : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -22,7 +24,13 @@ namespace TeleSharp.TL
      public int count {get;set;}
      public TLVector<TLTopPeer> peers {get;set;}
 
-
+		public TLTopPeerCategoryPeers (){}
+		public TLTopPeerCategoryPeers (TLAbsTopPeerCategory category ,int count ,TLVector<TLTopPeer> peers ){
+			this.category = category; 
+this.count = count; 
+this.peers = peers; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

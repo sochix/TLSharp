@@ -18,11 +18,18 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public int chat_id {get;set;}
-        public TLAbsInputUser user_id {get;set;}
-        public bool is_admin {get;set;}
+                private int chat_id {get;set;}
+        private TLAbsInputUser user_id {get;set;}
+        private bool is_admin {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestEditChatAdmin (int chat_id ,TLAbsInputUser user_id ,bool is_admin ){
+			this.chat_id = chat_id; 
+this.user_id = user_id; 
+this.is_admin = is_admin; 
+	
+		}
 
 		public void ComputeFlags()
 		{

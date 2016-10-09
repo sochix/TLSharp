@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-253774767)]
     public class TLUpdateStickerSetsOrder : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public TLVector<long> order {get;set;}
 
-
+		public TLUpdateStickerSetsOrder (){}
+		public TLUpdateStickerSetsOrder (TLVector<long> order ){
+			this.order = order; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-644787419)]
     public class TLInputPhotoCrop : TLAbsInputPhotoCrop
     {
+
+		
         public override int Constructor
         {
             get
@@ -22,7 +24,13 @@ namespace TeleSharp.TL
      public double crop_top {get;set;}
      public double crop_width {get;set;}
 
-
+		public TLInputPhotoCrop (){}
+		public TLInputPhotoCrop (double crop_left ,double crop_top ,double crop_width ){
+			this.crop_left = crop_left; 
+this.crop_top = crop_top; 
+this.crop_width = crop_width; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

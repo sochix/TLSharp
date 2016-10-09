@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Messages
 	[TLObject(364538944)]
     public class TLDialogs : TLAbsDialogs
     {
+
+		
         public override int Constructor
         {
             get
@@ -23,7 +25,14 @@ namespace TeleSharp.TL.Messages
      public TLVector<TLAbsChat> chats {get;set;}
      public TLVector<TLAbsUser> users {get;set;}
 
-
+		public TLDialogs (){}
+		public TLDialogs (TLVector<TLDialog> dialogs ,TLVector<TLAbsMessage> messages ,TLVector<TLAbsChat> chats ,TLVector<TLAbsUser> users ){
+			this.dialogs = dialogs; 
+this.messages = messages; 
+this.chats = chats; 
+this.users = users; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Account
             }
         }
 
-                public TLAbsInputNotifyPeer peer {get;set;}
+                private TLAbsInputNotifyPeer peer {get;set;}
         public TLAbsPeerNotifySettings Response{ get; set;}
 
+		
+		public TLRequestGetNotifySettings (TLAbsInputNotifyPeer peer ){
+			this.peer = peer; 
+	
+		}
 
 		public void ComputeFlags()
 		{

@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(480546647)]
     public class TLInputChatPhotoEmpty : TLAbsInputChatPhoto
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLInputChatPhotoEmpty (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

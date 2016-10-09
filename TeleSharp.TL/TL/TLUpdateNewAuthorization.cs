@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1895411046)]
     public class TLUpdateNewAuthorization : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -23,7 +25,14 @@ namespace TeleSharp.TL
      public string device {get;set;}
      public string location {get;set;}
 
-
+		public TLUpdateNewAuthorization (){}
+		public TLUpdateNewAuthorization (long auth_key_id ,int date ,string device ,string location ){
+			this.auth_key_id = auth_key_id; 
+this.date = date; 
+this.device = device; 
+this.location = location; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

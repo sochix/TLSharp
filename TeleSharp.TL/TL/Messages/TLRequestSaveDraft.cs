@@ -18,14 +18,23 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public int flags {get;set;}
-        public bool no_webpage {get;set;}
-        public int? reply_to_msg_id {get;set;}
-        public TLAbsInputPeer peer {get;set;}
-        public string message {get;set;}
-        public TLVector<TLAbsMessageEntity> entities {get;set;}
+                private int flags {get;set;}
+        private bool no_webpage {get;set;}
+        private int? reply_to_msg_id {get;set;}
+        private TLAbsInputPeer peer {get;set;}
+        private string message {get;set;}
+        private TLVector<TLAbsMessageEntity> entities {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestSaveDraft (bool no_webpage ,int? reply_to_msg_id ,TLAbsInputPeer peer ,string message ,TLVector<TLAbsMessageEntity> entities ){
+			this.no_webpage = no_webpage; 
+this.reply_to_msg_id = reply_to_msg_id; 
+this.peer = peer; 
+this.message = message; 
+this.entities = entities; 
+	
+		}
 
 		public void ComputeFlags()
 		{

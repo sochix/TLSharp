@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1094555409)]
     public class TLUpdateNotifySettings : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL
              public TLAbsNotifyPeer peer {get;set;}
      public TLAbsPeerNotifySettings notify_settings {get;set;}
 
-
+		public TLUpdateNotifySettings (){}
+		public TLUpdateNotifySettings (TLAbsNotifyPeer peer ,TLAbsPeerNotifySettings notify_settings ){
+			this.peer = peer; 
+this.notify_settings = notify_settings; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

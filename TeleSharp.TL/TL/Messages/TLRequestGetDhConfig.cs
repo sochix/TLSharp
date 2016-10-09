@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public int version {get;set;}
-        public int random_length {get;set;}
+                private int version {get;set;}
+        private int random_length {get;set;}
         public Messages.TLAbsDhConfig Response{ get; set;}
 
+		
+		public TLRequestGetDhConfig (int version ,int random_length ){
+			this.version = version; 
+this.random_length = random_length; 
+	
+		}
 
 		public void ComputeFlags()
 		{

@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Messages
 	[TLObject(1158290442)]
     public class TLFoundGifs : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL.Messages
              public int next_offset {get;set;}
      public TLVector<TLAbsFoundGif> results {get;set;}
 
-
+		public TLFoundGifs (){}
+		public TLFoundGifs (int next_offset ,TLVector<TLAbsFoundGif> results ){
+			this.next_offset = next_offset; 
+this.results = results; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

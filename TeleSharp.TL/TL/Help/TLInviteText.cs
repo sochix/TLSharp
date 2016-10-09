@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Help
 	[TLObject(415997816)]
     public class TLInviteText : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL.Help
 
              public string message {get;set;}
 
-
+		public TLInviteText (){}
+		public TLInviteText (string message ){
+			this.message = message; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

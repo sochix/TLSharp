@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1959820384)]
     public class TLNotifyAll : TLAbsNotifyPeer
     {
+
+		
         public override int Constructor
         {
             get
@@ -19,7 +21,10 @@ namespace TeleSharp.TL
         }
 
         
-
+		
+		public TLNotifyAll (){
+				
+		}
 		public void ComputeFlags()
 		{
 			

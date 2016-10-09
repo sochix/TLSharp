@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Updates
 	[TLObject(543450958)]
     public class TLChannelDifference : TLAbsChannelDifference
     {
+
+		
         public override int Constructor
         {
             get
@@ -27,7 +29,17 @@ namespace TeleSharp.TL.Updates
      public TLVector<TLAbsChat> chats {get;set;}
      public TLVector<TLAbsUser> users {get;set;}
 
-
+		public TLChannelDifference (){}
+		public TLChannelDifference (bool final ,int pts ,int? timeout ,TLVector<TLAbsMessage> new_messages ,TLVector<TLAbsUpdate> other_updates ,TLVector<TLAbsChat> chats ,TLVector<TLAbsUser> users ){
+			this.final = final; 
+this.pts = pts; 
+this.timeout = timeout; 
+this.new_messages = new_messages; 
+this.other_updates = other_updates; 
+this.chats = chats; 
+this.users = users; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

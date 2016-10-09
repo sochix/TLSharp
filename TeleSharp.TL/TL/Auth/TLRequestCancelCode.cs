@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Auth
             }
         }
 
-                public string phone_number {get;set;}
-        public string phone_code_hash {get;set;}
+                private string phone_number {get;set;}
+        private string phone_code_hash {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestCancelCode (string phone_number ,string phone_code_hash ){
+			this.phone_number = phone_number; 
+this.phone_code_hash = phone_code_hash; 
+	
+		}
 
 		public void ComputeFlags()
 		{

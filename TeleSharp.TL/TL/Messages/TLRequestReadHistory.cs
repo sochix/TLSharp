@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public TLAbsInputPeer peer {get;set;}
-        public int max_id {get;set;}
+                private TLAbsInputPeer peer {get;set;}
+        private int max_id {get;set;}
         public Messages.TLAffectedMessages Response{ get; set;}
 
+		
+		public TLRequestReadHistory (TLAbsInputPeer peer ,int max_id ){
+			this.peer = peer; 
+this.max_id = max_id; 
+	
+		}
 
 		public void ComputeFlags()
 		{

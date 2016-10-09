@@ -18,11 +18,18 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public TLAbsInputPeer peer {get;set;}
-        public int msg_id {get;set;}
-        public byte[] data {get;set;}
+                private TLAbsInputPeer peer {get;set;}
+        private int msg_id {get;set;}
+        private byte[] data {get;set;}
         public Messages.TLBotCallbackAnswer Response{ get; set;}
 
+		
+		public TLRequestGetBotCallbackAnswer (TLAbsInputPeer peer ,int msg_id ,byte[] data ){
+			this.peer = peer; 
+this.msg_id = msg_id; 
+this.data = data; 
+	
+		}
 
 		public void ComputeFlags()
 		{

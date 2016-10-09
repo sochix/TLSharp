@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(1662091044)]
     public class TLWallPaperSolid : TLAbsWallPaper
     {
+
+		
         public override int Constructor
         {
             get
@@ -23,7 +25,14 @@ namespace TeleSharp.TL
      public int bg_color {get;set;}
      public int color {get;set;}
 
-
+		public TLWallPaperSolid (){}
+		public TLWallPaperSolid (int id ,string title ,int bg_color ,int color ){
+			this.id = id; 
+this.title = title; 
+this.bg_color = bg_color; 
+this.color = color; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

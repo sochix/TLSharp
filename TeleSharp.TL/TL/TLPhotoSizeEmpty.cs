@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(236446268)]
     public class TLPhotoSizeEmpty : TLAbsPhotoSize
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL
 
              public string type {get;set;}
 
-
+		public TLPhotoSizeEmpty (){}
+		public TLPhotoSizeEmpty (string type ){
+			this.type = type; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

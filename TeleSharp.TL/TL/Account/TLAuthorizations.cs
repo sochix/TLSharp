@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Account
 	[TLObject(307276766)]
     public class TLAuthorizations : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL.Account
 
              public TLVector<TLAuthorization> authorizations {get;set;}
 
-
+		public TLAuthorizations (){}
+		public TLAuthorizations (TLVector<TLAuthorization> authorizations ){
+			this.authorizations = authorizations; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

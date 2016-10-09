@@ -18,9 +18,14 @@ namespace TeleSharp.TL.Account
             }
         }
 
-                public string username {get;set;}
+                private string username {get;set;}
         public TLAbsUser Response{ get; set;}
 
+		
+		public TLRequestUpdateUsername (string username ){
+			this.username = username; 
+	
+		}
 
 		public void ComputeFlags()
 		{

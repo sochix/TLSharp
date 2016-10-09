@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Help
 	[TLObject(398898678)]
     public class TLSupport : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -21,7 +23,12 @@ namespace TeleSharp.TL.Help
              public string phone_number {get;set;}
      public TLAbsUser user {get;set;}
 
-
+		public TLSupport (){}
+		public TLSupport (string phone_number ,TLAbsUser user ){
+			this.phone_number = phone_number; 
+this.user = user; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

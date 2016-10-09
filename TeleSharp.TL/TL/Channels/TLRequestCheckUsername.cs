@@ -18,10 +18,16 @@ namespace TeleSharp.TL.Channels
             }
         }
 
-                public TLAbsInputChannel channel {get;set;}
-        public string username {get;set;}
+                private TLAbsInputChannel channel {get;set;}
+        private string username {get;set;}
         public bool Response{ get; set;}
 
+		
+		public TLRequestCheckUsername (TLAbsInputChannel channel ,string username ){
+			this.channel = channel; 
+this.username = username; 
+	
+		}
 
 		public void ComputeFlags()
 		{

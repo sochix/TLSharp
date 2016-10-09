@@ -18,11 +18,18 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public TLInputEncryptedChat peer {get;set;}
-        public long random_id {get;set;}
-        public byte[] data {get;set;}
+                private TLInputEncryptedChat peer {get;set;}
+        private long random_id {get;set;}
+        private byte[] data {get;set;}
         public Messages.TLAbsSentEncryptedMessage Response{ get; set;}
 
+		
+		public TLRequestSendEncryptedService (TLInputEncryptedChat peer ,long random_id ,byte[] data ){
+			this.peer = peer; 
+this.random_id = random_id; 
+this.data = data; 
+	
+		}
 
 		public void ComputeFlags()
 		{

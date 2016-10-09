@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Account
 	[TLObject(2081952796)]
     public class TLPassword : TLAbsPassword
     {
+
+		
         public override int Constructor
         {
             get
@@ -24,7 +26,15 @@ namespace TeleSharp.TL.Account
      public bool has_recovery {get;set;}
      public string email_unconfirmed_pattern {get;set;}
 
-
+		public TLPassword (){}
+		public TLPassword (byte[] current_salt ,byte[] new_salt ,string hint ,bool has_recovery ,string email_unconfirmed_pattern ){
+			this.current_salt = current_salt; 
+this.new_salt = new_salt; 
+this.hint = hint; 
+this.has_recovery = has_recovery; 
+this.email_unconfirmed_pattern = email_unconfirmed_pattern; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

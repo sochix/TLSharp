@@ -18,17 +18,29 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-                public int flags {get;set;}
-        public bool silent {get;set;}
-        public bool background {get;set;}
-        public bool clear_draft {get;set;}
-        public TLAbsInputPeer peer {get;set;}
-        public int? reply_to_msg_id {get;set;}
-        public long random_id {get;set;}
-        public long query_id {get;set;}
-        public string id {get;set;}
+                private int flags {get;set;}
+        private bool silent {get;set;}
+        private bool background {get;set;}
+        private bool clear_draft {get;set;}
+        private TLAbsInputPeer peer {get;set;}
+        private int? reply_to_msg_id {get;set;}
+        private long random_id {get;set;}
+        private long query_id {get;set;}
+        private string id {get;set;}
         public TLAbsUpdates Response{ get; set;}
 
+		
+		public TLRequestSendInlineBotResult (bool silent ,bool background ,bool clear_draft ,TLAbsInputPeer peer ,int? reply_to_msg_id ,long random_id ,long query_id ,string id ){
+			this.silent = silent; 
+this.background = background; 
+this.clear_draft = clear_draft; 
+this.peer = peer; 
+this.reply_to_msg_id = reply_to_msg_id; 
+this.random_id = random_id; 
+this.query_id = query_id; 
+this.id = id; 
+	
+		}
 
 		public void ComputeFlags()
 		{

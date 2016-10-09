@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-1557620115)]
     public class TLChannelParticipantSelf : TLAbsChannelParticipant
     {
+
+		
         public override int Constructor
         {
             get
@@ -22,7 +24,13 @@ namespace TeleSharp.TL
      public int inviter_id {get;set;}
      public int date {get;set;}
 
-
+		public TLChannelParticipantSelf (){}
+		public TLChannelParticipantSelf (int user_id ,int inviter_id ,int date ){
+			this.user_id = user_id; 
+this.inviter_id = inviter_id; 
+this.date = date; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

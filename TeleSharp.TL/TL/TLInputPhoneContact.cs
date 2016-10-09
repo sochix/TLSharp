@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-208488460)]
     public class TLInputPhoneContact : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -23,7 +25,14 @@ namespace TeleSharp.TL
      public string first_name {get;set;}
      public string last_name {get;set;}
 
-
+		public TLInputPhoneContact (){}
+		public TLInputPhoneContact (long client_id ,string phone ,string first_name ,string last_name ){
+			this.client_id = client_id; 
+this.phone = phone; 
+this.first_name = first_name; 
+this.last_name = last_name; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

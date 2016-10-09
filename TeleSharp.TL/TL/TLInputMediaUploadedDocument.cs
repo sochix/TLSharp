@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(495530093)]
     public class TLInputMediaUploadedDocument : TLAbsInputMedia
     {
+
+		
         public override int Constructor
         {
             get
@@ -23,7 +25,14 @@ namespace TeleSharp.TL
      public TLVector<TLAbsDocumentAttribute> attributes {get;set;}
      public string caption {get;set;}
 
-
+		public TLInputMediaUploadedDocument (){}
+		public TLInputMediaUploadedDocument (TLAbsInputFile file ,string mime_type ,TLVector<TLAbsDocumentAttribute> attributes ,string caption ){
+			this.file = file; 
+this.mime_type = mime_type; 
+this.attributes = attributes; 
+this.caption = caption; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

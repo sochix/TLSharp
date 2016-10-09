@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Contacts
 	[TLObject(2131196633)]
     public class TLResolvedPeer : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -22,7 +24,13 @@ namespace TeleSharp.TL.Contacts
      public TLVector<TLAbsChat> chats {get;set;}
      public TLVector<TLAbsUser> users {get;set;}
 
-
+		public TLResolvedPeer (){}
+		public TLResolvedPeer (TLAbsPeer peer ,TLVector<TLAbsChat> chats ,TLVector<TLAbsUser> users ){
+			this.peer = peer; 
+this.chats = chats; 
+this.users = users; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

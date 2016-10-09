@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(2009052699)]
     public class TLPhotoSize : TLAbsPhotoSize
     {
+
+		
         public override int Constructor
         {
             get
@@ -24,7 +26,15 @@ namespace TeleSharp.TL
      public int h {get;set;}
      public int size {get;set;}
 
-
+		public TLPhotoSize (){}
+		public TLPhotoSize (string type ,TLAbsFileLocation location ,int w ,int h ,int size ){
+			this.type = type; 
+this.location = location; 
+this.w = w; 
+this.h = h; 
+this.size = size; 
+	
+		}
 		public void ComputeFlags()
 		{
 			

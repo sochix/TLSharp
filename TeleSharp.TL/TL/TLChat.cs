@@ -10,6 +10,8 @@ namespace TeleSharp.TL
 	[TLObject(-652419756)]
     public class TLChat : TLAbsChat
     {
+
+		
         public override int Constructor
         {
             get
@@ -33,7 +35,23 @@ namespace TeleSharp.TL
      public int version {get;set;}
      public TLAbsInputChannel migrated_to {get;set;}
 
-
+		public TLChat (){}
+		public TLChat (bool creator ,bool kicked ,bool left ,bool admins_enabled ,bool admin ,bool deactivated ,int id ,string title ,TLAbsChatPhoto photo ,int participants_count ,int date ,int version ,TLAbsInputChannel migrated_to ){
+			this.creator = creator; 
+this.kicked = kicked; 
+this.left = left; 
+this.admins_enabled = admins_enabled; 
+this.admin = admin; 
+this.deactivated = deactivated; 
+this.id = id; 
+this.title = title; 
+this.photo = photo; 
+this.participants_count = participants_count; 
+this.date = date; 
+this.version = version; 
+this.migrated_to = migrated_to; 
+	
+		}
 		public void ComputeFlags()
 		{
 			flags = 0;

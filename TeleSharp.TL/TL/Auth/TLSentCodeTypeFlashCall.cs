@@ -10,6 +10,8 @@ namespace TeleSharp.TL.Auth
 	[TLObject(-1425815847)]
     public class TLSentCodeTypeFlashCall : TLAbsSentCodeType
     {
+
+		
         public override int Constructor
         {
             get
@@ -20,7 +22,11 @@ namespace TeleSharp.TL.Auth
 
              public string pattern {get;set;}
 
-
+		public TLSentCodeTypeFlashCall (){}
+		public TLSentCodeTypeFlashCall (string pattern ){
+			this.pattern = pattern; 
+	
+		}
 		public void ComputeFlags()
 		{
 			
