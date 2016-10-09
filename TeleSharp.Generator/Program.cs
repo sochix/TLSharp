@@ -80,7 +80,7 @@ namespace TeleSharp.Generator
                     string fields = "";
                     foreach (var tmp in c.Params)
                     {
-                        fields += $"     private {CheckForFlagBase(tmp.type, GetTypeName(tmp.type))} {CheckForKeyword(tmp.name)} " + "{get;set;}" + Environment.NewLine;
+                        fields += $"     public {CheckForFlagBase(tmp.type, GetTypeName(tmp.type))} {CheckForKeyword(tmp.name)} " + "{get;set;}" + Environment.NewLine;
                     }
                     temp = temp.Replace("/* PARAMS */", fields);
                     #endregion
