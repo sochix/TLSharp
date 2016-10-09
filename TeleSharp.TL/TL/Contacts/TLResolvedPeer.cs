@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Contacts
 {
-    [TLObject(2131196633)]
+	[TLObject(2131196633)]
     public class TLResolvedPeer : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,30 +20,35 @@ namespace TeleSharp.TL.Contacts
             }
         }
 
-        public TLAbsPeer peer { get; set; }
-        public TLVector<TLAbsChat> chats { get; set; }
-        public TLVector<TLAbsUser> users { get; set; }
+             public TLAbsPeer peer {get;set;}
+     public TLVector<TLAbsChat> chats {get;set;}
+     public TLVector<TLAbsUser> users {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLResolvedPeer (TLAbsPeer peer ,TLVector<TLAbsChat> chats ,TLVector<TLAbsUser> users ){
+			this.peer = peer; 
+this.chats = chats; 
+this.users = users; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             peer = (TLAbsPeer)ObjectUtils.DeserializeObject(br);
-            chats = (TLVector<TLAbsChat>)ObjectUtils.DeserializeVector<TLAbsChat>(br);
-            users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
+chats = (TLVector<TLAbsChat>)ObjectUtils.DeserializeVector<TLAbsChat>(br);
+users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-            ObjectUtils.SerializeObject(peer, bw);
-            ObjectUtils.SerializeObject(chats, bw);
-            ObjectUtils.SerializeObject(users, bw);
+			bw.Write(Constructor);
+            ObjectUtils.SerializeObject(peer,bw);
+ObjectUtils.SerializeObject(chats,bw);
+ObjectUtils.SerializeObject(users,bw);
 
         }
     }

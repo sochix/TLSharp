@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-2106619040)]
+	[TLObject(-2106619040)]
     public class TLMessageEntityItalic : TLAbsMessageEntity
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,27 +20,31 @@ namespace TeleSharp.TL
             }
         }
 
-        public int offset { get; set; }
-        public int length { get; set; }
+             public int offset {get;set;}
+     public int length {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLMessageEntityItalic (int offset ,int length ){
+			this.offset = offset; 
+this.length = length; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             offset = br.ReadInt32();
-            length = br.ReadInt32();
+length = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
+			bw.Write(Constructor);
             bw.Write(offset);
-            bw.Write(length);
+bw.Write(length);
 
         }
     }

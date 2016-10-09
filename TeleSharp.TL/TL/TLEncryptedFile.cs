@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(1248893260)]
+	[TLObject(1248893260)]
     public class TLEncryptedFile : TLAbsEncryptedFile
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,36 +20,43 @@ namespace TeleSharp.TL
             }
         }
 
-        public long id { get; set; }
-        public long access_hash { get; set; }
-        public int size { get; set; }
-        public int dc_id { get; set; }
-        public int key_fingerprint { get; set; }
+             public long id {get;set;}
+     public long access_hash {get;set;}
+     public int size {get;set;}
+     public int dc_id {get;set;}
+     public int key_fingerprint {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLEncryptedFile (long id ,long access_hash ,int size ,int dc_id ,int key_fingerprint ){
+			this.id = id; 
+this.access_hash = access_hash; 
+this.size = size; 
+this.dc_id = dc_id; 
+this.key_fingerprint = key_fingerprint; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             id = br.ReadInt64();
-            access_hash = br.ReadInt64();
-            size = br.ReadInt32();
-            dc_id = br.ReadInt32();
-            key_fingerprint = br.ReadInt32();
+access_hash = br.ReadInt64();
+size = br.ReadInt32();
+dc_id = br.ReadInt32();
+key_fingerprint = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
+			bw.Write(Constructor);
             bw.Write(id);
-            bw.Write(access_hash);
-            bw.Write(size);
-            bw.Write(dc_id);
-            bw.Write(key_fingerprint);
+bw.Write(access_hash);
+bw.Write(size);
+bw.Write(dc_id);
+bw.Write(key_fingerprint);
 
         }
     }

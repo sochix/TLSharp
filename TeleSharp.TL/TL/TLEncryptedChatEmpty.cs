@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-1417756512)]
+	[TLObject(-1417756512)]
     public class TLEncryptedChatEmpty : TLAbsEncryptedChat
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,13 +20,16 @@ namespace TeleSharp.TL
             }
         }
 
-        public int id { get; set; }
+             public int id {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLEncryptedChatEmpty (int id ){
+			this.id = id; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,7 +39,7 @@ namespace TeleSharp.TL
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
+			bw.Write(Constructor);
             bw.Write(id);
 
         }

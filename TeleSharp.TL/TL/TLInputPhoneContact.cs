@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-208488460)]
+	[TLObject(-208488460)]
     public class TLInputPhoneContact : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,33 +20,39 @@ namespace TeleSharp.TL
             }
         }
 
-        public long client_id { get; set; }
-        public string phone { get; set; }
-        public string first_name { get; set; }
-        public string last_name { get; set; }
+             public long client_id {get;set;}
+     public string phone {get;set;}
+     public string first_name {get;set;}
+     public string last_name {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLInputPhoneContact (long client_id ,string phone ,string first_name ,string last_name ){
+			this.client_id = client_id; 
+this.phone = phone; 
+this.first_name = first_name; 
+this.last_name = last_name; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             client_id = br.ReadInt64();
-            phone = StringUtil.Deserialize(br);
-            first_name = StringUtil.Deserialize(br);
-            last_name = StringUtil.Deserialize(br);
+phone = StringUtil.Deserialize(br);
+first_name = StringUtil.Deserialize(br);
+last_name = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
+			bw.Write(Constructor);
             bw.Write(client_id);
-            StringUtil.Serialize(phone, bw);
-            StringUtil.Serialize(first_name, bw);
-            StringUtil.Serialize(last_name, bw);
+StringUtil.Serialize(phone,bw);
+StringUtil.Serialize(first_name,bw);
+StringUtil.Serialize(last_name,bw);
 
         }
     }

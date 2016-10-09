@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Account
 {
-    [TLObject(-484392616)]
+	[TLObject(-484392616)]
     public class TLRequestGetAuthorizations : TLMethod
     {
         public override int Constructor
@@ -18,28 +18,32 @@ namespace TeleSharp.TL.Account
             }
         }
 
-        public Account.TLAuthorizations Response { get; set; }
+                public Account.TLAuthorizations Response{ get; set;}
 
+		
+		public TLRequestGetAuthorizations (){
+				
+		}
 
-        public void ComputeFlags()
-        {
-
-        }
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
-
+            
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-
+			bw.Write(Constructor);
+            
         }
-        public override void deserializeResponse(BinaryReader br)
-        {
-            Response = (Account.TLAuthorizations)ObjectUtils.DeserializeObject(br);
+		public override void deserializeResponse(BinaryReader br)
+		{
+			Response = (Account.TLAuthorizations)ObjectUtils.DeserializeObject(br);
 
-        }
+		}
     }
 }

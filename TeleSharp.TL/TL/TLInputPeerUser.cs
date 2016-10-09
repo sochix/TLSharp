@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(2072935910)]
+	[TLObject(2072935910)]
     public class TLInputPeerUser : TLAbsInputPeer
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,27 +20,31 @@ namespace TeleSharp.TL
             }
         }
 
-        public int user_id { get; set; }
-        public long access_hash { get; set; }
+             public int user_id {get;set;}
+     public long access_hash {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLInputPeerUser (int user_id ,long access_hash ){
+			this.user_id = user_id; 
+this.access_hash = access_hash; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             user_id = br.ReadInt32();
-            access_hash = br.ReadInt64();
+access_hash = br.ReadInt64();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
+			bw.Write(Constructor);
             bw.Write(user_id);
-            bw.Write(access_hash);
+bw.Write(access_hash);
 
         }
     }

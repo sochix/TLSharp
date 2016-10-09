@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Messages
 {
-    [TLObject(1888354709)]
+	[TLObject(1888354709)]
     public class TLRequestForwardMessages : TLMethod
     {
         public override int Constructor
@@ -18,53 +18,63 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public int flags { get; set; }
-        public bool silent { get; set; }
-        public bool background { get; set; }
-        public TLAbsInputPeer from_peer { get; set; }
-        public TLVector<int> id { get; set; }
-        public TLVector<long> random_id { get; set; }
-        public TLAbsInputPeer to_peer { get; set; }
-        public TLAbsUpdates Response { get; set; }
+                private int flags {get;set;}
+        private bool silent {get;set;}
+        private bool background {get;set;}
+        private TLAbsInputPeer from_peer {get;set;}
+        private TLVector<int> id {get;set;}
+        private TLVector<long> random_id {get;set;}
+        private TLAbsInputPeer to_peer {get;set;}
+        public TLAbsUpdates Response{ get; set;}
 
+		
+		public TLRequestForwardMessages (bool silent ,bool background ,TLAbsInputPeer from_peer ,TLVector<int> id ,TLVector<long> random_id ,TLAbsInputPeer to_peer ){
+			this.silent = silent; 
+this.background = background; 
+this.from_peer = from_peer; 
+this.id = id; 
+this.random_id = random_id; 
+this.to_peer = to_peer; 
+	
+		}
 
-        public void ComputeFlags()
-        {
-            flags = 0;
-            flags = silent ? (flags | 32) : (flags & ~32);
-            flags = background ? (flags | 64) : (flags & ~64);
+		public void ComputeFlags()
+		{
+			flags = 0;
+flags = silent ? (flags | 32) : (flags & ~32);
+flags = background ? (flags | 64) : (flags & ~64);
 
-        }
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             flags = br.ReadInt32();
-            silent = (flags & 32) != 0;
-            background = (flags & 64) != 0;
-            from_peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
-            id = (TLVector<int>)ObjectUtils.DeserializeVector<int>(br);
-            random_id = (TLVector<long>)ObjectUtils.DeserializeVector<long>(br);
-            to_peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
+silent = (flags & 32) != 0;
+background = (flags & 64) != 0;
+from_peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
+id = (TLVector<int>)ObjectUtils.DeserializeVector<int>(br);
+random_id = (TLVector<long>)ObjectUtils.DeserializeVector<long>(br);
+to_peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
+			bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+bw.Write(flags);
 
 
-            ObjectUtils.SerializeObject(from_peer, bw);
-            ObjectUtils.SerializeObject(id, bw);
-            ObjectUtils.SerializeObject(random_id, bw);
-            ObjectUtils.SerializeObject(to_peer, bw);
-
-        }
-        public override void deserializeResponse(BinaryReader br)
-        {
-            Response = (TLAbsUpdates)ObjectUtils.DeserializeObject(br);
+ObjectUtils.SerializeObject(from_peer,bw);
+ObjectUtils.SerializeObject(id,bw);
+ObjectUtils.SerializeObject(random_id,bw);
+ObjectUtils.SerializeObject(to_peer,bw);
 
         }
+		public override void deserializeResponse(BinaryReader br)
+		{
+			Response = (TLAbsUpdates)ObjectUtils.DeserializeObject(br);
+
+		}
     }
 }

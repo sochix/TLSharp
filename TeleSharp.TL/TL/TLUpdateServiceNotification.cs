@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(942527460)]
+	[TLObject(942527460)]
     public class TLUpdateServiceNotification : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,33 +20,39 @@ namespace TeleSharp.TL
             }
         }
 
-        public string type { get; set; }
-        public string message { get; set; }
-        public TLAbsMessageMedia media { get; set; }
-        public bool popup { get; set; }
+             public string type {get;set;}
+     public string message {get;set;}
+     public TLAbsMessageMedia media {get;set;}
+     public bool popup {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLUpdateServiceNotification (string type ,string message ,TLAbsMessageMedia media ,bool popup ){
+			this.type = type; 
+this.message = message; 
+this.media = media; 
+this.popup = popup; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             type = StringUtil.Deserialize(br);
-            message = StringUtil.Deserialize(br);
-            media = (TLAbsMessageMedia)ObjectUtils.DeserializeObject(br);
-            popup = BoolUtil.Deserialize(br);
+message = StringUtil.Deserialize(br);
+media = (TLAbsMessageMedia)ObjectUtils.DeserializeObject(br);
+popup = BoolUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-            StringUtil.Serialize(type, bw);
-            StringUtil.Serialize(message, bw);
-            ObjectUtils.SerializeObject(media, bw);
-            BoolUtil.Serialize(popup, bw);
+			bw.Write(Constructor);
+            StringUtil.Serialize(type,bw);
+StringUtil.Serialize(message,bw);
+ObjectUtils.SerializeObject(media,bw);
+BoolUtil.Serialize(popup,bw);
 
         }
     }

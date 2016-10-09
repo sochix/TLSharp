@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-512463606)]
+	[TLObject(-512463606)]
     public class TLInputReportReasonOther : TLAbsReportReason
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,13 +20,16 @@ namespace TeleSharp.TL
             }
         }
 
-        public string text { get; set; }
+             public string text {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLInputReportReasonOther (string text ){
+			this.text = text; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,8 +39,8 @@ namespace TeleSharp.TL
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-            StringUtil.Serialize(text, bw);
+			bw.Write(Constructor);
+            StringUtil.Serialize(text,bw);
 
         }
     }

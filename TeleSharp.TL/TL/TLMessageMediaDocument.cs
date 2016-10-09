@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-203411800)]
+	[TLObject(-203411800)]
     public class TLMessageMediaDocument : TLAbsMessageMedia
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,27 +20,31 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLAbsDocument document { get; set; }
-        public string caption { get; set; }
+             public TLAbsDocument document {get;set;}
+     public string caption {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLMessageMediaDocument (TLAbsDocument document ,string caption ){
+			this.document = document; 
+this.caption = caption; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             document = (TLAbsDocument)ObjectUtils.DeserializeObject(br);
-            caption = StringUtil.Deserialize(br);
+caption = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-            ObjectUtils.SerializeObject(document, bw);
-            StringUtil.Serialize(caption, bw);
+			bw.Write(Constructor);
+            ObjectUtils.SerializeObject(document,bw);
+StringUtil.Serialize(caption,bw);
 
         }
     }

@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-181407105)]
+	[TLObject(-181407105)]
     public class TLInputFile : TLAbsInputFile
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,33 +20,39 @@ namespace TeleSharp.TL
             }
         }
 
-        public long id { get; set; }
-        public int parts { get; set; }
-        public string name { get; set; }
-        public string md5_checksum { get; set; }
+             public long id {get;set;}
+     public int parts {get;set;}
+     public string name {get;set;}
+     public string md5_checksum {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLInputFile (long id ,int parts ,string name ,string md5_checksum ){
+			this.id = id; 
+this.parts = parts; 
+this.name = name; 
+this.md5_checksum = md5_checksum; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             id = br.ReadInt64();
-            parts = br.ReadInt32();
-            name = StringUtil.Deserialize(br);
-            md5_checksum = StringUtil.Deserialize(br);
+parts = br.ReadInt32();
+name = StringUtil.Deserialize(br);
+md5_checksum = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
+			bw.Write(Constructor);
             bw.Write(id);
-            bw.Write(parts);
-            StringUtil.Serialize(name, bw);
-            StringUtil.Serialize(md5_checksum, bw);
+bw.Write(parts);
+StringUtil.Serialize(name,bw);
+StringUtil.Serialize(md5_checksum,bw);
 
         }
     }

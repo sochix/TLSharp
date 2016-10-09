@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(342061462)]
+	[TLObject(342061462)]
     public class TLInputFileLocation : TLAbsInputFileLocation
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,30 +20,35 @@ namespace TeleSharp.TL
             }
         }
 
-        public long volume_id { get; set; }
-        public int local_id { get; set; }
-        public long secret { get; set; }
+             public long volume_id {get;set;}
+     public int local_id {get;set;}
+     public long secret {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLInputFileLocation (long volume_id ,int local_id ,long secret ){
+			this.volume_id = volume_id; 
+this.local_id = local_id; 
+this.secret = secret; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             volume_id = br.ReadInt64();
-            local_id = br.ReadInt32();
-            secret = br.ReadInt64();
+local_id = br.ReadInt32();
+secret = br.ReadInt64();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
+			bw.Write(Constructor);
             bw.Write(volume_id);
-            bw.Write(local_id);
-            bw.Write(secret);
+bw.Write(local_id);
+bw.Write(secret);
 
         }
     }

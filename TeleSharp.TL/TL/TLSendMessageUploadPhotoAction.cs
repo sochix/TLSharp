@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-774682074)]
+	[TLObject(-774682074)]
     public class TLSendMessageUploadPhotoAction : TLAbsSendMessageAction
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,13 +20,16 @@ namespace TeleSharp.TL
             }
         }
 
-        public int progress { get; set; }
+             public int progress {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLSendMessageUploadPhotoAction (int progress ){
+			this.progress = progress; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,7 +39,7 @@ namespace TeleSharp.TL
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
+			bw.Write(Constructor);
             bw.Write(progress);
 
         }

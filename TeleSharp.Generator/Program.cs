@@ -22,14 +22,11 @@ namespace TeleSharp.Generator
             string AbsStyle = File.ReadAllText("ConstructorAbs.tmp");
             string NormalStyle = File.ReadAllText("Constructor.tmp");
             string MethodStyle = File.ReadAllText("Method.tmp");
-            //string method = File.ReadAllText("constructor.tt");
             string Json = "";
             string url;
             if (args.Count() == 0) url = "tl-schema.json"; else url = args[0];
 
             Json = File.ReadAllText(url);
-            FileStream file = File.OpenWrite("Result.cs");
-            StreamWriter sw = new StreamWriter(file);
             Schema schema = JsonConvert.DeserializeObject<Schema>(Json);
             foreach (var c in schema.constructors)
             {

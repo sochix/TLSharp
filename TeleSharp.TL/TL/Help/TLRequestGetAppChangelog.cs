@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Help
 {
-    [TLObject(-1189013126)]
+	[TLObject(-1189013126)]
     public class TLRequestGetAppChangelog : TLMethod
     {
         public override int Constructor
@@ -18,28 +18,32 @@ namespace TeleSharp.TL.Help
             }
         }
 
-        public Help.TLAbsAppChangelog Response { get; set; }
+                public Help.TLAbsAppChangelog Response{ get; set;}
 
+		
+		public TLRequestGetAppChangelog (){
+				
+		}
 
-        public void ComputeFlags()
-        {
-
-        }
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
-
+            
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-
+			bw.Write(Constructor);
+            
         }
-        public override void deserializeResponse(BinaryReader br)
-        {
-            Response = (Help.TLAbsAppChangelog)ObjectUtils.DeserializeObject(br);
+		public override void deserializeResponse(BinaryReader br)
+		{
+			Response = (Help.TLAbsAppChangelog)ObjectUtils.DeserializeObject(br);
 
-        }
+		}
     }
 }

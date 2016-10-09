@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-1910892683)]
+	[TLObject(-1910892683)]
     public class TLNearestDc : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,30 +20,35 @@ namespace TeleSharp.TL
             }
         }
 
-        public string country { get; set; }
-        public int this_dc { get; set; }
-        public int nearest_dc { get; set; }
+             public string country {get;set;}
+     public int this_dc {get;set;}
+     public int nearest_dc {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLNearestDc (string country ,int this_dc ,int nearest_dc ){
+			this.country = country; 
+this.this_dc = this_dc; 
+this.nearest_dc = nearest_dc; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             country = StringUtil.Deserialize(br);
-            this_dc = br.ReadInt32();
-            nearest_dc = br.ReadInt32();
+this_dc = br.ReadInt32();
+nearest_dc = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-            StringUtil.Serialize(country, bw);
-            bw.Write(this_dc);
-            bw.Write(nearest_dc);
+			bw.Write(Constructor);
+            StringUtil.Serialize(country,bw);
+bw.Write(this_dc);
+bw.Write(nearest_dc);
 
         }
     }

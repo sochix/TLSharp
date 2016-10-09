@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(2009052699)]
+	[TLObject(2009052699)]
     public class TLPhotoSize : TLAbsPhotoSize
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,36 +20,43 @@ namespace TeleSharp.TL
             }
         }
 
-        public string type { get; set; }
-        public TLAbsFileLocation location { get; set; }
-        public int w { get; set; }
-        public int h { get; set; }
-        public int size { get; set; }
+             public string type {get;set;}
+     public TLAbsFileLocation location {get;set;}
+     public int w {get;set;}
+     public int h {get;set;}
+     public int size {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLPhotoSize (string type ,TLAbsFileLocation location ,int w ,int h ,int size ){
+			this.type = type; 
+this.location = location; 
+this.w = w; 
+this.h = h; 
+this.size = size; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             type = StringUtil.Deserialize(br);
-            location = (TLAbsFileLocation)ObjectUtils.DeserializeObject(br);
-            w = br.ReadInt32();
-            h = br.ReadInt32();
-            size = br.ReadInt32();
+location = (TLAbsFileLocation)ObjectUtils.DeserializeObject(br);
+w = br.ReadInt32();
+h = br.ReadInt32();
+size = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-            StringUtil.Serialize(type, bw);
-            ObjectUtils.SerializeObject(location, bw);
-            bw.Write(w);
-            bw.Write(h);
-            bw.Write(size);
+			bw.Write(Constructor);
+            StringUtil.Serialize(type,bw);
+ObjectUtils.SerializeObject(location,bw);
+bw.Write(w);
+bw.Write(h);
+bw.Write(size);
 
         }
     }

@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(1938967520)]
+	[TLObject(1938967520)]
     public class TLMessageEntityPre : TLAbsMessageEntity
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,30 +20,35 @@ namespace TeleSharp.TL
             }
         }
 
-        public int offset { get; set; }
-        public int length { get; set; }
-        public string language { get; set; }
+             public int offset {get;set;}
+     public int length {get;set;}
+     public string language {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLMessageEntityPre (int offset ,int length ,string language ){
+			this.offset = offset; 
+this.length = length; 
+this.language = language; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             offset = br.ReadInt32();
-            length = br.ReadInt32();
-            language = StringUtil.Deserialize(br);
+length = br.ReadInt32();
+language = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
+			bw.Write(Constructor);
             bw.Write(offset);
-            bw.Write(length);
-            StringUtil.Serialize(language, bw);
+bw.Write(length);
+StringUtil.Serialize(language,bw);
 
         }
     }

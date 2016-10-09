@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Messages
 {
-    [TLObject(-1058912715)]
+	[TLObject(-1058912715)]
     public class TLDhConfigNotModified : TLAbsDhConfig
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,13 +20,16 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public byte[] random { get; set; }
+             public byte[] random {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLDhConfigNotModified (byte[] random ){
+			this.random = random; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,8 +39,8 @@ namespace TeleSharp.TL.Messages
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-            BytesUtil.Serialize(random, bw);
+			bw.Write(Constructor);
+            BytesUtil.Serialize(random,bw);
 
         }
     }

@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-1649296275)]
+	[TLObject(-1649296275)]
     public class TLPeerUser : TLAbsPeer
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,13 +20,16 @@ namespace TeleSharp.TL
             }
         }
 
-        public int user_id { get; set; }
+             public int user_id {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLPeerUser (int user_id ){
+			this.user_id = user_id; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,7 +39,7 @@ namespace TeleSharp.TL
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
+			bw.Write(Constructor);
             bw.Write(user_id);
 
         }

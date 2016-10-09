@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(386986326)]
+	[TLObject(386986326)]
     public class TLUpdateEncryptedChatTyping : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,13 +20,16 @@ namespace TeleSharp.TL
             }
         }
 
-        public int chat_id { get; set; }
+             public int chat_id {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLUpdateEncryptedChatTyping (int chat_id ){
+			this.chat_id = chat_id; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,7 +39,7 @@ namespace TeleSharp.TL
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
+			bw.Write(Constructor);
             bw.Write(chat_id);
 
         }

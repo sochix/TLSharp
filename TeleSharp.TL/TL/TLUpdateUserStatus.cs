@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(469489699)]
+	[TLObject(469489699)]
     public class TLUpdateUserStatus : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,27 +20,31 @@ namespace TeleSharp.TL
             }
         }
 
-        public int user_id { get; set; }
-        public TLAbsUserStatus status { get; set; }
+             public int user_id {get;set;}
+     public TLAbsUserStatus status {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLUpdateUserStatus (int user_id ,TLAbsUserStatus status ){
+			this.user_id = user_id; 
+this.status = status; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             user_id = br.ReadInt32();
-            status = (TLAbsUserStatus)ObjectUtils.DeserializeObject(br);
+status = (TLAbsUserStatus)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
+			bw.Write(Constructor);
             bw.Write(user_id);
-            ObjectUtils.SerializeObject(status, bw);
+ObjectUtils.SerializeObject(status,bw);
 
         }
     }

@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-123931160)]
+	[TLObject(-123931160)]
     public class TLMessageActionChatJoinedByLink : TLAbsMessageAction
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,13 +20,16 @@ namespace TeleSharp.TL
             }
         }
 
-        public int inviter_id { get; set; }
+             public int inviter_id {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLMessageActionChatJoinedByLink (int inviter_id ){
+			this.inviter_id = inviter_id; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,7 +39,7 @@ namespace TeleSharp.TL
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
+			bw.Write(Constructor);
             bw.Write(inviter_id);
 
         }

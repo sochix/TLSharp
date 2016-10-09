@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Account
 {
-    [TLObject(-1212732749)]
+	[TLObject(-1212732749)]
     public class TLPasswordSettings : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,13 +20,16 @@ namespace TeleSharp.TL.Account
             }
         }
 
-        public string email { get; set; }
+             public string email {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLPasswordSettings (string email ){
+			this.email = email; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,8 +39,8 @@ namespace TeleSharp.TL.Account
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-            StringUtil.Serialize(email, bw);
+			bw.Write(Constructor);
+            StringUtil.Serialize(email,bw);
 
         }
     }

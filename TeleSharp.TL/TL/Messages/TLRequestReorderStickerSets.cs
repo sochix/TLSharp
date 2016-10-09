@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Messages
 {
-    [TLObject(-1613775824)]
+	[TLObject(-1613775824)]
     public class TLRequestReorderStickerSets : TLMethod
     {
         public override int Constructor
@@ -18,14 +18,19 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public TLVector<long> order { get; set; }
-        public bool Response { get; set; }
+                private TLVector<long> order {get;set;}
+        public bool Response{ get; set;}
 
+		
+		public TLRequestReorderStickerSets (TLVector<long> order ){
+			this.order = order; 
+	
+		}
 
-        public void ComputeFlags()
-        {
-
-        }
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -35,14 +40,14 @@ namespace TeleSharp.TL.Messages
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-            ObjectUtils.SerializeObject(order, bw);
+			bw.Write(Constructor);
+            ObjectUtils.SerializeObject(order,bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
-        {
-            Response = BoolUtil.Deserialize(br);
+		public override void deserializeResponse(BinaryReader br)
+		{
+			Response = BoolUtil.Deserialize(br);
 
-        }
+		}
     }
 }

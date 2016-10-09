@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(2134579434)]
+	[TLObject(2134579434)]
     public class TLInputPeerEmpty : TLAbsInputPeer
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,22 +20,24 @@ namespace TeleSharp.TL
             }
         }
 
-
-
-        public void ComputeFlags()
-        {
-
-        }
+        
+		public TLInputPeerEmpty (){
+				
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
-
+            
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-
+			bw.Write(Constructor);
+            
         }
     }
 }

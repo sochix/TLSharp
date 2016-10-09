@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(297109817)]
+	[TLObject(297109817)]
     public class TLDocumentAttributeAnimated : TLAbsDocumentAttribute
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,22 +20,24 @@ namespace TeleSharp.TL
             }
         }
 
-
-
-        public void ComputeFlags()
-        {
-
-        }
+        
+		public TLDocumentAttributeAnimated (){
+				
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
-
+            
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-
+			bw.Write(Constructor);
+            
         }
     }
 }

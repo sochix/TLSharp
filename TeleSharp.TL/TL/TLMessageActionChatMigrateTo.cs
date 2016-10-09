@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(1371385889)]
+	[TLObject(1371385889)]
     public class TLMessageActionChatMigrateTo : TLAbsMessageAction
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,13 +20,16 @@ namespace TeleSharp.TL
             }
         }
 
-        public int channel_id { get; set; }
+             public int channel_id {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLMessageActionChatMigrateTo (int channel_id ){
+			this.channel_id = channel_id; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,7 +39,7 @@ namespace TeleSharp.TL
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
+			bw.Write(Constructor);
             bw.Write(channel_id);
 
         }

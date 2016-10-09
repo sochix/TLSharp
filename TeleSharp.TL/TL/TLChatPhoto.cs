@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(1632839530)]
+	[TLObject(1632839530)]
     public class TLChatPhoto : TLAbsChatPhoto
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,27 +20,31 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLAbsFileLocation photo_small { get; set; }
-        public TLAbsFileLocation photo_big { get; set; }
+             public TLAbsFileLocation photo_small {get;set;}
+     public TLAbsFileLocation photo_big {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLChatPhoto (TLAbsFileLocation photo_small ,TLAbsFileLocation photo_big ){
+			this.photo_small = photo_small; 
+this.photo_big = photo_big; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             photo_small = (TLAbsFileLocation)ObjectUtils.DeserializeObject(br);
-            photo_big = (TLAbsFileLocation)ObjectUtils.DeserializeObject(br);
+photo_big = (TLAbsFileLocation)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-            ObjectUtils.SerializeObject(photo_small, bw);
-            ObjectUtils.SerializeObject(photo_big, bw);
+			bw.Write(Constructor);
+            ObjectUtils.SerializeObject(photo_small,bw);
+ObjectUtils.SerializeObject(photo_big,bw);
 
         }
     }

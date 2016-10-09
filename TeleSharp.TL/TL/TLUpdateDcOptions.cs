@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-1906403213)]
+	[TLObject(-1906403213)]
     public class TLUpdateDcOptions : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,13 +20,16 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLVector<TLDcOption> dc_options { get; set; }
+             public TLVector<TLDcOption> dc_options {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLUpdateDcOptions (TLVector<TLDcOption> dc_options ){
+			this.dc_options = dc_options; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,8 +39,8 @@ namespace TeleSharp.TL
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-            ObjectUtils.SerializeObject(dc_options, bw);
+			bw.Write(Constructor);
+            ObjectUtils.SerializeObject(dc_options,bw);
 
         }
     }

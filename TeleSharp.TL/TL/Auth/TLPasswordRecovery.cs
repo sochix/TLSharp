@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Auth
 {
-    [TLObject(326715557)]
+	[TLObject(326715557)]
     public class TLPasswordRecovery : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,13 +20,16 @@ namespace TeleSharp.TL.Auth
             }
         }
 
-        public string email_pattern { get; set; }
+             public string email_pattern {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLPasswordRecovery (string email_pattern ){
+			this.email_pattern = email_pattern; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,8 +39,8 @@ namespace TeleSharp.TL.Auth
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-            StringUtil.Serialize(email_pattern, bw);
+			bw.Write(Constructor);
+            StringUtil.Serialize(email_pattern,bw);
 
         }
     }

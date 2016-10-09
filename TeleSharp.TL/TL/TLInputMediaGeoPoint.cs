@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-104578748)]
+	[TLObject(-104578748)]
     public class TLInputMediaGeoPoint : TLAbsInputMedia
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,13 +20,16 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLAbsInputGeoPoint geo_point { get; set; }
+             public TLAbsInputGeoPoint geo_point {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLInputMediaGeoPoint (TLAbsInputGeoPoint geo_point ){
+			this.geo_point = geo_point; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,8 +39,8 @@ namespace TeleSharp.TL
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-            ObjectUtils.SerializeObject(geo_point, bw);
+			bw.Write(Constructor);
+            ObjectUtils.SerializeObject(geo_point,bw);
 
         }
     }

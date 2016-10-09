@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Messages
 {
-    [TLObject(-244016606)]
+	[TLObject(-244016606)]
     public class TLStickersNotModified : TLAbsStickers
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,22 +20,24 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-
-
-        public void ComputeFlags()
-        {
-
-        }
+        
+		public TLStickersNotModified (){
+				
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
-
+            
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-
+			bw.Write(Constructor);
+            
         }
     }
 }

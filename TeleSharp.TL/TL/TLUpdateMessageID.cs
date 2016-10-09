@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(1318109142)]
+	[TLObject(1318109142)]
     public class TLUpdateMessageID : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,27 +20,31 @@ namespace TeleSharp.TL
             }
         }
 
-        public int id { get; set; }
-        public long random_id { get; set; }
+             public int id {get;set;}
+     public long random_id {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLUpdateMessageID (int id ,long random_id ){
+			this.id = id; 
+this.random_id = random_id; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             id = br.ReadInt32();
-            random_id = br.ReadInt64();
+random_id = br.ReadInt64();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
+			bw.Write(Constructor);
             bw.Write(id);
-            bw.Write(random_id);
+bw.Write(random_id);
 
         }
     }

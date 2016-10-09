@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-2122045747)]
+	[TLObject(-2122045747)]
     public class TLPeerSettings : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,29 +20,32 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public bool report_spam { get; set; }
+             public int flags {get;set;}
+     public bool report_spam {get;set;}
 
+		public TLPeerSettings (bool report_spam ){
+			this.report_spam = report_spam; 
+	
+		}
+		public void ComputeFlags()
+		{
+			flags = 0;
+flags = report_spam ? (flags | 1) : (flags & ~1);
 
-        public void ComputeFlags()
-        {
-            flags = 0;
-            flags = report_spam ? (flags | 1) : (flags & ~1);
-
-        }
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             flags = br.ReadInt32();
-            report_spam = (flags & 1) != 0;
+report_spam = (flags & 1) != 0;
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
+			bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+bw.Write(flags);
 
 
         }

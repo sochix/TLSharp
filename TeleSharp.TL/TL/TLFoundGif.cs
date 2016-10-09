@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(372165663)]
+	[TLObject(372165663)]
     public class TLFoundGif : TLAbsFoundGif
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,39 +20,47 @@ namespace TeleSharp.TL
             }
         }
 
-        public string url { get; set; }
-        public string thumb_url { get; set; }
-        public string content_url { get; set; }
-        public string content_type { get; set; }
-        public int w { get; set; }
-        public int h { get; set; }
+             public string url {get;set;}
+     public string thumb_url {get;set;}
+     public string content_url {get;set;}
+     public string content_type {get;set;}
+     public int w {get;set;}
+     public int h {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLFoundGif (string url ,string thumb_url ,string content_url ,string content_type ,int w ,int h ){
+			this.url = url; 
+this.thumb_url = thumb_url; 
+this.content_url = content_url; 
+this.content_type = content_type; 
+this.w = w; 
+this.h = h; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             url = StringUtil.Deserialize(br);
-            thumb_url = StringUtil.Deserialize(br);
-            content_url = StringUtil.Deserialize(br);
-            content_type = StringUtil.Deserialize(br);
-            w = br.ReadInt32();
-            h = br.ReadInt32();
+thumb_url = StringUtil.Deserialize(br);
+content_url = StringUtil.Deserialize(br);
+content_type = StringUtil.Deserialize(br);
+w = br.ReadInt32();
+h = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-            StringUtil.Serialize(url, bw);
-            StringUtil.Serialize(thumb_url, bw);
-            StringUtil.Serialize(content_url, bw);
-            StringUtil.Serialize(content_type, bw);
-            bw.Write(w);
-            bw.Write(h);
+			bw.Write(Constructor);
+            StringUtil.Serialize(url,bw);
+StringUtil.Serialize(thumb_url,bw);
+StringUtil.Serialize(content_url,bw);
+StringUtil.Serialize(content_type,bw);
+bw.Write(w);
+bw.Write(h);
 
         }
     }

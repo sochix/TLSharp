@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Auth
 {
-    [TLObject(-16553231)]
+	[TLObject(-16553231)]
     public class TLAuthorization : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,13 +20,16 @@ namespace TeleSharp.TL.Auth
             }
         }
 
-        public TLAbsUser user { get; set; }
+             public TLAbsUser user {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLAuthorization (TLAbsUser user ){
+			this.user = user; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,8 +39,8 @@ namespace TeleSharp.TL.Auth
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-            ObjectUtils.SerializeObject(user, bw);
+			bw.Write(Constructor);
+            ObjectUtils.SerializeObject(user,bw);
 
         }
     }

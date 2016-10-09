@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Messages
 {
-    [TLObject(852769188)]
+	[TLObject(852769188)]
     public class TLRequestSendEncryptedService : TLMethod
     {
         public override int Constructor
@@ -18,37 +18,44 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public TLInputEncryptedChat peer { get; set; }
-        public long random_id { get; set; }
-        public byte[] data { get; set; }
-        public Messages.TLAbsSentEncryptedMessage Response { get; set; }
+                private TLInputEncryptedChat peer {get;set;}
+        private long random_id {get;set;}
+        private byte[] data {get;set;}
+        public Messages.TLAbsSentEncryptedMessage Response{ get; set;}
 
+		
+		public TLRequestSendEncryptedService (TLInputEncryptedChat peer ,long random_id ,byte[] data ){
+			this.peer = peer; 
+this.random_id = random_id; 
+this.data = data; 
+	
+		}
 
-        public void ComputeFlags()
-        {
-
-        }
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             peer = (TLInputEncryptedChat)ObjectUtils.DeserializeObject(br);
-            random_id = br.ReadInt64();
-            data = BytesUtil.Deserialize(br);
+random_id = br.ReadInt64();
+data = BytesUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-            ObjectUtils.SerializeObject(peer, bw);
-            bw.Write(random_id);
-            BytesUtil.Serialize(data, bw);
+			bw.Write(Constructor);
+            ObjectUtils.SerializeObject(peer,bw);
+bw.Write(random_id);
+BytesUtil.Serialize(data,bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
-        {
-            Response = (Messages.TLAbsSentEncryptedMessage)ObjectUtils.DeserializeObject(br);
+		public override void deserializeResponse(BinaryReader br)
+		{
+			Response = (Messages.TLAbsSentEncryptedMessage)ObjectUtils.DeserializeObject(br);
 
-        }
+		}
     }
 }

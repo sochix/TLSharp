@@ -54,8 +54,8 @@ namespace TLSharp.Core
             if (!reconnect)
             {
                 var config = new TLRequestGetConfig() ;
-                var request = new TLRequestInitConnection() { api_id = _apiId, app_version = "1.0.0", device_model = "PC", lang_code = "en", query= config, system_version = "Win 10.0" };
-                var invokewithLayer = new TLRequestInvokeWithLayer() { layer = 53, query = request };
+                var request = new TLRequestInitConnection(  _apiId, "1.0.0", "PC", "Win 10.0", "en",config );
+                var invokewithLayer = new TLRequestInvokeWithLayer(53, request );
                 await _sender.Send(invokewithLayer);
                 await _sender.Receive(invokewithLayer);
 
@@ -89,7 +89,7 @@ namespace TLSharp.Core
             if (_sender == null)
                 throw new InvalidOperationException("Not connected!");
 
-            var authCheckPhoneRequest = new TLRequestCheckPhone() { phone_number = phoneNumber };
+            var authCheckPhoneRequest = new TLRequestCheckPhone(phoneNumber );
             await _sender.Send(authCheckPhoneRequest);
             await _sender.Receive(authCheckPhoneRequest);
 
@@ -104,7 +104,7 @@ namespace TLSharp.Core
 
             while (!completed)
             {
-                request = new TLRequestSendCode() { phone_number = phoneNumber, api_id = _apiId, api_hash = _apiHash };
+                request = new TLRequestSendCode(false,phoneNumber,null, _apiId, _apiHash);
                 try
                 {
                     await _sender.Send(request);
@@ -130,7 +130,7 @@ namespace TLSharp.Core
 
         public async Task<TLUser> MakeAuth(string phoneNumber, string phoneCodeHash, string code)
         {
-            var request = new TLRequestSignIn() { phone_number = phoneNumber, phone_code_hash = phoneCodeHash, phone_code = code };
+            var request = new TLRequestSignIn(phoneNumber,phoneCodeHash, code );
             await _sender.Send(request);
             await _sender.Receive(request);
 
@@ -141,7 +141,7 @@ namespace TLSharp.Core
 
         public async Task<TLUser> SignUp(string phoneNumber, string phoneCodeHash, string code, string firstName, string lastName)
         {
-            var request = new TLRequestSignUp() { phone_number = phoneNumber, phone_code = code, phone_code_hash = phoneCodeHash, first_name = firstName, last_name = lastName };
+            var request = new TLRequestSignUp(phoneNumber, code, phoneCodeHash, firstName, lastName);
             await _sender.Send(request);
             await _sender.Receive(request);
 

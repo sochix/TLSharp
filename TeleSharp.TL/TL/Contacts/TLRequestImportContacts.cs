@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Contacts
 {
-    [TLObject(-634342611)]
+	[TLObject(-634342611)]
     public class TLRequestImportContacts : TLMethod
     {
         public override int Constructor
@@ -18,34 +18,40 @@ namespace TeleSharp.TL.Contacts
             }
         }
 
-        public TLVector<TLInputPhoneContact> contacts { get; set; }
-        public bool replace { get; set; }
-        public Contacts.TLImportedContacts Response { get; set; }
+                private TLVector<TLInputPhoneContact> contacts {get;set;}
+        private bool replace {get;set;}
+        public Contacts.TLImportedContacts Response{ get; set;}
 
+		
+		public TLRequestImportContacts (TLVector<TLInputPhoneContact> contacts ,bool replace ){
+			this.contacts = contacts; 
+this.replace = replace; 
+	
+		}
 
-        public void ComputeFlags()
-        {
-
-        }
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             contacts = (TLVector<TLInputPhoneContact>)ObjectUtils.DeserializeVector<TLInputPhoneContact>(br);
-            replace = BoolUtil.Deserialize(br);
+replace = BoolUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-            ObjectUtils.SerializeObject(contacts, bw);
-            BoolUtil.Serialize(replace, bw);
+			bw.Write(Constructor);
+            ObjectUtils.SerializeObject(contacts,bw);
+BoolUtil.Serialize(replace,bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
-        {
-            Response = (Contacts.TLImportedContacts)ObjectUtils.DeserializeObject(br);
+		public override void deserializeResponse(BinaryReader br)
+		{
+			Response = (Contacts.TLImportedContacts)ObjectUtils.DeserializeObject(br);
 
-        }
+		}
     }
 }

@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Messages
 {
-    [TLObject(1694474197)]
+	[TLObject(1694474197)]
     public class TLChats : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,13 +20,16 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public TLVector<TLAbsChat> chats { get; set; }
+             public TLVector<TLAbsChat> chats {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLChats (TLVector<TLAbsChat> chats ){
+			this.chats = chats; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,8 +39,8 @@ namespace TeleSharp.TL.Messages
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-            ObjectUtils.SerializeObject(chats, bw);
+			bw.Write(Constructor);
+            ObjectUtils.SerializeObject(chats,bw);
 
         }
     }

@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-1734268085)]
+	[TLObject(-1734268085)]
     public class TLUpdateChannelMessageViews : TLAbsUpdate
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,30 +20,35 @@ namespace TeleSharp.TL
             }
         }
 
-        public int channel_id { get; set; }
-        public int id { get; set; }
-        public int views { get; set; }
+             public int channel_id {get;set;}
+     public int id {get;set;}
+     public int views {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLUpdateChannelMessageViews (int channel_id ,int id ,int views ){
+			this.channel_id = channel_id; 
+this.id = id; 
+this.views = views; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             channel_id = br.ReadInt32();
-            id = br.ReadInt32();
-            views = br.ReadInt32();
+id = br.ReadInt32();
+views = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
+			bw.Write(Constructor);
             bw.Write(channel_id);
-            bw.Write(id);
-            bw.Write(views);
+bw.Write(id);
+bw.Write(views);
 
         }
     }

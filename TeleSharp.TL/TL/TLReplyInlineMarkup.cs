@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(1218642516)]
+	[TLObject(1218642516)]
     public class TLReplyInlineMarkup : TLAbsReplyMarkup
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,13 +20,16 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLVector<TLKeyboardButtonRow> rows { get; set; }
+             public TLVector<TLKeyboardButtonRow> rows {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLReplyInlineMarkup (TLVector<TLKeyboardButtonRow> rows ){
+			this.rows = rows; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,8 +39,8 @@ namespace TeleSharp.TL
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-            ObjectUtils.SerializeObject(rows, bw);
+			bw.Write(Constructor);
+            ObjectUtils.SerializeObject(rows,bw);
 
         }
     }

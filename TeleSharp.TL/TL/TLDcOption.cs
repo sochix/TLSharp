@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(98092748)]
+	[TLObject(98092748)]
     public class TLDcOption : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,47 +20,55 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public bool ipv6 { get; set; }
-        public bool media_only { get; set; }
-        public bool tcpo_only { get; set; }
-        public int id { get; set; }
-        public string ip_address { get; set; }
-        public int port { get; set; }
+             public int flags {get;set;}
+     public bool ipv6 {get;set;}
+     public bool media_only {get;set;}
+     public bool tcpo_only {get;set;}
+     public int id {get;set;}
+     public string ip_address {get;set;}
+     public int port {get;set;}
 
+		public TLDcOption (bool ipv6 ,bool media_only ,bool tcpo_only ,int id ,string ip_address ,int port ){
+			this.ipv6 = ipv6; 
+this.media_only = media_only; 
+this.tcpo_only = tcpo_only; 
+this.id = id; 
+this.ip_address = ip_address; 
+this.port = port; 
+	
+		}
+		public void ComputeFlags()
+		{
+			flags = 0;
+flags = ipv6 ? (flags | 1) : (flags & ~1);
+flags = media_only ? (flags | 2) : (flags & ~2);
+flags = tcpo_only ? (flags | 4) : (flags & ~4);
 
-        public void ComputeFlags()
-        {
-            flags = 0;
-            flags = ipv6 ? (flags | 1) : (flags & ~1);
-            flags = media_only ? (flags | 2) : (flags & ~2);
-            flags = tcpo_only ? (flags | 4) : (flags & ~4);
-
-        }
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             flags = br.ReadInt32();
-            ipv6 = (flags & 1) != 0;
-            media_only = (flags & 2) != 0;
-            tcpo_only = (flags & 4) != 0;
-            id = br.ReadInt32();
-            ip_address = StringUtil.Deserialize(br);
-            port = br.ReadInt32();
+ipv6 = (flags & 1) != 0;
+media_only = (flags & 2) != 0;
+tcpo_only = (flags & 4) != 0;
+id = br.ReadInt32();
+ip_address = StringUtil.Deserialize(br);
+port = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
+			bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+bw.Write(flags);
 
 
 
-            bw.Write(id);
-            StringUtil.Serialize(ip_address, bw);
-            bw.Write(port);
+bw.Write(id);
+StringUtil.Serialize(ip_address,bw);
+bw.Write(port);
 
         }
     }

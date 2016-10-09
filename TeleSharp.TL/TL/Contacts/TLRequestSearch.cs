@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Contacts
 {
-    [TLObject(301470424)]
+	[TLObject(301470424)]
     public class TLRequestSearch : TLMethod
     {
         public override int Constructor
@@ -18,34 +18,40 @@ namespace TeleSharp.TL.Contacts
             }
         }
 
-        public string q { get; set; }
-        public int limit { get; set; }
-        public Contacts.TLFound Response { get; set; }
+                private string q {get;set;}
+        private int limit {get;set;}
+        public Contacts.TLFound Response{ get; set;}
 
+		
+		public TLRequestSearch (string q ,int limit ){
+			this.q = q; 
+this.limit = limit; 
+	
+		}
 
-        public void ComputeFlags()
-        {
-
-        }
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             q = StringUtil.Deserialize(br);
-            limit = br.ReadInt32();
+limit = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-            StringUtil.Serialize(q, bw);
-            bw.Write(limit);
+			bw.Write(Constructor);
+            StringUtil.Serialize(q,bw);
+bw.Write(limit);
 
         }
-        public override void deserializeResponse(BinaryReader br)
-        {
-            Response = (Contacts.TLFound)ObjectUtils.DeserializeObject(br);
+		public override void deserializeResponse(BinaryReader br)
+		{
+			Response = (Contacts.TLFound)ObjectUtils.DeserializeObject(br);
 
-        }
+		}
     }
 }

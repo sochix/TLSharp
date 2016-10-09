@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Help
 {
-    [TLObject(1295590211)]
+	[TLObject(1295590211)]
     public class TLRequestGetInviteText : TLMethod
     {
         public override int Constructor
@@ -18,28 +18,32 @@ namespace TeleSharp.TL.Help
             }
         }
 
-        public Help.TLInviteText Response { get; set; }
+                public Help.TLInviteText Response{ get; set;}
 
+		
+		public TLRequestGetInviteText (){
+				
+		}
 
-        public void ComputeFlags()
-        {
-
-        }
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
-
+            
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-
+			bw.Write(Constructor);
+            
         }
-        public override void deserializeResponse(BinaryReader br)
-        {
-            Response = (Help.TLInviteText)ObjectUtils.DeserializeObject(br);
+		public override void deserializeResponse(BinaryReader br)
+		{
+			Response = (Help.TLInviteText)ObjectUtils.DeserializeObject(br);
 
-        }
+		}
     }
 }

@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(629866245)]
+	[TLObject(629866245)]
     public class TLKeyboardButtonUrl : TLAbsKeyboardButton
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,27 +20,31 @@ namespace TeleSharp.TL
             }
         }
 
-        public string text { get; set; }
-        public string url { get; set; }
+             public string text {get;set;}
+     public string url {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLKeyboardButtonUrl (string text ,string url ){
+			this.text = text; 
+this.url = url; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             text = StringUtil.Deserialize(br);
-            url = StringUtil.Deserialize(br);
+url = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-            StringUtil.Serialize(text, bw);
-            StringUtil.Serialize(url, bw);
+			bw.Write(Constructor);
+            StringUtil.Serialize(text,bw);
+StringUtil.Serialize(url,bw);
 
         }
     }

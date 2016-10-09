@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Help
 {
-    [TLObject(-236044656)]
+	[TLObject(-236044656)]
     public class TLTermsOfService : TLObject
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,13 +20,16 @@ namespace TeleSharp.TL.Help
             }
         }
 
-        public string text { get; set; }
+             public string text {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLTermsOfService (string text ){
+			this.text = text; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,8 +39,8 @@ namespace TeleSharp.TL.Help
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-            StringUtil.Serialize(text, bw);
+			bw.Write(Constructor);
+            StringUtil.Serialize(text,bw);
 
         }
     }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Messages
 {
-    [TLObject(865483769)]
+	[TLObject(865483769)]
     public class TLRequestForwardMessage : TLMethod
     {
         public override int Constructor
@@ -18,37 +18,44 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public TLAbsInputPeer peer { get; set; }
-        public int id { get; set; }
-        public long random_id { get; set; }
-        public TLAbsUpdates Response { get; set; }
+                private TLAbsInputPeer peer {get;set;}
+        private int id {get;set;}
+        private long random_id {get;set;}
+        public TLAbsUpdates Response{ get; set;}
 
+		
+		public TLRequestForwardMessage (TLAbsInputPeer peer ,int id ,long random_id ){
+			this.peer = peer; 
+this.id = id; 
+this.random_id = random_id; 
+	
+		}
 
-        public void ComputeFlags()
-        {
-
-        }
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
-            id = br.ReadInt32();
-            random_id = br.ReadInt64();
+id = br.ReadInt32();
+random_id = br.ReadInt64();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-            ObjectUtils.SerializeObject(peer, bw);
-            bw.Write(id);
-            bw.Write(random_id);
+			bw.Write(Constructor);
+            ObjectUtils.SerializeObject(peer,bw);
+bw.Write(id);
+bw.Write(random_id);
 
         }
-        public override void deserializeResponse(BinaryReader br)
-        {
-            Response = (TLAbsUpdates)ObjectUtils.DeserializeObject(br);
+		public override void deserializeResponse(BinaryReader br)
+		{
+			Response = (TLAbsUpdates)ObjectUtils.DeserializeObject(br);
 
-        }
+		}
     }
 }

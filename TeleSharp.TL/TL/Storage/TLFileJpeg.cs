@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Storage
 {
-    [TLObject(8322574)]
+	[TLObject(8322574)]
     public class TLFileJpeg : TLAbsFileType
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,22 +20,24 @@ namespace TeleSharp.TL.Storage
             }
         }
 
-
-
-        public void ComputeFlags()
-        {
-
-        }
+        
+		public TLFileJpeg (){
+				
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
-
+            
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-
+			bw.Write(Constructor);
+            
         }
     }
 }

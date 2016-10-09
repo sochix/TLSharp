@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-1293828344)]
+	[TLObject(-1293828344)]
     public class TLInputChatPhoto : TLAbsInputChatPhoto
     {
+
+		
         public override int Constructor
         {
             get
@@ -18,27 +20,31 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLAbsInputPhoto id { get; set; }
-        public TLAbsInputPhotoCrop crop { get; set; }
+             public TLAbsInputPhoto id {get;set;}
+     public TLAbsInputPhotoCrop crop {get;set;}
 
-
-        public void ComputeFlags()
-        {
-
-        }
+		public TLInputChatPhoto (TLAbsInputPhoto id ,TLAbsInputPhotoCrop crop ){
+			this.id = id; 
+this.crop = crop; 
+	
+		}
+		public void ComputeFlags()
+		{
+			
+		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             id = (TLAbsInputPhoto)ObjectUtils.DeserializeObject(br);
-            crop = (TLAbsInputPhotoCrop)ObjectUtils.DeserializeObject(br);
+crop = (TLAbsInputPhotoCrop)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            bw.Write(Constructor);
-            ObjectUtils.SerializeObject(id, bw);
-            ObjectUtils.SerializeObject(crop, bw);
+			bw.Write(Constructor);
+            ObjectUtils.SerializeObject(id,bw);
+ObjectUtils.SerializeObject(crop,bw);
 
         }
     }
