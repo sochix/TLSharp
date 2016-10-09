@@ -30,9 +30,7 @@ namespace TeleSharp.TL
      public int? pts {get;set;}
      public TLAbsDraftMessage draft {get;set;}
 
-		public TLDialog (){
-			
-		}
+		public TLDialog (){}
 		public TLDialog (TLAbsPeer peer ,int top_message ,int read_inbox_max_id ,int read_outbox_max_id ,int unread_count ,TLAbsPeerNotifySettings notify_settings ,int? pts ,TLAbsDraftMessage draft ){
 			this.peer = peer; 
 this.top_message = top_message; 

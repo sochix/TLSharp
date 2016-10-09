@@ -23,9 +23,7 @@ namespace TeleSharp.TL.Messages
              public string hash {get;set;}
      public TLVector<TLAbsDocument> stickers {get;set;}
 
-		public TLStickers (){
-			
-		}
+		public TLStickers (){}
 		public TLStickers (string hash ,TLVector<TLAbsDocument> stickers ){
 			this.hash = hash; 
 this.stickers = stickers; 

@@ -24,9 +24,7 @@ namespace TeleSharp.TL.Messages
      public bool alert {get;set;}
      public string message {get;set;}
 
-		public TLBotCallbackAnswer (){
-			
-		}
+		public TLBotCallbackAnswer (){}
 		public TLBotCallbackAnswer (bool alert ,string message ){
 			this.alert = alert; 
 this.message = message; 

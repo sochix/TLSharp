@@ -27,9 +27,7 @@ namespace TeleSharp.TL.Updates
      public TLVector<TLAbsUser> users {get;set;}
      public Updates.TLState state {get;set;}
 
-		public TLDifference (){
-			
-		}
+		public TLDifference (){}
 		public TLDifference (TLVector<TLAbsMessage> new_messages ,TLVector<TLAbsEncryptedMessage> new_encrypted_messages ,TLVector<TLAbsUpdate> other_updates ,TLVector<TLAbsChat> chats ,TLVector<TLAbsUser> users ,Updates.TLState state ){
 			this.new_messages = new_messages; 
 this.new_encrypted_messages = new_encrypted_messages; 

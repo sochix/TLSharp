@@ -23,9 +23,7 @@ namespace TeleSharp.TL
              public int user_id {get;set;}
      public TLAbsUserStatus status {get;set;}
 
-		public TLContactStatus (){
-			
-		}
+		public TLContactStatus (){}
 		public TLContactStatus (int user_id ,TLAbsUserStatus status ){
 			this.user_id = user_id; 
 this.status = status; 

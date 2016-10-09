@@ -24,9 +24,7 @@ namespace TeleSharp.TL
      public int max_date {get;set;}
      public int date {get;set;}
 
-		public TLUpdateEncryptedMessagesRead (){
-			
-		}
+		public TLUpdateEncryptedMessagesRead (){}
 		public TLUpdateEncryptedMessagesRead (int chat_id ,int max_date ,int date ){
 			this.chat_id = chat_id; 
 this.max_date = max_date; 

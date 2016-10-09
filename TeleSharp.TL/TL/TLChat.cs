@@ -35,9 +35,7 @@ namespace TeleSharp.TL
      public int version {get;set;}
      public TLAbsInputChannel migrated_to {get;set;}
 
-		public TLChat (){
-			
-		}
+		public TLChat (){}
 		public TLChat (bool creator ,bool kicked ,bool left ,bool admins_enabled ,bool admin ,bool deactivated ,int id ,string title ,TLAbsChatPhoto photo ,int participants_count ,int date ,int version ,TLAbsInputChannel migrated_to ){
 			this.creator = creator; 
 this.kicked = kicked; 

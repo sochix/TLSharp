@@ -22,9 +22,7 @@ namespace TeleSharp.TL
 
              public int user_id {get;set;}
 
-		public TLPeerUser (){
-			
-		}
+		public TLPeerUser (){}
 		public TLPeerUser (int user_id ){
 			this.user_id = user_id; 
 	

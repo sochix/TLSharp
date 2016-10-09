@@ -25,9 +25,7 @@ namespace TeleSharp.TL
      public TLVector<TLAbsPhotoSize> sizes {get;set;}
      public int color {get;set;}
 
-		public TLWallPaper (){
-			
-		}
+		public TLWallPaper (){}
 		public TLWallPaper (int id ,string title ,TLVector<TLAbsPhotoSize> sizes ,int color ){
 			this.id = id; 
 this.title = title; 

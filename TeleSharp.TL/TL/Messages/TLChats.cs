@@ -22,9 +22,7 @@ namespace TeleSharp.TL.Messages
 
              public TLVector<TLAbsChat> chats {get;set;}
 
-		public TLChats (){
-			
-		}
+		public TLChats (){}
 		public TLChats (TLVector<TLAbsChat> chats ){
 			this.chats = chats; 
 	

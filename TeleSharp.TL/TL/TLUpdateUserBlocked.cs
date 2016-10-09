@@ -23,9 +23,7 @@ namespace TeleSharp.TL
              public int user_id {get;set;}
      public bool blocked {get;set;}
 
-		public TLUpdateUserBlocked (){
-			
-		}
+		public TLUpdateUserBlocked (){}
 		public TLUpdateUserBlocked (int user_id ,bool blocked ){
 			this.user_id = user_id; 
 this.blocked = blocked; 

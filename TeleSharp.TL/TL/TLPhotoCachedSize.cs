@@ -26,9 +26,7 @@ namespace TeleSharp.TL
      public int h {get;set;}
      public byte[] bytes {get;set;}
 
-		public TLPhotoCachedSize (){
-			
-		}
+		public TLPhotoCachedSize (){}
 		public TLPhotoCachedSize (string type ,TLAbsFileLocation location ,int w ,int h ,byte[] bytes ){
 			this.type = type; 
 this.location = location; 

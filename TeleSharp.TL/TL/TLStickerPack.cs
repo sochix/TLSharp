@@ -23,9 +23,7 @@ namespace TeleSharp.TL
              public string emoticon {get;set;}
      public TLVector<long> documents {get;set;}
 
-		public TLStickerPack (){
-			
-		}
+		public TLStickerPack (){}
 		public TLStickerPack (string emoticon ,TLVector<long> documents ){
 			this.emoticon = emoticon; 
 this.documents = documents; 

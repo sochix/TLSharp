@@ -24,9 +24,7 @@ namespace TeleSharp.TL
      public bool enabled {get;set;}
      public int version {get;set;}
 
-		public TLUpdateChatAdmins (){
-			
-		}
+		public TLUpdateChatAdmins (){}
 		public TLUpdateChatAdmins (int chat_id ,bool enabled ,int version ){
 			this.chat_id = chat_id; 
 this.enabled = enabled; 

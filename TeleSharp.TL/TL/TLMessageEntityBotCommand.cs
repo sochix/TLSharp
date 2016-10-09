@@ -23,9 +23,7 @@ namespace TeleSharp.TL
              public int offset {get;set;}
      public int length {get;set;}
 
-		public TLMessageEntityBotCommand (){
-			
-		}
+		public TLMessageEntityBotCommand (){}
 		public TLMessageEntityBotCommand (int offset ,int length ){
 			this.offset = offset; 
 this.length = length; 

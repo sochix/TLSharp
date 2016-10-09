@@ -39,9 +39,7 @@ namespace TeleSharp.TL
      public int? migrated_from_max_id {get;set;}
      public int? pinned_msg_id {get;set;}
 
-		public TLChannelFull (){
-			
-		}
+		public TLChannelFull (){}
 		public TLChannelFull (bool can_view_participants ,bool can_set_username ,int id ,string about ,int? participants_count ,int? admins_count ,int? kicked_count ,int read_inbox_max_id ,int read_outbox_max_id ,int unread_count ,TLAbsPhoto chat_photo ,TLAbsPeerNotifySettings notify_settings ,TLAbsExportedChatInvite exported_invite ,TLVector<TLBotInfo> bot_info ,int? migrated_from_chat_id ,int? migrated_from_max_id ,int? pinned_msg_id ){
 			this.can_view_participants = can_view_participants; 
 this.can_set_username = can_set_username; 

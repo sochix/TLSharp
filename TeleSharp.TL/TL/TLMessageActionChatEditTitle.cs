@@ -22,9 +22,7 @@ namespace TeleSharp.TL
 
              public string title {get;set;}
 
-		public TLMessageActionChatEditTitle (){
-			
-		}
+		public TLMessageActionChatEditTitle (){}
 		public TLMessageActionChatEditTitle (string title ){
 			this.title = title; 
 	

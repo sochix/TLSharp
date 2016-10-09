@@ -26,9 +26,7 @@ namespace TeleSharp.TL
      public int mute_until {get;set;}
      public string sound {get;set;}
 
-		public TLPeerNotifySettings (){
-			
-		}
+		public TLPeerNotifySettings (){}
 		public TLPeerNotifySettings (bool show_previews ,bool silent ,int mute_until ,string sound ){
 			this.show_previews = show_previews; 
 this.silent = silent; 

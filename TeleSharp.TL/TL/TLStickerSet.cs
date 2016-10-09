@@ -31,9 +31,7 @@ namespace TeleSharp.TL
      public int count {get;set;}
      public int hash {get;set;}
 
-		public TLStickerSet (){
-			
-		}
+		public TLStickerSet (){}
 		public TLStickerSet (bool installed ,bool disabled ,bool official ,long id ,long access_hash ,string title ,string short_name ,int count ,int hash ){
 			this.installed = installed; 
 this.disabled = disabled; 

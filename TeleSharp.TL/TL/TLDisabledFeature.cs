@@ -23,9 +23,7 @@ namespace TeleSharp.TL
              public string feature {get;set;}
      public string description {get;set;}
 
-		public TLDisabledFeature (){
-			
-		}
+		public TLDisabledFeature (){}
 		public TLDisabledFeature (string feature ,string description ){
 			this.feature = feature; 
 this.description = description; 

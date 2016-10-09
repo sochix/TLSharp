@@ -23,9 +23,7 @@ namespace TeleSharp.TL
              public TLAbsInputFile file {get;set;}
      public TLAbsInputPhotoCrop crop {get;set;}
 
-		public TLInputChatUploadedPhoto (){
-			
-		}
+		public TLInputChatUploadedPhoto (){}
 		public TLInputChatUploadedPhoto (TLAbsInputFile file ,TLAbsInputPhotoCrop crop ){
 			this.file = file; 
 this.crop = crop; 

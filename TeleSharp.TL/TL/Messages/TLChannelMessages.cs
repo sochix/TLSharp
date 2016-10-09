@@ -27,9 +27,7 @@ namespace TeleSharp.TL.Messages
      public TLVector<TLAbsChat> chats {get;set;}
      public TLVector<TLAbsUser> users {get;set;}
 
-		public TLChannelMessages (){
-			
-		}
+		public TLChannelMessages (){}
 		public TLChannelMessages (int pts ,int count ,TLVector<TLAbsMessage> messages ,TLVector<TLAbsChat> chats ,TLVector<TLAbsUser> users ){
 			this.pts = pts; 
 this.count = count; 

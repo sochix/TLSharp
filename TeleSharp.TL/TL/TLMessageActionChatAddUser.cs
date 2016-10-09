@@ -22,9 +22,7 @@ namespace TeleSharp.TL
 
              public TLVector<int> users {get;set;}
 
-		public TLMessageActionChatAddUser (){
-			
-		}
+		public TLMessageActionChatAddUser (){}
 		public TLMessageActionChatAddUser (TLVector<int> users ){
 			this.users = users; 
 	

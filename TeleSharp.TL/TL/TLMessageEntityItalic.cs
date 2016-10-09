@@ -23,9 +23,7 @@ namespace TeleSharp.TL
              public int offset {get;set;}
      public int length {get;set;}
 
-		public TLMessageEntityItalic (){
-			
-		}
+		public TLMessageEntityItalic (){}
 		public TLMessageEntityItalic (int offset ,int length ){
 			this.offset = offset; 
 this.length = length; 

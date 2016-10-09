@@ -21,9 +21,7 @@ namespace TeleSharp.TL
         }
 
         
-		public TLInputPeerNotifyEventsAll (){
-			
-		}
+		
 		public TLInputPeerNotifyEventsAll (){
 				
 		}

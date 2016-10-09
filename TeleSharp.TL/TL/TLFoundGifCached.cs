@@ -24,9 +24,7 @@ namespace TeleSharp.TL
      public TLAbsPhoto photo {get;set;}
      public TLAbsDocument document {get;set;}
 
-		public TLFoundGifCached (){
-			
-		}
+		public TLFoundGifCached (){}
 		public TLFoundGifCached (string url ,TLAbsPhoto photo ,TLAbsDocument document ){
 			this.url = url; 
 this.photo = photo; 

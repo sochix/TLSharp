@@ -23,9 +23,7 @@ namespace TeleSharp.TL
              public int offset {get;set;}
      public int length {get;set;}
 
-		public TLMessageEntityUnknown (){
-			
-		}
+		public TLMessageEntityUnknown (){}
 		public TLMessageEntityUnknown (int offset ,int length ){
 			this.offset = offset; 
 this.length = length; 

@@ -26,9 +26,7 @@ namespace TeleSharp.TL
      public byte[] bytes {get;set;}
      public TLAbsEncryptedFile file {get;set;}
 
-		public TLEncryptedMessage (){
-			
-		}
+		public TLEncryptedMessage (){}
 		public TLEncryptedMessage (long random_id ,int chat_id ,int date ,byte[] bytes ,TLAbsEncryptedFile file ){
 			this.random_id = random_id; 
 this.chat_id = chat_id; 

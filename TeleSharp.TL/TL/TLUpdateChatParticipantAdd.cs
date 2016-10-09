@@ -26,9 +26,7 @@ namespace TeleSharp.TL
      public int date {get;set;}
      public int version {get;set;}
 
-		public TLUpdateChatParticipantAdd (){
-			
-		}
+		public TLUpdateChatParticipantAdd (){}
 		public TLUpdateChatParticipantAdd (int chat_id ,int user_id ,int inviter_id ,int date ,int version ){
 			this.chat_id = chat_id; 
 this.user_id = user_id; 

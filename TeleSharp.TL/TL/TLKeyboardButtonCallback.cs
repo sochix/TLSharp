@@ -23,9 +23,7 @@ namespace TeleSharp.TL
              public string text {get;set;}
      public byte[] data {get;set;}
 
-		public TLKeyboardButtonCallback (){
-			
-		}
+		public TLKeyboardButtonCallback (){}
 		public TLKeyboardButtonCallback (string text ,byte[] data ){
 			this.text = text; 
 this.data = data; 

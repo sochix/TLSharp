@@ -22,9 +22,7 @@ namespace TeleSharp.TL
 
              public Messages.TLStickerSet stickerset {get;set;}
 
-		public TLUpdateNewStickerSet (){
-			
-		}
+		public TLUpdateNewStickerSet (){}
 		public TLUpdateNewStickerSet (Messages.TLStickerSet stickerset ){
 			this.stickerset = stickerset; 
 	

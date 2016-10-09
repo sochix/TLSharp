@@ -22,9 +22,7 @@ namespace TeleSharp.TL.Messages
 
              public int date {get;set;}
 
-		public TLSentEncryptedMessage (){
-			
-		}
+		public TLSentEncryptedMessage (){}
 		public TLSentEncryptedMessage (int date ){
 			this.date = date; 
 	

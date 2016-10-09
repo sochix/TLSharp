@@ -24,9 +24,7 @@ namespace TeleSharp.TL
      public int length {get;set;}
      public string language {get;set;}
 
-		public TLMessageEntityPre (){
-			
-		}
+		public TLMessageEntityPre (){}
 		public TLMessageEntityPre (int offset ,int length ,string language ){
 			this.offset = offset; 
 this.length = length; 

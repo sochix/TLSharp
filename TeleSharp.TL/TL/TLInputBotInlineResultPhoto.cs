@@ -25,9 +25,7 @@ namespace TeleSharp.TL
      public TLAbsInputPhoto photo {get;set;}
      public TLAbsInputBotInlineMessage send_message {get;set;}
 
-		public TLInputBotInlineResultPhoto (){
-			
-		}
+		public TLInputBotInlineResultPhoto (){}
 		public TLInputBotInlineResultPhoto (string id ,string type ,TLAbsInputPhoto photo ,TLAbsInputBotInlineMessage send_message ){
 			this.id = id; 
 this.type = type; 

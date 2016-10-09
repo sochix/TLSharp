@@ -23,9 +23,7 @@ namespace TeleSharp.TL
              public long id {get;set;}
      public int date {get;set;}
 
-		public TLWebPagePending (){
-			
-		}
+		public TLWebPagePending (){}
 		public TLWebPagePending (long id ,int date ){
 			this.id = id; 
 this.date = date; 

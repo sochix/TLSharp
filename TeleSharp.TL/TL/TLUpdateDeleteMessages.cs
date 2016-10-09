@@ -24,9 +24,7 @@ namespace TeleSharp.TL
      public int pts {get;set;}
      public int pts_count {get;set;}
 
-		public TLUpdateDeleteMessages (){
-			
-		}
+		public TLUpdateDeleteMessages (){}
 		public TLUpdateDeleteMessages (TLVector<int> messages ,int pts ,int pts_count ){
 			this.messages = messages; 
 this.pts = pts; 

@@ -22,9 +22,7 @@ namespace TeleSharp.TL
 
              public int channel_id {get;set;}
 
-		public TLPeerChannel (){
-			
-		}
+		public TLPeerChannel (){}
 		public TLPeerChannel (int channel_id ){
 			this.channel_id = channel_id; 
 	

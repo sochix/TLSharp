@@ -32,9 +32,7 @@ namespace TeleSharp.TL.Updates
      public TLVector<TLAbsChat> chats {get;set;}
      public TLVector<TLAbsUser> users {get;set;}
 
-		public TLChannelDifferenceTooLong (){
-			
-		}
+		public TLChannelDifferenceTooLong (){}
 		public TLChannelDifferenceTooLong (bool final ,int pts ,int? timeout ,int top_message ,int read_inbox_max_id ,int read_outbox_max_id ,int unread_count ,TLVector<TLAbsMessage> messages ,TLVector<TLAbsChat> chats ,TLVector<TLAbsUser> users ){
 			this.final = final; 
 this.pts = pts; 

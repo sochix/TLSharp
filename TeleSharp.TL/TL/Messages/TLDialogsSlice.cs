@@ -26,9 +26,7 @@ namespace TeleSharp.TL.Messages
      public TLVector<TLAbsChat> chats {get;set;}
      public TLVector<TLAbsUser> users {get;set;}
 
-		public TLDialogsSlice (){
-			
-		}
+		public TLDialogsSlice (){}
 		public TLDialogsSlice (int count ,TLVector<TLDialog> dialogs ,TLVector<TLAbsMessage> messages ,TLVector<TLAbsChat> chats ,TLVector<TLAbsUser> users ){
 			this.count = count; 
 this.dialogs = dialogs; 

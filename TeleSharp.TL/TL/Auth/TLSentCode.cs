@@ -27,9 +27,7 @@ namespace TeleSharp.TL.Auth
      public Auth.TLAbsCodeType next_type {get;set;}
      public int? timeout {get;set;}
 
-		public TLSentCode (){
-			
-		}
+		public TLSentCode (){}
 		public TLSentCode (bool phone_registered ,Auth.TLAbsSentCodeType type ,string phone_code_hash ,Auth.TLAbsCodeType next_type ,int? timeout ){
 			this.phone_registered = phone_registered; 
 this.type = type; 

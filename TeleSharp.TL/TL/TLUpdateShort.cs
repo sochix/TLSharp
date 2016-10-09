@@ -23,9 +23,7 @@ namespace TeleSharp.TL
              public TLAbsUpdate update {get;set;}
      public int date {get;set;}
 
-		public TLUpdateShort (){
-			
-		}
+		public TLUpdateShort (){}
 		public TLUpdateShort (TLAbsUpdate update ,int date ){
 			this.update = update; 
 this.date = date; 

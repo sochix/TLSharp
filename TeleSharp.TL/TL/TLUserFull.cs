@@ -29,9 +29,7 @@ namespace TeleSharp.TL
      public TLAbsPeerNotifySettings notify_settings {get;set;}
      public TLBotInfo bot_info {get;set;}
 
-		public TLUserFull (){
-			
-		}
+		public TLUserFull (){}
 		public TLUserFull (bool blocked ,TLAbsUser user ,string about ,Contacts.TLLink link ,TLAbsPhoto profile_photo ,TLAbsPeerNotifySettings notify_settings ,TLBotInfo bot_info ){
 			this.blocked = blocked; 
 this.user = user; 

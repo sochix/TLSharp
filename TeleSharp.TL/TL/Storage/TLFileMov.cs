@@ -21,9 +21,7 @@ namespace TeleSharp.TL.Storage
         }
 
         
-		public TLFileMov (){
-			
-		}
+		
 		public TLFileMov (){
 				
 		}

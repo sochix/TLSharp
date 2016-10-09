@@ -28,9 +28,7 @@ namespace TeleSharp.TL
      public string ip_address {get;set;}
      public int port {get;set;}
 
-		public TLDcOption (){
-			
-		}
+		public TLDcOption (){}
 		public TLDcOption (bool ipv6 ,bool media_only ,bool tcpo_only ,int id ,string ip_address ,int port ){
 			this.ipv6 = ipv6; 
 this.media_only = media_only; 

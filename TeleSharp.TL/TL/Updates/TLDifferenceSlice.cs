@@ -27,9 +27,7 @@ namespace TeleSharp.TL.Updates
      public TLVector<TLAbsUser> users {get;set;}
      public Updates.TLState intermediate_state {get;set;}
 
-		public TLDifferenceSlice (){
-			
-		}
+		public TLDifferenceSlice (){}
 		public TLDifferenceSlice (TLVector<TLAbsMessage> new_messages ,TLVector<TLAbsEncryptedMessage> new_encrypted_messages ,TLVector<TLAbsUpdate> other_updates ,TLVector<TLAbsChat> chats ,TLVector<TLAbsUser> users ,Updates.TLState intermediate_state ){
 			this.new_messages = new_messages; 
 this.new_encrypted_messages = new_encrypted_messages; 

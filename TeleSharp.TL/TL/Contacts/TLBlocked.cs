@@ -23,9 +23,7 @@ namespace TeleSharp.TL.Contacts
              public TLVector<TLContactBlocked> blocked {get;set;}
      public TLVector<TLAbsUser> users {get;set;}
 
-		public TLBlocked (){
-			
-		}
+		public TLBlocked (){}
 		public TLBlocked (TLVector<TLContactBlocked> blocked ,TLVector<TLAbsUser> users ){
 			this.blocked = blocked; 
 this.users = users; 

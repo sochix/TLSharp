@@ -21,9 +21,7 @@ namespace TeleSharp.TL
         }
 
         
-		public TLPrivacyValueAllowAll (){
-			
-		}
+		
 		public TLPrivacyValueAllowAll (){
 				
 		}

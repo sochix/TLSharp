@@ -27,9 +27,7 @@ namespace TeleSharp.TL
      public TLVector<TLAbsMessageEntity> entities {get;set;}
      public int date {get;set;}
 
-		public TLDraftMessage (){
-			
-		}
+		public TLDraftMessage (){}
 		public TLDraftMessage (bool no_webpage ,int? reply_to_msg_id ,string message ,TLVector<TLAbsMessageEntity> entities ,int date ){
 			this.no_webpage = no_webpage; 
 this.reply_to_msg_id = reply_to_msg_id; 

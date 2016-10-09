@@ -24,9 +24,7 @@ namespace TeleSharp.TL.Contacts
      public TLVector<long> retry_contacts {get;set;}
      public TLVector<TLAbsUser> users {get;set;}
 
-		public TLImportedContacts (){
-			
-		}
+		public TLImportedContacts (){}
 		public TLImportedContacts (TLVector<TLImportedContact> imported ,TLVector<long> retry_contacts ,TLVector<TLAbsUser> users ){
 			this.imported = imported; 
 this.retry_contacts = retry_contacts; 

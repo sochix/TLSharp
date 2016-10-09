@@ -23,9 +23,7 @@ namespace TeleSharp.TL
              public int chat_id {get;set;}
      public long access_hash {get;set;}
 
-		public TLInputEncryptedChat (){
-			
-		}
+		public TLInputEncryptedChat (){}
 		public TLInputEncryptedChat (int chat_id ,long access_hash ){
 			this.chat_id = chat_id; 
 this.access_hash = access_hash; 

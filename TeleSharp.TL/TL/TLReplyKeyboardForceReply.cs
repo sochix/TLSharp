@@ -24,9 +24,7 @@ namespace TeleSharp.TL
      public bool single_use {get;set;}
      public bool selective {get;set;}
 
-		public TLReplyKeyboardForceReply (){
-			
-		}
+		public TLReplyKeyboardForceReply (){}
 		public TLReplyKeyboardForceReply (bool single_use ,bool selective ){
 			this.single_use = single_use; 
 this.selective = selective; 

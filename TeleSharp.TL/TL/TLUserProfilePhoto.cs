@@ -24,9 +24,7 @@ namespace TeleSharp.TL
      public TLAbsFileLocation photo_small {get;set;}
      public TLAbsFileLocation photo_big {get;set;}
 
-		public TLUserProfilePhoto (){
-			
-		}
+		public TLUserProfilePhoto (){}
 		public TLUserProfilePhoto (long photo_id ,TLAbsFileLocation photo_small ,TLAbsFileLocation photo_big ){
 			this.photo_id = photo_id; 
 this.photo_small = photo_small; 

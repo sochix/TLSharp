@@ -26,9 +26,7 @@ namespace TeleSharp.TL
      public int admin_id {get;set;}
      public int participant_id {get;set;}
 
-		public TLEncryptedChatWaiting (){
-			
-		}
+		public TLEncryptedChatWaiting (){}
 		public TLEncryptedChatWaiting (int id ,long access_hash ,int date ,int admin_id ,int participant_id ){
 			this.id = id; 
 this.access_hash = access_hash; 

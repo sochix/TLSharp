@@ -23,9 +23,7 @@ namespace TeleSharp.TL
              public int flags {get;set;}
      public bool selective {get;set;}
 
-		public TLReplyKeyboardHide (){
-			
-		}
+		public TLReplyKeyboardHide (){}
 		public TLReplyKeyboardHide (bool selective ){
 			this.selective = selective; 
 	

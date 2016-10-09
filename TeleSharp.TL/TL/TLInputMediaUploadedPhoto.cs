@@ -23,9 +23,7 @@ namespace TeleSharp.TL
              public TLAbsInputFile file {get;set;}
      public string caption {get;set;}
 
-		public TLInputMediaUploadedPhoto (){
-			
-		}
+		public TLInputMediaUploadedPhoto (){}
 		public TLInputMediaUploadedPhoto (TLAbsInputFile file ,string caption ){
 			this.file = file; 
 this.caption = caption; 

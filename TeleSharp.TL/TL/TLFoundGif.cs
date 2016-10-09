@@ -27,9 +27,7 @@ namespace TeleSharp.TL
      public int w {get;set;}
      public int h {get;set;}
 
-		public TLFoundGif (){
-			
-		}
+		public TLFoundGif (){}
 		public TLFoundGif (string url ,string thumb_url ,string content_url ,string content_type ,int w ,int h ){
 			this.url = url; 
 this.thumb_url = thumb_url; 

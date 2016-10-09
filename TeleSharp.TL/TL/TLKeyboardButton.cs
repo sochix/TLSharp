@@ -22,9 +22,7 @@ namespace TeleSharp.TL
 
              public string text {get;set;}
 
-		public TLKeyboardButton (){
-			
-		}
+		public TLKeyboardButton (){}
 		public TLKeyboardButton (string text ){
 			this.text = text; 
 	

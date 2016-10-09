@@ -24,9 +24,7 @@ namespace TeleSharp.TL.Messages
      public TLVector<TLStickerPack> packs {get;set;}
      public TLVector<TLAbsDocument> documents {get;set;}
 
-		public TLStickerSet (){
-			
-		}
+		public TLStickerSet (){}
 		public TLStickerSet (TLStickerSet @set ,TLVector<TLStickerPack> packs ,TLVector<TLAbsDocument> documents ){
 			this.@set = @set; 
 this.packs = packs; 

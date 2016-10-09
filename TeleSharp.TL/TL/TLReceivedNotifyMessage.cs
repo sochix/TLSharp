@@ -23,9 +23,7 @@ namespace TeleSharp.TL
              public int id {get;set;}
      public int flags {get;set;}
 
-		public TLReceivedNotifyMessage (){
-			
-		}
+		public TLReceivedNotifyMessage (){}
 		public TLReceivedNotifyMessage (int id ){
 			this.id = id; 
 	

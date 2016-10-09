@@ -23,9 +23,7 @@ namespace TeleSharp.TL
              public string url {get;set;}
      public string q {get;set;}
 
-		public TLInputMediaGifExternal (){
-			
-		}
+		public TLInputMediaGifExternal (){}
 		public TLInputMediaGifExternal (string url ,string q ){
 			this.url = url; 
 this.q = q; 

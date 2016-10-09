@@ -25,9 +25,7 @@ namespace TeleSharp.TL
      public TLAbsMessageMedia media {get;set;}
      public bool popup {get;set;}
 
-		public TLUpdateServiceNotification (){
-			
-		}
+		public TLUpdateServiceNotification (){}
 		public TLUpdateServiceNotification (string type ,string message ,TLAbsMessageMedia media ,bool popup ){
 			this.type = type; 
 this.message = message; 

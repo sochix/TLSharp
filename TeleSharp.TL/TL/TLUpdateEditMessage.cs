@@ -24,9 +24,7 @@ namespace TeleSharp.TL
      public int pts {get;set;}
      public int pts_count {get;set;}
 
-		public TLUpdateEditMessage (){
-			
-		}
+		public TLUpdateEditMessage (){}
 		public TLUpdateEditMessage (TLAbsMessage message ,int pts ,int pts_count ){
 			this.message = message; 
 this.pts = pts; 

@@ -24,9 +24,7 @@ namespace TeleSharp.TL
      public int this_dc {get;set;}
      public int nearest_dc {get;set;}
 
-		public TLNearestDc (){
-			
-		}
+		public TLNearestDc (){}
 		public TLNearestDc (string country ,int this_dc ,int nearest_dc ){
 			this.country = country; 
 this.this_dc = this_dc; 

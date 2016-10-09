@@ -42,9 +42,7 @@ namespace TeleSharp.TL
      public int version {get;set;}
      public string restriction_reason {get;set;}
 
-		public TLChannel (){
-			
-		}
+		public TLChannel (){}
 		public TLChannel (bool creator ,bool kicked ,bool left ,bool editor ,bool moderator ,bool broadcast ,bool verified ,bool megagroup ,bool restricted ,bool democracy ,bool signatures ,bool min ,int id ,long? access_hash ,string title ,string username ,TLAbsChatPhoto photo ,int date ,int version ,string restriction_reason ){
 			this.creator = creator; 
 this.kicked = kicked; 

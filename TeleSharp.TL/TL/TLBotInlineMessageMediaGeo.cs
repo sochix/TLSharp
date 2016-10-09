@@ -24,9 +24,7 @@ namespace TeleSharp.TL
      public TLAbsGeoPoint geo {get;set;}
      public TLAbsReplyMarkup reply_markup {get;set;}
 
-		public TLBotInlineMessageMediaGeo (){
-			
-		}
+		public TLBotInlineMessageMediaGeo (){}
 		public TLBotInlineMessageMediaGeo (TLAbsGeoPoint geo ,TLAbsReplyMarkup reply_markup ){
 			this.geo = geo; 
 this.reply_markup = reply_markup; 

@@ -22,9 +22,7 @@ namespace TeleSharp.TL
 
              public TLVector<int> users {get;set;}
 
-		public TLPrivacyValueDisallowUsers (){
-			
-		}
+		public TLPrivacyValueDisallowUsers (){}
 		public TLPrivacyValueDisallowUsers (TLVector<int> users ){
 			this.users = users; 
 	

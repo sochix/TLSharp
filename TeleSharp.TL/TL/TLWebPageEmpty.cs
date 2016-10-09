@@ -22,9 +22,7 @@ namespace TeleSharp.TL
 
              public long id {get;set;}
 
-		public TLWebPageEmpty (){
-			
-		}
+		public TLWebPageEmpty (){}
 		public TLWebPageEmpty (long id ){
 			this.id = id; 
 	

@@ -27,9 +27,7 @@ namespace TeleSharp.TL
      public TLAbsGeoPoint geo {get;set;}
      public string offset {get;set;}
 
-		public TLUpdateBotInlineQuery (){
-			
-		}
+		public TLUpdateBotInlineQuery (){}
 		public TLUpdateBotInlineQuery (long query_id ,int user_id ,string query ,TLAbsGeoPoint geo ,string offset ){
 			this.query_id = query_id; 
 this.user_id = user_id; 

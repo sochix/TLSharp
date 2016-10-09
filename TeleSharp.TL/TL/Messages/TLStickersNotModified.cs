@@ -21,9 +21,7 @@ namespace TeleSharp.TL.Messages
         }
 
         
-		public TLStickersNotModified (){
-			
-		}
+		
 		public TLStickersNotModified (){
 				
 		}

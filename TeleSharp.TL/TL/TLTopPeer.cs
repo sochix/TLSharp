@@ -23,9 +23,7 @@ namespace TeleSharp.TL
              public TLAbsPeer peer {get;set;}
      public double rating {get;set;}
 
-		public TLTopPeer (){
-			
-		}
+		public TLTopPeer (){}
 		public TLTopPeer (TLAbsPeer peer ,double rating ){
 			this.peer = peer; 
 this.rating = rating; 

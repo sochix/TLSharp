@@ -22,9 +22,7 @@ namespace TeleSharp.TL
 
              public TLAbsInputGeoPoint geo_point {get;set;}
 
-		public TLInputMediaGeoPoint (){
-			
-		}
+		public TLInputMediaGeoPoint (){}
 		public TLInputMediaGeoPoint (TLAbsInputGeoPoint geo_point ){
 			this.geo_point = geo_point; 
 	

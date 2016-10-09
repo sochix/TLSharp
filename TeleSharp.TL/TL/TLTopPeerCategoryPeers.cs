@@ -24,9 +24,7 @@ namespace TeleSharp.TL
      public int count {get;set;}
      public TLVector<TLTopPeer> peers {get;set;}
 
-		public TLTopPeerCategoryPeers (){
-			
-		}
+		public TLTopPeerCategoryPeers (){}
 		public TLTopPeerCategoryPeers (TLAbsTopPeerCategory category ,int count ,TLVector<TLTopPeer> peers ){
 			this.category = category; 
 this.count = count; 

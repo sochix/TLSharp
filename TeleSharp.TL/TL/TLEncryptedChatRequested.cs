@@ -27,9 +27,7 @@ namespace TeleSharp.TL
      public int participant_id {get;set;}
      public byte[] g_a {get;set;}
 
-		public TLEncryptedChatRequested (){
-			
-		}
+		public TLEncryptedChatRequested (){}
 		public TLEncryptedChatRequested (int id ,long access_hash ,int date ,int admin_id ,int participant_id ,byte[] g_a ){
 			this.id = id; 
 this.access_hash = access_hash; 

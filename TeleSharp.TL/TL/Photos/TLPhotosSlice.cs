@@ -24,9 +24,7 @@ namespace TeleSharp.TL.Photos
      public TLVector<TLAbsPhoto> photos {get;set;}
      public TLVector<TLAbsUser> users {get;set;}
 
-		public TLPhotosSlice (){
-			
-		}
+		public TLPhotosSlice (){}
 		public TLPhotosSlice (int count ,TLVector<TLAbsPhoto> photos ,TLVector<TLAbsUser> users ){
 			this.count = count; 
 this.photos = photos; 

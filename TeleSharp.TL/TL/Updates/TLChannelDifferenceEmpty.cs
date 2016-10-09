@@ -25,9 +25,7 @@ namespace TeleSharp.TL.Updates
      public int pts {get;set;}
      public int? timeout {get;set;}
 
-		public TLChannelDifferenceEmpty (){
-			
-		}
+		public TLChannelDifferenceEmpty (){}
 		public TLChannelDifferenceEmpty (bool final ,int pts ,int? timeout ){
 			this.final = final; 
 this.pts = pts; 

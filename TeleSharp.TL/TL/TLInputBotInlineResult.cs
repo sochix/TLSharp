@@ -34,9 +34,7 @@ namespace TeleSharp.TL
      public int? duration {get;set;}
      public TLAbsInputBotInlineMessage send_message {get;set;}
 
-		public TLInputBotInlineResult (){
-			
-		}
+		public TLInputBotInlineResult (){}
 		public TLInputBotInlineResult (string id ,string type ,string title ,string description ,string url ,string thumb_url ,string content_url ,string content_type ,int? w ,int? h ,int? duration ,TLAbsInputBotInlineMessage send_message ){
 			this.id = id; 
 this.type = type; 

@@ -26,9 +26,7 @@ namespace TeleSharp.TL
      public bool selective {get;set;}
      public TLVector<TLKeyboardButtonRow> rows {get;set;}
 
-		public TLReplyKeyboardMarkup (){
-			
-		}
+		public TLReplyKeyboardMarkup (){}
 		public TLReplyKeyboardMarkup (bool resize ,bool single_use ,bool selective ,TLVector<TLKeyboardButtonRow> rows ){
 			this.resize = resize; 
 this.single_use = single_use; 

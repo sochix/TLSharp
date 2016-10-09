@@ -22,9 +22,7 @@ namespace TeleSharp.TL.Account
 
              public TLVector<TLAuthorization> authorizations {get;set;}
 
-		public TLAuthorizations (){
-			
-		}
+		public TLAuthorizations (){}
 		public TLAuthorizations (TLVector<TLAuthorization> authorizations ){
 			this.authorizations = authorizations; 
 	

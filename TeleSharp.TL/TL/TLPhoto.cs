@@ -25,9 +25,7 @@ namespace TeleSharp.TL
      public int date {get;set;}
      public TLVector<TLAbsPhotoSize> sizes {get;set;}
 
-		public TLPhoto (){
-			
-		}
+		public TLPhoto (){}
 		public TLPhoto (long id ,long access_hash ,int date ,TLVector<TLAbsPhotoSize> sizes ){
 			this.id = id; 
 this.access_hash = access_hash; 

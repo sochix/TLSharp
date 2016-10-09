@@ -24,9 +24,7 @@ namespace TeleSharp.TL.Messages
      public TLVector<TLAbsChat> chats {get;set;}
      public TLVector<TLAbsUser> users {get;set;}
 
-		public TLChatFull (){
-			
-		}
+		public TLChatFull (){}
 		public TLChatFull (TLAbsChatFull full_chat ,TLVector<TLAbsChat> chats ,TLVector<TLAbsUser> users ){
 			this.full_chat = full_chat; 
 this.chats = chats; 

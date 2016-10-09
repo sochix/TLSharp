@@ -21,9 +21,7 @@ namespace TeleSharp.TL
         }
 
         
-		public TLMessageActionHistoryClear (){
-			
-		}
+		
 		public TLMessageActionHistoryClear (){
 				
 		}

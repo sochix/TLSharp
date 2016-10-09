@@ -23,9 +23,7 @@ namespace TeleSharp.TL.Updates
              public int date {get;set;}
      public int seq {get;set;}
 
-		public TLDifferenceEmpty (){
-			
-		}
+		public TLDifferenceEmpty (){}
 		public TLDifferenceEmpty (int date ,int seq ){
 			this.date = date; 
 this.seq = seq; 

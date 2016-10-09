@@ -22,9 +22,7 @@ namespace TeleSharp.TL
 
              public string text {get;set;}
 
-		public TLKeyboardButtonRequestGeoLocation (){
-			
-		}
+		public TLKeyboardButtonRequestGeoLocation (){}
 		public TLKeyboardButtonRequestGeoLocation (string text ){
 			this.text = text; 
 	

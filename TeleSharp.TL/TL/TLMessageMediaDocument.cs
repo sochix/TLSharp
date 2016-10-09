@@ -23,9 +23,7 @@ namespace TeleSharp.TL
              public TLAbsDocument document {get;set;}
      public string caption {get;set;}
 
-		public TLMessageMediaDocument (){
-			
-		}
+		public TLMessageMediaDocument (){}
 		public TLMessageMediaDocument (TLAbsDocument document ,string caption ){
 			this.document = document; 
 this.caption = caption; 

@@ -23,9 +23,7 @@ namespace TeleSharp.TL
              public TLAbsInputPhoto id {get;set;}
      public string caption {get;set;}
 
-		public TLInputMediaPhoto (){
-			
-		}
+		public TLInputMediaPhoto (){}
 		public TLInputMediaPhoto (TLAbsInputPhoto id ,string caption ){
 			this.id = id; 
 this.caption = caption; 

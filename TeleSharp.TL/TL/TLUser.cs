@@ -44,9 +44,7 @@ namespace TeleSharp.TL
      public string restriction_reason {get;set;}
      public string bot_inline_placeholder {get;set;}
 
-		public TLUser (){
-			
-		}
+		public TLUser (){}
 		public TLUser (bool self ,bool contact ,bool mutual_contact ,bool deleted ,bool bot ,bool bot_chat_history ,bool bot_nochats ,bool verified ,bool restricted ,bool min ,bool bot_inline_geo ,int id ,long? access_hash ,string first_name ,string last_name ,string username ,string phone ,TLAbsUserProfilePhoto photo ,TLAbsUserStatus status ,int? bot_info_version ,string restriction_reason ,string bot_inline_placeholder ){
 			this.self = self; 
 this.contact = contact; 

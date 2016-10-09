@@ -24,9 +24,7 @@ namespace TeleSharp.TL
      public int id {get;set;}
      public int views {get;set;}
 
-		public TLUpdateChannelMessageViews (){
-			
-		}
+		public TLUpdateChannelMessageViews (){}
 		public TLUpdateChannelMessageViews (int channel_id ,int id ,int views ){
 			this.channel_id = channel_id; 
 this.id = id; 

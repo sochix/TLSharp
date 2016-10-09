@@ -22,9 +22,7 @@ namespace TeleSharp.TL
 
              public int user_id {get;set;}
 
-		public TLMessageActionChatDeleteUser (){
-			
-		}
+		public TLMessageActionChatDeleteUser (){}
 		public TLMessageActionChatDeleteUser (int user_id ){
 			this.user_id = user_id; 
 	

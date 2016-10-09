@@ -22,9 +22,7 @@ namespace TeleSharp.TL.Account
 
              public string email {get;set;}
 
-		public TLPasswordSettings (){
-			
-		}
+		public TLPasswordSettings (){}
 		public TLPasswordSettings (string email ){
 			this.email = email; 
 	

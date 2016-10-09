@@ -23,9 +23,7 @@ namespace TeleSharp.TL
              public string alt {get;set;}
      public TLAbsInputStickerSet stickerset {get;set;}
 
-		public TLDocumentAttributeSticker (){
-			
-		}
+		public TLDocumentAttributeSticker (){}
 		public TLDocumentAttributeSticker (string alt ,TLAbsInputStickerSet stickerset ){
 			this.alt = alt; 
 this.stickerset = stickerset; 

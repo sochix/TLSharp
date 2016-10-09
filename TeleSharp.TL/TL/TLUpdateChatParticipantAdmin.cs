@@ -25,9 +25,7 @@ namespace TeleSharp.TL
      public bool is_admin {get;set;}
      public int version {get;set;}
 
-		public TLUpdateChatParticipantAdmin (){
-			
-		}
+		public TLUpdateChatParticipantAdmin (){}
 		public TLUpdateChatParticipantAdmin (int chat_id ,int user_id ,bool is_admin ,int version ){
 			this.chat_id = chat_id; 
 this.user_id = user_id; 

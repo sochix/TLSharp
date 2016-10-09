@@ -90,7 +90,10 @@ namespace TeleSharp.Generator
                     }
                     if (paramters.EndsWith(",")) paramters = paramters.Substring(0, paramters.Length - 1);
                     temp = temp.Replace("/* Parameters */",paramters);
-                    
+                    if (c.Params.Count != 0)
+                        temp = temp.Replace("/* PARAMETERLESS */", $"public {GetNameofClass(c.predicate, false)} ()"+"{}");
+                    else
+                        temp = temp.Replace("/* PARAMETERLESS */", "");
                     #endregion
                     #region AssignParamters
                     string assign = "";
@@ -101,6 +104,7 @@ namespace TeleSharp.Generator
                     }
                     temp = temp.Replace("/* Assign */", assign);
                     #endregion
+                    
                     #region ComputeFlagFunc
                     if (!c.Params.Any(x => x.name == "flags")) temp = temp.Replace("/* COMPUTE */", "");
                     else

@@ -22,9 +22,7 @@ namespace TeleSharp.TL
 
              public int was_online {get;set;}
 
-		public TLUserStatusOffline (){
-			
-		}
+		public TLUserStatusOffline (){}
 		public TLUserStatusOffline (int was_online ){
 			this.was_online = was_online; 
 	

@@ -22,9 +22,7 @@ namespace TeleSharp.TL
 
              public string link {get;set;}
 
-		public TLChatInviteExported (){
-			
-		}
+		public TLChatInviteExported (){}
 		public TLChatInviteExported (string link ){
 			this.link = link; 
 	

@@ -26,9 +26,7 @@ namespace TeleSharp.TL
      public int date {get;set;}
      public int seq {get;set;}
 
-		public TLUpdates (){
-			
-		}
+		public TLUpdates (){}
 		public TLUpdates (TLVector<TLAbsUpdate> updates ,TLVector<TLAbsUser> users ,TLVector<TLAbsChat> chats ,int date ,int seq ){
 			this.updates = updates; 
 this.users = users; 

@@ -24,9 +24,7 @@ namespace TeleSharp.TL
      public int length {get;set;}
      public string url {get;set;}
 
-		public TLMessageEntityTextUrl (){
-			
-		}
+		public TLMessageEntityTextUrl (){}
 		public TLMessageEntityTextUrl (int offset ,int length ,string url ){
 			this.offset = offset; 
 this.length = length; 

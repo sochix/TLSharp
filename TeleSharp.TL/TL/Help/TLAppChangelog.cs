@@ -22,9 +22,7 @@ namespace TeleSharp.TL.Help
 
              public string text {get;set;}
 
-		public TLAppChangelog (){
-			
-		}
+		public TLAppChangelog (){}
 		public TLAppChangelog (string text ){
 			this.text = text; 
 	

@@ -22,9 +22,7 @@ namespace TeleSharp.TL.Help
 
              public string message {get;set;}
 
-		public TLInviteText (){
-			
-		}
+		public TLInviteText (){}
 		public TLInviteText (string message ){
 			this.message = message; 
 	

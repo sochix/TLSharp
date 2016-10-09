@@ -21,9 +21,7 @@ namespace TeleSharp.TL
         }
 
         
-		public TLTopPeerCategoryCorrespondents (){
-			
-		}
+		
 		public TLTopPeerCategoryCorrespondents (){
 				
 		}

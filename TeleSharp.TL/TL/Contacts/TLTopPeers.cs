@@ -24,9 +24,7 @@ namespace TeleSharp.TL.Contacts
      public TLVector<TLAbsChat> chats {get;set;}
      public TLVector<TLAbsUser> users {get;set;}
 
-		public TLTopPeers (){
-			
-		}
+		public TLTopPeers (){}
 		public TLTopPeers (TLVector<TLTopPeerCategoryPeers> categories ,TLVector<TLAbsChat> chats ,TLVector<TLAbsUser> users ){
 			this.categories = categories; 
 this.chats = chats; 

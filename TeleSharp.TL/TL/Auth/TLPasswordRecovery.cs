@@ -22,9 +22,7 @@ namespace TeleSharp.TL.Auth
 
              public string email_pattern {get;set;}
 
-		public TLPasswordRecovery (){
-			
-		}
+		public TLPasswordRecovery (){}
 		public TLPasswordRecovery (string email_pattern ){
 			this.email_pattern = email_pattern; 
 	

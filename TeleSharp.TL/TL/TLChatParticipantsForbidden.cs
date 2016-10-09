@@ -24,9 +24,7 @@ namespace TeleSharp.TL
      public int chat_id {get;set;}
      public TLAbsChatParticipant self_participant {get;set;}
 
-		public TLChatParticipantsForbidden (){
-			
-		}
+		public TLChatParticipantsForbidden (){}
 		public TLChatParticipantsForbidden (int chat_id ,TLAbsChatParticipant self_participant ){
 			this.chat_id = chat_id; 
 this.self_participant = self_participant; 

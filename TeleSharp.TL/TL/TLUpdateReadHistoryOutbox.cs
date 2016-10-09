@@ -25,9 +25,7 @@ namespace TeleSharp.TL
      public int pts {get;set;}
      public int pts_count {get;set;}
 
-		public TLUpdateReadHistoryOutbox (){
-			
-		}
+		public TLUpdateReadHistoryOutbox (){}
 		public TLUpdateReadHistoryOutbox (TLAbsPeer peer ,int max_id ,int pts ,int pts_count ){
 			this.peer = peer; 
 this.max_id = max_id; 

@@ -25,9 +25,7 @@ namespace TeleSharp.TL
      public int date {get;set;}
      public byte[] bytes {get;set;}
 
-		public TLEncryptedMessageService (){
-			
-		}
+		public TLEncryptedMessageService (){}
 		public TLEncryptedMessageService (long random_id ,int chat_id ,int date ,byte[] bytes ){
 			this.random_id = random_id; 
 this.chat_id = chat_id; 

@@ -23,9 +23,7 @@ namespace TeleSharp.TL.Account
              public TLVector<TLAbsPrivacyRule> rules {get;set;}
      public TLVector<TLAbsUser> users {get;set;}
 
-		public TLPrivacyRules (){
-			
-		}
+		public TLPrivacyRules (){}
 		public TLPrivacyRules (TLVector<TLAbsPrivacyRule> rules ,TLVector<TLAbsUser> users ){
 			this.rules = rules; 
 this.users = users; 

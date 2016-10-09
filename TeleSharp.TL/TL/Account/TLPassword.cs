@@ -26,9 +26,7 @@ namespace TeleSharp.TL.Account
      public bool has_recovery {get;set;}
      public string email_unconfirmed_pattern {get;set;}
 
-		public TLPassword (){
-			
-		}
+		public TLPassword (){}
 		public TLPassword (byte[] current_salt ,byte[] new_salt ,string hint ,bool has_recovery ,string email_unconfirmed_pattern ){
 			this.current_salt = current_salt; 
 this.new_salt = new_salt; 

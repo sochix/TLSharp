@@ -22,9 +22,7 @@ namespace TeleSharp.TL
 
              public int id {get;set;}
 
-		public TLUserEmpty (){
-			
-		}
+		public TLUserEmpty (){}
 		public TLUserEmpty (int id ){
 			this.id = id; 
 	

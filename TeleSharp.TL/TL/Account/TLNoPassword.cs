@@ -23,9 +23,7 @@ namespace TeleSharp.TL.Account
              public byte[] new_salt {get;set;}
      public string email_unconfirmed_pattern {get;set;}
 
-		public TLNoPassword (){
-			
-		}
+		public TLNoPassword (){}
 		public TLNoPassword (byte[] new_salt ,string email_unconfirmed_pattern ){
 			this.new_salt = new_salt; 
 this.email_unconfirmed_pattern = email_unconfirmed_pattern; 

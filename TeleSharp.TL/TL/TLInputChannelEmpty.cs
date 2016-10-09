@@ -21,9 +21,7 @@ namespace TeleSharp.TL
         }
 
         
-		public TLInputChannelEmpty (){
-			
-		}
+		
 		public TLInputChannelEmpty (){
 				
 		}

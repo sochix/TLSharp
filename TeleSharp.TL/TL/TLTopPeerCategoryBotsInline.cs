@@ -21,9 +21,7 @@ namespace TeleSharp.TL
         }
 
         
-		public TLTopPeerCategoryBotsInline (){
-			
-		}
+		
 		public TLTopPeerCategoryBotsInline (){
 				
 		}

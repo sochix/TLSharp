@@ -23,9 +23,7 @@ namespace TeleSharp.TL
              public string title {get;set;}
      public int chat_id {get;set;}
 
-		public TLMessageActionChannelMigrateFrom (){
-			
-		}
+		public TLMessageActionChannelMigrateFrom (){}
 		public TLMessageActionChannelMigrateFrom (string title ,int chat_id ){
 			this.title = title; 
 this.chat_id = chat_id; 

@@ -26,9 +26,7 @@ namespace TeleSharp.TL
      public TLVector<TLAbsDocumentAttribute> attributes {get;set;}
      public string caption {get;set;}
 
-		public TLInputMediaUploadedThumbDocument (){
-			
-		}
+		public TLInputMediaUploadedThumbDocument (){}
 		public TLInputMediaUploadedThumbDocument (TLAbsInputFile file ,TLAbsInputFile thumb ,string mime_type ,TLVector<TLAbsDocumentAttribute> attributes ,string caption ){
 			this.file = file; 
 this.thumb = thumb; 

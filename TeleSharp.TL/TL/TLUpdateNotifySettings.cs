@@ -23,9 +23,7 @@ namespace TeleSharp.TL
              public TLAbsNotifyPeer peer {get;set;}
      public TLAbsPeerNotifySettings notify_settings {get;set;}
 
-		public TLUpdateNotifySettings (){
-			
-		}
+		public TLUpdateNotifySettings (){}
 		public TLUpdateNotifySettings (TLAbsNotifyPeer peer ,TLAbsPeerNotifySettings notify_settings ){
 			this.peer = peer; 
 this.notify_settings = notify_settings; 

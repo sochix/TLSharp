@@ -22,9 +22,7 @@ namespace TeleSharp.TL
 
              public TLAbsGeoPoint geo {get;set;}
 
-		public TLMessageMediaGeo (){
-			
-		}
+		public TLMessageMediaGeo (){}
 		public TLMessageMediaGeo (TLAbsGeoPoint geo ){
 			this.geo = geo; 
 	

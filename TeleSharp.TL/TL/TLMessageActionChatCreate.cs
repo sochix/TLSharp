@@ -23,9 +23,7 @@ namespace TeleSharp.TL
              public string title {get;set;}
      public TLVector<int> users {get;set;}
 
-		public TLMessageActionChatCreate (){
-			
-		}
+		public TLMessageActionChatCreate (){}
 		public TLMessageActionChatCreate (string title ,TLVector<int> users ){
 			this.title = title; 
 this.users = users; 

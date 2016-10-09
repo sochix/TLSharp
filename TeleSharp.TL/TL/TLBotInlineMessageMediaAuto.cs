@@ -24,9 +24,7 @@ namespace TeleSharp.TL
      public string caption {get;set;}
      public TLAbsReplyMarkup reply_markup {get;set;}
 
-		public TLBotInlineMessageMediaAuto (){
-			
-		}
+		public TLBotInlineMessageMediaAuto (){}
 		public TLBotInlineMessageMediaAuto (string caption ,TLAbsReplyMarkup reply_markup ){
 			this.caption = caption; 
 this.reply_markup = reply_markup; 

@@ -23,9 +23,7 @@ namespace TeleSharp.TL
              public int flags {get;set;}
      public bool report_spam {get;set;}
 
-		public TLPeerSettings (){
-			
-		}
+		public TLPeerSettings (){}
 		public TLPeerSettings (bool report_spam ){
 			this.report_spam = report_spam; 
 	

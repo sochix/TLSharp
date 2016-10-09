@@ -25,9 +25,7 @@ namespace TeleSharp.TL
      public int local_id {get;set;}
      public long secret {get;set;}
 
-		public TLFileLocation (){
-			
-		}
+		public TLFileLocation (){}
 		public TLFileLocation (int dc_id ,long volume_id ,int local_id ,long secret ){
 			this.dc_id = dc_id; 
 this.volume_id = volume_id; 

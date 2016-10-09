@@ -29,9 +29,7 @@ namespace TeleSharp.TL
      public string description {get;set;}
      public TLAbsBotInlineMessage send_message {get;set;}
 
-		public TLBotInlineMediaResult (){
-			
-		}
+		public TLBotInlineMediaResult (){}
 		public TLBotInlineMediaResult (string id ,string type ,TLAbsPhoto photo ,TLAbsDocument document ,string title ,string description ,TLAbsBotInlineMessage send_message ){
 			this.id = id; 
 this.type = type; 

@@ -21,9 +21,7 @@ namespace TeleSharp.TL.Contacts
         }
 
         
-		public TLContactsNotModified (){
-			
-		}
+		
 		public TLContactsNotModified (){
 				
 		}

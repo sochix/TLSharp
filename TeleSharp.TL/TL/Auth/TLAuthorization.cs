@@ -22,9 +22,7 @@ namespace TeleSharp.TL.Auth
 
              public TLAbsUser user {get;set;}
 
-		public TLAuthorization (){
-			
-		}
+		public TLAuthorization (){}
 		public TLAuthorization (TLAbsUser user ){
 			this.user = user; 
 	

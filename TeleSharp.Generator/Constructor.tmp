@@ -21,9 +21,7 @@ namespace /* NAMESPACE */
         }
 
         /* PARAMS */
-		public /* NAME */ (){
-			
-		}
+		/* PARAMETERLESS */
 		public /* NAME */ (/* Parameters */){
 			/* Assign */	
 		}

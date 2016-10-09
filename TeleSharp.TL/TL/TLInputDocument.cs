@@ -23,9 +23,7 @@ namespace TeleSharp.TL
              public long id {get;set;}
      public long access_hash {get;set;}
 
-		public TLInputDocument (){
-			
-		}
+		public TLInputDocument (){}
 		public TLInputDocument (long id ,long access_hash ){
 			this.id = id; 
 this.access_hash = access_hash; 

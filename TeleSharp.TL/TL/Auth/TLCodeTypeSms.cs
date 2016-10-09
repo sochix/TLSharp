@@ -21,9 +21,7 @@ namespace TeleSharp.TL.Auth
         }
 
         
-		public TLCodeTypeSms (){
-			
-		}
+		
 		public TLCodeTypeSms (){
 				
 		}

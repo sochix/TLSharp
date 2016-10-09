@@ -22,9 +22,7 @@ namespace TeleSharp.TL.Auth
 
              public int length {get;set;}
 
-		public TLSentCodeTypeSms (){
-			
-		}
+		public TLSentCodeTypeSms (){}
 		public TLSentCodeTypeSms (int length ){
 			this.length = length; 
 	
