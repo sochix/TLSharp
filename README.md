@@ -12,7 +12,7 @@ It's a perfect fit for any developer who would like to send data directly to Tel
 
 :exclamation: **Please, don't use it for SPAM!**
 
-# The Docuemention Moved to [TLSharp.aarani.ir](http://tlsharp.aarani.ir)
+# The Docuemention Moved to [TLSharp.readme.io](http://tlsharp.readme.ir)
 
 #Table of contents?
 
