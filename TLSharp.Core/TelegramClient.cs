@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using TLSharp.Core.Auth;
-using TLSharp.Core.MTProto;
-using TLSharp.Core.MTProto.Crypto;
-using TLSharp.Core.Network;
-using TLSharp.Core.Requests;
 using TeleSharp.TL;
-using MD5 = System.Security.Cryptography.MD5;
-using TeleSharp.TL.Help;
 using TeleSharp.TL.Auth;
 using TeleSharp.TL.Contacts;
+using TeleSharp.TL.Help;
 using TeleSharp.TL.Messages;
+using TLSharp.Core.Auth;
+using TLSharp.Core.MTProto.Crypto;
+using TLSharp.Core.Network;
 
 namespace TLSharp.Core
 {
@@ -42,7 +37,7 @@ namespace TLSharp.Core
             _transport = new TcpTransport(_session.ServerAddress, _session.Port);
         }
 
-        public async Task<bool> Connect(bool reconnect = false)
+        public async Task<bool> ConnectAsync(bool reconnect = false)
         {
             if (_session.AuthKey == null || reconnect)
             {
@@ -67,7 +62,7 @@ namespace TLSharp.Core
             return true;
         }
 
-        private async Task ReconnectToDc(int dcId)
+        private async Task ReconnectToDcAsync(int dcId)
         {
             if (dcOptions == null || !dcOptions.Any())
                 throw new InvalidOperationException($"Can't reconnect. Establish initial connection first.");
@@ -78,7 +73,7 @@ namespace TLSharp.Core
             _session.ServerAddress = dc.ip_address;
             _session.Port = dc.port;
 
-            await Connect(true);
+            await ConnectAsync(true);
         }
 
         public bool IsUserAuthorized()
@@ -86,7 +81,7 @@ namespace TLSharp.Core
             return _session.TLUser != null;
         }
 
-        public async Task<bool> IsPhoneRegistered(string phoneNumber)
+        public async Task<bool> IsPhoneRegisteredAsync(string phoneNumber)
         {
             if (_sender == null)
                 throw new InvalidOperationException("Not connected!");
@@ -98,7 +93,7 @@ namespace TLSharp.Core
             return authCheckPhoneRequest.Response.phone_registered;
         }
 
-        public async Task<string> SendCodeRequest(string phoneNumber)
+        public async Task<string> SendCodeRequestAsync(string phoneNumber)
         {
             var completed = false;
 
@@ -118,7 +113,7 @@ namespace TLSharp.Core
                 {
                     if (ex.Message.StartsWith("Your phone number registered to") && ex.Data["dcId"] != null)
                     {
-                        await ReconnectToDc((int)ex.Data["dcId"]);
+                        await ReconnectToDcAsync((int)ex.Data["dcId"]);
                     }
                     else
                     {
@@ -130,7 +125,7 @@ namespace TLSharp.Core
             return request.Response.phone_code_hash;
         }
 
-        public async Task<TLUser> MakeAuth(string phoneNumber, string phoneCodeHash, string code)
+        public async Task<TLUser> MakeAuthAsync(string phoneNumber, string phoneCodeHash, string code)
         {
             var request = new TLRequestSignIn() { phone_number = phoneNumber, phone_code_hash = phoneCodeHash, phone_code = code };
             await _sender.Send(request);
@@ -141,7 +136,7 @@ namespace TLSharp.Core
             return ((TLUser)request.Response.user);
         }
 
-        public async Task<TLUser> SignUp(string phoneNumber, string phoneCodeHash, string code, string firstName, string lastName)
+        public async Task<TLUser> SignUpAsync(string phoneNumber, string phoneCodeHash, string code, string firstName, string lastName)
         {
             var request = new TLRequestSignUp() { phone_number = phoneNumber, phone_code = code, phone_code_hash = phoneCodeHash, first_name = firstName, last_name = lastName };
             await _sender.Send(request);
@@ -151,7 +146,7 @@ namespace TLSharp.Core
 
             return ((TLUser)request.Response.user);
         }
-        public async Task<T> SendRequest<T>(TLMethod methodtoExceute)
+        public async Task<T> SendRequestAsync<T>(TLMethod methodtoExceute)
         {
             await _sender.Send(methodtoExceute);
             await _sender.Receive(methodtoExceute);
@@ -162,24 +157,24 @@ namespace TLSharp.Core
         }
 
 
-	    public async Task<TLContacts> GetContacts()
+	    public async Task<TLContacts> GetContactsAsync()
 	    {
 		    if (!IsUserAuthorized())
 				throw new InvalidOperationException("Authorize user first!");
 
 			var req = new TLRequestGetContacts() {hash = ""};
 			
-			return await SendRequest<TLContacts>(req);
+			return await SendRequestAsync<TLContacts>(req);
 		}
 
-	    public async Task<TLAbsUpdates> SendMessage(TLAbsInputPeer peer, string message)
+	    public async Task<TLAbsUpdates> SendMessageAsync(TLAbsInputPeer peer, string message)
 	    {
 			if (!IsUserAuthorized())
 				throw new InvalidOperationException("Authorize user first!");
 
 			long uniqueId = Convert.ToInt64((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds);
 
-			return await SendRequest<TLAbsUpdates>(
+			return await SendRequestAsync<TLAbsUpdates>(
 				   new TLRequestSendMessage()
 				   {
 					   peer = peer,
@@ -188,20 +183,20 @@ namespace TLSharp.Core
 				   });
 		}
 
-	    public async Task<Boolean> SendTyping(TLAbsInputPeer peer)
+	    public async Task<Boolean> SendTypingAsync(TLAbsInputPeer peer)
 	    {
 			var req = new TLRequestSetTyping()
 			{
 				action = new TLSendMessageTypingAction(),
 				peer = peer
 			};
-			return await SendRequest<Boolean>(req);
+			return await SendRequestAsync<Boolean>(req);
 		}
 
-	    public async Task<TLDialogs> GetUserDialogs()
+	    public async Task<TLDialogs> GetUserDialogsAsync()
 	    {
 			var peer = new TLInputPeerSelf();
-			return await SendRequest<TLDialogs>(
+			return await SendRequestAsync<TLDialogs>(
 				new TLRequestGetDialogs() { offset_date = 0, offset_peer = peer, limit = 100 });
 		}
 
