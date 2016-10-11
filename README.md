@@ -138,6 +138,7 @@ Don't panic. You can call any method with help of `SendRequestAsync` function. F
 **Where you can find a list of requests and its params?**
 
 The only way is [Telegram API docs](https://core.telegram.org/methods). Yes, it's outdated. But there is no other source.
+Latest scheme in JSON format you can find [here](https://gist.github.com/aarani/b22b7cda024973dff68e1672794b0298)
 
 ## Contributing
 
