@@ -43,9 +43,10 @@ namespace TeleSharp.TL
                 else if (typeof(T).BaseType == typeof(TLObject))
                 {
                     int constructor = br.ReadInt32();
-                    object obj = Activator.CreateInstance(typeof(T));
-                    typeof(T).GetMethod("DeserializeBody").Invoke(obj, new object[] { br });
-                    lists.Add((T)Convert.ChangeType(obj,typeof(T)));
+                    Type type = TLContext.getType(constructor);
+                    object obj = Activator.CreateInstance(type);
+                    type.GetMethod("DeserializeBody").Invoke(obj, new object[] { br });
+                    lists.Add((T)Convert.ChangeType(obj, type));
                 }
             }
         }
