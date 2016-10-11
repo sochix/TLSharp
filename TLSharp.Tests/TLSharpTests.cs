@@ -69,8 +69,7 @@ namespace TLSharp.Tests
         [TestMethod]
         public async Task AuthUser()
         {
-            var store = new FileSessionStore();
-            var client = new TelegramClient(store, "session", apiId, apiHash);
+            var client = new TelegramClient(apiId, apiHash);
 
             await client.ConnectAsync();
 
@@ -86,8 +85,7 @@ namespace TLSharp.Tests
 		[TestMethod]
 	    public async Task SendMessageTest()
 	    {
-		    var store = new FileSessionStore();
-			var client = new TelegramClient(store, "session", apiId, apiHash);
+		    var client = new TelegramClient(apiId, apiHash);
 
 			await client.ConnectAsync();
 
@@ -106,8 +104,7 @@ namespace TLSharp.Tests
 		[TestMethod]
 		public async Task SendMessageToChannelTest()
 		{
-			var store = new FileSessionStore();
-			var client = new TelegramClient(store, "session", apiId, apiHash);
+			var client = new TelegramClient(apiId, apiHash);
 
 			await client.ConnectAsync();
 
@@ -123,8 +120,7 @@ namespace TLSharp.Tests
 		[TestMethod]
         public async Task SignUpNewUser()
         {
-            var store = new FileSessionStore();
-            var client = new TelegramClient(store, "session", apiId, apiHash);
+            var client = new TelegramClient(apiId, apiHash);
             await client.ConnectAsync();
 
             var hash = await client.SendCodeRequestAsync(NotRegisteredNumberToSignUp);
@@ -141,8 +137,7 @@ namespace TLSharp.Tests
         [TestMethod]
         public async Task CheckPhones()
         {
-            var store = new FileSessionStore();
-            var client = new TelegramClient(store, "session", apiId, apiHash);
+            var client = new TelegramClient(apiId, apiHash);
             await client.ConnectAsync();
 
             var result = await client.IsPhoneRegisteredAsync(NumberToAuthenticate);

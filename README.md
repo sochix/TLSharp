@@ -1,52 +1,143 @@
 #TLSharp
 
 [![Join the chat at https://gitter.im/TLSharp/Lobby](https://badges.gitter.im/TLSharp/Lobby.svg)](https://gitter.im/TLSharp/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 [![Build status](https://ci.appveyor.com/api/projects/status/95rl618ch5c4h2fa?svg=true)](https://ci.appveyor.com/project/sochix/tlsharp)
 
-Telegram (http://telegram.org) client library implemented in C#. Only basic functionality is currently implemented. **Consider donation to speed up development process.** Bitcoin wallet: **3K1ocweFgaHnAibJ3n6hX7RNZWFTFcJjUe**
+_Unofficial_ Telegram (http://telegram.org) client library implemented in C#. Latest TL scheme supported, thanks to Afshin Arani
 
-It's a perfect fit for any developer who would like to send data directly to Telegram users.
+**Consider donation to speed up development process.** 
 
-:star: If you :heart: library, please star it! :star:
+Bitcoin wallet: **3K1ocweFgaHnAibJ3n6hX7RNZWFTFcJjUe**
 
-:exclamation: **Please, don't use it for SPAM!**
+It's a perfect fit for any developer who would like to send data directly to Telegram users or write own custom Telegram client.
 
-# The Docuemention Moved to [TLSharp.aarani.ir](http://tlsharp.aarani.ir)
+:star2: If you :heart: library, please star it! :star2:
 
-#Table of contents?
+# Table of contents?
 
 - [How do I add this to my project?](#how-do-i-add-this-to-my-project)
 - [Dependencies](#dependencies)
 - [Starter Guide](#starter-guide)
   - [Quick configuration](#quick-configuration)
+  - [First requests](#first-requests)
+- [Available Methods](#available-methods)
 - [Contributing](#contributing)
 - [FAQ](#faq)
 - [Donations](#donations)
 - [License](#license)
 
-#How do I add this to my project?
+# How do I add this to my project?
 
-Library isn't ready for production usage, that's why no Nu-Get package available.
+Library _almost_ ready for production usage. We need contributors to make 1.0.0 release.
 
-To use it follow next steps:
+To use TLSharp follow next steps:
 
 1. Clone TLSharp from GitHub
 1. Compile source with VS2015
 1. Add reference to ```TLSharp.Core.dll``` to your awesome project.
 
-#Dependencies
+# Dependencies
 
 TLSharp has a few dependenices, most of functionality implemented from scratch.
 All dependencies listed in [package.conf file](https://github.com/sochix/TLSharp/blob/master/TLSharp.Core/packages.config).
 
-#Starter Guide
+# Starter Guide
 
 ## Quick Configuration
 Telegram API isn't that easy to start. You need to do some configuration first.
 
 1. Create a [developer account](https://my.telegram.org/) in Telegram. 
 1. Goto [API development tools](https://my.telegram.org/apps) and copy **API_ID** and **API_HASH** from your account. You'll need it later.
+
+## First requests
+To start work, create an instance of TelegramClient and establish connection
+
+```csharp 
+   var client = new TelegramClient(apiId, apiHash);
+   await client.ConnectAsync();
+```
+Now you can work with Telegram API, but ->
+> Only a small portion of the API methods are available to unauthorized users. ([full description](https://core.telegram.org/api/auth)) 
+
+For authentication you need to run following code
+```csharp
+  var hash = await client.SendCodeRequestAsync("<user_number>");
+  var code = "<code_from_telegram>"; // you can change code in debugger
+
+  var user = await client.MakeAuthAsync("<user_number>", hash, code);
+``` 
+
+Full code you can see at [AuthUser test](https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L70)
+
+When user is authenticated, TLSharp creates special file called _session.dat_. In this file TLSharp store all information needed for user session. So you need to authenticate user every time the _session.dat_ file is corrupted or removed.
+
+You can call any method on authenticated user. For example, let's send message to a friend by his phone number:
+
+```csharp
+  //get available contacts
+  var result = await client.GetContactsAsync();
+
+  //find recipient in contacts
+  var user = result.users.lists
+	  .Where(x => x.GetType() == typeof (TLUser))
+	  .Cast<TLUser>()
+	  .FirstOrDefault(x => x.phone == "<recipient_phone>");
+	
+  //send message
+  await client.SendMessageAsync(new TLInputPeerUser() {user_id = user.id}, "OUR_MESSAGE");
+```
+
+Full code you can see at [SendMessage test](https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L87)
+
+To send message to channel you could use the following code:
+```csharp
+  //get user dialogs
+  var dialogs = await client.GetUserDialogsAsync();
+
+  //find channel by title
+  var chat = dialogs.chats.lists
+    .Where(c => c.GetType() == typeof(TLChannel))
+    .Cast<TLChannel>()
+    .FirstOrDefault(c => c.title == "<channel_title>");
+
+  //send message
+  await client.SendMessageAsync(new TLInputPeerChannel() { channel_id = chat.id, access_hash = chat.access_hash.Value }, "OUR_MESSAGE");
+```
+Full code you can see at [SendMessageToChannel test](https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L107)
+
+## Available Methods
+
+For your convenience TLSharp have wrappers for several Telegram API methods. You could add your own, see details below.
+
+1. IsPhoneRegisteredAsync
+1. SendCodeRequestAsync
+1. MakeAuthAsync
+1. SignUpAsync
+1. GetContactsAsync
+1. SendMessageAsync
+1. SendTypingAsync
+1. GetUserDialogsAsync
+
+**What if you can't find needed method at the list?**
+
+Don't panic. You can call any method with help of `SendRequestAsync` function. For example, send user typing method: 
+
+```csharp
+
+  //Create request 
+  var req = new TLRequestSetTyping()
+  {
+    action = new TLSendMessageTypingAction(),
+    peer = peer
+  };
+
+  //run request, and deserialize response to Boolean
+  return await SendRequestAsync<Boolean>(req);
+``` 
+
+**Where you can find a list of requests and its params?**
+
+The only way is [Telegram API docs](https://core.telegram.org/methods). Yes, it's outdated. But there is no other source.
 
 ## Contributing
 
@@ -55,6 +146,9 @@ Contributing is highly appreciated!
 ###What things can I Implement (Project Roadmap)?
 
 * Add Updates handling
+* Add NuGet package
+* Add wrappers for media uploading
+* Store user session as JSON
 
 # FAQ
 
@@ -67,22 +161,23 @@ TLSharp library should automatically handle this errors. If you see such errors,
 You should create a Telegram session. See [configuration guide](#sending-messages-set-up)
 
 #### Why I get FLOOD_WAIT error?
-It's Telegram restrictions. See [this](https://core.telegram.org/api/errors#420-flood)
+[It's Telegram restrictions](https://core.telegram.org/api/errors#420-flood)
 
 #### Why does TLSharp lacks feature XXXX?
 
 Now TLSharp is basic realization of Telegram protocol, you can be a contributor or a sponsor to speed-up developemnt of any feature.
 
 #### Nothing helps
-Create an issue in project bug tracker.
+Ask your question at gitter or create an issue in project bug tracker.
 
-**Attach this information**:
+**Attach following information**:
 
 * Full problem description and exception message
 * Stack-trace
 * Your code that runs in to this exception
 
 Without information listen above your issue will be closed. 
+
 # Donations
 Thanks for donations! It's highly appreciated. 
 Bitcoin wallet: **3K1ocweFgaHnAibJ3n6hX7RNZWFTFcJjUe**
@@ -90,13 +185,16 @@ Bitcoin wallet: **3K1ocweFgaHnAibJ3n6hX7RNZWFTFcJjUe**
 List of donators:
 * [mtbitcoin](https://github.com/mtbitcoin)
 
+# Contributors
+* [Afshin Arani](http://aarani.ir) - TLGenerator, and a lot of other usefull things
+
 # License
 
 **Please, provide link to an author when you using library**
 
 The MIT License
 
-Copyright (c) 2015 Ilya Pirozhenko http://www.sochix.ru/ & Afshin Arani http://aarani.ir
+Copyright (c) 2015 Ilya Pirozhenko http://www.sochix.ru/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

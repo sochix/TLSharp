@@ -23,8 +23,11 @@ namespace TLSharp.Core
         private Session _session;
         private List<TLDcOption> dcOptions;
 
-        public TelegramClient(ISessionStore store, string sessionUserId, int apiId, string apiHash)
+        public TelegramClient(int apiId, string apiHash, ISessionStore store = null, string sessionUserId = "session")
         {
+			if (store == null)
+				store = new FileSessionStore();
+
             TLContext.Init();
             _apiHash = apiHash;
             _apiId = apiId;
