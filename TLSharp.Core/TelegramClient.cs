@@ -13,6 +13,8 @@ using TeleSharp.TL;
 using MD5 = System.Security.Cryptography.MD5;
 using TeleSharp.TL.Help;
 using TeleSharp.TL.Auth;
+using TeleSharp.TL.Contacts;
+using TeleSharp.TL.Messages;
 
 namespace TLSharp.Core
 {
@@ -153,9 +155,57 @@ namespace TLSharp.Core
         {
             await _sender.Send(methodtoExceute);
             await _sender.Receive(methodtoExceute);
-            return (T)Convert.ChangeType(typeof(TLMethod).GetProperty("Response").GetValue(methodtoExceute),typeof(T));
+
+	        var result = methodtoExceute.GetType().GetProperty("Response").GetValue(methodtoExceute);
+			
+			return (T)result;
         }
-        private void OnUserAuthenticated(TLUser TLUser)
+
+
+	    public async Task<TLContacts> GetContacts()
+	    {
+		    if (!IsUserAuthorized())
+				throw new InvalidOperationException("Authorize user first!");
+
+			var req = new TLRequestGetContacts() {hash = ""};
+			
+			return await SendRequest<TLContacts>(req);
+		}
+
+	    public async Task<TLAbsUpdates> SendMessage(TLAbsInputPeer peer, string message)
+	    {
+			if (!IsUserAuthorized())
+				throw new InvalidOperationException("Authorize user first!");
+
+			long uniqueId = Convert.ToInt64((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds);
+
+			return await SendRequest<TLAbsUpdates>(
+				   new TLRequestSendMessage()
+				   {
+					   peer = peer,
+					   message = message,
+					   random_id = uniqueId
+				   });
+		}
+
+	    public async Task<Boolean> SendTyping(TLAbsInputPeer peer)
+	    {
+			var req = new TLRequestSetTyping()
+			{
+				action = new TLSendMessageTypingAction(),
+				peer = peer
+			};
+			return await SendRequest<Boolean>(req);
+		}
+
+	    public async Task<TLDialogs> GetUserDialogs()
+	    {
+			var peer = new TLInputPeerSelf();
+			return await SendRequest<TLDialogs>(
+				new TLRequestGetDialogs() { offset_date = 0, offset_peer = peer, limit = 100 });
+		}
+
+		private void OnUserAuthenticated(TLUser TLUser)
         {
             _session.TLUser = TLUser;
             _session.SessionExpires = int.MaxValue;

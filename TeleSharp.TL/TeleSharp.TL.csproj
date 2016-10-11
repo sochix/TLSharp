@@ -301,6 +301,7 @@
     <Compile Include="TL\Storage\TLFilePng.cs" />
     <Compile Include="TL\Storage\TLFileUnknown.cs" />
     <Compile Include="TL\Storage\TLFileWebp.cs" />
+    <Compile Include="TL\TLAbsBool.cs" />
     <Compile Include="TL\TLAbsBotInlineMessage.cs" />
     <Compile Include="TL\TLAbsBotInlineResult.cs" />
     <Compile Include="TL\TLAbsChannelMessagesFilter.cs" />
@@ -370,6 +371,8 @@
     <Compile Include="TL\TLAbsWebPage.cs" />
     <Compile Include="TL\TLAccountDaysTTL.cs" />
     <Compile Include="TL\TLAuthorization.cs" />
+    <Compile Include="TL\TLBoolFalse.cs" />
+    <Compile Include="TL\TLBoolTrue.cs" />
     <Compile Include="TL\TLBotCommand.cs" />
     <Compile Include="TL\TLBotInfo.cs" />
     <Compile Include="TL\TLBotInlineMediaResult.cs" />
@@ -639,6 +642,7 @@
     <Compile Include="TL\TLTopPeerCategoryCorrespondents.cs" />
     <Compile Include="TL\TLTopPeerCategoryGroups.cs" />
     <Compile Include="TL\TLTopPeerCategoryPeers.cs" />
+    <Compile Include="TL\TLTrue.cs" />
     <Compile Include="TL\TLUpdateBotCallbackQuery.cs" />
     <Compile Include="TL\TLUpdateBotInlineQuery.cs" />
     <Compile Include="TL\TLUpdateBotInlineSend.cs" />

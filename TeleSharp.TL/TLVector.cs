@@ -53,7 +53,11 @@ namespace TeleSharp.TL
 
         public override void SerializeBody(BinaryWriter bw)
         {
-            throw new NotImplementedException();
+			bw.Write(Constructor);
+	        foreach (var item in lists.Cast<TLObject>())
+	        {
+		        item.SerializeBody(bw);
+	        }
         }
     }
 }
