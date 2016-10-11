@@ -152,6 +152,9 @@ Contributing is highly appreciated!
 
 # FAQ
 
+#### What API layer is supported?
+The latest one - 53. Thanks to Afshin Arani
+
 #### I get an error MIGRATE_X?
 
 TLSharp library should automatically handle this errors. If you see such errors, pls create a new issue.
