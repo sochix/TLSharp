@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Tlsharp by sochix</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Tlsharp</h1>
+      <h2 class="project-tagline">Telegram (http://telegram.org) client library implemented in C#. Waiting for contributors!</h2>
+      <a href="https://github.com/sochix/TLSharp" class="btn">View on GitHub</a>
+      <a href="https://github.com/sochix/TLSharp/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/sochix/TLSharp/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="tlsharp" class="anchor" href="#tlsharp" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>TLSharp</h1>
+
+<p><a href="https://gitter.im/TLSharp/Lobby?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/TLSharp/Lobby.svg" alt="Join the chat at https://gitter.im/TLSharp/Lobby"></a>
+<a href="https://ci.appveyor.com/project/sochix/tlsharp"><img src="https://ci.appveyor.com/api/projects/status/95rl618ch5c4h2fa?svg=true" alt="Build status"></a></p>
+
+<p><em>Unofficial</em> Telegram (<a href="http://telegram.org">http://telegram.org</a>) client library implemented in C#. Latest TL scheme supported, thanks to Afshin Arani</p>
+
+<p><strong>Consider donation to speed up development process.</strong> </p>
+
+<p>Bitcoin wallet: <strong>3K1ocweFgaHnAibJ3n6hX7RNZWFTFcJjUe</strong></p>
+
+<p>It's a perfect fit for any developer who would like to send data directly to Telegram users or write own custom Telegram client.</p>
+
+<p><g-emoji alias="star2" fallback-src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f31f.png" ios-version="6.0">🌟</g-emoji> If you <g-emoji alias="heart" fallback-src="https://assets-cdn.github.com/images/icons/emoji/unicode/2764.png" ios-version="6.0">❤️</g-emoji> library, please star it! <g-emoji alias="star2" fallback-src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f31f.png" ios-version="6.0">🌟</g-emoji></p>
+
+<h1>
+<a id="table-of-contents" class="anchor" href="#table-of-contents" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Table of contents?</h1>
+
+<ul>
+<li><a href="#how-do-i-add-this-to-my-project">How do I add this to my project?</a></li>
+<li><a href="#dependencies">Dependencies</a></li>
+<li>
+<a href="#starter-guide">Starter Guide</a>
+
+<ul>
+<li><a href="#quick-configuration">Quick configuration</a></li>
+<li><a href="#first-requests">First requests</a></li>
+</ul>
+</li>
+<li><a href="#available-methods">Available Methods</a></li>
+<li><a href="#contributing">Contributing</a></li>
+<li><a href="#faq">FAQ</a></li>
+<li><a href="#donations">Donations</a></li>
+<li><a href="#license">License</a></li>
+</ul>
+
+<h1>
+<a id="how-do-i-add-this-to-my-project" class="anchor" href="#how-do-i-add-this-to-my-project" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How do I add this to my project?</h1>
+
+<p>Library <em>almost</em> ready for production usage. We need contributors to make 1.0.0 release.</p>
+
+<p>To use TLSharp follow next steps:</p>
+
+<ol>
+<li>Clone TLSharp from GitHub</li>
+<li>Compile source with VS2015</li>
+<li>Add reference to <code>TLSharp.Core.dll</code> to your awesome project.</li>
+</ol>
+
+<h1>
+<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dependencies</h1>
+
+<p>TLSharp has a few dependenices, most of functionality implemented from scratch.
+All dependencies listed in <a href="https://github.com/sochix/TLSharp/blob/master/TLSharp.Core/packages.config">package.conf file</a>.</p>
+
+<h1>
+<a id="starter-guide" class="anchor" href="#starter-guide" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Starter Guide</h1>
+
+<h2>
+<a id="quick-configuration" class="anchor" href="#quick-configuration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Quick Configuration</h2>
+
+<p>Telegram API isn't that easy to start. You need to do some configuration first.</p>
+
+<ol>
+<li>Create a <a href="https://my.telegram.org/">developer account</a> in Telegram. </li>
+<li>Goto <a href="https://my.telegram.org/apps">API development tools</a> and copy <strong>API_ID</strong> and <strong>API_HASH</strong> from your account. You'll need it later.</li>
+</ol>
+
+<h2>
+<a id="first-requests" class="anchor" href="#first-requests" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>First requests</h2>
+
+<p>To start work, create an instance of TelegramClient and establish connection</p>
+
+<div class="highlight highlight-source-cs"><pre>   <span class="pl-k">var</span> client = <span class="pl-k">new</span> TelegramClient(apiId, apiHash);
+   <span class="pl-k">await</span> client.ConnectAsync();</pre></div>
+
+<p>Now you can work with Telegram API, but -&gt;</p>
+
+<blockquote>
+<p>Only a small portion of the API methods are available to unauthorized users. (<a href="https://core.telegram.org/api/auth">full description</a>) </p>
+</blockquote>
+
+<p>For authentication you need to run following code</p>
+
+<div class="highlight highlight-source-cs"><pre>  <span class="pl-k">var</span> hash = <span class="pl-k">await</span> client.SendCodeRequestAsync(<span class="pl-s"><span class="pl-pds">"</span>&lt;user_number&gt;<span class="pl-pds">"</span></span>);
+  <span class="pl-k">var</span> code = <span class="pl-s"><span class="pl-pds">"</span>&lt;code_from_telegram&gt;<span class="pl-pds">"</span></span>; <span class="pl-c">// you can change code in debugger</span>
+
+  <span class="pl-k">var</span> user = <span class="pl-k">await</span> client.MakeAuthAsync(<span class="pl-s"><span class="pl-pds">"</span>&lt;user_number&gt;<span class="pl-pds">"</span></span>, hash, code);</pre></div>
+
+<p>Full code you can see at <a href="https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L70">AuthUser test</a></p>
+
+<p>When user is authenticated, TLSharp creates special file called <em>session.dat</em>. In this file TLSharp store all information needed for user session. So you need to authenticate user every time the <em>session.dat</em> file is corrupted or removed.</p>
+
+<p>You can call any method on authenticated user. For example, let's send message to a friend by his phone number:</p>
+
+<div class="highlight highlight-source-cs"><pre>  <span class="pl-c">//get available contacts</span>
+  <span class="pl-k">var</span> result = <span class="pl-k">await</span> client.GetContactsAsync();
+
+  <span class="pl-c">//find recipient in contacts</span>
+  <span class="pl-k">var</span> user = result.users.lists
+      .Where(x =&gt; x.GetType() == <span class="pl-k">typeof</span> (TLUser))
+      .Cast&lt;TLUser&gt;()
+      .FirstOrDefault(x =&gt; x.phone == <span class="pl-s"><span class="pl-pds">"</span>&lt;recipient_phone&gt;<span class="pl-pds">"</span></span>);
+
+  <span class="pl-c">//send message</span>
+  <span class="pl-k">await</span> client.SendMessageAsync(<span class="pl-k">new</span> TLInputPeerUser() {user_id = user.id}, <span class="pl-s"><span class="pl-pds">"</span>OUR_MESSAGE<span class="pl-pds">"</span></span>);</pre></div>
+
+<p>Full code you can see at <a href="https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L87">SendMessage test</a></p>
+
+<p>To send message to channel you could use the following code:</p>
+
+<div class="highlight highlight-source-cs"><pre>  <span class="pl-c">//get user dialogs</span>
+  <span class="pl-k">var</span> dialogs = <span class="pl-k">await</span> client.GetUserDialogsAsync();
+
+  <span class="pl-c">//find channel by title</span>
+  <span class="pl-k">var</span> chat = dialogs.chats.lists
+    .Where(c =&gt; c.GetType() == <span class="pl-k">typeof</span>(TLChannel))
+    .Cast&lt;TLChannel&gt;()
+    .FirstOrDefault(c =&gt; c.title == <span class="pl-s"><span class="pl-pds">"</span>&lt;channel_title&gt;<span class="pl-pds">"</span></span>);
+
+  <span class="pl-c">//send message</span>
+  <span class="pl-k">await</span> client.SendMessageAsync(<span class="pl-k">new</span> TLInputPeerChannel() { channel_id = chat.id, access_hash = chat.access_hash.Value }, <span class="pl-s"><span class="pl-pds">"</span>OUR_MESSAGE<span class="pl-pds">"</span></span>);</pre></div>
+
+<p>Full code you can see at <a href="https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L107">SendMessageToChannel test</a></p>
+
+<h2>
+<a id="available-methods" class="anchor" href="#available-methods" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Available Methods</h2>
+
+<p>For your convenience TLSharp have wrappers for several Telegram API methods. You could add your own, see details below.</p>
+
+<ol>
+<li>IsPhoneRegisteredAsync</li>
+<li>SendCodeRequestAsync</li>
+<li>MakeAuthAsync</li>
+<li>SignUpAsync</li>
+<li>GetContactsAsync</li>
+<li>SendMessageAsync</li>
+<li>SendTypingAsync</li>
+<li>GetUserDialogsAsync</li>
+</ol>
+
+<p><strong>What if you can't find needed method at the list?</strong></p>
+
+<p>Don't panic. You can call any method with help of <code>SendRequestAsync</code> function. For example, send user typing method: </p>
+
+<div class="highlight highlight-source-cs"><pre>
+  <span class="pl-c">//Create request </span>
+  <span class="pl-k">var</span> req = <span class="pl-k">new</span> TLRequestSetTyping()
+  {
+    action = <span class="pl-k">new</span> TLSendMessageTypingAction(),
+    peer = peer
+  };
+
+  <span class="pl-c">//run request, and deserialize response to Boolean</span>
+  <span class="pl-k">return</span> <span class="pl-k">await</span> SendRequestAsync&lt;Boolean&gt;(req);</pre></div>
+
+<p><strong>Where you can find a list of requests and its params?</strong></p>
+
+<p>The only way is <a href="https://core.telegram.org/methods">Telegram API docs</a>. Yes, it's outdated. But there is no other source.</p>
+
+<h2>
+<a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contributing</h2>
+
+<p>Contributing is highly appreciated!</p>
+
+<h3>
+<a id="what-things-can-i-implement-project-roadmap" class="anchor" href="#what-things-can-i-implement-project-roadmap" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What things can I Implement (Project Roadmap)?</h3>
+
+<ul>
+<li>Add Updates handling</li>
+<li>Add NuGet package</li>
+<li>Add wrappers for media uploading</li>
+<li>Store user session as JSON</li>
+</ul>
+
+<h1>
+<a id="faq" class="anchor" href="#faq" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>FAQ</h1>
+
+<h4>
+<a id="what-api-layer-is-supported" class="anchor" href="#what-api-layer-is-supported" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What API layer is supported?</h4>
+
+<p>The latest one - 53. Thanks to Afshin Arani</p>
+
+<h4>
+<a id="i-get-an-error-migrate_x" class="anchor" href="#i-get-an-error-migrate_x" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>I get an error MIGRATE_X?</h4>
+
+<p>TLSharp library should automatically handle this errors. If you see such errors, pls create a new issue.</p>
+
+<h4>
+<a id="i-get-an-exception-systemioendofstreamexception-unable-to-read-beyond-the-end-of-the-stream-all-test-methos-except-that-authenticationworks-and-testconnection-return-same-error-i-did-every-thing-including-setting-api-id-and-hash-and-setting-server-address-" class="anchor" href="#i-get-an-exception-systemioendofstreamexception-unable-to-read-beyond-the-end-of-the-stream-all-test-methos-except-that-authenticationworks-and-testconnection-return-same-error-i-did-every-thing-including-setting-api-id-and-hash-and-setting-server-address-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>I get an exception: System.IO.EndOfStreamException: Unable to read beyond the end of the stream. All test methos except that AuthenticationWorks and TestConnection return same error. I did every thing including setting api id and hash, and setting server address.-</h4>
+
+<p>You should create a Telegram session. See <a href="#sending-messages-set-up">configuration guide</a></p>
+
+<h4>
+<a id="why-i-get-flood_wait-error" class="anchor" href="#why-i-get-flood_wait-error" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Why I get FLOOD_WAIT error?</h4>
+
+<p><a href="https://core.telegram.org/api/errors#420-flood">It's Telegram restrictions</a></p>
+
+<h4>
+<a id="why-does-tlsharp-lacks-feature-xxxx" class="anchor" href="#why-does-tlsharp-lacks-feature-xxxx" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Why does TLSharp lacks feature XXXX?</h4>
+
+<p>Now TLSharp is basic realization of Telegram protocol, you can be a contributor or a sponsor to speed-up developemnt of any feature.</p>
+
+<h4>
+<a id="nothing-helps" class="anchor" href="#nothing-helps" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Nothing helps</h4>
+
+<p>Ask your question at gitter or create an issue in project bug tracker.</p>
+
+<p><strong>Attach following information</strong>:</p>
+
+<ul>
+<li>Full problem description and exception message</li>
+<li>Stack-trace</li>
+<li>Your code that runs in to this exception</li>
+</ul>
+
+<p>Without information listen above your issue will be closed. </p>
+
+<h1>
+<a id="donations" class="anchor" href="#donations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Donations</h1>
+
+<p>Thanks for donations! It's highly appreciated. 
+Bitcoin wallet: <strong>3K1ocweFgaHnAibJ3n6hX7RNZWFTFcJjUe</strong></p>
+
+<p>List of donators:</p>
+
+<ul>
+<li><a href="https://github.com/mtbitcoin">mtbitcoin</a></li>
+</ul>
+
+<h1>
+<a id="contributors" class="anchor" href="#contributors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contributors</h1>
+
+<ul>
+<li>
+<a href="http://aarani.ir">Afshin Arani</a> - TLGenerator, and a lot of other usefull things</li>
+</ul>
+
+<h1>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h1>
+
+<p><strong>Please, provide link to an author when you using library</strong></p>
+
+<p>The MIT License</p>
+
+<p>Copyright (c) 2015 Ilya Pirozhenko <a href="http://www.sochix.ru/">http://www.sochix.ru/</a></p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/sochix/TLSharp">Tlsharp</a> is maintained by <a href="https://github.com/sochix">sochix</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
