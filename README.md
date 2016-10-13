@@ -146,6 +146,7 @@ Contributing is highly appreciated!
 
 ###What things can I Implement (Project Roadmap)?
 
+* Add PHONE_MIGRATE handling
 * Add Updates handling
 * Add NuGet package
 * Add wrappers for media uploading
