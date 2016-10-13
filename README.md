@@ -144,7 +144,9 @@ Latest scheme in JSON format you can find [here](https://gist.github.com/aarani/
 
 Contributing is highly appreciated!
 
-###What things can I Implement (Project Roadmap)?
+### What things can I Implement (Project Roadmap)?
+
+#### Release 1.0.0
 
 * Add PHONE_MIGRATE handling
 * Add Updates handling
