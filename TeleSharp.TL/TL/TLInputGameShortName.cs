@@ -7,20 +7,19 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(-644787419)]
-    public class TLInputPhotoCrop : TLAbsInputPhotoCrop
+	[TLObject(-1020139510)]
+    public class TLInputGameShortName : TLAbsInputGame
     {
         public override int Constructor
         {
             get
             {
-                return -644787419;
+                return -1020139510;
             }
         }
 
-             public double crop_left {get;set;}
-     public double crop_top {get;set;}
-     public double crop_width {get;set;}
+             public TLAbsInputUser bot_id {get;set;}
+     public string short_name {get;set;}
 
 
 		public void ComputeFlags()
@@ -30,18 +29,16 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            crop_left = br.ReadDouble();
-crop_top = br.ReadDouble();
-crop_width = br.ReadDouble();
+            bot_id = (TLAbsInputUser)ObjectUtils.DeserializeObject(br);
+short_name = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
 			bw.Write(Constructor);
-            bw.Write(crop_left);
-bw.Write(crop_top);
-bw.Write(crop_width);
+            ObjectUtils.SerializeObject(bot_id,bw);
+StringUtil.Serialize(short_name,bw);
 
         }
     }

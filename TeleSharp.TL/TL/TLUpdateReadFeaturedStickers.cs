@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(-1377390588)]
-    public class TLInputPhotoCropAuto : TLAbsInputPhotoCrop
+	[TLObject(1461528386)]
+    public class TLUpdateReadFeaturedStickers : TLAbsUpdate
     {
         public override int Constructor
         {
             get
             {
-                return -1377390588;
+                return 1461528386;
             }
         }
 

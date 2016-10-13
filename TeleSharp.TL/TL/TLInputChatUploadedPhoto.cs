@@ -7,19 +7,18 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(-1809496270)]
+	[TLObject(-1837345356)]
     public class TLInputChatUploadedPhoto : TLAbsInputChatPhoto
     {
         public override int Constructor
         {
             get
             {
-                return -1809496270;
+                return -1837345356;
             }
         }
 
              public TLAbsInputFile file {get;set;}
-     public TLAbsInputPhotoCrop crop {get;set;}
 
 
 		public void ComputeFlags()
@@ -30,7 +29,6 @@ namespace TeleSharp.TL
         public override void DeserializeBody(BinaryReader br)
         {
             file = (TLAbsInputFile)ObjectUtils.DeserializeObject(br);
-crop = (TLAbsInputPhotoCrop)ObjectUtils.DeserializeObject(br);
 
         }
 
@@ -38,7 +36,6 @@ crop = (TLAbsInputPhotoCrop)ObjectUtils.DeserializeObject(br);
         {
 			bw.Write(Constructor);
             ObjectUtils.SerializeObject(file,bw);
-ObjectUtils.SerializeObject(crop,bw);
 
         }
     }

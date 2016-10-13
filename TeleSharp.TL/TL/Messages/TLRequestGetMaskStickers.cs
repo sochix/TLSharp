@@ -7,20 +7,19 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Messages
 {
-	[TLObject(-1373446075)]
-    public class TLRequestGetStickers : TLMethod
+	[TLObject(1706608543)]
+    public class TLRequestGetMaskStickers : TLMethod
     {
         public override int Constructor
         {
             get
             {
-                return -1373446075;
+                return 1706608543;
             }
         }
 
-                public string emoticon {get;set;}
-        public string hash {get;set;}
-        public Messages.TLAbsStickers Response{ get; set;}
+                public int hash {get;set;}
+        public Messages.TLAbsAllStickers Response{ get; set;}
 
 
 		public void ComputeFlags()
@@ -30,21 +29,19 @@ namespace TeleSharp.TL.Messages
 
         public override void DeserializeBody(BinaryReader br)
         {
-            emoticon = StringUtil.Deserialize(br);
-hash = StringUtil.Deserialize(br);
+            hash = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
 			bw.Write(Constructor);
-            StringUtil.Serialize(emoticon,bw);
-StringUtil.Serialize(hash,bw);
+            bw.Write(hash);
 
         }
 		public override void deserializeResponse(BinaryReader br)
 		{
-			Response = (Messages.TLAbsStickers)ObjectUtils.DeserializeObject(br);
+			Response = (Messages.TLAbsAllStickers)ObjectUtils.DeserializeObject(br);
 
 		}
     }

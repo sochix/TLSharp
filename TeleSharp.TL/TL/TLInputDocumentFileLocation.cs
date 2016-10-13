@@ -7,19 +7,20 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(1313188841)]
+	[TLObject(1125058340)]
     public class TLInputDocumentFileLocation : TLAbsInputFileLocation
     {
         public override int Constructor
         {
             get
             {
-                return 1313188841;
+                return 1125058340;
             }
         }
 
              public long id {get;set;}
      public long access_hash {get;set;}
+     public int version {get;set;}
 
 
 		public void ComputeFlags()
@@ -31,6 +32,7 @@ namespace TeleSharp.TL
         {
             id = br.ReadInt64();
 access_hash = br.ReadInt64();
+version = br.ReadInt32();
 
         }
 
@@ -39,6 +41,7 @@ access_hash = br.ReadInt64();
 			bw.Write(Constructor);
             bw.Write(id);
 bw.Write(access_hash);
+bw.Write(version);
 
         }
     }

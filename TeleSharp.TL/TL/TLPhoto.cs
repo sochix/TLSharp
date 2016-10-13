@@ -7,18 +7,20 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(-840088834)]
+	[TLObject(-1836524247)]
     public class TLPhoto : TLAbsPhoto
     {
         public override int Constructor
         {
             get
             {
-                return -840088834;
+                return -1836524247;
             }
         }
 
-             public long id {get;set;}
+             public int flags {get;set;}
+     public bool has_stickers {get;set;}
+     public long id {get;set;}
      public long access_hash {get;set;}
      public int date {get;set;}
      public TLVector<TLAbsPhotoSize> sizes {get;set;}
@@ -26,12 +28,16 @@ namespace TeleSharp.TL
 
 		public void ComputeFlags()
 		{
-			
+			flags = 0;
+flags = has_stickers ? (flags | 1) : (flags & ~1);
+
 		}
 
         public override void DeserializeBody(BinaryReader br)
         {
-            id = br.ReadInt64();
+            flags = br.ReadInt32();
+has_stickers = (flags & 1) != 0;
+id = br.ReadInt64();
 access_hash = br.ReadInt64();
 date = br.ReadInt32();
 sizes = (TLVector<TLAbsPhotoSize>)ObjectUtils.DeserializeVector<TLAbsPhotoSize>(br);
@@ -41,7 +47,10 @@ sizes = (TLVector<TLAbsPhotoSize>)ObjectUtils.DeserializeVector<TLAbsPhotoSize>(
         public override void SerializeBody(BinaryWriter bw)
         {
 			bw.Write(Constructor);
-            bw.Write(id);
+            ComputeFlags();
+bw.Write(flags);
+
+bw.Write(id);
 bw.Write(access_hash);
 bw.Write(date);
 ObjectUtils.SerializeObject(sizes,bw);

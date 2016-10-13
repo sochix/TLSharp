@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    public abstract class TLAbsInputPhotoCrop : TLObject
+    public abstract class TLAbsInputGame : TLObject
     {
     }
 }
