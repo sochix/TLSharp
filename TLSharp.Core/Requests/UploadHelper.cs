@@ -46,7 +46,6 @@ namespace TLSharp.Core.Requests
                 }
             }
             stream = null;
-            GC.Collect();
             int partnumber = 0;
             long file_id = BitConverter.ToInt64(RandomByteArray(8), 0);
             while (parts.Count != 0)
@@ -89,7 +88,6 @@ namespace TLSharp.Core.Requests
                 }
             }
             stream = null;
-            GC.Collect();
             int partnumber = 0;
             long file_id = BitConverter.ToInt64(RandomByteArray(8), 0);
             while (parts.Count != 0)
