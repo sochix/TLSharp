@@ -25,8 +25,8 @@ namespace TLSharp.Core
 
         public TelegramClient(int apiId, string apiHash, ISessionStore store = null, string sessionUserId = "session")
         {
-			if (store == null)
-				store = new FileSessionStore();
+            if (store == null)
+                store = new FileSessionStore();
 
             TLContext.Init();
             _apiHash = apiHash;
@@ -51,16 +51,14 @@ namespace TLSharp.Core
 
             _sender = new MtProtoSender(_transport, _session);
 
-            if (!reconnect)
-            {
-                var config = new TLRequestGetConfig() ;
-                var request = new TLRequestInitConnection() { api_id = _apiId, app_version = "1.0.0", device_model = "PC", lang_code = "en", query= config, system_version = "Win 10.0" };
-                var invokewithLayer = new TLRequestInvokeWithLayer() { layer = 53, query = request };
-                await _sender.Send(invokewithLayer);
-                await _sender.Receive(invokewithLayer);
+            //set-up layer
+            var config = new TLRequestGetConfig();
+            var request = new TLRequestInitConnection() { api_id = _apiId, app_version = "1.0.0", device_model = "PC", lang_code = "en", query = config, system_version = "Win 10.0" };
+            var invokewithLayer = new TLRequestInvokeWithLayer() { layer = 57, query = request };
+            await _sender.Send(invokewithLayer);
+            await _sender.Receive(invokewithLayer);
 
-                dcOptions = ((TLConfig)invokewithLayer.Response).dc_options.lists;
-            }
+            dcOptions = ((TLConfig)invokewithLayer.Response).dc_options.lists;
 
             return true;
         }
@@ -154,62 +152,61 @@ namespace TLSharp.Core
             await _sender.Send(methodtoExceute);
             await _sender.Receive(methodtoExceute);
 
-	        var result = methodtoExceute.GetType().GetProperty("Response").GetValue(methodtoExceute);
-			
-			return (T)result;
+            var result = methodtoExceute.GetType().GetProperty("Response").GetValue(methodtoExceute);
+
+            return (T)result;
         }
 
+        public async Task<TLContacts> GetContactsAsync()
+        {
+            if (!IsUserAuthorized())
+                throw new InvalidOperationException("Authorize user first!");
 
-	    public async Task<TLContacts> GetContactsAsync()
-	    {
-		    if (!IsUserAuthorized())
-				throw new InvalidOperationException("Authorize user first!");
+            var req = new TLRequestGetContacts() { hash = "" };
 
-			var req = new TLRequestGetContacts() {hash = ""};
-			
-			return await SendRequestAsync<TLContacts>(req);
-		}
+            return await SendRequestAsync<TLContacts>(req);
+        }
 
-	    public async Task<TLAbsUpdates> SendMessageAsync(TLAbsInputPeer peer, string message)
-	    {
-			if (!IsUserAuthorized())
-				throw new InvalidOperationException("Authorize user first!");
+        public async Task<TLAbsUpdates> SendMessageAsync(TLAbsInputPeer peer, string message)
+        {
+            if (!IsUserAuthorized())
+                throw new InvalidOperationException("Authorize user first!");
 
-			long uniqueId = Convert.ToInt64((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds);
+            long uniqueId = Convert.ToInt64((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds);
 
-			return await SendRequestAsync<TLAbsUpdates>(
-				   new TLRequestSendMessage()
-				   {
-					   peer = peer,
-					   message = message,
-					   random_id = uniqueId
-				   });
-		}
+            return await SendRequestAsync<TLAbsUpdates>(
+                   new TLRequestSendMessage()
+                   {
+                       peer = peer,
+                       message = message,
+                       random_id = uniqueId
+                   });
+        }
 
-	    public async Task<Boolean> SendTypingAsync(TLAbsInputPeer peer)
-	    {
-			var req = new TLRequestSetTyping()
-			{
-				action = new TLSendMessageTypingAction(),
-				peer = peer
-			};
-			return await SendRequestAsync<Boolean>(req);
-		}
+        public async Task<Boolean> SendTypingAsync(TLAbsInputPeer peer)
+        {
+            var req = new TLRequestSetTyping()
+            {
+                action = new TLSendMessageTypingAction(),
+                peer = peer
+            };
+            return await SendRequestAsync<Boolean>(req);
+        }
 
-	    public async Task<TLDialogs> GetUserDialogsAsync()
-	    {
-			var peer = new TLInputPeerSelf();
-			return await SendRequestAsync<TLDialogs>(
-				new TLRequestGetDialogs() { offset_date = 0, offset_peer = peer, limit = 100 });
-		}
+        public async Task<TLDialogs> GetUserDialogsAsync()
+        {
+            var peer = new TLInputPeerSelf();
+            return await SendRequestAsync<TLDialogs>(
+                new TLRequestGetDialogs() { offset_date = 0, offset_peer = peer, limit = 100 });
+        }
 
-		private void OnUserAuthenticated(TLUser TLUser)
+        private void OnUserAuthenticated(TLUser TLUser)
         {
             _session.TLUser = TLUser;
             _session.SessionExpires = int.MaxValue;
 
             _session.Save();
         }
-       
+
     }
 }

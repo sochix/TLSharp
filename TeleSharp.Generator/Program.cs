@@ -72,7 +72,7 @@ namespace TeleSharp.Generator
                     if (nspace.EndsWith("."))
                         nspace = nspace.Remove(nspace.Length - 1, 1);
                     string temp = NormalStyle.Replace("/* NAMESPACE */", "TeleSharp." + nspace);
-                    temp = (c.type == "himself") ? temp.Replace("/* PARENT */", "TLObject") :  temp.Replace("/* PARENT */", GetNameofClass(c.type, true)); 
+                    temp = (c.type == "himself") ? temp.Replace("/* PARENT */", "TLObject") : temp.Replace("/* PARENT */", GetNameofClass(c.type, true));
                     temp = temp.Replace("/*Constructor*/", c.id.ToString());
                     temp = temp.Replace("/* NAME */", GetNameofClass(c.predicate, false));
                     #endregion
@@ -129,11 +129,7 @@ namespace TeleSharp.Generator
             }
             foreach (var c in schema.methods)
             {
-                if (c.method.Contains("updateUsername"))
-                {
-
-                }
-                string path = (GetNameSpace(c.method).Replace("TeleSharp.TL", "TL\\").Replace(".", "") + "\\" + GetNameofClass(c.method, false,true) + ".cs").Replace("\\\\", "\\");
+                string path = (GetNameSpace(c.method).Replace("TeleSharp.TL", "TL\\").Replace(".", "") + "\\" + GetNameofClass(c.method, false, true) + ".cs").Replace("\\\\", "\\");
                 FileStream classFile = MakeFile(path);
                 using (StreamWriter writer = new StreamWriter(classFile))
                 {
@@ -144,7 +140,7 @@ namespace TeleSharp.Generator
                     string temp = MethodStyle.Replace("/* NAMESPACE */", "TeleSharp." + nspace);
                     temp = temp.Replace("/* PARENT */", "TLMethod");
                     temp = temp.Replace("/*Constructor*/", c.id.ToString());
-                    temp = temp.Replace("/* NAME */", GetNameofClass(c.method, false,true));
+                    temp = temp.Replace("/* NAME */", GetNameofClass(c.method, false, true));
                     #endregion
                     #region Fields
                     string fields = "";
@@ -244,7 +240,7 @@ namespace TeleSharp.Generator
                 else if (type.IndexOf('.') != -1 && type.IndexOf('?') != -1)
                     return "TLRequest" + FormatName(type.Split('?')[1]);
                 else
-                    return "TLRequest" + FormatName(type) ;
+                    return "TLRequest" + FormatName(type);
             }
         }
         private static bool IsFlagBase(string type)
@@ -274,13 +270,12 @@ namespace TeleSharp.Generator
             {
                 string innerType = type.Split('?')[1];
                 if (innerType == "true") return result;
-                else if ((new string[] {"bool","int", "uint", "long", "double" }).Contains(result)) return result + "?";
+                else if ((new string[] { "bool", "int", "uint", "long", "double" }).Contains(result)) return result + "?";
                 else return result;
             }
         }
         public static string GetTypeName(string type)
         {
-            if (type.ToLower().Contains("inputcontact")) return "TLInputPhoneContact";
             switch (type.ToLower())
             {
                 case "#":
@@ -304,34 +299,38 @@ namespace TeleSharp.Generator
                 case "x":
                     return "TLObject";
             }
+
             if (type.StartsWith("Vector"))
                 return "TLVector<" + GetTypeName(type.Replace("Vector<", "").Replace(">", "")) + ">";
+
+            if (type.ToLower().Contains("inputcontact"))
+                return "TLInputPhoneContact";
+
+
+            if (type.IndexOf('.') != -1 && type.IndexOf('?') == -1)
+            {
+
+                if (interfacesList.Any(x => x.ToLower() == (type).ToLower()))
+                    return FormatName(type.Split('.')[0]) + "." + "TLAbs" + type.Split('.')[1];
+                else if (classesList.Any(x => x.ToLower() == (type).ToLower()))
+                    return FormatName(type.Split('.')[0]) + "." + "TL" + type.Split('.')[1];
+                else
+                    return FormatName(type.Split('.')[1]);
+            }
+            else if (type.IndexOf('?') == -1)
+            {
+                if (interfacesList.Any(x => x.ToLower() == type.ToLower()))
+                    return "TLAbs" + type;
+                else if (classesList.Any(x => x.ToLower() == type.ToLower()))
+                    return "TL" + type;
+                else
+                    return type;
+            }
             else
             {
-                if (type.IndexOf('.') != -1 && type.IndexOf('?') == -1)
-                {
-
-                    if (interfacesList.Any(x => x.ToLower() == (type).ToLower()))
-                        return FormatName(type.Split('.')[0]) + "." + "TLAbs" + type.Split('.')[1];
-                    else if (classesList.Any(x => x.ToLower() == (type).ToLower()))
-                        return FormatName(type.Split('.')[0]) + "." + "TL" + type.Split('.')[1];
-                    else
-                        return FormatName(type.Split('.')[1]);
-                }
-                else if (type.IndexOf('?') == -1)
-                {
-                    if (interfacesList.Any(x => x.ToLower() == type.ToLower()))
-                        return "TLAbs" + type;
-                    else if (classesList.Any(x => x.ToLower() == type.ToLower()))
-                        return "TL" + type;
-                    else
-                        return type;
-                }
-                else
-                {
-                    return GetTypeName(type.Split('?')[1]);
-                }
+                return GetTypeName(type.Split('?')[1]);
             }
+
 
         }
         public static string LookTypeInLists(string src)
@@ -401,7 +400,7 @@ namespace TeleSharp.Generator
                     {
                         if (p.type.ToLower().Contains("vector"))
                         {
-                            return $"{CheckForKeyword(p.name)} = ({GetTypeName(p.type)})ObjectUtils.DeserializeVector<{GetTypeName(p.type).Replace("TLVector<","").Replace(">","")}>(br);";
+                            return $"{CheckForKeyword(p.name)} = ({GetTypeName(p.type)})ObjectUtils.DeserializeVector<{GetTypeName(p.type).Replace("TLVector<", "").Replace(">", "")}>(br);";
                         }
                         else return $"{CheckForKeyword(p.name)} = ({GetTypeName(p.type)})ObjectUtils.DeserializeObject(br);";
                     }

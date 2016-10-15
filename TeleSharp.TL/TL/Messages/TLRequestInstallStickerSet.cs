@@ -7,20 +7,20 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Messages
 {
-	[TLObject(2066793382)]
+	[TLObject(-946871200)]
     public class TLRequestInstallStickerSet : TLMethod
     {
         public override int Constructor
         {
             get
             {
-                return 2066793382;
+                return -946871200;
             }
         }
 
                 public TLAbsInputStickerSet stickerset {get;set;}
-        public bool disabled {get;set;}
-        public bool Response{ get; set;}
+        public bool archived {get;set;}
+        public Messages.TLAbsStickerSetInstallResult Response{ get; set;}
 
 
 		public void ComputeFlags()
@@ -31,7 +31,7 @@ namespace TeleSharp.TL.Messages
         public override void DeserializeBody(BinaryReader br)
         {
             stickerset = (TLAbsInputStickerSet)ObjectUtils.DeserializeObject(br);
-disabled = BoolUtil.Deserialize(br);
+archived = BoolUtil.Deserialize(br);
 
         }
 
@@ -39,12 +39,12 @@ disabled = BoolUtil.Deserialize(br);
         {
 			bw.Write(Constructor);
             ObjectUtils.SerializeObject(stickerset,bw);
-BoolUtil.Serialize(disabled,bw);
+BoolUtil.Serialize(archived,bw);
 
         }
 		public override void deserializeResponse(BinaryReader br)
 		{
-			Response = BoolUtil.Deserialize(br);
+			Response = (Messages.TLAbsStickerSetInstallResult)ObjectUtils.DeserializeObject(br);
 
 		}
     }

@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(-106717361)]
+	[TLObject(-2027738169)]
     public class TLDocument : TLAbsDocument
     {
         public override int Constructor
         {
             get
             {
-                return -106717361;
+                return -2027738169;
             }
         }
 
@@ -25,6 +25,7 @@ namespace TeleSharp.TL
      public int size {get;set;}
      public TLAbsPhotoSize thumb {get;set;}
      public int dc_id {get;set;}
+     public int version {get;set;}
      public TLVector<TLAbsDocumentAttribute> attributes {get;set;}
 
 
@@ -42,6 +43,7 @@ mime_type = StringUtil.Deserialize(br);
 size = br.ReadInt32();
 thumb = (TLAbsPhotoSize)ObjectUtils.DeserializeObject(br);
 dc_id = br.ReadInt32();
+version = br.ReadInt32();
 attributes = (TLVector<TLAbsDocumentAttribute>)ObjectUtils.DeserializeVector<TLAbsDocumentAttribute>(br);
 
         }
@@ -56,6 +58,7 @@ StringUtil.Serialize(mime_type,bw);
 bw.Write(size);
 ObjectUtils.SerializeObject(thumb,bw);
 bw.Write(dc_id);
+bw.Write(version);
 ObjectUtils.SerializeObject(attributes,bw);
 
         }
