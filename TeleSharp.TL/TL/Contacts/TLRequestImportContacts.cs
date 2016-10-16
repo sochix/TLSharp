@@ -30,7 +30,7 @@ namespace TeleSharp.TL.Contacts
 
         public override void DeserializeBody(BinaryReader br)
         {
-            contacts = ObjectUtils.DeserializeVector<TLInputPhoneContact>(br);
+            contacts = (TLVector<TLInputPhoneContact>)ObjectUtils.DeserializeVector<TLInputPhoneContact>(br);
 replace = BoolUtil.Deserialize(br);
 
         }

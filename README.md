@@ -148,16 +148,16 @@ Contributing is highly appreciated!
 
 #### Release 1.0.0
 
-* Add PHONE_MIGRATE handling
+* [DONE] Add PHONE_MIGRATE handling
 * Add Updates handling
 * Add NuGet package
-* Add wrappers for media uploading
+* [WIP] Add wrappers for media uploading
 * Store user session as JSON
 
 # FAQ
 
 #### What API layer is supported?
-The latest one - 53. Thanks to Afshin Arani
+The latest one - 57. Thanks to Afshin Arani for his TLGenerator
 
 #### I get an error MIGRATE_X?
 
