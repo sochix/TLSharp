@@ -194,6 +194,7 @@ List of donators:
 
 # Contributors
 * [Afshin Arani](http://aarani.ir) - TLGenerator, and a lot of other usefull things
+* [Knocte](https://github.com/knocte)
 
 # License
 
