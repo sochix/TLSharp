@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TeleSharp.TL;
 using TeleSharp.TL.Channels;
@@ -15,6 +16,8 @@ using TLSharp.Core;
 using TLSharp.Core.Auth;
 using TLSharp.Core.MTProto;
 using TLSharp.Core.Network;
+using TLSharp.Core.Requests;
+using TLSharp.Core.Utils;
 
 namespace TLSharp.Tests
 {
@@ -37,7 +40,7 @@ namespace TLSharp.Tests
 
         private int apiId = 0;
 
-        [TestInitialize]
+		[TestInitialize]
         public void Init()
         {
             // Setup your phone numbers in app.config
@@ -117,7 +120,49 @@ namespace TLSharp.Tests
 			await client.SendMessageAsync(new TLInputPeerChannel() { channel_id = chat.id, access_hash = chat.access_hash.Value }, "TEST MSG");
 		}
 
-		[TestMethod]
+        [TestMethod]
+        public async Task SendPhotoToContactTest()
+        {
+            var client = new TelegramClient(apiId, apiHash);
+
+            await client.ConnectAsync();
+
+            var result = await client.GetContactsAsync();
+
+            var user = result.users.lists
+                .Where(x => x.GetType() == typeof(TLUser))
+                .Cast<TLUser>()
+                .FirstOrDefault(x => x.phone == NumberToSendMessage);
+
+            var fileResult = (TLInputFile)await client.UploadFile("cat.jpg", new StreamReader("data/cat.jpg"));
+            await client.SendUploadedPhoto(new TLInputPeerUser() {user_id = user.id}, fileResult, "kitty");
+        }
+
+        [TestMethod]
+        public async Task SendBigFileToContactTest()
+        {
+            var client = new TelegramClient(apiId, apiHash);
+
+            await client.ConnectAsync();
+
+            var result = await client.GetContactsAsync();
+
+            var user = result.users.lists
+                .Where(x => x.GetType() == typeof(TLUser))
+                .Cast<TLUser>()
+                .FirstOrDefault(x => x.phone == NumberToSendMessage);
+
+            var fileResult = (TLInputFileBig)await client.UploadFile("some.zip", new StreamReader("C:\\PetProjects\\TelegramBotSample.zip"));
+
+            await client.SendUploadedDocument(
+                new TLInputPeerUser() {user_id = user.id},
+                fileResult,
+                "some zips",
+                "application/zip",
+                new TLVector<TLAbsDocumentAttribute>());            
+        }
+
+        [TestMethod]
         public async Task SignUpNewUser()
         {
             var client = new TelegramClient(apiId, apiHash);
@@ -143,6 +188,5 @@ namespace TLSharp.Tests
             var result = await client.IsPhoneRegisteredAsync(NumberToAuthenticate);
             Assert.IsTrue(result);
         }
-
     }
 }

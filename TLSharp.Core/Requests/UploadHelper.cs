@@ -7,112 +7,130 @@ using System.Text;
 using System.Threading.Tasks;
 using TeleSharp.TL;
 using TeleSharp.TL.Upload;
+using TLSharp.Core.Utils;
+
 namespace TLSharp.Core.Requests
 {
-    public class UploadHelper
+    public static class UploadHelper
     {
-        public static async Task<TLAbsInputFile> Uploader(string name,StreamReader reader,TelegramClient client)
+        private static string GetFileHash(byte[] data)
         {
-            if (reader.BaseStream.Length < 10 * 1024 * 1024)
-                return await SmallFileUpload(name, reader, client);
+            string md5_checksum;
+            using (var md5 = MD5.Create())
+            {
+                var hash = md5.ComputeHash(data);
+                var hashResult = new StringBuilder(hash.Length * 2);
+
+                foreach (byte t in hash)
+                    hashResult.Append(t.ToString("x2"));
+
+                md5_checksum = hashResult.ToString();
+            }
+
+            return md5_checksum;
+        }
+
+        public static async Task<TLAbsInputFile> UploadFile(this TelegramClient client, string name, StreamReader reader)
+        {
+            const long tenMb = 10 * 1024 * 1024;
+            return await UploadFile(name, reader, client, reader.BaseStream.Length >= tenMb);
+        }
+
+        private static byte[] GetFile(StreamReader reader)
+        {
+            var file = new byte[reader.BaseStream.Length];
+
+            using (reader)
+            {
+                reader.BaseStream.Read(file, 0, (int)reader.BaseStream.Length);
+            }
+
+            return file;
+        }
+
+        private static Queue<byte[]> GetFileParts(byte[] file)
+        {
+            var fileParts = new Queue<byte[]>();
+
+            const int maxFilePart = 512 * 1024;
+
+            using (var stream = new MemoryStream(file))
+            {
+                while (stream.Position != stream.Length)
+                {
+                    if ((stream.Length - stream.Position) > maxFilePart)
+                    {
+                        var temp = new byte[maxFilePart];
+                        stream.Read(temp, 0, maxFilePart);
+                        fileParts.Enqueue(temp);
+                    }
+                    else
+                    {
+                        var length = stream.Length - stream.Position;
+                        var temp = new byte[length];
+                        stream.Read(temp, 0, (int)(length));
+                        fileParts.Enqueue(temp);
+                    }
+                }
+            }
+
+            return fileParts;
+        }
+
+        private static async Task<TLAbsInputFile> UploadFile(string name, StreamReader reader,
+            TelegramClient client, bool isBigFileUpload)
+        {
+            var file = GetFile(reader);
+            var fileParts = GetFileParts(file);
+
+            int partNumber = 0;
+            int partsCount = fileParts.Count;
+            long file_id = BitConverter.ToInt64(Helpers.GenerateRandomBytes(8), 0);
+            while (fileParts.Count != 0)
+            {
+                var part = fileParts.Dequeue();
+
+                if (isBigFileUpload)
+                {
+                    await client.SendRequestAsync<bool>(new TLRequestSaveBigFilePart
+                    {
+                        file_id = file_id,
+                        file_part = partNumber,
+                        bytes = part,
+                        file_total_parts = partsCount
+                    });
+                }
+                else
+                {
+                    await client.SendRequestAsync<bool>(new TLRequestSaveFilePart
+                    {
+                        file_id = file_id,
+                        file_part = partNumber,
+                        bytes = part
+                    });
+                }
+                partNumber++;
+            }
+
+            if (isBigFileUpload)
+            {
+                return new TLInputFileBig
+                {
+                    id = file_id,
+                    name = name,
+                    parts = partsCount
+                };
+            }
             else
-                return await BigFileUpload(name, reader, client);
-        }
-        private static async Task<TLInputFile> SmallFileUpload(string name, StreamReader reader, TelegramClient client)
-        {
-            var file = new byte[reader.BaseStream.Length];
-            reader.BaseStream.Read(file, 0, (int)reader.BaseStream.Length);
-            string hash;
-            using (MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider())
             {
-                hash = Convert.ToBase64String(md5.ComputeHash(file));
-            }
-            reader = null;
-            var stream = new MemoryStream(file);
-            Queue<byte[]> parts =  new Queue<byte[]>();
-            while (!(stream.Position == stream.Length))
-            {
-                if ((stream.Length - stream.Position) > 512 *1024)
+                return new TLInputFile
                 {
-                    byte[] temp = new byte[512];
-                    stream.Read(temp, 0, 512 * 1024);
-                    parts.Enqueue(temp);
-                }
-                else
-                {
-                    byte[] temp = new byte[512];
-                    stream.Read(temp, 0, (int)(stream.Length - stream.Position));
-                    parts.Enqueue(temp);
-                }
+                    id = file_id,
+                    name = name,
+                    parts = partsCount,
+                    md5_checksum = GetFileHash(file)
+                };
             }
-            stream = null;
-            int partnumber = 0;
-            long file_id = BitConverter.ToInt64(RandomByteArray(8), 0);
-            while (parts.Count != 0)
-            {
-                var part = parts.Dequeue();
-                TLRequestSaveFilePart save = new TLRequestSaveFilePart();
-                save.file_id = file_id;
-                save.file_part = partnumber;
-                save.bytes = part;
-                await client.SendRequestAsync<bool>(save);
-                partnumber++;
-            }
-            TLInputFile returnFile = new TLInputFile();
-            returnFile.id = file_id;
-            returnFile.name = name;
-            returnFile.parts = parts.Count;
-            returnFile.md5_checksum = hash;
-            return returnFile;
-        }
-        private static async Task<TLInputFileBig> BigFileUpload(string name, StreamReader reader, TelegramClient client)
-        {
-            var file = new byte[reader.BaseStream.Length];
-            reader.BaseStream.Read(file, 0, (int)reader.BaseStream.Length);
-            reader = null;
-            var stream = new MemoryStream(file);
-            Queue<byte[]> parts = new Queue<byte[]>();
-            while (!(stream.Position == stream.Length))
-            {
-                if ((stream.Length - stream.Position) > 512 * 1024)
-                {
-                    byte[] temp = new byte[512];
-                    stream.Read(temp, 0, 512 * 1024);
-                    parts.Enqueue(temp);
-                }
-                else
-                {
-                    byte[] temp = new byte[512];
-                    stream.Read(temp, 0, (int)(stream.Length - stream.Position));
-                    parts.Enqueue(temp);
-                }
-            }
-            stream = null;
-            int partnumber = 0;
-            long file_id = BitConverter.ToInt64(RandomByteArray(8), 0);
-            while (parts.Count != 0)
-            {
-                var part = parts.Dequeue();
-                TLRequestSaveBigFilePart save = new TLRequestSaveBigFilePart();
-                save.file_id = file_id;
-                save.file_part = partnumber;
-                save.bytes = part;
-                save.file_total_parts = parts.Count;
-                await client.SendRequestAsync<bool>(save);
-                partnumber++;
-            }
-            TLInputFileBig returnFile = new TLInputFileBig();
-            returnFile.id = file_id;
-            returnFile.name = name;
-            returnFile.parts = parts.Count;
-            return returnFile;
-        }
-        private static byte[] RandomByteArray(int count)
-        {
-            var temp = new byte[count];
-            Random random = new Random();
-            random.NextBytes(temp);
-            return temp;
         }
     }
 }
