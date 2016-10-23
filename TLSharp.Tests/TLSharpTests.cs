@@ -99,6 +99,12 @@ namespace TLSharp.Tests
                 .Where(x => x.GetType() == typeof(TLUser))
                 .Cast<TLUser>()
                 .FirstOrDefault(x => x.phone == NumberToSendMessage);
+
+            if (user == null)
+            {
+                throw new System.Exception("Number was not found in Contacts List of user: " + NumberToSendMessage);
+            }
+
             await client.SendTypingAsync(new TLInputPeerUser() { user_id = user.id });
             Thread.Sleep(3000);
             await client.SendMessageAsync(new TLInputPeerUser() { user_id = user.id }, "TEST");
