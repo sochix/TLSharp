@@ -20,6 +20,7 @@ It's a perfect fit for any developer who would like to send data directly to Tel
 - [Starter Guide](#starter-guide)
   - [Quick configuration](#quick-configuration)
   - [First requests](#first-requests)
+  - [Working with files](#working-with-files)
 - [Available Methods](#available-methods)
 - [Contributing](#contributing)
 - [FAQ](#faq)
@@ -104,8 +105,41 @@ To send message to channel you could use the following code:
   await client.SendMessageAsync(new TLInputPeerChannel() { channel_id = chat.id, access_hash = chat.access_hash.Value }, "OUR_MESSAGE");
 ```
 Full code you can see at [SendMessageToChannel test](https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L107)
+## Working with files
+Telegram separate files to two categories -> big file and small file. File is Big if its size more than 10 Mb. TLSharp tries to hide this complexity from you, thats why we provide one method to upload files **UploadFile**.
 
-## Available Methods
+```csharp
+	var fileResult = await client.UploadFile("cat.jpg", new StreamReader("data/cat.jpg"));
+```
+
+TLSharp provides two wrappers for sending photo and document
+
+```csharp
+	await client.SendUploadedPhoto(new TLInputPeerUser() { user_id = user.id }, fileResult, "kitty");
+	await client.SendUploadedDocument(
+                new TLInputPeerUser() { user_id = user.id },
+                fileResult,
+                "some zips", //caption
+                "application/zip", //mime-type
+                new TLVector<TLAbsDocumentAttribute>()); //document attributes, such as file name
+```
+Full code you can see at [SendPhotoToContactTest](https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L125) and [SendBigFileToContactTest](https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L143)
+
+To download file you should call **GetFile** method
+```csharp
+	await client.GetFile(
+                new TLInputDocumentFileLocation()
+                {
+                    access_hash = document.access_hash,
+                    id = document.id,
+                    version = document.version
+                },
+                document.size); //size of fileChunk you want to retrieve
+```
+
+Full code you can see at [DownloadFileFromContactTest](https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L167)
+
+# Available Methods
 
 For your convenience TLSharp have wrappers for several Telegram API methods. You could add your own, see details below.
 
@@ -117,6 +151,10 @@ For your convenience TLSharp have wrappers for several Telegram API methods. You
 1. SendMessageAsync
 1. SendTypingAsync
 1. GetUserDialogsAsync
+1. SendUploadedPhoto
+1. SendUploadedDocument
+1. GetFile
+1. UploadFile
 
 **What if you can't find needed method at the list?**
 
@@ -140,18 +178,19 @@ Don't panic. You can call any method with help of `SendRequestAsync` function. F
 The only way is [Telegram API docs](https://core.telegram.org/methods). Yes, it's outdated. But there is no other source.
 Latest scheme in JSON format you can find [here](https://gist.github.com/aarani/b22b7cda024973dff68e1672794b0298)
 
-## Contributing
+# Contributing
 
 Contributing is highly appreciated!
 
-### What things can I Implement (Project Roadmap)?
+## What things can I Implement (Project Roadmap)?
 
-#### Release 1.0.0
+### Release 1.0.0
 
 * [DONE] Add PHONE_MIGRATE handling
+* Add FILE_MIGRATE handling
 * Add Updates handling
 * Add NuGet package
-* [WIP] Add wrappers for media uploading
+* [DONE] Add wrappers for media uploading and downloading
 * Store user session as JSON
 
 # FAQ
