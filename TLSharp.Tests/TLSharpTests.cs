@@ -1,6 +1,7 @@
 ﻿
 using System.Configuration;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,10 +9,9 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using TeleSharp.TL;
-using TeleSharp.TL.Upload;
+using TeleSharp.TL.Messages;
 using TLSharp.Core;
 using TLSharp.Core.Requests;
-using TLSharp.Core.Utils;
 
 namespace TLSharp.Tests
 {
@@ -127,7 +127,7 @@ namespace TLSharp.Tests
         [TestMethod]
         public async Task SendPhotoToContactTest()
         {
-            var client = new TelegramClient(apiId, apiHash);
+            var client = new TelegramClient(ApiId, ApiHash);
 
             await client.ConnectAsync();
 
@@ -145,7 +145,7 @@ namespace TLSharp.Tests
         [TestMethod]
         public async Task SendBigFileToContactTest()
         {
-            var client = new TelegramClient(apiId, apiHash);
+            var client = new TelegramClient(ApiId, ApiHash);
 
             await client.ConnectAsync();
 
@@ -169,7 +169,7 @@ namespace TLSharp.Tests
         [TestMethod]
         public async Task DownloadFileFromContactTest()
         {
-            var client = new TelegramClient(apiId, apiHash);
+            var client = new TelegramClient(ApiId, ApiHash);
 
             await client.ConnectAsync();
 
