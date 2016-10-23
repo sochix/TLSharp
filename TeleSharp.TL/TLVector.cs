@@ -54,6 +54,8 @@ namespace TeleSharp.TL
         public override void SerializeBody(BinaryWriter bw)
         {
 			bw.Write(Constructor);
+            bw.Write(lists.Count());
+
 	        foreach (var item in lists.Cast<TLObject>())
 	        {
 		        item.SerializeBody(bw);

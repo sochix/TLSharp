@@ -758,7 +758,6 @@
     <Compile Include="TL\TLUserStatusOffline.cs" />
     <Compile Include="TL\TLUserStatusOnline.cs" />
     <Compile Include="TL\TLUserStatusRecently.cs" />
-    <Compile Include="TL\TLVector.cs" />
     <Compile Include="TL\TLWallPaper.cs" />
     <Compile Include="TL\TLWallPaperSolid.cs" />
     <Compile Include="TL\TLWebPage.cs" />
