@@ -12,6 +12,7 @@ using TeleSharp.TL;
 using TeleSharp.TL.Messages;
 using TLSharp.Core;
 using TLSharp.Core.Requests;
+using TLSharp.Core.Utils;
 
 namespace TLSharp.Tests
 {
