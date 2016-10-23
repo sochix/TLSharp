@@ -110,16 +110,9 @@ namespace TLSharp.Core
 
                     completed = true;
                 }
-                catch (InvalidOperationException ex)
+                catch (MigrationNeededException ex)
                 {
-                    if (ex.Message.StartsWith("Your phone number registered to") && ex.Data["dcId"] != null)
-                    {
-                        await ReconnectToDcAsync((int)ex.Data["dcId"]);
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    await ReconnectToDcAsync(ex.DC);
                 }
             }
 

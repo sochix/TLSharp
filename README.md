@@ -33,7 +33,7 @@ Library _almost_ ready for production usage. We need contributors to make 1.0.0 
 To use TLSharp follow next steps:
 
 1. Clone TLSharp from GitHub
-1. Compile source with VS2015
+1. Compile source with VS2015 or MonoDevelop
 1. Add reference to ```TLSharp.Core.dll``` to your awesome project.
 
 # Dependencies
@@ -194,6 +194,7 @@ List of donators:
 
 # Contributors
 * [Afshin Arani](http://aarani.ir) - TLGenerator, and a lot of other usefull things
+* [Knocte](https://github.com/knocte)
 
 # License
 
