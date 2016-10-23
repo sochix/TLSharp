@@ -27,14 +27,24 @@ namespace TLSharp.Tests
 
         private string NumberToAddToChat { get; set; }
 
-        private string apiHash = null;
+        private string ApiHash { get; set; }
 
-        private int apiId = 0;
+        private int ApiId { get; set; }
 
         [TestInitialize]
         public void Init()
         {
-            // Setup your phone numbers in app.config
+            // Setup your API settings and phone numbers in app.config
+
+            ApiHash = ConfigurationManager.AppSettings[nameof(ApiHash)];
+            if (string.IsNullOrEmpty(ApiHash))
+                Debug.WriteLine("ApiHash not configured in app.config! Some tests may fail.");
+
+            var apiId = ConfigurationManager.AppSettings[nameof(ApiId)];
+            if (string.IsNullOrEmpty(apiId))
+                Debug.WriteLine("ApiId not configured in app.config! Some tests may fail.");
+            ApiId = int.Parse(apiId);
+
             NumberToAuthenticate = ConfigurationManager.AppSettings[nameof(NumberToAuthenticate)];
             if (string.IsNullOrEmpty(NumberToAuthenticate))
                 Debug.WriteLine("NumberToAuthenticate not configured in app.config! Some tests may fail.");
@@ -63,7 +73,7 @@ namespace TLSharp.Tests
         [TestMethod]
         public async Task AuthUser()
         {
-            var client = new TelegramClient(apiId, apiHash);
+            var client = new TelegramClient(ApiId, ApiHash);
 
             await client.ConnectAsync();
 
@@ -79,7 +89,7 @@ namespace TLSharp.Tests
 		[TestMethod]
 	    public async Task SendMessageTest()
 	    {
-		    var client = new TelegramClient(apiId, apiHash);
+            var client = new TelegramClient(ApiId, ApiHash);
 
 			await client.ConnectAsync();
 
@@ -98,7 +108,7 @@ namespace TLSharp.Tests
 		[TestMethod]
 		public async Task SendMessageToChannelTest()
 		{
-			var client = new TelegramClient(apiId, apiHash);
+            var client = new TelegramClient(ApiId, ApiHash);
 
 			await client.ConnectAsync();
 
@@ -114,7 +124,7 @@ namespace TLSharp.Tests
 		[TestMethod]
         public async Task SignUpNewUser()
         {
-            var client = new TelegramClient(apiId, apiHash);
+            var client = new TelegramClient(ApiId, ApiHash);
             await client.ConnectAsync();
 
             var hash = await client.SendCodeRequestAsync(NotRegisteredNumberToSignUp);
@@ -131,7 +141,7 @@ namespace TLSharp.Tests
         [TestMethod]
         public async Task CheckPhones()
         {
-            var client = new TelegramClient(apiId, apiHash);
+            var client = new TelegramClient(ApiId, ApiHash);
             await client.ConnectAsync();
 
             var result = await client.IsPhoneRegisteredAsync(NumberToAuthenticate);
