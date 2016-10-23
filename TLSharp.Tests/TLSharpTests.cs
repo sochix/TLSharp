@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using System.Configuration;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using TeleSharp.TL;
-using TeleSharp.TL.Channels;
-using TeleSharp.TL.Contacts;
-using TeleSharp.TL.Messages;
 using TLSharp.Core;
-using TLSharp.Core.Auth;
-using TLSharp.Core.MTProto;
-using TLSharp.Core.Network;
 
 namespace TLSharp.Tests
 {
