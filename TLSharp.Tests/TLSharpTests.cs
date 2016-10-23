@@ -8,7 +8,10 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using TeleSharp.TL;
+using TeleSharp.TL.Upload;
 using TLSharp.Core;
+using TLSharp.Core.Requests;
+using TLSharp.Core.Utils;
 
 namespace TLSharp.Tests
 {
@@ -86,42 +89,123 @@ namespace TLSharp.Tests
             Assert.IsTrue(client.IsUserAuthorized());
         }
 
-		[TestMethod]
-	    public async Task SendMessageTest()
-	    {
+        [TestMethod]
+        public async Task SendMessageTest()
+        {
             var client = new TelegramClient(ApiId, ApiHash);
 
-			await client.ConnectAsync();
+            await client.ConnectAsync();
 
-			var result = await client.GetContactsAsync();
+            var result = await client.GetContactsAsync();
 
-			var user = result.users.lists
-				.Where(x => x.GetType() == typeof (TLUser))
-				.Cast<TLUser>()
-				.FirstOrDefault(x => x.phone == NumberToSendMessage);
-			await client.SendTypingAsync(new TLInputPeerUser() {user_id = user.id});
-			Thread.Sleep(3000);
-			await client.SendMessageAsync(new TLInputPeerUser() {user_id = user.id}, "TEST");
-						
-	    }
+            var user = result.users.lists
+                .Where(x => x.GetType() == typeof(TLUser))
+                .Cast<TLUser>()
+                .FirstOrDefault(x => x.phone == NumberToSendMessage);
+            await client.SendTypingAsync(new TLInputPeerUser() { user_id = user.id });
+            Thread.Sleep(3000);
+            await client.SendMessageAsync(new TLInputPeerUser() { user_id = user.id }, "TEST");
 
-		[TestMethod]
-		public async Task SendMessageToChannelTest()
-		{
+        }
+
+        [TestMethod]
+        public async Task SendMessageToChannelTest()
+        {
             var client = new TelegramClient(ApiId, ApiHash);
 
-			await client.ConnectAsync();
+            await client.ConnectAsync();
 
-			var dialogs = await client.GetUserDialogsAsync();
-			var chat = dialogs.chats.lists
-				.Where(c => c.GetType() == typeof(TLChannel))
-				.Cast<TLChannel>()
-				.FirstOrDefault(c => c.title == "TestGroup");
+            var dialogs = await client.GetUserDialogsAsync();
+            var chat = dialogs.chats.lists
+                .Where(c => c.GetType() == typeof(TLChannel))
+                .Cast<TLChannel>()
+                .FirstOrDefault(c => c.title == "TestGroup");
 
-			await client.SendMessageAsync(new TLInputPeerChannel() { channel_id = chat.id, access_hash = chat.access_hash.Value }, "TEST MSG");
-		}
+            await client.SendMessageAsync(new TLInputPeerChannel() { channel_id = chat.id, access_hash = chat.access_hash.Value }, "TEST MSG");
+        }
 
-		[TestMethod]
+        [TestMethod]
+        public async Task SendPhotoToContactTest()
+        {
+            var client = new TelegramClient(apiId, apiHash);
+
+            await client.ConnectAsync();
+
+            var result = await client.GetContactsAsync();
+
+            var user = result.users.lists
+                .Where(x => x.GetType() == typeof(TLUser))
+                .Cast<TLUser>()
+                .FirstOrDefault(x => x.phone == NumberToSendMessage);
+
+            var fileResult = (TLInputFile)await client.UploadFile("cat.jpg", new StreamReader("data/cat.jpg"));
+            await client.SendUploadedPhoto(new TLInputPeerUser() { user_id = user.id }, fileResult, "kitty");
+        }
+
+        [TestMethod]
+        public async Task SendBigFileToContactTest()
+        {
+            var client = new TelegramClient(apiId, apiHash);
+
+            await client.ConnectAsync();
+
+            var result = await client.GetContactsAsync();
+
+            var user = result.users.lists
+                .Where(x => x.GetType() == typeof(TLUser))
+                .Cast<TLUser>()
+                .FirstOrDefault(x => x.phone == NumberToSendMessage);
+
+            var fileResult = (TLInputFileBig)await client.UploadFile("some.zip", new StreamReader("<some big file path>"));
+
+            await client.SendUploadedDocument(
+                new TLInputPeerUser() { user_id = user.id },
+                fileResult,
+                "some zips",
+                "application/zip",
+                new TLVector<TLAbsDocumentAttribute>());
+        }
+
+        [TestMethod]
+        public async Task DownloadFileFromContactTest()
+        {
+            var client = new TelegramClient(apiId, apiHash);
+
+            await client.ConnectAsync();
+
+            var result = await client.GetContactsAsync();
+
+            var user = result.users.lists
+                .Where(x => x.GetType() == typeof(TLUser))
+                .Cast<TLUser>()
+                .FirstOrDefault(x => x.phone == NumberToSendMessage);
+
+            var inputPeer = new TLInputPeerUser() { user_id = user.id };
+            var res = await client.SendRequestAsync<TLMessagesSlice>(new TLRequestGetHistory() { peer = inputPeer });
+            var document = res.messages.lists
+                .Where(m => m.GetType() == typeof(TLMessage))
+                .Cast<TLMessage>()
+                .Where(m => m.media != null && m.media.GetType() == typeof(TLMessageMediaDocument))
+                .Select(m => m.media)
+                .Cast<TLMessageMediaDocument>()
+                .Where(md => md.document.GetType() == typeof(TLDocument))
+                .Select(md => md.document)
+                .Cast<TLDocument>()
+                .First();
+
+            var resFile = await client.GetFile(
+                new TLInputDocumentFileLocation()
+                {
+                    access_hash = document.access_hash,
+                    id = document.id,
+                    version = document.version
+                },
+                document.size);
+            
+            Assert.IsTrue(resFile.bytes.Length > 0);
+        }
+
+        [TestMethod]
         public async Task SignUpNewUser()
         {
             var client = new TelegramClient(ApiId, ApiHash);
@@ -147,6 +231,5 @@ namespace TLSharp.Tests
             var result = await client.IsPhoneRegisteredAsync(NumberToAuthenticate);
             Assert.IsTrue(result);
         }
-
     }
 }
