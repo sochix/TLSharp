@@ -12,7 +12,7 @@
   <body>
     <section class="page-header">
       <h1 class="project-name">TLSharp</h1>
-      <h2 class="project-tagline">Telegram client library implemented in C#.</h2>
+      <h2 class="project-tagline">Telegram client library implemented in C#</h2>
       <a href="https://github.com/sochix/TLSharp" class="btn">View on GitHub</a>
       <a href="https://github.com/sochix/TLSharp/zipball/master" class="btn">Download .zip</a>
       <a href="https://github.com/sochix/TLSharp/tarball/master" class="btn">Download .tar.gz</a>
@@ -47,6 +47,7 @@
 <ul>
 <li><a href="#quick-configuration">Quick configuration</a></li>
 <li><a href="#first-requests">First requests</a></li>
+<li><a href="#working-with-files">Working with files</a></li>
 </ul>
 </li>
 <li><a href="#available-methods">Available Methods</a></li>
@@ -65,7 +66,7 @@
 
 <ol>
 <li>Clone TLSharp from GitHub</li>
-<li>Compile source with VS2015</li>
+<li>Compile source with VS2015 or MonoDevelop</li>
 <li>Add reference to <code>TLSharp.Core.dll</code> to your awesome project.</li>
 </ol>
 
@@ -146,7 +147,39 @@ All dependencies listed in <a href="https://github.com/sochix/TLSharp/blob/maste
 <p>Full code you can see at <a href="https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L107">SendMessageToChannel test</a></p>
 
 <h2>
-<a id="available-methods" class="anchor" href="#available-methods" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Available Methods</h2>
+<a id="working-with-files" class="anchor" href="#working-with-files" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Working with files</h2>
+
+<p>Telegram separate files to two categories -&gt; big file and small file. File is Big if its size more than 10 Mb. TLSharp tries to hide this complexity from you, thats why we provide one method to upload files <strong>UploadFile</strong>.</p>
+
+<div class="highlight highlight-source-cs"><pre>    <span class="pl-k">var</span> fileResult = <span class="pl-k">await</span> client.UploadFile(<span class="pl-s"><span class="pl-pds">"</span>cat.jpg<span class="pl-pds">"</span></span>, <span class="pl-k">new</span> StreamReader(<span class="pl-s"><span class="pl-pds">"</span>data/cat.jpg<span class="pl-pds">"</span></span>));</pre></div>
+
+<p>TLSharp provides two wrappers for sending photo and document</p>
+
+<div class="highlight highlight-source-cs"><pre>    <span class="pl-k">await</span> client.SendUploadedPhoto(<span class="pl-k">new</span> TLInputPeerUser() { user_id = user.id }, fileResult, <span class="pl-s"><span class="pl-pds">"</span>kitty<span class="pl-pds">"</span></span>);
+    <span class="pl-k">await</span> client.SendUploadedDocument(
+                <span class="pl-k">new</span> TLInputPeerUser() { user_id = user.id },
+                fileResult,
+                <span class="pl-s"><span class="pl-pds">"</span>some zips<span class="pl-pds">"</span></span>, <span class="pl-c">//caption</span>
+                <span class="pl-s"><span class="pl-pds">"</span>application/zip<span class="pl-pds">"</span></span>, <span class="pl-c">//mime-type</span>
+                <span class="pl-k">new</span> TLVector&lt;TLAbsDocumentAttribute&gt;()); <span class="pl-c">//document attributes, such as file name</span></pre></div>
+
+<p>Full code you can see at <a href="https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L125">SendPhotoToContactTest</a> and <a href="https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L143">SendBigFileToContactTest</a></p>
+
+<p>To download file you should call <strong>GetFile</strong> method</p>
+
+<div class="highlight highlight-source-cs"><pre>    <span class="pl-k">await</span> client.GetFile(
+                <span class="pl-k">new</span> TLInputDocumentFileLocation()
+                {
+                    access_hash = document.access_hash,
+                    id = document.id,
+                    version = document.version
+                },
+                document.size); <span class="pl-c">//size of fileChunk you want to retrieve</span></pre></div>
+
+<p>Full code you can see at <a href="https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L167">DownloadFileFromContactTest</a></p>
+
+<h1>
+<a id="available-methods" class="anchor" href="#available-methods" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Available Methods</h1>
 
 <p>For your convenience TLSharp have wrappers for several Telegram API methods. You could add your own, see details below.</p>
 
@@ -159,6 +192,10 @@ All dependencies listed in <a href="https://github.com/sochix/TLSharp/blob/maste
 <li>SendMessageAsync</li>
 <li>SendTypingAsync</li>
 <li>GetUserDialogsAsync</li>
+<li>SendUploadedPhoto</li>
+<li>SendUploadedDocument</li>
+<li>GetFile</li>
+<li>UploadFile</li>
 </ol>
 
 <p><strong>What if you can't find needed method at the list?</strong></p>
@@ -181,22 +218,23 @@ All dependencies listed in <a href="https://github.com/sochix/TLSharp/blob/maste
 <p>The only way is <a href="https://core.telegram.org/methods">Telegram API docs</a>. Yes, it's outdated. But there is no other source.
 Latest scheme in JSON format you can find <a href="https://gist.github.com/aarani/b22b7cda024973dff68e1672794b0298">here</a></p>
 
-<h2>
-<a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contributing</h2>
+<h1>
+<a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contributing</h1>
 
 <p>Contributing is highly appreciated!</p>
 
-<h3>
-<a id="what-things-can-i-implement-project-roadmap" class="anchor" href="#what-things-can-i-implement-project-roadmap" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What things can I Implement (Project Roadmap)?</h3>
+<h2>
+<a id="what-things-can-i-implement-project-roadmap" class="anchor" href="#what-things-can-i-implement-project-roadmap" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What things can I Implement (Project Roadmap)?</h2>
 
-<h4>
-<a id="release-100" class="anchor" href="#release-100" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Release 1.0.0</h4>
+<h3>
+<a id="release-100" class="anchor" href="#release-100" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Release 1.0.0</h3>
 
 <ul>
 <li>[DONE] Add PHONE_MIGRATE handling</li>
+<li>Add FILE_MIGRATE handling</li>
 <li>Add Updates handling</li>
 <li>Add NuGet package</li>
-<li>[WIP] Add wrappers for media uploading</li>
+<li>[DONE] Add wrappers for media uploading and downloading</li>
 <li>Store user session as JSON</li>
 </ul>
 
@@ -261,6 +299,7 @@ Bitcoin wallet: <strong>3K1ocweFgaHnAibJ3n6hX7RNZWFTFcJjUe</strong></p>
 <ul>
 <li>
 <a href="http://aarani.ir">Afshin Arani</a> - TLGenerator, and a lot of other usefull things</li>
+<li><a href="https://github.com/knocte">Knocte</a></li>
 </ul>
 
 <h1>
