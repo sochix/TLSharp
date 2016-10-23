@@ -279,9 +279,7 @@ namespace TLSharp.Core.Network
                 {
                     var resultString = Regex.Match(errorMessage, @"\d+").Value;
                     var dcIdx = int.Parse(resultString);
-                    var exception = new InvalidOperationException($"Your phone number registered to {dcIdx} dc. Please update settings. See https://github.com/sochix/TLSharp#i-get-an-error-migrate_x for details.");
-                    exception.Data.Add("dcId", dcIdx);
-                    throw exception;
+                    throw new MigrationNeededException(dcIdx);
                 }
                 else
                 {
@@ -482,6 +480,17 @@ namespace TLSharp.Core.Network
         private MemoryStream makeMemory(int len)
         {
             return new MemoryStream(new byte[len], 0, len, true, true);
+        }
+    }
+
+    internal class MigrationNeededException : Exception
+    {
+        internal int DC { get; private set; }
+
+        internal MigrationNeededException(int dc)
+            : base ("$Your phone number is registered to a different dc: {dc}. Please migrate.")
+        {
+            DC = dc;
         }
     }
 }
