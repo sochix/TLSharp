@@ -8,6 +8,7 @@ using TeleSharp.TL.Auth;
 using TeleSharp.TL.Contacts;
 using TeleSharp.TL.Help;
 using TeleSharp.TL.Messages;
+using TeleSharp.TL.Upload;
 using TLSharp.Core.Auth;
 using TLSharp.Core.MTProto.Crypto;
 using TLSharp.Core.Network;
@@ -232,6 +233,15 @@ namespace TLSharp.Core
                 peer = peer
             });
         }
+
+        public async Task<TLFile> GetFile(TLAbsInputFileLocation location, int filePartSize)
+        {
+            return await SendRequestAsync<TLFile>(new TLRequestGetFile()
+            {
+                location = location,
+                limit = filePartSize
+            });
+        } 
 
         private void OnUserAuthenticated(TLUser TLUser)
         {
