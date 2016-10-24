@@ -488,7 +488,7 @@ namespace TLSharp.Core.Network
         internal int DC { get; private set; }
 
         internal MigrationNeededException(int dc)
-            : base ("$Your phone number is registered to a different dc: {dc}. Please migrate.")
+            : base ($"Your phone number is registered to a different DC: {dc}. Please migrate.")
         {
             DC = dc;
         }
