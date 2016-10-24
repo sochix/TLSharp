@@ -35,11 +35,11 @@ namespace TLSharp.Core
             TLContext.Init();
             _apiHash = apiHash;
             _apiId = apiId;
-            if (_apiId == 0)
-                throw new InvalidOperationException("Your API_ID is invalid. Do a configuration first https://github.com/sochix/TLSharp#quick-configuration");
-
+            if (_apiId == default(int))
+                throw new MissingApiConfigurationException("API_ID");
             if (string.IsNullOrEmpty(_apiHash))
-                throw new InvalidOperationException("Your API_ID is invalid. Do a configuration first https://github.com/sochix/TLSharp#quick-configuration");
+                throw new MissingApiConfigurationException("API_HASH");
+
             _session = Session.TryLoadOrCreateNew(store, sessionUserId);
             _transport = new TcpTransport(_session.ServerAddress, _session.Port);
         }
@@ -250,6 +250,15 @@ namespace TLSharp.Core
 
             _session.Save();
         }
+    }
 
+    public class MissingApiConfigurationException : Exception
+    {
+        public const string InfoUrl = "https://github.com/sochix/TLSharp#quick-configuration";
+
+        internal MissingApiConfigurationException(string invalidParamName):
+            base($"Your {invalidParamName} setting is missing. Adjust the configuration first, see {InfoUrl}")
+        {
+        }
     }
 }
