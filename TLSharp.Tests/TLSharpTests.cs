@@ -49,9 +49,10 @@ namespace TLSharp.Tests
             {
                 return new TelegramClient(ApiId, ApiHash);
             }
-            catch (MissingApiConfigurationException)
+            catch (MissingApiConfigurationException ex)
             {
-                throw new Exception($"Please add your API settings to the `app.config` file. (More info: {MissingApiConfigurationException.InfoUrl})");
+                throw new Exception($"Please add your API settings to the `app.config` file. (More info: {MissingApiConfigurationException.InfoUrl})",
+                                    ex);
             }
         }
 
