@@ -141,7 +141,7 @@ namespace TLSharp.Tests
 
             await client.ConnectAsync();
 
-            var dialogs = await client.GetUserDialogsAsync();
+            var dialogs = (TLDialogs) await client.GetUserDialogsAsync();
             var chat = dialogs.chats.lists
                 .Where(c => c.GetType() == typeof(TLChannel))
                 .Cast<TLChannel>()
