@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TLSharp.Core</RootNamespace>
     <AssemblyName>TLSharp.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -63,7 +63,7 @@
     <Compile Include="Network\TcpTransport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\AckRequest.cs" />
-    <Compile Include="Requests\UploadHelper.cs" />
+    <Compile Include="Utils\UploadHelper.cs" />
     <Compile Include="Session.cs" />
     <Compile Include="TelegramClient.cs" />
     <Compile Include="Utils\Helpers.cs" />

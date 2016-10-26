@@ -21,7 +21,7 @@ namespace TeleSharp.TL
             }
             catch(Exception ex)
             {
-                throw new InvalidDataException("Constructor Invalid Or Context.Init Not Called !");
+                throw new InvalidDataException("Constructor Invalid Or Context.Init Not Called !", ex);
             }
             if (t.IsSubclassOf(typeof(TLMethod)))
             {

@@ -2,14 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using TeleSharp.TL;
 using TeleSharp.TL.Auth;
 using TeleSharp.TL.Contacts;
 using TeleSharp.TL.Help;
 using TeleSharp.TL.Messages;
+using TeleSharp.TL.Upload;
 using TLSharp.Core.Auth;
 using TLSharp.Core.MTProto.Crypto;
 using TLSharp.Core.Network;
+using TLSharp.Core.Requests;
+using TLSharp.Core.Utils;
 
 namespace TLSharp.Core
 {
@@ -31,11 +35,11 @@ namespace TLSharp.Core
             TLContext.Init();
             _apiHash = apiHash;
             _apiId = apiId;
-            if (_apiId == 0)
-                throw new InvalidOperationException("Your API_ID is invalid. Do a configuration first https://github.com/sochix/TLSharp#quick-configuration");
-
+            if (_apiId == default(int))
+                throw new MissingApiConfigurationException("API_ID");
             if (string.IsNullOrEmpty(_apiHash))
-                throw new InvalidOperationException("Your API_ID is invalid. Do a configuration first https://github.com/sochix/TLSharp#quick-configuration");
+                throw new MissingApiConfigurationException("API_HASH");
+
             _session = Session.TryLoadOrCreateNew(store, sessionUserId);
             _transport = new TcpTransport(_session.ServerAddress, _session.Port);
         }
@@ -53,7 +57,15 @@ namespace TLSharp.Core
 
             //set-up layer
             var config = new TLRequestGetConfig();
-            var request = new TLRequestInitConnection() { api_id = _apiId, app_version = "1.0.0", device_model = "PC", lang_code = "en", query = config, system_version = "Win 10.0" };
+            var request = new TLRequestInitConnection()
+            {
+                api_id = _apiId,
+                app_version = "1.0.0",
+                device_model = "PC",
+                lang_code = "en",
+                query = config,
+                system_version = "Win 10.0"
+            };
             var invokewithLayer = new TLRequestInvokeWithLayer() { layer = 57, query = request };
             await _sender.Send(invokewithLayer);
             await _sender.Receive(invokewithLayer);
@@ -110,16 +122,9 @@ namespace TLSharp.Core
 
                     completed = true;
                 }
-                catch (InvalidOperationException ex)
+                catch (MigrationNeededException ex)
                 {
-                    if (ex.Message.StartsWith("Your phone number registered to") && ex.Data["dcId"] != null)
-                    {
-                        await ReconnectToDcAsync((int)ex.Data["dcId"]);
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    await ReconnectToDcAsync(ex.DC);
                 }
             }
 
@@ -172,14 +177,12 @@ namespace TLSharp.Core
             if (!IsUserAuthorized())
                 throw new InvalidOperationException("Authorize user first!");
 
-            long uniqueId = Convert.ToInt64((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds);
-
             return await SendRequestAsync<TLAbsUpdates>(
                    new TLRequestSendMessage()
                    {
                        peer = peer,
                        message = message,
-                       random_id = uniqueId
+                       random_id = Helpers.GenerateRandomLong()
                    });
         }
 
@@ -200,6 +203,46 @@ namespace TLSharp.Core
                 new TLRequestGetDialogs() { offset_date = 0, offset_peer = peer, limit = 100 });
         }
 
+        public async Task<TLAbsUpdates> SendUploadedPhoto(TLAbsInputPeer peer, TLAbsInputFile file, string caption)
+        {   
+            return await SendRequestAsync<TLAbsUpdates>(new TLRequestSendMedia()
+            {
+                random_id = Helpers.GenerateRandomLong(),
+                background = false,
+                clear_draft = false,
+                media = new TLInputMediaUploadedPhoto() { file = file, caption = caption },
+                peer = peer
+            });
+        }
+
+        public async Task<TLAbsUpdates> SendUploadedDocument(
+            TLAbsInputPeer peer, TLAbsInputFile file, string caption, string mimeType, TLVector<TLAbsDocumentAttribute> attributes)
+        {
+           return await SendRequestAsync<TLAbsUpdates>(new TLRequestSendMedia()
+            {
+                random_id = Helpers.GenerateRandomLong(),
+                background = false,
+                clear_draft = false,
+                media = new TLInputMediaUploadedDocument()
+                {
+                    file = file,
+                    caption = caption,
+                    mime_type = mimeType,
+                    attributes = attributes
+                },
+                peer = peer
+            });
+        }
+
+        public async Task<TLFile> GetFile(TLAbsInputFileLocation location, int filePartSize)
+        {
+            return await SendRequestAsync<TLFile>(new TLRequestGetFile()
+            {
+                location = location,
+                limit = filePartSize
+            });
+        } 
+
         private void OnUserAuthenticated(TLUser TLUser)
         {
             _session.TLUser = TLUser;
@@ -207,6 +250,15 @@ namespace TLSharp.Core
 
             _session.Save();
         }
+    }
 
+    public class MissingApiConfigurationException : Exception
+    {
+        public const string InfoUrl = "https://github.com/sochix/TLSharp#quick-configuration";
+
+        internal MissingApiConfigurationException(string invalidParamName):
+            base($"Your {invalidParamName} setting is missing. Adjust the configuration first, see {InfoUrl}")
+        {
+        }
     }
 }

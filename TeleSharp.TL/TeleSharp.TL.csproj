@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TeleSharp.TL</RootNamespace>
     <AssemblyName>TeleSharp.TL</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -758,7 +758,6 @@
     <Compile Include="TL\TLUserStatusOffline.cs" />
     <Compile Include="TL\TLUserStatusOnline.cs" />
     <Compile Include="TL\TLUserStatusRecently.cs" />
-    <Compile Include="TL\TLVector.cs" />
     <Compile Include="TL\TLWallPaper.cs" />
     <Compile Include="TL\TLWallPaperSolid.cs" />
     <Compile Include="TL\TLWebPage.cs" />

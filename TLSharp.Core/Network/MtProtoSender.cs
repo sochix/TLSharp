@@ -279,9 +279,7 @@ namespace TLSharp.Core.Network
                 {
                     var resultString = Regex.Match(errorMessage, @"\d+").Value;
                     var dcIdx = int.Parse(resultString);
-                    var exception = new InvalidOperationException($"Your phone number registered to {dcIdx} dc. Please update settings. See https://github.com/sochix/TLSharp#i-get-an-error-migrate_x for details.");
-                    exception.Data.Add("dcId", dcIdx);
-                    throw exception;
+                    throw new MigrationNeededException(dcIdx);
                 }
                 else
                 {
@@ -338,9 +336,9 @@ namespace TLSharp.Core.Network
             switch (errorCode)
             {
                 case 16:
-                    throw new InvalidOperationException(" msg_id too low (most likely, client time is wrong; it would be worthwhile to synchronize it using msg_id notifications and re-send the original message with the “correct” msg_id or wrap it in a container with a new msg_id if the original message had waited too long on the client to be transmitted)");
+                    throw new InvalidOperationException("msg_id too low (most likely, client time is wrong; it would be worthwhile to synchronize it using msg_id notifications and re-send the original message with the “correct” msg_id or wrap it in a container with a new msg_id if the original message had waited too long on the client to be transmitted)");
                 case 17:
-                    throw new InvalidOperationException(" msg_id too high (similar to the previous case, the client time has to be synchronized, and the message re-sent with the correct msg_id)");
+                    throw new InvalidOperationException("msg_id too high (similar to the previous case, the client time has to be synchronized, and the message re-sent with the correct msg_id)");
                 case 18:
                     throw new InvalidOperationException("incorrect two lower order msg_id bits (the server expects client message msg_id to be divisible by 4)");
                 case 19:
@@ -482,6 +480,17 @@ namespace TLSharp.Core.Network
         private MemoryStream makeMemory(int len)
         {
             return new MemoryStream(new byte[len], 0, len, true, true);
+        }
+    }
+
+    internal class MigrationNeededException : Exception
+    {
+        internal int DC { get; private set; }
+
+        internal MigrationNeededException(int dc)
+            : base ($"Your phone number is registered to a different DC: {dc}. Please migrate.")
+        {
+            DC = dc;
         }
     }
 }
