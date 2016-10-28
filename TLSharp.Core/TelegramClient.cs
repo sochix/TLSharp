@@ -196,10 +196,10 @@ namespace TLSharp.Core
             return await SendRequestAsync<Boolean>(req);
         }
 
-        public async Task<TLDialogs> GetUserDialogsAsync()
+        public async Task<TLAbsDialogs> GetUserDialogsAsync()
         {
             var peer = new TLInputPeerSelf();
-            return await SendRequestAsync<TLDialogs>(
+            return await SendRequestAsync<TLAbsDialogs>(
                 new TLRequestGetDialogs() { offset_date = 0, offset_peer = peer, limit = 100 });
         }
 
