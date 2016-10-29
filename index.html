@@ -23,7 +23,8 @@
 <a id="tlsharp" class="anchor" href="#tlsharp" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>TLSharp</h1>
 
 <p><a href="https://gitter.im/TLSharp/Lobby?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/TLSharp/Lobby.svg" alt="Join the chat at https://gitter.im/TLSharp/Lobby"></a>
-<a href="https://ci.appveyor.com/project/sochix/tlsharp"><img src="https://ci.appveyor.com/api/projects/status/95rl618ch5c4h2fa?svg=true" alt="Build status"></a></p>
+<a href="https://ci.appveyor.com/project/sochix/tlsharp"><img src="https://ci.appveyor.com/api/projects/status/95rl618ch5c4h2fa?svg=true" alt="Build status"></a>
+<a href="https://badge.fury.io/nu/TLSharp"><img src="https://badge.fury.io/nu/TLSharp.svg" alt="NuGet version"></a></p>
 
 <p><em>Unofficial</em> Telegram (<a href="http://telegram.org">http://telegram.org</a>) client library implemented in C#. Latest TL scheme supported, thanks to Afshin Arani</p>
 
@@ -60,9 +61,12 @@
 <h1>
 <a id="how-do-i-add-this-to-my-project" class="anchor" href="#how-do-i-add-this-to-my-project" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How do I add this to my project?</h1>
 
-<p>Library <em>almost</em> ready for production usage. We need contributors to make 1.0.0 release.</p>
+<p>Install via NuGet</p>
 
-<p>To use TLSharp follow next steps:</p>
+<pre><code>    Install-Package TLSharp
+</code></pre>
+
+<p>or build from source</p>
 
 <ol>
 <li>Clone TLSharp from GitHub</li>
@@ -231,9 +235,9 @@ Latest scheme in JSON format you can find <a href="https://gist.github.com/aaran
 
 <ul>
 <li>[DONE] Add PHONE_MIGRATE handling</li>
-<li>Add FILE_MIGRATE handling</li>
+<li>[DONE] Add FILE_MIGRATE handling</li>
 <li>Add Updates handling</li>
-<li>Add NuGet package</li>
+<li>[DONE] Add NuGet package</li>
 <li>[DONE] Add wrappers for media uploading and downloading</li>
 <li>Store user session as JSON</li>
 </ul>
