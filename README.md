@@ -2,6 +2,7 @@
 
 [![Join the chat at https://gitter.im/TLSharp/Lobby](https://badges.gitter.im/TLSharp/Lobby.svg)](https://gitter.im/TLSharp/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build status](https://ci.appveyor.com/api/projects/status/95rl618ch5c4h2fa?svg=true)](https://ci.appveyor.com/project/sochix/tlsharp)
+[![NuGet version](https://badge.fury.io/nu/TLSharp.svg)](https://badge.fury.io/nu/TLSharp)
 
 _Unofficial_ Telegram (http://telegram.org) client library implemented in C#. Latest TL scheme supported, thanks to Afshin Arani
 
@@ -29,9 +30,13 @@ It's a perfect fit for any developer who would like to send data directly to Tel
 
 # How do I add this to my project?
 
-Library _almost_ ready for production usage. We need contributors to make 1.0.0 release.
+Install via NuGet
 
-To use TLSharp follow next steps:
+```
+	Install-Package TLSharp
+```
+
+or build from source
 
 1. Clone TLSharp from GitHub
 1. Compile source with VS2015 or MonoDevelop
@@ -187,9 +192,9 @@ Contributing is highly appreciated!
 ### Release 1.0.0
 
 * [DONE] Add PHONE_MIGRATE handling
-* [DONE]Add FILE_MIGRATE handling
+* [DONE] Add FILE_MIGRATE handling
 * Add Updates handling
-* Add NuGet package
+* [DONE] Add NuGet package
 * [DONE] Add wrappers for media uploading and downloading
 * Store user session as JSON
 
