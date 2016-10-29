@@ -187,7 +187,7 @@ Contributing is highly appreciated!
 ### Release 1.0.0
 
 * [DONE] Add PHONE_MIGRATE handling
-* Add FILE_MIGRATE handling
+* [DONE]Add FILE_MIGRATE handling
 * Add Updates handling
 * Add NuGet package
 * [DONE] Add wrappers for media uploading and downloading
