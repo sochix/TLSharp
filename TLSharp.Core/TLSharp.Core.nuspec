@@ -20,9 +20,9 @@ It's a perfect fit for any developer who would like to send data directly to Tel
 		<copyright>Copyright 2016</copyright>
     </metadata>
     <files>
-        <file src="TeleSharp.TL\bin\Debug\BigMath.dll" target="lib\net45\BigMath.dll" />
+        <file src="TLSharp.Core\bin\Debug\BigMath.dll" target="lib\net45\BigMath.dll" />
         <file src="TLSharp.Core\bin\Debug\Ionic.ZLib.dll" target="lib\net45\Ionic.ZLib.dll" />
-        <file src="TeleSharp.TL\bin\Debug\TeleSharp.TL.dll" target="lib\net45\TeleSharp.TL.dll" />
+        <file src="TLSharp.Core\bin\Debug\TeleSharp.TL.dll" target="lib\net45\TeleSharp.TL.dll" />
         <file src="TLSharp.Core\bin\Debug\TLSharp.Core.dll" target="lib\net45\TLSharp.Core.dll" />
     </files>
 </package>
