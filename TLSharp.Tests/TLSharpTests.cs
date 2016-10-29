@@ -231,6 +231,36 @@ namespace TLSharp.Tests
             Assert.IsTrue(resFile.bytes.Length > 0);
         }
 
+
+        [TestMethod]
+        public async Task DownloadFileFromWrongLocationTest()
+        {
+            var client = NewClient();
+
+            await client.ConnectAsync();
+
+            var result = await client.GetContactsAsync();
+
+            var user = result.users.lists
+                .Where(x => x.GetType() == typeof(TLUser))
+                .Cast<TLUser>()
+                .FirstOrDefault(x => x.id == 5880094);
+    
+            var photo = ((TLUserProfilePhoto)user.photo);
+            var photoLocation = (TLFileLocation) photo.photo_big;
+
+            var resFile = await client.GetFile(new TLInputFileLocation()
+            {
+                local_id = photoLocation.local_id,
+                secret = photoLocation.secret,
+                volume_id = photoLocation.volume_id
+            }, 1024);
+
+            var res = await client.GetUserDialogsAsync(); 
+
+            Assert.IsTrue(resFile.bytes.Length > 0);
+        }
+
         [TestMethod]
         public async Task SignUpNewUser()
         {

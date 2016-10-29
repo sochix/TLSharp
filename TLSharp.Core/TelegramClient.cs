@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using TeleSharp.TL;
+using TeleSharp.TL.Account;
 using TeleSharp.TL.Auth;
 using TeleSharp.TL.Contacts;
 using TeleSharp.TL.Help;
@@ -14,6 +15,7 @@ using TLSharp.Core.MTProto.Crypto;
 using TLSharp.Core.Network;
 using TLSharp.Core.Requests;
 using TLSharp.Core.Utils;
+using TLAuthorization = TeleSharp.TL.Auth.TLAuthorization;
 
 namespace TLSharp.Core
 {
@@ -152,12 +154,12 @@ namespace TLSharp.Core
 
             return ((TLUser)request.Response.user);
         }
-        public async Task<T> SendRequestAsync<T>(TLMethod methodtoExceute)
+        public async Task<T> SendRequestAsync<T>(TLMethod methodToExecute)
         {
-            await _sender.Send(methodtoExceute);
-            await _sender.Receive(methodtoExceute);
-
-            var result = methodtoExceute.GetType().GetProperty("Response").GetValue(methodtoExceute);
+            await _sender.Send(methodToExecute);
+            await _sender.Receive(methodToExecute);
+            
+            var result = methodToExecute.GetType().GetProperty("Response").GetValue(methodToExecute);
 
             return (T)result;
         }
@@ -204,7 +206,7 @@ namespace TLSharp.Core
         }
 
         public async Task<TLAbsUpdates> SendUploadedPhoto(TLAbsInputPeer peer, TLAbsInputFile file, string caption)
-        {   
+        {
             return await SendRequestAsync<TLAbsUpdates>(new TLRequestSendMedia()
             {
                 random_id = Helpers.GenerateRandomLong(),
@@ -218,7 +220,7 @@ namespace TLSharp.Core
         public async Task<TLAbsUpdates> SendUploadedDocument(
             TLAbsInputPeer peer, TLAbsInputFile file, string caption, string mimeType, TLVector<TLAbsDocumentAttribute> attributes)
         {
-           return await SendRequestAsync<TLAbsUpdates>(new TLRequestSendMedia()
+            return await SendRequestAsync<TLAbsUpdates>(new TLRequestSendMedia()
             {
                 random_id = Helpers.GenerateRandomLong(),
                 background = false,
@@ -236,12 +238,43 @@ namespace TLSharp.Core
 
         public async Task<TLFile> GetFile(TLAbsInputFileLocation location, int filePartSize)
         {
-            return await SendRequestAsync<TLFile>(new TLRequestGetFile()
+            TLFile result = null;
+            try
             {
-                location = location,
-                limit = filePartSize
-            });
-        } 
+                result = await SendRequestAsync<TLFile>(new TLRequestGetFile()
+                {
+                    location = location,
+                    limit = filePartSize
+                });
+            }
+            catch (FileMigrationException ex)
+            {
+                var exportedAuth = await SendRequestAsync<TLExportedAuthorization>(new TLRequestExportAuthorization() { dc_id = ex.DC });
+
+                var authKey = _session.AuthKey;
+                var timeOffset = _session.TimeOffset;
+                var serverAddress = _session.ServerAddress;
+                var serverPort = _session.Port;
+
+                await ReconnectToDcAsync(ex.DC);
+                var auth = await SendRequestAsync<TLAuthorization>(new TLRequestImportAuthorization
+                {
+                    bytes = exportedAuth.bytes,
+                    id = exportedAuth.id
+                });
+                result = await GetFile(location, filePartSize);
+
+                _session.AuthKey = authKey;
+                _session.TimeOffset = timeOffset;
+                _transport = new TcpTransport(serverAddress, serverPort);
+                _session.ServerAddress =serverAddress;
+                _session.Port = serverPort;
+                await ConnectAsync();
+
+            }
+
+            return result;
+        }
 
         private void OnUserAuthenticated(TLUser TLUser)
         {
@@ -256,7 +289,7 @@ namespace TLSharp.Core
     {
         public const string InfoUrl = "https://github.com/sochix/TLSharp#quick-configuration";
 
-        internal MissingApiConfigurationException(string invalidParamName):
+        internal MissingApiConfigurationException(string invalidParamName) :
             base($"Your {invalidParamName} setting is missing. Adjust the configuration first, see {InfoUrl}")
         {
         }

@@ -281,6 +281,18 @@ namespace TLSharp.Core.Network
                     var dcIdx = int.Parse(resultString);
                     throw new MigrationNeededException(dcIdx);
                 }
+                else if (errorMessage.StartsWith("FILE_MIGRATE_"))
+                {
+                    var resultString = Regex.Match(errorMessage, @"\d+").Value;
+                    var dcIdx = int.Parse(resultString);
+                    throw new FileMigrationException(dcIdx);
+                }
+                else if (errorMessage.StartsWith("USER_MIGRATE_"))
+                {
+                    var resultString = Regex.Match(errorMessage, @"\d+").Value;
+                    var dcIdx = int.Parse(resultString);
+                    throw new UserMigrationException(dcIdx);
+                }
                 else
                 {
                     throw new InvalidOperationException(errorMessage);
@@ -489,6 +501,28 @@ namespace TLSharp.Core.Network
 
         internal MigrationNeededException(int dc)
             : base ($"Your phone number is registered to a different DC: {dc}. Please migrate.")
+        {
+            DC = dc;
+        }
+    }
+
+    internal class FileMigrationException : Exception
+    {
+        internal int DC { get; private set; }
+
+        internal FileMigrationException(int dc)
+            : base ($"File is located on a different DC: {dc}. Please migrate.")
+        {
+            DC = dc;
+        }
+    }
+
+    internal class UserMigrationException : Exception
+    {
+        internal int DC { get; private set; }
+
+        internal UserMigrationException(int dc)
+            : base($"User is located on a different DC: {dc}. Please migrate.")
         {
             DC = dc;
         }
