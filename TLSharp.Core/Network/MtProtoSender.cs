@@ -279,7 +279,7 @@ namespace TLSharp.Core.Network
                 {
                     var resultString = Regex.Match(errorMessage, @"\d+").Value;
                     var dcIdx = int.Parse(resultString);
-                    throw new MigrationNeededException(dcIdx);
+                    throw new PhoneMigrationException(dcIdx);
                 }
                 else if (errorMessage.StartsWith("FILE_MIGRATE_"))
                 {
@@ -495,11 +495,11 @@ namespace TLSharp.Core.Network
         }
     }
 
-    internal class MigrationNeededException : Exception
+    internal class PhoneMigrationException : Exception
     {
         internal int DC { get; private set; }
 
-        internal MigrationNeededException(int dc)
+        internal PhoneMigrationException(int dc)
             : base ($"Your phone number is registered to a different DC: {dc}. Please migrate.")
         {
             DC = dc;
