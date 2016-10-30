@@ -279,7 +279,7 @@ namespace TLSharp.Core.Network
                 {
                     var resultString = Regex.Match(errorMessage, @"\d+").Value;
                     var dcIdx = int.Parse(resultString);
-                    throw new MigrationNeededException(dcIdx);
+                    throw new PhoneMigrationException(dcIdx);
                 }
                 else if (errorMessage.StartsWith("FILE_MIGRATE_"))
                 {
@@ -495,36 +495,40 @@ namespace TLSharp.Core.Network
         }
     }
 
-    internal class MigrationNeededException : Exception
+    internal abstract class DataCenterMigrationException : Exception
     {
         internal int DC { get; private set; }
 
-        internal MigrationNeededException(int dc)
-            : base ($"Your phone number is registered to a different DC: {dc}. Please migrate.")
+        private const string REPORT_MESSAGE =
+            " See: https://github.com/sochix/TLSharp#i-get-a-xxxmigrationexception-or-a-migrate_x-error";
+
+        protected DataCenterMigrationException(string msg, int dc) : base (msg + REPORT_MESSAGE)
         {
             DC = dc;
         }
     }
 
-    internal class FileMigrationException : Exception
+    internal class PhoneMigrationException : DataCenterMigrationException
     {
-        internal int DC { get; private set; }
+        internal PhoneMigrationException(int dc)
+            : base ($"Phone number registered to a different DC: {dc}.", dc)
+        {
+        }
+    }
 
+    internal class FileMigrationException : DataCenterMigrationException
+    {
         internal FileMigrationException(int dc)
-            : base ($"File is located on a different DC: {dc}. Please migrate.")
+            : base ($"File located on a different DC: {dc}.", dc)
         {
-            DC = dc;
         }
     }
 
-    internal class UserMigrationException : Exception
+    internal class UserMigrationException : DataCenterMigrationException
     {
-        internal int DC { get; private set; }
-
         internal UserMigrationException(int dc)
-            : base($"User is located on a different DC: {dc}. Please migrate.")
+            : base($"User located on a different DC: {dc}.", dc)
         {
-            DC = dc;
         }
     }
 }

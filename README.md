@@ -203,9 +203,9 @@ Contributing is highly appreciated!
 #### What API layer is supported?
 The latest one - 57. Thanks to Afshin Arani for his TLGenerator
 
-#### I get an error MIGRATE_X?
+#### I get a xxxMigrationException or a MIGRATE_X error!
 
-TLSharp library should automatically handle this errors. If you see such errors, pls create a new issue.
+TLSharp library should automatically handle these errors. If you see such errors, please open a new Github issue with the details (include a stacktrace, etc.).
 
 #### I get an exception: System.IO.EndOfStreamException: Unable to read beyond the end of the stream. All test methos except that AuthenticationWorks and TestConnection return same error. I did every thing including setting api id and hash, and setting server address.-
 
