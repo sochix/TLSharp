@@ -499,7 +499,10 @@ namespace TLSharp.Core.Network
     {
         internal int DC { get; private set; }
 
-        protected DataCenterMigrationException(string msg, int dc) : base (msg)
+        private const string REPORT_MESSAGE =
+            " See: https://github.com/sochix/TLSharp#i-get-an-error-migrate_x";
+
+        protected DataCenterMigrationException(string msg, int dc) : base (msg + REPORT_MESSAGE)
         {
             DC = dc;
         }
@@ -508,7 +511,7 @@ namespace TLSharp.Core.Network
     internal class PhoneMigrationException : DataCenterMigrationException
     {
         internal PhoneMigrationException(int dc)
-            : base ($"Your phone number is registered to a different DC: {dc}. Please migrate.", dc)
+            : base ($"Phone number registered to a different DC: {dc}.", dc)
         {
         }
     }
@@ -516,7 +519,7 @@ namespace TLSharp.Core.Network
     internal class FileMigrationException : DataCenterMigrationException
     {
         internal FileMigrationException(int dc)
-            : base ($"File is located on a different DC: {dc}. Please migrate.", dc)
+            : base ($"File located on a different DC: {dc}.", dc)
         {
         }
     }
@@ -524,7 +527,7 @@ namespace TLSharp.Core.Network
     internal class UserMigrationException : DataCenterMigrationException
     {
         internal UserMigrationException(int dc)
-            : base($"User is located on a different DC: {dc}. Please migrate.", dc)
+            : base($"User located on a different DC: {dc}.", dc)
         {
         }
     }
