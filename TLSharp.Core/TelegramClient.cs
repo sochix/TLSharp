@@ -31,16 +31,17 @@ namespace TLSharp.Core
 
         public TelegramClient(int apiId, string apiHash, ISessionStore store = null, string sessionUserId = "session")
         {
+            if (apiId == default(int))
+                throw new MissingApiConfigurationException("API_ID");
+            if (string.IsNullOrEmpty(apiHash))
+                throw new MissingApiConfigurationException("API_HASH");
+
             if (store == null)
                 store = new FileSessionStore();
 
             TLContext.Init();
             _apiHash = apiHash;
             _apiId = apiId;
-            if (_apiId == default(int))
-                throw new MissingApiConfigurationException("API_ID");
-            if (string.IsNullOrEmpty(_apiHash))
-                throw new MissingApiConfigurationException("API_HASH");
 
             _session = Session.TryLoadOrCreateNew(store, sessionUserId);
             _transport = new TcpTransport(_session.ServerAddress, _session.Port);
