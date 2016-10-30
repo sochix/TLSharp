@@ -81,9 +81,9 @@ namespace TeleSharp.TL
                 }
                 else if (typeof(T).BaseType == typeof(TLObject))
                 {
-                    var res = (TLObject) (Convert.ChangeType(item, typeof (TLObject)));
+                    var res = (TLObject)(object)item;
                     res.SerializeBody(bw);
-                }                
+                }
             }
         }
     }
