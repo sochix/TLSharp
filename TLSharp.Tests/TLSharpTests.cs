@@ -24,6 +24,8 @@ namespace TLSharp.Tests
 
         private string NumberToAuthenticate { get; set; }
 
+        private string CodeToAuthenticate { get; set; }
+
         private string NotRegisteredNumberToSignUp { get; set; }
 
         private string UserNameToSendMessage { get; set; }
@@ -72,6 +74,10 @@ namespace TLSharp.Tests
             if (string.IsNullOrEmpty(NumberToAuthenticate))
                 Debug.WriteLine("NumberToAuthenticate not configured in app.config! Some tests may fail.");
 
+            CodeToAuthenticate = ConfigurationManager.AppSettings[nameof(CodeToAuthenticate)];
+            if (string.IsNullOrEmpty(CodeToAuthenticate))
+                Debug.WriteLine("CpdeToAuthenticate not configured in app.config! Some tests may fail.");
+
             NotRegisteredNumberToSignUp = ConfigurationManager.AppSettings[nameof(NotRegisteredNumberToSignUp)];
             if (string.IsNullOrEmpty(NotRegisteredNumberToSignUp))
                 Debug.WriteLine("NotRegisteredNumberToSignUp not configured in app.config! Some tests may fail.");
@@ -101,9 +107,23 @@ namespace TLSharp.Tests
             await client.ConnectAsync();
 
             var hash = await client.SendCodeRequestAsync(NumberToAuthenticate);
-            var code = "93463"; // you can change code in debugger
+            var code = CodeToAuthenticate; // you can change code in debugger too
 
-            var user = await client.MakeAuthAsync(NumberToAuthenticate, hash, code);
+            if (String.IsNullOrWhiteSpace(code))
+            {
+                throw new Exception("CodeToAuthenticate is empty in the app.config file, fill it with the code you just got now by SMS/Telegram");
+            }
+
+            TLUser user = null;
+            try
+            {
+                user = await client.MakeAuthAsync(NumberToAuthenticate, hash, code);
+            }
+            catch (InvalidPhoneCodeException ex)
+            {
+                throw new Exception("CodeToAuthenticate is wrong in the app.config file, fill it with the code you just got now by SMS/Telegram",
+                                    ex);
+            }
 
             Assert.IsNotNull(user);
             Assert.IsTrue(client.IsUserAuthorized());

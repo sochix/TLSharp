@@ -293,6 +293,10 @@ namespace TLSharp.Core.Network
                     var dcIdx = int.Parse(resultString);
                     throw new UserMigrationException(dcIdx);
                 }
+                else if (errorMessage == "PHONE_CODE_INVALID")
+                {
+                    throw new InvalidPhoneCodeException("The numeric code used to authenticate does not match the numeric code sent by SMS/Telegram");
+                }
                 else
                 {
                     throw new InvalidOperationException(errorMessage);
