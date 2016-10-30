@@ -500,7 +500,7 @@ namespace TLSharp.Core.Network
         internal int DC { get; private set; }
 
         private const string REPORT_MESSAGE =
-            " See: https://github.com/sochix/TLSharp#i-get-an-error-migrate_x";
+            " See: https://github.com/sochix/TLSharp#i-get-a-xxxmigrationexception-or-a-migrate_x-error";
 
         protected DataCenterMigrationException(string msg, int dc) : base (msg + REPORT_MESSAGE)
         {
