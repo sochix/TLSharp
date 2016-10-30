@@ -495,36 +495,37 @@ namespace TLSharp.Core.Network
         }
     }
 
-    internal class PhoneMigrationException : Exception
+    internal abstract class DataCenterMigrationException : Exception
     {
         internal int DC { get; private set; }
 
+        protected DataCenterMigrationException(string msg, int dc) : base (msg)
+        {
+            DC = dc;
+        }
+    }
+
+    internal class PhoneMigrationException : DataCenterMigrationException
+    {
         internal PhoneMigrationException(int dc)
-            : base ($"Your phone number is registered to a different DC: {dc}. Please migrate.")
+            : base ($"Your phone number is registered to a different DC: {dc}. Please migrate.", dc)
         {
-            DC = dc;
         }
     }
 
-    internal class FileMigrationException : Exception
+    internal class FileMigrationException : DataCenterMigrationException
     {
-        internal int DC { get; private set; }
-
         internal FileMigrationException(int dc)
-            : base ($"File is located on a different DC: {dc}. Please migrate.")
+            : base ($"File is located on a different DC: {dc}. Please migrate.", dc)
         {
-            DC = dc;
         }
     }
 
-    internal class UserMigrationException : Exception
+    internal class UserMigrationException : DataCenterMigrationException
     {
-        internal int DC { get; private set; }
-
         internal UserMigrationException(int dc)
-            : base($"User is located on a different DC: {dc}. Please migrate.")
+            : base($"User is located on a different DC: {dc}. Please migrate.", dc)
         {
-            DC = dc;
         }
     }
 }
