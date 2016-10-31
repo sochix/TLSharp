@@ -33,7 +33,7 @@ It's a perfect fit for any developer who would like to send data directly to Tel
 Install via NuGet
 
 ```
-	Install-Package TLSharp
+	> Install-Package TLSharp
 ```
 
 or build from source
