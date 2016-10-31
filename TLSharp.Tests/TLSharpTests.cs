@@ -60,43 +60,45 @@ namespace TLSharp.Tests
 
         private void GatherTestConfiguration()
         {
+            string appConfigMsgWarning = "{0} not configured in app.config! Some tests may fail.";
+
             ApiHash = ConfigurationManager.AppSettings[nameof(ApiHash)];
             if (string.IsNullOrEmpty(ApiHash))
-                Debug.WriteLine("ApiHash not configured in app.config! Some tests may fail.");
+                Debug.WriteLine(appConfigMsgWarning, nameof(ApiHash));
 
             var apiId = ConfigurationManager.AppSettings[nameof(ApiId)];
             if (string.IsNullOrEmpty(apiId))
-                Debug.WriteLine("ApiId not configured in app.config! Some tests may fail.");
+                Debug.WriteLine(appConfigMsgWarning, nameof(ApiId));
             else
                 ApiId = int.Parse(apiId);
 
             NumberToAuthenticate = ConfigurationManager.AppSettings[nameof(NumberToAuthenticate)];
             if (string.IsNullOrEmpty(NumberToAuthenticate))
-                Debug.WriteLine("NumberToAuthenticate not configured in app.config! Some tests may fail.");
+                Debug.WriteLine(appConfigMsgWarning, nameof(NumberToAuthenticate));
 
             CodeToAuthenticate = ConfigurationManager.AppSettings[nameof(CodeToAuthenticate)];
             if (string.IsNullOrEmpty(CodeToAuthenticate))
-                Debug.WriteLine("CpdeToAuthenticate not configured in app.config! Some tests may fail.");
+                Debug.WriteLine(appConfigMsgWarning, nameof(CodeToAuthenticate));
 
             NotRegisteredNumberToSignUp = ConfigurationManager.AppSettings[nameof(NotRegisteredNumberToSignUp)];
             if (string.IsNullOrEmpty(NotRegisteredNumberToSignUp))
-                Debug.WriteLine("NotRegisteredNumberToSignUp not configured in app.config! Some tests may fail.");
+                Debug.WriteLine(appConfigMsgWarning, nameof(NotRegisteredNumberToSignUp));
 
             NumberToSendMessage = ConfigurationManager.AppSettings[nameof(NumberToSendMessage)];
             if (string.IsNullOrEmpty(NumberToSendMessage))
-                Debug.WriteLine("NumberToSendMessage not configured in app.config! Some tests may fail.");
+                Debug.WriteLine(appConfigMsgWarning, nameof(NumberToSendMessage));
 
             UserNameToSendMessage = ConfigurationManager.AppSettings[nameof(UserNameToSendMessage)];
             if (string.IsNullOrEmpty(UserNameToSendMessage))
-                Debug.WriteLine("UserNameToSendMessage not configured in app.config! Some tests may fail.");
+                Debug.WriteLine(appConfigMsgWarning, nameof(UserNameToSendMessage));
 
             NumberToGetUserFull = ConfigurationManager.AppSettings[nameof(NumberToGetUserFull)];
             if (string.IsNullOrEmpty(NumberToGetUserFull))
-                Debug.WriteLine("NumberToGetUserFull not configured in app.config! Some tests may fail.");
+                Debug.WriteLine(appConfigMsgWarning, nameof(NumberToGetUserFull));
 
             NumberToAddToChat = ConfigurationManager.AppSettings[nameof(NumberToAddToChat)];
             if (string.IsNullOrEmpty(NumberToAddToChat))
-                Debug.WriteLine("NumberToAddToChat not configured in app.config! Some tests may fail.");
+                Debug.WriteLine(appConfigMsgWarning, nameof(NumberToAddToChat));
         }
 
         [TestMethod]
