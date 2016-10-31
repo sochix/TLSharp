@@ -31,16 +31,17 @@ namespace TLSharp.Core
 
         public TelegramClient(int apiId, string apiHash, ISessionStore store = null, string sessionUserId = "session")
         {
+            if (apiId == default(int))
+                throw new MissingApiConfigurationException("API_ID");
+            if (string.IsNullOrEmpty(apiHash))
+                throw new MissingApiConfigurationException("API_HASH");
+
             if (store == null)
                 store = new FileSessionStore();
 
             TLContext.Init();
             _apiHash = apiHash;
             _apiId = apiId;
-            if (_apiId == default(int))
-                throw new MissingApiConfigurationException("API_ID");
-            if (string.IsNullOrEmpty(_apiHash))
-                throw new MissingApiConfigurationException("API_HASH");
 
             _session = Session.TryLoadOrCreateNew(store, sessionUserId);
             _transport = new TcpTransport(_session.ServerAddress, _session.Port);
@@ -98,6 +99,9 @@ namespace TLSharp.Core
 
         public async Task<bool> IsPhoneRegisteredAsync(string phoneNumber)
         {
+            if (String.IsNullOrWhiteSpace(phoneNumber))
+                throw new ArgumentNullException(nameof(phoneNumber));
+
             if (_sender == null)
                 throw new InvalidOperationException("Not connected!");
 
@@ -110,6 +114,9 @@ namespace TLSharp.Core
 
         public async Task<string> SendCodeRequestAsync(string phoneNumber)
         {
+            if (String.IsNullOrWhiteSpace(phoneNumber))
+                throw new ArgumentNullException(nameof(phoneNumber));
+
             var completed = false;
 
             TLRequestSendCode request = null;
@@ -135,6 +142,15 @@ namespace TLSharp.Core
 
         public async Task<TLUser> MakeAuthAsync(string phoneNumber, string phoneCodeHash, string code)
         {
+            if (String.IsNullOrWhiteSpace(phoneNumber))
+                throw new ArgumentNullException(nameof(phoneNumber));
+
+            if (String.IsNullOrWhiteSpace(phoneCodeHash))
+                throw new ArgumentNullException(nameof(phoneCodeHash));
+
+            if (String.IsNullOrWhiteSpace(code))
+                throw new ArgumentNullException(nameof(code));
+
             var request = new TLRequestSignIn() { phone_number = phoneNumber, phone_code_hash = phoneCodeHash, phone_code = code };
             await _sender.Send(request);
             await _sender.Receive(request);
