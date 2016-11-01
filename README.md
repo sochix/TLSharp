@@ -211,8 +211,8 @@ TLSharp library should automatically handle these errors. If you see such errors
 
 You should create a Telegram session. See [configuration guide](#sending-messages-set-up)
 
-#### Why I get FLOOD_WAIT error?
-[It's Telegram restrictions](https://core.telegram.org/api/errors#420-flood)
+#### Why do I get a FloodException/FLOOD_WAIT error?
+It's likely [Telegram restrictions](https://core.telegram.org/api/errors#420-flood), or a bug in TLSharp (if you feel it's the latter, please open a Github issue). You can know the time to wait by accessing the FloodException::TimeToWait property.
 
 #### Why does TLSharp lacks feature XXXX?
 

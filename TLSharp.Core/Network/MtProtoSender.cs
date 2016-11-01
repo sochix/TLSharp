@@ -272,8 +272,7 @@ namespace TLSharp.Core.Network
                 {
                     var resultString = Regex.Match(errorMessage, @"\d+").Value;
                     var seconds = int.Parse(resultString);
-                    Debug.WriteLine($"Should wait {seconds} sec.");
-                    Thread.Sleep(1000 * seconds);
+                    throw new FloodException(TimeSpan.FromSeconds(seconds));
                 }
                 else if (errorMessage.StartsWith("PHONE_MIGRATE_"))
                 {
@@ -496,6 +495,18 @@ namespace TLSharp.Core.Network
         private MemoryStream makeMemory(int len)
         {
             return new MemoryStream(new byte[len], 0, len, true, true);
+        }
+    }
+
+    public class FloodException : Exception
+    {
+        public TimeSpan TimeToWait { get; private set; }
+
+        internal FloodException(TimeSpan timeToWait)
+            : base($"Flood prevention. Telegram now requires your program to do requests again only after {timeToWait.TotalSeconds} seconds have passed ({nameof(TimeToWait)} property)." +
+                    " If you think the culprit of this problem may lie in TLSharp's implementation, open a Github issue please.")
+        {
+            TimeToWait = timeToWait;
         }
     }
 
