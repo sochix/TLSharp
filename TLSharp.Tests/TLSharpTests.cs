@@ -84,10 +84,6 @@ namespace TLSharp.Tests
             if (string.IsNullOrEmpty(NotRegisteredNumberToSignUp))
                 Debug.WriteLine(appConfigMsgWarning, nameof(NotRegisteredNumberToSignUp));
 
-            NumberToSendMessage = ConfigurationManager.AppSettings[nameof(NumberToSendMessage)];
-            if (string.IsNullOrEmpty(NumberToSendMessage))
-                Debug.WriteLine(appConfigMsgWarning, nameof(NumberToSendMessage));
-
             UserNameToSendMessage = ConfigurationManager.AppSettings[nameof(UserNameToSendMessage)];
             if (string.IsNullOrEmpty(UserNameToSendMessage))
                 Debug.WriteLine(appConfigMsgWarning, nameof(UserNameToSendMessage));
@@ -134,6 +130,10 @@ namespace TLSharp.Tests
         [TestMethod]
         public async Task SendMessageTest()
         {
+            NumberToSendMessage = ConfigurationManager.AppSettings[nameof(NumberToSendMessage)];
+            if (string.IsNullOrWhiteSpace(NumberToSendMessage))
+                throw new Exception($"Please fill the '{nameof(NumberToSendMessage)}' setting in app.config file first");
+
             var client = NewClient();
 
             await client.ConnectAsync();
