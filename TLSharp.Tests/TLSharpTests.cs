@@ -7,8 +7,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 using TeleSharp.TL;
 using TeleSharp.TL.Messages;
 using TLSharp.Core;
@@ -17,7 +15,6 @@ using TLSharp.Core.Utils;
 
 namespace TLSharp.Tests
 {
-    [TestClass]
     public class TLSharpTests
     {
         private string NumberToSendMessage { get; set; }
@@ -38,9 +35,27 @@ namespace TLSharp.Tests
 
         private int ApiId { get; set; }
 
-        [TestInitialize]
-        public void Init()
+        class Assert
         {
+            static internal void IsNotNull(object obj)
+            {
+                IsNotNullHanlder(obj);
+            }
+
+            static internal void IsTrue(bool cond)
+            {
+                IsTrueHandler(cond);
+            }
+        }
+
+        internal static Action<object> IsNotNullHanlder;
+        internal static Action<bool> IsTrueHandler;
+
+        protected void Init(Action<object> notNullHandler, Action<bool> trueHandler)
+        {
+            IsNotNullHanlder = notNullHandler;
+            IsTrueHandler = trueHandler;
+
             // Setup your API settings and phone numbers in app.config
             GatherTestConfiguration();
         }
@@ -97,8 +112,7 @@ namespace TLSharp.Tests
                 Debug.WriteLine(appConfigMsgWarning, nameof(NumberToAddToChat));
         }
 
-        [TestMethod]
-        public async Task AuthUser()
+        public virtual async Task AuthUser()
         {
             var client = NewClient();
 
@@ -127,8 +141,7 @@ namespace TLSharp.Tests
             Assert.IsTrue(client.IsUserAuthorized());
         }
 
-        [TestMethod]
-        public async Task SendMessageTest()
+        public virtual async Task SendMessageTest()
         {
             NumberToSendMessage = ConfigurationManager.AppSettings[nameof(NumberToSendMessage)];
             if (string.IsNullOrWhiteSpace(NumberToSendMessage))
@@ -160,8 +173,7 @@ namespace TLSharp.Tests
             await client.SendMessageAsync(new TLInputPeerUser() { user_id = user.id }, "TEST");
         }
 
-        [TestMethod]
-        public async Task SendMessageToChannelTest()
+        public virtual async Task SendMessageToChannelTest()
         {
             var client = NewClient();
 
@@ -176,8 +188,7 @@ namespace TLSharp.Tests
             await client.SendMessageAsync(new TLInputPeerChannel() { channel_id = chat.id, access_hash = chat.access_hash.Value }, "TEST MSG");
         }
 
-        [TestMethod]
-        public async Task SendPhotoToContactTest()
+        public virtual async Task SendPhotoToContactTest()
         {
             var client = NewClient();
 
@@ -194,8 +205,7 @@ namespace TLSharp.Tests
             await client.SendUploadedPhoto(new TLInputPeerUser() { user_id = user.id }, fileResult, "kitty");
         }
 
-        [TestMethod]
-        public async Task SendBigFileToContactTest()
+        public virtual async Task SendBigFileToContactTest()
         {
             var client = NewClient();
 
@@ -218,8 +228,7 @@ namespace TLSharp.Tests
                 new TLVector<TLAbsDocumentAttribute>());
         }
 
-        [TestMethod]
-        public async Task DownloadFileFromContactTest()
+        public virtual async Task DownloadFileFromContactTest()
         {
             var client = NewClient();
 
@@ -257,9 +266,7 @@ namespace TLSharp.Tests
             Assert.IsTrue(resFile.bytes.Length > 0);
         }
 
-
-        [TestMethod]
-        public async Task DownloadFileFromWrongLocationTest()
+        public virtual async Task DownloadFileFromWrongLocationTest()
         {
             var client = NewClient();
 
@@ -287,8 +294,7 @@ namespace TLSharp.Tests
             Assert.IsTrue(resFile.bytes.Length > 0);
         }
 
-        [TestMethod]
-        public async Task SignUpNewUser()
+        public virtual async Task SignUpNewUser()
         {
             var client = NewClient();
             await client.ConnectAsync();
@@ -304,8 +310,7 @@ namespace TLSharp.Tests
             Assert.IsNotNull(loggedInUser);
         }
 
-        [TestMethod]
-        public async Task CheckPhones()
+        public virtual async Task CheckPhones()
         {
             var client = NewClient();
             await client.ConnectAsync();
