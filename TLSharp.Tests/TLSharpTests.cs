@@ -84,10 +84,6 @@ namespace TLSharp.Tests
             if (string.IsNullOrEmpty(NotRegisteredNumberToSignUp))
                 Debug.WriteLine(appConfigMsgWarning, nameof(NotRegisteredNumberToSignUp));
 
-            NumberToSendMessage = ConfigurationManager.AppSettings[nameof(NumberToSendMessage)];
-            if (string.IsNullOrEmpty(NumberToSendMessage))
-                Debug.WriteLine(appConfigMsgWarning, nameof(NumberToSendMessage));
-
             UserNameToSendMessage = ConfigurationManager.AppSettings[nameof(UserNameToSendMessage)];
             if (string.IsNullOrEmpty(UserNameToSendMessage))
                 Debug.WriteLine(appConfigMsgWarning, nameof(UserNameToSendMessage));
@@ -134,6 +130,15 @@ namespace TLSharp.Tests
         [TestMethod]
         public async Task SendMessageTest()
         {
+            NumberToSendMessage = ConfigurationManager.AppSettings[nameof(NumberToSendMessage)];
+            if (string.IsNullOrWhiteSpace(NumberToSendMessage))
+                throw new Exception($"Please fill the '{nameof(NumberToSendMessage)}' setting in app.config file first");
+
+            // this is because the contacts in the address come without the "+" prefix
+            var normalizedNumber = NumberToSendMessage.StartsWith("+") ?
+                NumberToSendMessage.Substring(1, NumberToSendMessage.Length - 1) :
+                NumberToSendMessage;
+
             var client = NewClient();
 
             await client.ConnectAsync();
@@ -143,7 +148,7 @@ namespace TLSharp.Tests
             var user = result.users.lists
                 .Where(x => x.GetType() == typeof(TLUser))
                 .Cast<TLUser>()
-                .FirstOrDefault(x => x.phone == NumberToSendMessage);
+                .FirstOrDefault(x => x.phone == normalizedNumber);
 
             if (user == null)
             {
@@ -153,7 +158,6 @@ namespace TLSharp.Tests
             await client.SendTypingAsync(new TLInputPeerUser() { user_id = user.id });
             Thread.Sleep(3000);
             await client.SendMessageAsync(new TLInputPeerUser() { user_id = user.id }, "TEST");
-
         }
 
         [TestMethod]
