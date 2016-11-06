@@ -148,6 +148,19 @@ namespace TLSharp.Core.Network
             return null;
         }
 
+        public async Task SendPingAsync()
+        {
+            var pingRequest = new PingRequest();
+            using (var memory = new MemoryStream())
+            using (var writer = new BinaryWriter(memory))
+            {
+                pingRequest.SerializeBody(writer);
+                await Send(memory.ToArray(), pingRequest);
+            }
+
+            await Receive(pingRequest);
+        }
+
         private bool processMessage(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
         {
             // TODO: check salt
@@ -169,7 +182,7 @@ namespace TLSharp.Core.Network
                     return HandlePing(messageId, sequence, messageReader);
                 case 0x347773c5: // pong
                                  //logger.debug("MSG pong");
-                    return HandlePong(messageId, sequence, messageReader);
+                    return HandlePong(messageId, sequence, messageReader, request);
                 case 0xae500895: // future_salts
                                  //logger.debug("MSG future_salts");
                     return HandleFutureSalts(messageId, sequence, messageReader);
@@ -455,8 +468,16 @@ namespace TLSharp.Core.Network
             return true;
         }
 
-        private bool HandlePong(ulong messageId, int sequence, BinaryReader messageReader)
+        private bool HandlePong(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
         {
+            uint code = messageReader.ReadUInt32();
+            ulong msgId = messageReader.ReadUInt64();
+
+            if (msgId == (ulong)request.MessageId)
+            {
+                request.ConfirmReceived = true;
+            }
+
             return false;
         }
 
