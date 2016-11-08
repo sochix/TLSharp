@@ -174,7 +174,7 @@ namespace TLSharp.Core
         {
             await _sender.Send(methodToExecute);
             await _sender.Receive(methodToExecute);
-            
+
             var result = methodToExecute.GetType().GetProperty("Response").GetValue(methodToExecute);
 
             return (T)result;
@@ -290,6 +290,11 @@ namespace TLSharp.Core
             }
 
             return result;
+        }
+
+        public async Task SendPingAsync()
+        {
+            await _sender.SendPingAsync();
         }
 
         private void OnUserAuthenticated(TLUser TLUser)
