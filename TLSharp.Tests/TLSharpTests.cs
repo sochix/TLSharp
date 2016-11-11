@@ -14,6 +14,7 @@ using TeleSharp.TL.Messages;
 using TLSharp.Core;
 using TLSharp.Core.Requests;
 using TLSharp.Core.Utils;
+using TeleSharp.TL.Updates;
 
 namespace TLSharp.Tests
 {
@@ -174,6 +175,31 @@ namespace TLSharp.Tests
                 .FirstOrDefault(c => c.title == "TestGroup");
 
             await client.SendMessageAsync(new TLInputPeerChannel() { channel_id = chat.id, access_hash = chat.access_hash.Value }, "TEST MSG");
+        }
+
+
+        [TestMethod]
+        public async Task GetChannelMessagesTest()
+        {
+            var client = NewClient();
+
+            await client.ConnectAsync();
+
+            var dialogs = (TLDialogs)await client.GetUserDialogsAsync();
+            var chat = dialogs.chats.lists
+                .Where(c => c.GetType() == typeof(TLChannel))
+                .Cast<TLChannel>()
+                .FirstOrDefault(c => c.title == "Telegram News");
+
+
+            TLAbsChannelDifference result = await client.GetFirst100HundredUpdatesFromTheChannel(chat);
+
+            foreach(var item in (result as TLChannelDifference).new_messages.lists)
+            {
+                var m = item as TLMessage;
+                if (m != null)
+                    Console.WriteLine(m.message);
+            }
         }
 
         [TestMethod]
