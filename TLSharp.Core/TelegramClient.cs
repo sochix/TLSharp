@@ -10,6 +10,7 @@ using TeleSharp.TL.Contacts;
 using TeleSharp.TL.Help;
 using TeleSharp.TL.Messages;
 using TeleSharp.TL.Upload;
+using TeleSharp.TL.Updates;
 using TLSharp.Core.Auth;
 using TLSharp.Core.MTProto.Crypto;
 using TLSharp.Core.Network;
@@ -105,11 +106,63 @@ namespace TLSharp.Core
             if (_sender == null)
                 throw new InvalidOperationException("Not connected!");
 
-            var authCheckPhoneRequest = new TLRequestCheckPhone() { phone_number = phoneNumber };
-            await _sender.Send(authCheckPhoneRequest);
-            await _sender.Receive(authCheckPhoneRequest);
+            var request = new TLRequestCheckPhone() { phone_number = phoneNumber };
 
-            return authCheckPhoneRequest.Response.phone_registered;
+            var completed = false;
+            while (!completed)
+            {
+                request = new TLRequestCheckPhone() { phone_number = phoneNumber };
+                try
+                {
+                    await _sender.Send(request);
+                    await _sender.Receive(request);
+
+                    completed = true;
+                }
+                catch (PhoneMigrationException ex)
+                {
+                    await ReconnectToDcAsync(ex.DC);
+                }
+            }
+
+            return request.Response.phone_registered;
+        }
+
+        public async Task<TLAbsChannelDifference> GetFirst100HundredUpdatesFromTheChannel(TLChannel channel)
+        {
+            if (_sender == null)
+                throw new InvalidOperationException("Not connected!");
+
+            TLRequestGetChannelDifference request = null;
+
+            var chn =  new TLInputChannel();
+            chn.channel_id = channel.id;
+            chn.access_hash = (long)channel.access_hash;
+
+            var completed = false;
+            while (!completed)
+            {
+                request = new TLRequestGetChannelDifference();
+                request.channel = chn;
+                var fltr = new TLChannelMessagesFilterEmpty();
+                request.filter = fltr;
+                request.pts = 1;
+                request.limit = 100;
+
+                try
+                {
+                    await _sender.Send(request);
+                    await _sender.Receive(request);
+
+                    completed = true;
+                }
+                catch (PhoneMigrationException ex)
+                {
+                    await ReconnectToDcAsync(ex.DC);
+                }
+            }
+
+            return request.Response;
         }
 
         public async Task<string> SendCodeRequestAsync(string phoneNumber)
