@@ -63,6 +63,7 @@
     <Compile Include="Network\TcpTransport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\AckRequest.cs" />
+    <Compile Include="Requests\PingRequest.cs" />
     <Compile Include="Utils\UploadHelper.cs" />
     <Compile Include="Session.cs" />
     <Compile Include="TelegramClient.cs" />

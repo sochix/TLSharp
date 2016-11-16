@@ -148,6 +148,19 @@ namespace TLSharp.Core.Network
             return null;
         }
 
+        public async Task SendPingAsync()
+        {
+            var pingRequest = new PingRequest();
+            using (var memory = new MemoryStream())
+            using (var writer = new BinaryWriter(memory))
+            {
+                pingRequest.SerializeBody(writer);
+                await Send(memory.ToArray(), pingRequest);
+            }
+
+            await Receive(pingRequest);
+        }
+
         private bool processMessage(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
         {
             // TODO: check salt
@@ -169,7 +182,7 @@ namespace TLSharp.Core.Network
                     return HandlePing(messageId, sequence, messageReader);
                 case 0x347773c5: // pong
                                  //logger.debug("MSG pong");
-                    return HandlePong(messageId, sequence, messageReader);
+                    return HandlePong(messageId, sequence, messageReader, request);
                 case 0xae500895: // future_salts
                                  //logger.debug("MSG future_salts");
                     return HandleFutureSalts(messageId, sequence, messageReader);
@@ -272,14 +285,29 @@ namespace TLSharp.Core.Network
                 {
                     var resultString = Regex.Match(errorMessage, @"\d+").Value;
                     var seconds = int.Parse(resultString);
-                    Debug.WriteLine($"Should wait {seconds} sec.");
-                    Thread.Sleep(1000 * seconds);
+                    throw new FloodException(TimeSpan.FromSeconds(seconds));
                 }
                 else if (errorMessage.StartsWith("PHONE_MIGRATE_"))
                 {
                     var resultString = Regex.Match(errorMessage, @"\d+").Value;
                     var dcIdx = int.Parse(resultString);
-                    throw new MigrationNeededException(dcIdx);
+                    throw new PhoneMigrationException(dcIdx);
+                }
+                else if (errorMessage.StartsWith("FILE_MIGRATE_"))
+                {
+                    var resultString = Regex.Match(errorMessage, @"\d+").Value;
+                    var dcIdx = int.Parse(resultString);
+                    throw new FileMigrationException(dcIdx);
+                }
+                else if (errorMessage.StartsWith("USER_MIGRATE_"))
+                {
+                    var resultString = Regex.Match(errorMessage, @"\d+").Value;
+                    var dcIdx = int.Parse(resultString);
+                    throw new UserMigrationException(dcIdx);
+                }
+                else if (errorMessage == "PHONE_CODE_INVALID")
+                {
+                    throw new InvalidPhoneCodeException("The numeric code used to authenticate does not match the numeric code sent by SMS/Telegram");
                 }
                 else
                 {
@@ -440,8 +468,16 @@ namespace TLSharp.Core.Network
             return true;
         }
 
-        private bool HandlePong(ulong messageId, int sequence, BinaryReader messageReader)
+        private bool HandlePong(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
         {
+            uint code = messageReader.ReadUInt32();
+            ulong msgId = messageReader.ReadUInt64();
+
+            if (msgId == (ulong)request.MessageId)
+            {
+                request.ConfirmReceived = true;
+            }
+
             return false;
         }
 
@@ -483,14 +519,52 @@ namespace TLSharp.Core.Network
         }
     }
 
-    internal class MigrationNeededException : Exception
+    public class FloodException : Exception
+    {
+        public TimeSpan TimeToWait { get; private set; }
+
+        internal FloodException(TimeSpan timeToWait)
+            : base($"Flood prevention. Telegram now requires your program to do requests again only after {timeToWait.TotalSeconds} seconds have passed ({nameof(TimeToWait)} property)." +
+                    " If you think the culprit of this problem may lie in TLSharp's implementation, open a Github issue please.")
+        {
+            TimeToWait = timeToWait;
+        }
+    }
+
+    internal abstract class DataCenterMigrationException : Exception
     {
         internal int DC { get; private set; }
 
-        internal MigrationNeededException(int dc)
-            : base ($"Your phone number is registered to a different DC: {dc}. Please migrate.")
+        private const string REPORT_MESSAGE =
+            " See: https://github.com/sochix/TLSharp#i-get-a-xxxmigrationexception-or-a-migrate_x-error";
+
+        protected DataCenterMigrationException(string msg, int dc) : base (msg + REPORT_MESSAGE)
         {
             DC = dc;
+        }
+    }
+
+    internal class PhoneMigrationException : DataCenterMigrationException
+    {
+        internal PhoneMigrationException(int dc)
+            : base ($"Phone number registered to a different DC: {dc}.", dc)
+        {
+        }
+    }
+
+    internal class FileMigrationException : DataCenterMigrationException
+    {
+        internal FileMigrationException(int dc)
+            : base ($"File located on a different DC: {dc}.", dc)
+        {
+        }
+    }
+
+    internal class UserMigrationException : DataCenterMigrationException
+    {
+        internal UserMigrationException(int dc)
+            : base($"User located on a different DC: {dc}.", dc)
+        {
         }
     }
 }

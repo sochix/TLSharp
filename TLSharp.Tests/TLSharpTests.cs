@@ -24,6 +24,8 @@ namespace TLSharp.Tests
 
         private string NumberToAuthenticate { get; set; }
 
+        private string CodeToAuthenticate { get; set; }
+
         private string NotRegisteredNumberToSignUp { get; set; }
 
         private string UserNameToSendMessage { get; set; }
@@ -58,39 +60,41 @@ namespace TLSharp.Tests
 
         private void GatherTestConfiguration()
         {
+            string appConfigMsgWarning = "{0} not configured in app.config! Some tests may fail.";
+
             ApiHash = ConfigurationManager.AppSettings[nameof(ApiHash)];
             if (string.IsNullOrEmpty(ApiHash))
-                Debug.WriteLine("ApiHash not configured in app.config! Some tests may fail.");
+                Debug.WriteLine(appConfigMsgWarning, nameof(ApiHash));
 
             var apiId = ConfigurationManager.AppSettings[nameof(ApiId)];
             if (string.IsNullOrEmpty(apiId))
-                Debug.WriteLine("ApiId not configured in app.config! Some tests may fail.");
+                Debug.WriteLine(appConfigMsgWarning, nameof(ApiId));
             else
                 ApiId = int.Parse(apiId);
 
             NumberToAuthenticate = ConfigurationManager.AppSettings[nameof(NumberToAuthenticate)];
             if (string.IsNullOrEmpty(NumberToAuthenticate))
-                Debug.WriteLine("NumberToAuthenticate not configured in app.config! Some tests may fail.");
+                Debug.WriteLine(appConfigMsgWarning, nameof(NumberToAuthenticate));
+
+            CodeToAuthenticate = ConfigurationManager.AppSettings[nameof(CodeToAuthenticate)];
+            if (string.IsNullOrEmpty(CodeToAuthenticate))
+                Debug.WriteLine(appConfigMsgWarning, nameof(CodeToAuthenticate));
 
             NotRegisteredNumberToSignUp = ConfigurationManager.AppSettings[nameof(NotRegisteredNumberToSignUp)];
             if (string.IsNullOrEmpty(NotRegisteredNumberToSignUp))
-                Debug.WriteLine("NotRegisteredNumberToSignUp not configured in app.config! Some tests may fail.");
-
-            NumberToSendMessage = ConfigurationManager.AppSettings[nameof(NumberToSendMessage)];
-            if (string.IsNullOrEmpty(NumberToSendMessage))
-                Debug.WriteLine("NumberToSendMessage not configured in app.config! Some tests may fail.");
+                Debug.WriteLine(appConfigMsgWarning, nameof(NotRegisteredNumberToSignUp));
 
             UserNameToSendMessage = ConfigurationManager.AppSettings[nameof(UserNameToSendMessage)];
             if (string.IsNullOrEmpty(UserNameToSendMessage))
-                Debug.WriteLine("UserNameToSendMessage not configured in app.config! Some tests may fail.");
+                Debug.WriteLine(appConfigMsgWarning, nameof(UserNameToSendMessage));
 
             NumberToGetUserFull = ConfigurationManager.AppSettings[nameof(NumberToGetUserFull)];
             if (string.IsNullOrEmpty(NumberToGetUserFull))
-                Debug.WriteLine("NumberToGetUserFull not configured in app.config! Some tests may fail.");
+                Debug.WriteLine(appConfigMsgWarning, nameof(NumberToGetUserFull));
 
             NumberToAddToChat = ConfigurationManager.AppSettings[nameof(NumberToAddToChat)];
             if (string.IsNullOrEmpty(NumberToAddToChat))
-                Debug.WriteLine("NumberToAddToChat not configured in app.config! Some tests may fail.");
+                Debug.WriteLine(appConfigMsgWarning, nameof(NumberToAddToChat));
         }
 
         [TestMethod]
@@ -101,9 +105,23 @@ namespace TLSharp.Tests
             await client.ConnectAsync();
 
             var hash = await client.SendCodeRequestAsync(NumberToAuthenticate);
-            var code = "93463"; // you can change code in debugger
+            var code = CodeToAuthenticate; // you can change code in debugger too
 
-            var user = await client.MakeAuthAsync(NumberToAuthenticate, hash, code);
+            if (String.IsNullOrWhiteSpace(code))
+            {
+                throw new Exception("CodeToAuthenticate is empty in the app.config file, fill it with the code you just got now by SMS/Telegram");
+            }
+
+            TLUser user = null;
+            try
+            {
+                user = await client.MakeAuthAsync(NumberToAuthenticate, hash, code);
+            }
+            catch (InvalidPhoneCodeException ex)
+            {
+                throw new Exception("CodeToAuthenticate is wrong in the app.config file, fill it with the code you just got now by SMS/Telegram",
+                                    ex);
+            }
 
             Assert.IsNotNull(user);
             Assert.IsTrue(client.IsUserAuthorized());
@@ -112,6 +130,15 @@ namespace TLSharp.Tests
         [TestMethod]
         public async Task SendMessageTest()
         {
+            NumberToSendMessage = ConfigurationManager.AppSettings[nameof(NumberToSendMessage)];
+            if (string.IsNullOrWhiteSpace(NumberToSendMessage))
+                throw new Exception($"Please fill the '{nameof(NumberToSendMessage)}' setting in app.config file first");
+
+            // this is because the contacts in the address come without the "+" prefix
+            var normalizedNumber = NumberToSendMessage.StartsWith("+") ?
+                NumberToSendMessage.Substring(1, NumberToSendMessage.Length - 1) :
+                NumberToSendMessage;
+
             var client = NewClient();
 
             await client.ConnectAsync();
@@ -121,7 +148,7 @@ namespace TLSharp.Tests
             var user = result.users.lists
                 .Where(x => x.GetType() == typeof(TLUser))
                 .Cast<TLUser>()
-                .FirstOrDefault(x => x.phone == NumberToSendMessage);
+                .FirstOrDefault(x => x.phone == normalizedNumber);
 
             if (user == null)
             {
@@ -131,7 +158,6 @@ namespace TLSharp.Tests
             await client.SendTypingAsync(new TLInputPeerUser() { user_id = user.id });
             Thread.Sleep(3000);
             await client.SendMessageAsync(new TLInputPeerUser() { user_id = user.id }, "TEST");
-
         }
 
         [TestMethod]
@@ -141,7 +167,7 @@ namespace TLSharp.Tests
 
             await client.ConnectAsync();
 
-            var dialogs = await client.GetUserDialogsAsync();
+            var dialogs = (TLDialogs) await client.GetUserDialogsAsync();
             var chat = dialogs.chats.lists
                 .Where(c => c.GetType() == typeof(TLChannel))
                 .Cast<TLChannel>()
@@ -228,6 +254,36 @@ namespace TLSharp.Tests
                 },
                 document.size);
             
+            Assert.IsTrue(resFile.bytes.Length > 0);
+        }
+
+
+        [TestMethod]
+        public async Task DownloadFileFromWrongLocationTest()
+        {
+            var client = NewClient();
+
+            await client.ConnectAsync();
+
+            var result = await client.GetContactsAsync();
+
+            var user = result.users.lists
+                .Where(x => x.GetType() == typeof(TLUser))
+                .Cast<TLUser>()
+                .FirstOrDefault(x => x.id == 5880094);
+    
+            var photo = ((TLUserProfilePhoto)user.photo);
+            var photoLocation = (TLFileLocation) photo.photo_big;
+
+            var resFile = await client.GetFile(new TLInputFileLocation()
+            {
+                local_id = photoLocation.local_id,
+                secret = photoLocation.secret,
+                volume_id = photoLocation.volume_id
+            }, 1024);
+
+            var res = await client.GetUserDialogsAsync(); 
+
             Assert.IsTrue(resFile.bytes.Length > 0);
         }
 

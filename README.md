@@ -2,6 +2,7 @@
 
 [![Join the chat at https://gitter.im/TLSharp/Lobby](https://badges.gitter.im/TLSharp/Lobby.svg)](https://gitter.im/TLSharp/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build status](https://ci.appveyor.com/api/projects/status/95rl618ch5c4h2fa?svg=true)](https://ci.appveyor.com/project/sochix/tlsharp)
+[![NuGet version](https://badge.fury.io/nu/TLSharp.svg)](https://badge.fury.io/nu/TLSharp)
 
 _Unofficial_ Telegram (http://telegram.org) client library implemented in C#. Latest TL scheme supported, thanks to Afshin Arani
 
@@ -29,9 +30,13 @@ It's a perfect fit for any developer who would like to send data directly to Tel
 
 # How do I add this to my project?
 
-Library _almost_ ready for production usage. We need contributors to make 1.0.0 release.
+Install via NuGet
 
-To use TLSharp follow next steps:
+```
+	> Install-Package TLSharp
+```
+
+or build from source
 
 1. Clone TLSharp from GitHub
 1. Compile source with VS2015 or MonoDevelop
@@ -155,6 +160,7 @@ For your convenience TLSharp have wrappers for several Telegram API methods. You
 1. SendUploadedDocument
 1. GetFile
 1. UploadFile
+1. SendPingAsync
 
 **What if you can't find needed method at the list?**
 
@@ -187,9 +193,9 @@ Contributing is highly appreciated!
 ### Release 1.0.0
 
 * [DONE] Add PHONE_MIGRATE handling
-* Add FILE_MIGRATE handling
+* [DONE] Add FILE_MIGRATE handling
 * Add Updates handling
-* Add NuGet package
+* [DONE] Add NuGet package
 * [DONE] Add wrappers for media uploading and downloading
 * Store user session as JSON
 
@@ -198,16 +204,16 @@ Contributing is highly appreciated!
 #### What API layer is supported?
 The latest one - 57. Thanks to Afshin Arani for his TLGenerator
 
-#### I get an error MIGRATE_X?
+#### I get a xxxMigrationException or a MIGRATE_X error!
 
-TLSharp library should automatically handle this errors. If you see such errors, pls create a new issue.
+TLSharp library should automatically handle these errors. If you see such errors, please open a new Github issue with the details (include a stacktrace, etc.).
 
 #### I get an exception: System.IO.EndOfStreamException: Unable to read beyond the end of the stream. All test methos except that AuthenticationWorks and TestConnection return same error. I did every thing including setting api id and hash, and setting server address.-
 
 You should create a Telegram session. See [configuration guide](#sending-messages-set-up)
 
-#### Why I get FLOOD_WAIT error?
-[It's Telegram restrictions](https://core.telegram.org/api/errors#420-flood)
+#### Why do I get a FloodException/FLOOD_WAIT error?
+It's likely [Telegram restrictions](https://core.telegram.org/api/errors#420-flood), or a bug in TLSharp (if you feel it's the latter, please open a Github issue). You can know the time to wait by accessing the FloodException::TimeToWait property.
 
 #### Why does TLSharp lacks feature XXXX?
 

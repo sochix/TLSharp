@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using TeleSharp.TL;
+using TeleSharp.TL.Account;
 using TeleSharp.TL.Auth;
 using TeleSharp.TL.Contacts;
 using TeleSharp.TL.Help;
@@ -14,6 +15,7 @@ using TLSharp.Core.MTProto.Crypto;
 using TLSharp.Core.Network;
 using TLSharp.Core.Requests;
 using TLSharp.Core.Utils;
+using TLAuthorization = TeleSharp.TL.Auth.TLAuthorization;
 
 namespace TLSharp.Core
 {
@@ -29,16 +31,17 @@ namespace TLSharp.Core
 
         public TelegramClient(int apiId, string apiHash, ISessionStore store = null, string sessionUserId = "session")
         {
+            if (apiId == default(int))
+                throw new MissingApiConfigurationException("API_ID");
+            if (string.IsNullOrEmpty(apiHash))
+                throw new MissingApiConfigurationException("API_HASH");
+
             if (store == null)
                 store = new FileSessionStore();
 
             TLContext.Init();
             _apiHash = apiHash;
             _apiId = apiId;
-            if (_apiId == default(int))
-                throw new MissingApiConfigurationException("API_ID");
-            if (string.IsNullOrEmpty(_apiHash))
-                throw new MissingApiConfigurationException("API_HASH");
 
             _session = Session.TryLoadOrCreateNew(store, sessionUserId);
             _transport = new TcpTransport(_session.ServerAddress, _session.Port);
@@ -96,6 +99,9 @@ namespace TLSharp.Core
 
         public async Task<bool> IsPhoneRegisteredAsync(string phoneNumber)
         {
+            if (String.IsNullOrWhiteSpace(phoneNumber))
+                throw new ArgumentNullException(nameof(phoneNumber));
+
             if (_sender == null)
                 throw new InvalidOperationException("Not connected!");
 
@@ -108,6 +114,9 @@ namespace TLSharp.Core
 
         public async Task<string> SendCodeRequestAsync(string phoneNumber)
         {
+            if (String.IsNullOrWhiteSpace(phoneNumber))
+                throw new ArgumentNullException(nameof(phoneNumber));
+
             var completed = false;
 
             TLRequestSendCode request = null;
@@ -122,7 +131,7 @@ namespace TLSharp.Core
 
                     completed = true;
                 }
-                catch (MigrationNeededException ex)
+                catch (PhoneMigrationException ex)
                 {
                     await ReconnectToDcAsync(ex.DC);
                 }
@@ -133,6 +142,15 @@ namespace TLSharp.Core
 
         public async Task<TLUser> MakeAuthAsync(string phoneNumber, string phoneCodeHash, string code)
         {
+            if (String.IsNullOrWhiteSpace(phoneNumber))
+                throw new ArgumentNullException(nameof(phoneNumber));
+
+            if (String.IsNullOrWhiteSpace(phoneCodeHash))
+                throw new ArgumentNullException(nameof(phoneCodeHash));
+
+            if (String.IsNullOrWhiteSpace(code))
+                throw new ArgumentNullException(nameof(code));
+
             var request = new TLRequestSignIn() { phone_number = phoneNumber, phone_code_hash = phoneCodeHash, phone_code = code };
             await _sender.Send(request);
             await _sender.Receive(request);
@@ -152,12 +170,12 @@ namespace TLSharp.Core
 
             return ((TLUser)request.Response.user);
         }
-        public async Task<T> SendRequestAsync<T>(TLMethod methodtoExceute)
+        public async Task<T> SendRequestAsync<T>(TLMethod methodToExecute)
         {
-            await _sender.Send(methodtoExceute);
-            await _sender.Receive(methodtoExceute);
+            await _sender.Send(methodToExecute);
+            await _sender.Receive(methodToExecute);
 
-            var result = methodtoExceute.GetType().GetProperty("Response").GetValue(methodtoExceute);
+            var result = methodToExecute.GetType().GetProperty("Response").GetValue(methodToExecute);
 
             return (T)result;
         }
@@ -196,15 +214,15 @@ namespace TLSharp.Core
             return await SendRequestAsync<Boolean>(req);
         }
 
-        public async Task<TLDialogs> GetUserDialogsAsync()
+        public async Task<TLAbsDialogs> GetUserDialogsAsync()
         {
             var peer = new TLInputPeerSelf();
-            return await SendRequestAsync<TLDialogs>(
+            return await SendRequestAsync<TLAbsDialogs>(
                 new TLRequestGetDialogs() { offset_date = 0, offset_peer = peer, limit = 100 });
         }
 
         public async Task<TLAbsUpdates> SendUploadedPhoto(TLAbsInputPeer peer, TLAbsInputFile file, string caption)
-        {   
+        {
             return await SendRequestAsync<TLAbsUpdates>(new TLRequestSendMedia()
             {
                 random_id = Helpers.GenerateRandomLong(),
@@ -218,7 +236,7 @@ namespace TLSharp.Core
         public async Task<TLAbsUpdates> SendUploadedDocument(
             TLAbsInputPeer peer, TLAbsInputFile file, string caption, string mimeType, TLVector<TLAbsDocumentAttribute> attributes)
         {
-           return await SendRequestAsync<TLAbsUpdates>(new TLRequestSendMedia()
+            return await SendRequestAsync<TLAbsUpdates>(new TLRequestSendMedia()
             {
                 random_id = Helpers.GenerateRandomLong(),
                 background = false,
@@ -236,12 +254,48 @@ namespace TLSharp.Core
 
         public async Task<TLFile> GetFile(TLAbsInputFileLocation location, int filePartSize)
         {
-            return await SendRequestAsync<TLFile>(new TLRequestGetFile()
+            TLFile result = null;
+            try
             {
-                location = location,
-                limit = filePartSize
-            });
-        } 
+                result = await SendRequestAsync<TLFile>(new TLRequestGetFile()
+                {
+                    location = location,
+                    limit = filePartSize
+                });
+            }
+            catch (FileMigrationException ex)
+            {
+                var exportedAuth = await SendRequestAsync<TLExportedAuthorization>(new TLRequestExportAuthorization() { dc_id = ex.DC });
+
+                var authKey = _session.AuthKey;
+                var timeOffset = _session.TimeOffset;
+                var serverAddress = _session.ServerAddress;
+                var serverPort = _session.Port;
+
+                await ReconnectToDcAsync(ex.DC);
+                var auth = await SendRequestAsync<TLAuthorization>(new TLRequestImportAuthorization
+                {
+                    bytes = exportedAuth.bytes,
+                    id = exportedAuth.id
+                });
+                result = await GetFile(location, filePartSize);
+
+                _session.AuthKey = authKey;
+                _session.TimeOffset = timeOffset;
+                _transport = new TcpTransport(serverAddress, serverPort);
+                _session.ServerAddress =serverAddress;
+                _session.Port = serverPort;
+                await ConnectAsync();
+
+            }
+
+            return result;
+        }
+
+        public async Task SendPingAsync()
+        {
+            await _sender.SendPingAsync();
+        }
 
         private void OnUserAuthenticated(TLUser TLUser)
         {
@@ -256,9 +310,14 @@ namespace TLSharp.Core
     {
         public const string InfoUrl = "https://github.com/sochix/TLSharp#quick-configuration";
 
-        internal MissingApiConfigurationException(string invalidParamName):
+        internal MissingApiConfigurationException(string invalidParamName) :
             base($"Your {invalidParamName} setting is missing. Adjust the configuration first, see {InfoUrl}")
         {
         }
+    }
+
+    public class InvalidPhoneCodeException : Exception
+    {
+        internal InvalidPhoneCodeException(string msg) : base(msg) { }
     }
 }
