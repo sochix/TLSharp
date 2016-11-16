@@ -341,7 +341,7 @@ namespace TLSharp.Tests
                 {
                     TLRequestGetFullChannel getchannel = new TLRequestGetFullChannel() { channel = new TLInputChannel() { channel_id = ((TLChannel)v).id,access_hash = ((TLChannel)v).access_hash.Value } };
 
-                    var result2 = await client.SendRequestAsync<TLChannelFull>(getchannel);
+                    var result2 = await client.SendRequestAsync<TeleSharp.TL.Messages.TLChatFull>(getchannel);
 
                     Assert.IsNotNull(result2);
                 }
