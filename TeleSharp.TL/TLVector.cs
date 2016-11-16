@@ -17,12 +17,12 @@ namespace TeleSharp.TL
         {
             get
             {
-                return ((IList<T>)lists)[index];
+                return lists[index];
             }
 
             set
             {
-                ((IList<T>)lists)[index] = value;
+                lists[index] = value;
             }
         }
 
@@ -38,7 +38,7 @@ namespace TeleSharp.TL
         {
             get
             {
-                return ((IList<T>)lists).Count;
+                return lists.Count;
             }
         }
 
@@ -46,28 +46,28 @@ namespace TeleSharp.TL
         {
             get
             {
-                return ((IList<T>)lists).IsReadOnly;
+                return ((IList)lists).IsReadOnly;
             }
         }
 
         public void Add(T item)
         {
-            ((IList<T>)lists).Add(item);
+            lists.Add(item);
         }
 
         public void Clear()
         {
-            ((IList<T>)lists).Clear();
+            lists.Clear();
         }
 
         public bool Contains(T item)
         {
-            return ((IList<T>)lists).Contains(item);
+            return lists.Contains(item);
         }
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            ((IList<T>)lists).CopyTo(array, arrayIndex);
+            lists.CopyTo(array, arrayIndex);
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -104,27 +104,27 @@ namespace TeleSharp.TL
 
         public IEnumerator<T> GetEnumerator()
         {
-            return ((IList<T>)lists).GetEnumerator();
+            return lists.GetEnumerator();
         }
 
         public int IndexOf(T item)
         {
-            return ((IList<T>)lists).IndexOf(item);
+            return lists.IndexOf(item);
         }
 
         public void Insert(int index, T item)
         {
-            ((IList<T>)lists).Insert(index, item);
+            lists.Insert(index, item);
         }
 
         public bool Remove(T item)
         {
-            return ((IList<T>)lists).Remove(item);
+            return lists.Remove(item);
         }
 
         public void RemoveAt(int index)
         {
-            ((IList<T>)lists).RemoveAt(index);
+            lists.RemoveAt(index);
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -165,7 +165,7 @@ namespace TeleSharp.TL
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ((IList<T>)lists).GetEnumerator();
+            return lists.GetEnumerator();
         }
     }
 }
