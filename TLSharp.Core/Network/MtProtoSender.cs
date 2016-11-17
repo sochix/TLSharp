@@ -309,6 +309,10 @@ namespace TLSharp.Core.Network
                 {
                     throw new InvalidPhoneCodeException("The numeric code used to authenticate does not match the numeric code sent by SMS/Telegram");
                 }
+                else if (errorMessage == "SESSION_PASSWORD_NEEDED")
+                {
+                    throw new CloudPasswordNeededException("This Account has Cloud Password !");
+                }
                 else
                 {
                     throw new InvalidOperationException(errorMessage);

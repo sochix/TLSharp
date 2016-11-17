@@ -26,6 +26,8 @@ namespace TLSharp.Tests
 
         private string CodeToAuthenticate { get; set; }
 
+        private string PasswordToAuthenticate { get; set; }
+
         private string NotRegisteredNumberToSignUp { get; set; }
 
         private string UserNameToSendMessage { get; set; }
@@ -80,6 +82,10 @@ namespace TLSharp.Tests
             if (string.IsNullOrEmpty(CodeToAuthenticate))
                 Debug.WriteLine(appConfigMsgWarning, nameof(CodeToAuthenticate));
 
+            PasswordToAuthenticate = ConfigurationManager.AppSettings[nameof(PasswordToAuthenticate)];
+            if (string.IsNullOrEmpty(PasswordToAuthenticate))
+                Debug.WriteLine(appConfigMsgWarning, nameof(PasswordToAuthenticate));
+
             NotRegisteredNumberToSignUp = ConfigurationManager.AppSettings[nameof(NotRegisteredNumberToSignUp)];
             if (string.IsNullOrEmpty(NotRegisteredNumberToSignUp))
                 Debug.WriteLine(appConfigMsgWarning, nameof(NotRegisteredNumberToSignUp));
@@ -117,12 +123,18 @@ namespace TLSharp.Tests
             {
                 user = await client.MakeAuthAsync(NumberToAuthenticate, hash, code);
             }
+            catch (CloudPasswordNeededException ex)
+            {
+                var password = await client.GetPasswordSetting();
+                var password_str = PasswordToAuthenticate;
+
+                user = await client.MakeAuthWithPasswordAsync(password,password_str);
+            }
             catch (InvalidPhoneCodeException ex)
             {
                 throw new Exception("CodeToAuthenticate is wrong in the app.config file, fill it with the code you just got now by SMS/Telegram",
                                     ex);
             }
-
             Assert.IsNotNull(user);
             Assert.IsTrue(client.IsUserAuthorized());
         }

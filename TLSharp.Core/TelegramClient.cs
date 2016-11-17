@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using TeleSharp.TL;
@@ -159,6 +161,33 @@ namespace TLSharp.Core
 
             return ((TLUser)request.Response.user);
         }
+        public async Task<TLPassword> GetPasswordSetting()
+        {
+            var request = new TLRequestGetPassword();
+
+            await _sender.Send(request);
+            await _sender.Receive(request);
+
+            return ((TLPassword)request.Response);
+        }
+
+        public async Task<TLUser> MakeAuthWithPasswordAsync(TLPassword password, string password_str)
+        {
+
+            byte[] password_bytes = Encoding.UTF8.GetBytes(password_str);
+            IEnumerable<byte> rv = password.current_salt.Concat(password_bytes).Concat(password.current_salt);
+
+            SHA256Managed hashstring = new SHA256Managed();
+            var password_hash = hashstring.ComputeHash(rv.ToArray());
+
+            var request = new TLRequestCheckPassword() { password_hash = password_hash };
+            await _sender.Send(request);
+            await _sender.Receive(request);
+
+            OnUserAuthenticated(((TLUser)request.Response.user));
+
+            return ((TLUser)request.Response.user);
+        }
 
         public async Task<TLUser> SignUpAsync(string phoneNumber, string phoneCodeHash, string code, string firstName, string lastName)
         {
@@ -283,7 +312,7 @@ namespace TLSharp.Core
                 _session.AuthKey = authKey;
                 _session.TimeOffset = timeOffset;
                 _transport = new TcpTransport(serverAddress, serverPort);
-                _session.ServerAddress =serverAddress;
+                _session.ServerAddress = serverAddress;
                 _session.Port = serverPort;
                 await ConnectAsync();
 
@@ -319,5 +348,9 @@ namespace TLSharp.Core
     public class InvalidPhoneCodeException : Exception
     {
         internal InvalidPhoneCodeException(string msg) : base(msg) { }
+    }
+    public class CloudPasswordNeededException : Exception
+    {
+        internal CloudPasswordNeededException(string msg) : base(msg) { }
     }
 }
