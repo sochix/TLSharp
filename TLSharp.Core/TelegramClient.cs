@@ -29,7 +29,7 @@ namespace TLSharp.Core
         private string _apiHash = "";
         private int _apiId = 0;
         private Session _session;
-        private List<TLDcOption> dcOptions;
+        private TLVector<TLDcOption> dcOptions;
 
         public TelegramClient(int apiId, string apiHash, ISessionStore store = null, string sessionUserId = "session")
         {
@@ -75,7 +75,7 @@ namespace TLSharp.Core
             await _sender.Send(invokewithLayer);
             await _sender.Receive(invokewithLayer);
 
-            dcOptions = ((TLConfig)invokewithLayer.Response).dc_options.lists;
+            dcOptions = ((TLConfig)invokewithLayer.Response).dc_options;
 
             return true;
         }
