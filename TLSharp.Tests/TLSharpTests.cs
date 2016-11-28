@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using TeleSharp.TL;
+using TeleSharp.TL.Channels;
 using TeleSharp.TL.Messages;
 using TLSharp.Core;
 using TLSharp.Core.Requests;
@@ -170,7 +171,7 @@ namespace TLSharp.Tests
 
             var result = await client.GetContactsAsync();
 
-            var user = result.users.lists
+            var user = result.users
                 .Where(x => x.GetType() == typeof(TLUser))
                 .Cast<TLUser>()
                 .FirstOrDefault(x => x.phone == normalizedNumber);
@@ -192,7 +193,7 @@ namespace TLSharp.Tests
             await client.ConnectAsync();
 
             var dialogs = (TLDialogs) await client.GetUserDialogsAsync();
-            var chat = dialogs.chats.lists
+            var chat = dialogs.chats
                 .Where(c => c.GetType() == typeof(TLChannel))
                 .Cast<TLChannel>()
                 .FirstOrDefault(c => c.title == "TestGroup");
@@ -208,7 +209,7 @@ namespace TLSharp.Tests
 
             var result = await client.GetContactsAsync();
 
-            var user = result.users.lists
+            var user = result.users
                 .Where(x => x.GetType() == typeof(TLUser))
                 .Cast<TLUser>()
                 .FirstOrDefault(x => x.phone == NumberToSendMessage);
@@ -225,7 +226,7 @@ namespace TLSharp.Tests
 
             var result = await client.GetContactsAsync();
 
-            var user = result.users.lists
+            var user = result.users
                 .Where(x => x.GetType() == typeof(TLUser))
                 .Cast<TLUser>()
                 .FirstOrDefault(x => x.phone == NumberToSendMessage);
@@ -248,14 +249,14 @@ namespace TLSharp.Tests
 
             var result = await client.GetContactsAsync();
 
-            var user = result.users.lists
+            var user = result.users
                 .Where(x => x.GetType() == typeof(TLUser))
                 .Cast<TLUser>()
                 .FirstOrDefault(x => x.phone == NumberToSendMessage);
 
             var inputPeer = new TLInputPeerUser() { user_id = user.id };
             var res = await client.SendRequestAsync<TLMessagesSlice>(new TLRequestGetHistory() { peer = inputPeer });
-            var document = res.messages.lists
+            var document = res.messages
                 .Where(m => m.GetType() == typeof(TLMessage))
                 .Cast<TLMessage>()
                 .Where(m => m.media != null && m.media.GetType() == typeof(TLMessageMediaDocument))
@@ -286,7 +287,7 @@ namespace TLSharp.Tests
 
             var result = await client.GetContactsAsync();
 
-            var user = result.users.lists
+            var user = result.users
                 .Where(x => x.GetType() == typeof(TLUser))
                 .Cast<TLUser>()
                 .FirstOrDefault(x => x.id == 5880094);
@@ -329,6 +330,27 @@ namespace TLSharp.Tests
 
             var result = await client.IsPhoneRegisteredAsync(NumberToAuthenticate);
             Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public async Task GetChannelsUsingEnumerable()
+        {
+            var client = NewClient();
+            await client.ConnectAsync();
+
+            var result = await client.GetUserDialogsAsync();
+            
+            foreach (var v in ((TLDialogsSlice)result).chats)
+            {
+                if (v is TLChannel)
+                {
+                    TLRequestGetFullChannel getchannel = new TLRequestGetFullChannel() { channel = new TLInputChannel() { channel_id = ((TLChannel)v).id,access_hash = ((TLChannel)v).access_hash.Value } };
+
+                    var result2 = await client.SendRequestAsync<TeleSharp.TL.Messages.TLChatFull>(getchannel);
+
+                    Assert.IsNotNull(result2);
+                }
+            }
         }
     }
 }
