@@ -108,9 +108,20 @@ namespace TLSharp.Core
                 throw new InvalidOperationException("Not connected!");
 
             var authCheckPhoneRequest = new TLRequestCheckPhone() { phone_number = phoneNumber };
-            await _sender.Send(authCheckPhoneRequest);
-            await _sender.Receive(authCheckPhoneRequest);
-
+            var completed = false;
+            while(!completed)
+            {
+                try
+                {
+                    await _sender.Send(authCheckPhoneRequest);
+                    await _sender.Receive(authCheckPhoneRequest);
+                    completed = true;
+                }
+                catch(PhoneMigrationException e)
+                {
+                    await ReconnectToDcAsync(e.DC);
+                }
+            }
             return authCheckPhoneRequest.Response.phone_registered;
         }
 
