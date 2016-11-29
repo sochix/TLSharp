@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 using TeleSharp.TL.Messages;
 using TLSharp.Core;
+using TLSharp.Core.Network;
 using TLSharp.Core.Requests;
 using TLSharp.Core.Utils;
 
@@ -329,6 +330,21 @@ namespace TLSharp.Tests
 
             var result = await client.IsPhoneRegisteredAsync(NumberToAuthenticate);
             Assert.IsTrue(result);
+        }
+        public virtual async Task FloodExceptionShouldNotCauseCannotReadPackageLengthError()
+        {
+            for (int i = 0; i < 50; i++)
+            {
+                try
+                {
+                    await CheckPhones();
+                }
+                catch (FloodException floodException)
+                {
+                    Console.WriteLine($"FLOODEXCEPTION: {floodException}");
+                    Thread.Sleep(floodException.TimeToWait);
+                }
+            }
         }
     }
 }

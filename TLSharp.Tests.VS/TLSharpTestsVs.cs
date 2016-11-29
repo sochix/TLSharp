@@ -67,5 +67,10 @@ namespace TLSharp.Tests
         {
             await base.CheckPhones();
         }
+        [TestMethod]
+        public override async Task FloodExceptionShouldNotCauseCannotReadPackageLengthError()
+        {
+            await base.FloodExceptionShouldNotCauseCannotReadPackageLengthError();
+        }
     }
 }
