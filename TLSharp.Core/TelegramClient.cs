@@ -30,6 +30,12 @@ namespace TLSharp.Core
         private int _apiId = 0;
         private Session _session;
         private List<TLDcOption> dcOptions;
+        private bool _usingProxy = false;
+        private string _httpProxyHost;
+        private int _httpProxyPort;
+        private string _proxyUserName;
+        private string _proxyPassword;
+
 
         public TelegramClient(int apiId, string apiHash, ISessionStore store = null, string sessionUserId = "session")
         {
@@ -49,6 +55,7 @@ namespace TLSharp.Core
             _transport = new TcpTransport(_session.ServerAddress, _session.Port);
         }
 
+
         public TelegramClient(int apiId, string apiHash, string httpProxyHost, int httpProxyPort, string proxyUserName, string proxyPassword,
             ISessionStore store = null, string sessionUserId = "session")
         {
@@ -67,7 +74,13 @@ namespace TLSharp.Core
             _transport = new TcpTransport(_session.ServerAddress, _session.Port,
                 httpProxyHost, httpProxyPort, proxyUserName, proxyPassword);
 
-        }
+            _usingProxy = true;
+            _httpProxyHost = httpProxyHost;
+            _httpProxyPort = httpProxyPort;
+            _proxyUserName = proxyUserName;
+            _proxyPassword = proxyPassword;
+
+    }
 
         public async Task<bool> ConnectAsync(bool reconnect = false)
         {
@@ -107,7 +120,16 @@ namespace TLSharp.Core
 
             var dc = dcOptions.First(d => d.id == dcId);
 
-            _transport = new TcpTransport(dc.ip_address, dc.port);
+            if (!_usingProxy)
+            {
+                _transport = new TcpTransport(dc.ip_address, dc.port);
+            }
+            else
+            {
+                _transport = new TcpTransport(dc.ip_address, dc.port,
+                                             _httpProxyHost, _httpProxyPort, _proxyUserName, _proxyPassword);
+            }
+
             _session.ServerAddress = dc.ip_address;
             _session.Port = dc.port;
 
