@@ -21,7 +21,7 @@ using TLAuthorization = TeleSharp.TL.Auth.TLAuthorization;
 
 namespace TLSharp.Core
 {
-    public class TelegramClient
+    public class TelegramClient : IDisposable
     {
         private MtProtoSender _sender;
         private AuthKey _key;
@@ -343,6 +343,15 @@ namespace TLSharp.Core
             _session.SessionExpires = int.MaxValue;
 
             _session.Save();
+        }
+
+        public void Dispose()
+        {
+            if (_transport != null)
+            {
+                _transport.Dispose();
+                _transport = null;
+            }
         }
     }
 
