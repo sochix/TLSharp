@@ -337,6 +337,23 @@ namespace TLSharp.Core
             await _sender.SendPingAsync();
         }
 
+        /// <summary>
+        /// Serch user or chat. API: contacts.search#11f812d8 q:string limit:int = contacts.Found;
+        /// </summary>
+        /// <param name="q">User or chat name</param>
+        /// <param name="limit">Max result count</param>
+        /// <returns></returns>
+        public async Task<TLFound> SearchUserAsync(string q, int limit = 10)
+        {
+            var r = new TeleSharp.TL.Contacts.TLRequestSearch
+            {
+                q = q,
+                limit = limit
+            };
+
+            return await SendRequestAsync<TLFound>(r);
+        }
+
         private void OnUserAuthenticated(TLUser TLUser)
         {
             _session.TLUser = TLUser;

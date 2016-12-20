@@ -331,6 +331,7 @@ namespace TLSharp.Tests
             var result = await client.IsPhoneRegisteredAsync(NumberToAuthenticate);
             Assert.IsTrue(result);
         }
+
         public virtual async Task FloodExceptionShouldNotCauseCannotReadPackageLengthError()
         {
             for (int i = 0; i < 50; i++)
@@ -345,6 +346,43 @@ namespace TLSharp.Tests
                     Thread.Sleep(floodException.TimeToWait);
                 }
             }
+        }
+
+        public virtual async Task SendMessageByUserNameTest()
+        {
+            UserNameToSendMessage = ConfigurationManager.AppSettings[nameof(UserNameToSendMessage)];
+            if (string.IsNullOrWhiteSpace(UserNameToSendMessage))
+                throw new Exception($"Please fill the '{nameof(UserNameToSendMessage)}' setting in app.config file first");
+
+            var client = NewClient();
+
+            await client.ConnectAsync();
+
+            var result = await client.SearchUserAsync(UserNameToSendMessage);
+
+            var user = result.users.lists
+                .Where(x => x.GetType() == typeof(TLUser))
+                .Cast<TLUser>()
+                .FirstOrDefault(x => x.username == UserNameToSendMessage.TrimStart('@'));
+
+            if (user == null)
+            {
+                var contacts = await client.GetContactsAsync();
+
+                user = contacts.users.lists
+                    .Where(x => x.GetType() == typeof(TLUser))
+                    .Cast<TLUser>()
+                    .FirstOrDefault(x => x.username == UserNameToSendMessage.TrimStart('@'));
+            }
+
+            if (user == null)
+            {
+                throw new System.Exception("Usename was not found: " + UserNameToSendMessage);
+            }
+
+            await client.SendTypingAsync(new TLInputPeerUser() { user_id = user.id });
+            Thread.Sleep(3000);
+            await client.SendMessageAsync(new TLInputPeerUser() { user_id = user.id }, "TEST");
         }
     }
 }
