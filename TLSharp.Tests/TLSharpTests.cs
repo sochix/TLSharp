@@ -172,7 +172,8 @@ namespace TLSharp.Tests
             var result = await client.GetContactsAsync();
 
             var user = result.users.lists
-                .OfType<TLUser>()
+                .Where(x => x.GetType() == typeof(TLUser))
+                .Cast<TLUser>()
                 .FirstOrDefault(x => x.phone == normalizedNumber);
 
             if (user == null)
@@ -193,7 +194,8 @@ namespace TLSharp.Tests
 
             var dialogs = (TLDialogs) await client.GetUserDialogsAsync();
             var chat = dialogs.chats.lists
-                .OfType<TLChannel>()
+                .Where(c => c.GetType() == typeof(TLChannel))
+                .Cast<TLChannel>()
                 .FirstOrDefault(c => c.title == "TestGroup");
 
             await client.SendMessageAsync(new TLInputPeerChannel() { channel_id = chat.id, access_hash = chat.access_hash.Value }, "TEST MSG");
@@ -208,7 +210,8 @@ namespace TLSharp.Tests
             var result = await client.GetContactsAsync();
 
             var user = result.users.lists
-                .OfType<TLUser>()
+                .Where(x => x.GetType() == typeof(TLUser))
+                .Cast<TLUser>()
                 .FirstOrDefault(x => x.phone == NumberToSendMessage);
 
             var fileResult = (TLInputFile)await client.UploadFile("cat.jpg", new StreamReader("data/cat.jpg"));
@@ -224,7 +227,8 @@ namespace TLSharp.Tests
             var result = await client.GetContactsAsync();
 
             var user = result.users.lists
-                .OfType<TLUser>()
+                .Where(x => x.GetType() == typeof(TLUser))
+                .Cast<TLUser>()
                 .FirstOrDefault(x => x.phone == NumberToSendMessage);
 
             var fileResult = (TLInputFileBig)await client.UploadFile("some.zip", new StreamReader("<some big file path>"));
@@ -246,18 +250,21 @@ namespace TLSharp.Tests
             var result = await client.GetContactsAsync();
 
             var user = result.users.lists
-                .OfType<TLUser>()
+                .Where(x => x.GetType() == typeof(TLUser))
+                .Cast<TLUser>()
                 .FirstOrDefault(x => x.phone == NumberToSendMessage);
 
             var inputPeer = new TLInputPeerUser() { user_id = user.id };
             var res = await client.SendRequestAsync<TLMessagesSlice>(new TLRequestGetHistory() { peer = inputPeer });
             var document = res.messages.lists
-                .OfType<TLMessage>()
-                .Where(m => m.media != null)
+                .Where(m => m.GetType() == typeof(TLMessage))
+                .Cast<TLMessage>()
+                .Where(m => m.media != null && m.media.GetType() == typeof(TLMessageMediaDocument))
                 .Select(m => m.media)
-                .OfType<TLMessageMediaDocument>()
+                .Cast<TLMessageMediaDocument>()
+                .Where(md => md.document.GetType() == typeof(TLDocument))
                 .Select(md => md.document)
-                .OfType<TLDocument>()
+                .Cast<TLDocument>()
                 .First();
 
             var resFile = await client.GetFile(
@@ -281,7 +288,8 @@ namespace TLSharp.Tests
             var result = await client.GetContactsAsync();
 
             var user = result.users.lists
-                .OfType<TLUser>()
+                .Where(x => x.GetType() == typeof(TLUser))
+                .Cast<TLUser>()
                 .FirstOrDefault(x => x.id == 5880094);
     
             var photo = ((TLUserProfilePhoto)user.photo);
