@@ -362,7 +362,7 @@ namespace TLSharp.Tests
 
             var user = result.users.lists
                 .Where(x => x.GetType() == typeof(TLUser))
-                .Cast<TLUser>()
+                .OfType<TLUser>()
                 .FirstOrDefault(x => x.username == UserNameToSendMessage.TrimStart('@'));
 
             if (user == null)
@@ -371,13 +371,13 @@ namespace TLSharp.Tests
 
                 user = contacts.users.lists
                     .Where(x => x.GetType() == typeof(TLUser))
-                    .Cast<TLUser>()
+                    .OfType<TLUser>()
                     .FirstOrDefault(x => x.username == UserNameToSendMessage.TrimStart('@'));
             }
 
             if (user == null)
             {
-                throw new System.Exception("Usename was not found: " + UserNameToSendMessage);
+                throw new System.Exception("Username was not found: " + UserNameToSendMessage);
             }
 
             await client.SendTypingAsync(new TLInputPeerUser() { user_id = user.id });
