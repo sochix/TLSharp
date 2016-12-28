@@ -75,5 +75,11 @@ namespace TLSharp.Tests
         {
             await base.FloodExceptionShouldNotCauseCannotReadPackageLengthError();
         }
+
+        [Test]
+        public override async Task SendMessageByUserNameTest()
+        {
+            await base.SendMessageByUserNameTest();
+        }
     }
 }
