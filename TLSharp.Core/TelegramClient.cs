@@ -4,7 +4,6 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using TeleSharp.TL;
 using TeleSharp.TL.Account;
 using TeleSharp.TL.Auth;
@@ -15,7 +14,6 @@ using TeleSharp.TL.Upload;
 using TLSharp.Core.Auth;
 using TLSharp.Core.MTProto.Crypto;
 using TLSharp.Core.Network;
-using TLSharp.Core.Requests;
 using TLSharp.Core.Utils;
 using TLAuthorization = TeleSharp.TL.Auth.TLAuthorization;
 
@@ -335,6 +333,21 @@ namespace TLSharp.Core
         public async Task SendPingAsync()
         {
             await _sender.SendPingAsync();
+        }
+
+        public async Task<TLAbsMessages> GetHistoryAsync(TLAbsInputPeer peer, int offset, int max_id, int limit)
+        {
+            if (!IsUserAuthorized())
+                throw new InvalidOperationException("Authorize user first!");
+
+            var req = new TLRequestGetHistory()
+            {
+                peer = peer,
+                add_offset = offset,
+                max_id = max_id,
+                limit = limit
+            };
+            return await SendRequestAsync<TLAbsMessages>(req);
         }
 
         /// <summary>

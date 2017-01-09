@@ -161,6 +161,7 @@ For your convenience TLSharp have wrappers for several Telegram API methods. You
 1. GetFile
 1. UploadFile
 1. SendPingAsync
+1. GetHistoryAsync
 
 **What if you can't find needed method at the list?**
 
