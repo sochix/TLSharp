@@ -28,10 +28,8 @@ namespace TLSharp.Core
         private int _apiId = 0;
         private Session _session;
         private List<TLDcOption> dcOptions;
-        private TcpClientConnectionHandler _handler;
 
-        public TelegramClient(int apiId, string apiHash,
-            ISessionStore store = null, string sessionUserId = "session", TcpClientConnectionHandler handler = null)
+        public TelegramClient(int apiId, string apiHash, ISessionStore store = null, string sessionUserId = "session")
         {
             if (apiId == default(int))
                 throw new MissingApiConfigurationException("API_ID");
@@ -44,10 +42,9 @@ namespace TLSharp.Core
             TLContext.Init();
             _apiHash = apiHash;
             _apiId = apiId;
-            _handler = handler;
 
             _session = Session.TryLoadOrCreateNew(store, sessionUserId);
-            _transport = new TcpTransport(_session.ServerAddress, _session.Port, _handler);
+            _transport = new TcpTransport(_session.ServerAddress, _session.Port);
         }
 
         public async Task<bool> ConnectAsync(bool reconnect = false)
@@ -88,7 +85,7 @@ namespace TLSharp.Core
 
             var dc = dcOptions.First(d => d.id == dcId);
 
-            _transport = new TcpTransport(dc.ip_address, dc.port, _handler);
+            _transport = new TcpTransport(dc.ip_address, dc.port);
             _session.ServerAddress = dc.ip_address;
             _session.Port = dc.port;
 
@@ -293,7 +290,7 @@ namespace TLSharp.Core
             });
         }
 
-        public async Task<TLFile> GetFile(TLAbsInputFileLocation location, int filePartSize, int offset = 0)
+        public async Task<TLFile> GetFile(TLAbsInputFileLocation location, int filePartSize)
         {
             TLFile result = null;
             try
@@ -301,8 +298,7 @@ namespace TLSharp.Core
                 result = await SendRequestAsync<TLFile>(new TLRequestGetFile()
                 {
                     location = location,
-                    limit = filePartSize,
-                    offset = offset
+                    limit = filePartSize
                 });
             }
             catch (FileMigrationException ex)
@@ -320,7 +316,7 @@ namespace TLSharp.Core
                     bytes = exportedAuth.bytes,
                     id = exportedAuth.id
                 });
-                result = await GetFile(location, filePartSize, offset);
+                result = await GetFile(location, filePartSize);
 
                 _session.AuthKey = authKey;
                 _session.TimeOffset = timeOffset;
@@ -371,36 +367,12 @@ namespace TLSharp.Core
             return await SendRequestAsync<TLFound>(r);
         }
 
-        /// <summary>
-        /// Serch user or chat. API: contacts.search#11f812d8 q:string limit:int = contacts.Found;
-        /// </summary>
-        /// <param name="q">User or chat name</param>
-        /// <param name="limit">Max result count</param>
-        /// <returns></returns>
-        public async Task<TLFound> SearchUserAsync(string q, int limit = 10)
-        {
-            var r = new TeleSharp.TL.Contacts.TLRequestSearch
-            {
-                q = q,
-                limit = limit
-            };
-
-            return await SendRequestAsync<TLFound>(r);
-        }
-
         private void OnUserAuthenticated(TLUser TLUser)
         {
             _session.TLUser = TLUser;
             _session.SessionExpires = int.MaxValue;
 
             _session.Save();
-        }
-
-        public bool IsConnected()
-        {
-            if (this._transport == null)
-                return false;
-            return this._transport.IsConnected;
         }
 
         public void Dispose()
