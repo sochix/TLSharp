@@ -290,7 +290,7 @@ namespace TLSharp.Core
             });
         }
 
-        public async Task<TLFile> GetFile(TLAbsInputFileLocation location, int filePartSize)
+        public async Task<TLFile> GetFile(TLAbsInputFileLocation location, int filePartSize, int offset = 0)
         {
             TLFile result = null;
             try
@@ -298,7 +298,8 @@ namespace TLSharp.Core
                 result = await SendRequestAsync<TLFile>(new TLRequestGetFile()
                 {
                     location = location,
-                    limit = filePartSize
+                    limit = filePartSize,
+                    offset = offset
                 });
             }
             catch (FileMigrationException ex)
