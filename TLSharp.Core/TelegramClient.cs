@@ -47,6 +47,28 @@ namespace TLSharp.Core
             _transport = new TcpTransport(_session.ServerAddress, _session.Port);
         }
 
+
+        public TelegramClient(int apiId, string apiHash, string httpProxyHost, int httpProxyPort, string proxyUserName, string proxyPassword,
+            ISessionStore store = null, string sessionUserId = "session")
+        {
+            if (store == null)
+                store = new FileSessionStore();
+
+            TLContext.Init();
+            _apiHash = apiHash;
+            _apiId = apiId;
+            if (_apiId == default(int))
+                throw new MissingApiConfigurationException("API_ID");
+            if (string.IsNullOrEmpty(_apiHash))
+                throw new MissingApiConfigurationException("API_HASH");
+
+            _session = Session.TryLoadOrCreateNew(store, sessionUserId);
+            _transport = new TcpTransport(_session.ServerAddress, _session.Port,
+                httpProxyHost, httpProxyPort, proxyUserName, proxyPassword);
+
+        }
+
+
         public async Task<bool> ConnectAsync(bool reconnect = false)
         {
             if (_session.AuthKey == null || reconnect)
