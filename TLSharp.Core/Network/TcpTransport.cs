@@ -1,22 +1,28 @@
 ﻿using System;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 
 namespace TLSharp.Core.Network
 {
+    public delegate TcpClient TcpClientConnectionHandler(string address, int port);
+
     public class TcpTransport : IDisposable
     {
         private readonly TcpClient _tcpClient;
         private int sendCounter = 0;
 
-        public TcpTransport(string address, int port)
+        public TcpTransport(string address, int port, TcpClientConnectionHandler handler = null)
         {
-            _tcpClient = new TcpClient();
+            if (handler == null)
+            {
+                _tcpClient = new TcpClient();
 
-            var ipAddress = IPAddress.Parse(address);
-            _tcpClient.Connect(ipAddress, port);
+                var ipAddress = IPAddress.Parse(address);
+                _tcpClient.Connect(ipAddress, port);
+            }
+            else
+                _tcpClient = handler(address, port);
         }
 
         public async Task Send(byte[] packet)
