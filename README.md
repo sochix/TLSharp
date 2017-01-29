@@ -12,9 +12,9 @@ It's a perfect fit for any developer who would like to send data directly to Tel
 
 :star2: If you :heart: library, please star it! :star2:
 
-If you have difficulties with library usage, I can support you ( 75$/hour ). Contact me at @sochix.
-
 If you have difficulties with console or writing code, you can try [Telegram Tools](https://github.com/sochix/telegram-tools). It's a GUI for TLSharp.
+
+<a href="https://github.com/sochix/telegram-tools"><img src="https://github.com/sochix/telegram-tools/raw/master/demo.gif" /></a>
 
 # Table of contents?
 
