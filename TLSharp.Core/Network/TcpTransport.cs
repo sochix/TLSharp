@@ -11,6 +11,7 @@ namespace TLSharp.Core.Network
     {
         private readonly TcpClient _tcpClient;
         private int sendCounter = 0;
+        private int cnt = 0;
 
         public TcpTransport(string address, int port, TcpClientConnectionHandler handler = null)
         {
