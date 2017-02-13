@@ -110,7 +110,7 @@ namespace TLSharp.Core.Network
             using (var inputReader = new BinaryReader(inputStream))
             {
                 if (inputReader.BaseStream.Length < 8)
-                    throw new InvalidOperationException($"Can't decode packet");
+                    throw new DecodePacketException();
 
                 ulong remoteAuthKeyId = inputReader.ReadUInt64(); // TODO: check auth key id
                 byte[] msgKey = inputReader.ReadBytes(16); // TODO: check msg_key correctness
@@ -312,6 +312,15 @@ namespace TLSharp.Core.Network
                 else if (errorMessage == "SESSION_PASSWORD_NEEDED")
                 {
                     throw new CloudPasswordNeededException("This Account has Cloud Password !");
+                }
+                else if (errorMessage == "AUTH_KEY_UNREGISTERED")
+                {
+                    //
+                    throw new AuthKeyUnregisteredException();
+                }
+                else if (errorMessage == "RPC_MCGET_FAIL")
+                {
+                    throw new RpcMcGetFailException();
                 }
                 else
                 {
@@ -532,6 +541,29 @@ namespace TLSharp.Core.Network
                     " If you think the culprit of this problem may lie in TLSharp's implementation, open a Github issue please.")
         {
             TimeToWait = timeToWait;
+        }
+    }
+
+    public class DecodePacketException : Exception
+    {
+        internal DecodePacketException() : base($"Can't decode packet.")
+        {
+
+        }
+    }
+    public class AuthKeyUnregisteredException : Exception
+    {
+        internal AuthKeyUnregisteredException() : base($"Auth key is unregistered.")
+        {
+
+        }
+    }
+
+    public class RpcMcGetFailException : Exception
+    {
+        internal RpcMcGetFailException() : base($"Rpc Mc Get Fail.")
+        {
+
         }
     }
 

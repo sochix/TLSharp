@@ -28,7 +28,7 @@ namespace TLSharp.Core.Network
         public async Task Send(byte[] packet)
         {
             if (!_tcpClient.Connected)
-                throw new InvalidOperationException("Client not connected to server.");
+                throw new TcpClientNotConnectedException();
 
             var tcpMessage = new TcpMessage(sendCounter, packet);
 
@@ -42,7 +42,7 @@ namespace TLSharp.Core.Network
 
             var packetLengthBytes = new byte[4];
             if (await stream.ReadAsync(packetLengthBytes, 0, 4) != 4)
-                throw new InvalidOperationException("Couldn't read the packet length");
+                throw new TcpClientCouldntReadPacketLengthException();
             int packetLength = BitConverter.ToInt32(packetLengthBytes, 0);
 
             var seqBytes = new byte[4];
@@ -92,4 +92,20 @@ namespace TLSharp.Core.Network
                 _tcpClient.Close();
         }
     }
+    public class TcpClientNotConnectedException : Exception
+    {
+        internal TcpClientNotConnectedException() : base($"Client not connected to server.")
+        {
+
+        }
+    }
+    public class TcpClientCouldntReadPacketLengthException : Exception
+    {
+        internal TcpClientCouldntReadPacketLengthException() : base($"Couldn't read the packet length")
+        {
+
+        }
+    }
+
+    
 }
