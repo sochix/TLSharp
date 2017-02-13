@@ -243,6 +243,7 @@ List of donators:
 # Contributors
 * [Afshin Arani](http://aarani.ir) - TLGenerator, and a lot of other usefull things
 * [Knocte](https://github.com/knocte)
+* [RapidAPI](https://rapidapi.com/package/TelegramBot/functions?utm_source=TelegramGitHub&utm_medium=button)
 
 # License
 
