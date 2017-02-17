@@ -320,7 +320,7 @@ namespace TLSharp.Core
                     bytes = exportedAuth.bytes,
                     id = exportedAuth.id
                 });
-                result = await GetFile(location, filePartSize);
+                result = await GetFile(location, filePartSize, offset);
 
                 _session.AuthKey = authKey;
                 _session.TimeOffset = timeOffset;
