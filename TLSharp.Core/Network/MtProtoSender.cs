@@ -577,6 +577,29 @@ namespace TLSharp.Core.Network
 
     
 
+    public class DecodePacketException : Exception
+    {
+        internal DecodePacketException() : base($"Can't decode packet.")
+        {
+
+        }
+    }
+    public class AuthKeyUnregisteredException : Exception
+    {
+        internal AuthKeyUnregisteredException() : base($"Auth key is unregistered.")
+        {
+
+        }
+    }
+
+    public class RpcMcGetFailException : Exception
+    {
+        internal RpcMcGetFailException() : base($"Rpc Mc Get Fail.")
+        {
+
+        }
+    }
+
     internal abstract class DataCenterMigrationException : Exception
     {
         internal int DC { get; private set; }
