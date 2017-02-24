@@ -574,9 +574,7 @@ namespace TLSharp.Core.Network
 
         }
     }
-
     
-
     internal abstract class DataCenterMigrationException : Exception
     {
         internal int DC { get; private set; }
