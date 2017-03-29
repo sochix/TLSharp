@@ -546,14 +546,14 @@ namespace TLSharp.Core.Network
 
     internal class DecodePacketException : Exception
     {
-        internal DecodePacketException() : base($"Can't decode packet.")
+        internal DecodePacketException() : base("Can't decode packet.")
         {
 
         }
     }
     public class AuthKeyUnregisteredException : Exception
     {
-        internal AuthKeyUnregisteredException() : base($"Auth key is unregistered.")
+        internal AuthKeyUnregisteredException() : base("Auth key is unregistered.")
         {
 
         }
@@ -561,7 +561,7 @@ namespace TLSharp.Core.Network
 
     internal class RpcMcGetFailException : Exception
     {
-        internal RpcMcGetFailException() : base($"Rpc Mc Get Fail.")
+        internal RpcMcGetFailException() : base("Rpc Mc Get Fail.")
         {
 
         }
@@ -569,7 +569,7 @@ namespace TLSharp.Core.Network
 
     internal class MsgSeqnoTooLowException : Exception
     {
-        internal MsgSeqnoTooLowException() : base($"msg_seqno too low (the server has already received a message with a lower msg_id but with either a higher or an equal and odd seqno)")
+        internal MsgSeqnoTooLowException() : base("msg_seqno too low (the server has already received a message with a lower msg_id but with either a higher or an equal and odd seqno)")
         {
 
         }
