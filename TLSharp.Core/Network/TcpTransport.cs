@@ -94,14 +94,14 @@ namespace TLSharp.Core.Network
     }
     internal class TcpClientNotConnectedException : Exception
     {
-        internal TcpClientNotConnectedException() : base($"Client not connected to server.")
+        internal TcpClientNotConnectedException() : base("Client not connected to server.")
         {
 
         }
     }
     internal class TcpClientCouldntReadPacketLengthException : Exception
     {
-        internal TcpClientCouldntReadPacketLengthException() : base($"Couldn't read the packet length")
+        internal TcpClientCouldntReadPacketLengthException() : base("Couldn't read the packet length")
         {
 
         }
