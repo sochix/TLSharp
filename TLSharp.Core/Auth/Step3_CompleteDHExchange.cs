@@ -208,7 +208,7 @@ namespace TLSharp.Core.Auth
     }
     internal class InvalidNewNonceHashException : Exception
     {
-        internal InvalidNewNonceHashException() : base($"invalid new nonce hash")
+        internal InvalidNewNonceHashException() : base("invalid new nonce hash")
         {
 
         }
