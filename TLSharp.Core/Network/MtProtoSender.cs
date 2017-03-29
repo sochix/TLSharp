@@ -110,7 +110,7 @@ namespace TLSharp.Core.Network
             using (var inputReader = new BinaryReader(inputStream))
             {
                 if (inputReader.BaseStream.Length < 8)
-                    throw new InvalidOperationException($"Can't decode packet");
+                    throw new DecodePacketException();
 
                 ulong remoteAuthKeyId = inputReader.ReadUInt64(); // TODO: check auth key id
                 byte[] msgKey = inputReader.ReadBytes(16); // TODO: check msg_key correctness
@@ -313,6 +313,15 @@ namespace TLSharp.Core.Network
                 {
                     throw new CloudPasswordNeededException("This Account has Cloud Password !");
                 }
+                else if (errorMessage == "AUTH_KEY_UNREGISTERED")
+                {
+                    //
+                    throw new AuthKeyUnregisteredException();
+                }
+                else if (errorMessage == "RPC_MCGET_FAIL")
+                {
+                    throw new RpcMcGetFailException();
+                }
                 else
                 {
                     throw new InvalidOperationException(errorMessage);
@@ -378,7 +387,7 @@ namespace TLSharp.Core.Network
                 case 20:
                     throw new InvalidOperationException("message too old, and it cannot be verified whether the server has received a message with this msg_id or not");
                 case 32:
-                    throw new InvalidOperationException("msg_seqno too low (the server has already received a message with a lower msg_id but with either a higher or an equal and odd seqno)");
+                    throw new MsgSeqnoTooLowException();
                 case 33:
                     throw new InvalidOperationException(" msg_seqno too high (similarly, there is a message with a higher msg_id but with either a lower or an equal and odd seqno)");
                 case 34:
@@ -534,6 +543,39 @@ namespace TLSharp.Core.Network
             TimeToWait = timeToWait;
         }
     }
+
+    internal class DecodePacketException : Exception
+    {
+        internal DecodePacketException() : base("Can't decode packet.")
+        {
+
+        }
+    }
+    public class AuthKeyUnregisteredException : Exception
+    {
+        internal AuthKeyUnregisteredException() : base("Auth key is unregistered.")
+        {
+
+        }
+    }
+
+    internal class RpcMcGetFailException : Exception
+    {
+        internal RpcMcGetFailException() : base("Rpc Mc Get Fail.")
+        {
+
+        }
+    }
+
+    internal class MsgSeqnoTooLowException : Exception
+    {
+        internal MsgSeqnoTooLowException() : base("msg_seqno too low (the server has already received a message with a lower msg_id but with either a higher or an equal and odd seqno)")
+        {
+
+        }
+    }
+
+    
 
     internal abstract class DataCenterMigrationException : Exception
     {
