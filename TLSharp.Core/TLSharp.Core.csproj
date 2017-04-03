@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TLSharp.Core</RootNamespace>
     <AssemblyName>TLSharp.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -57,41 +57,26 @@
     <Compile Include="MTProto\Crypto\RSA.cs" />
     <Compile Include="MTProto\Crypto\Salt.cs" />
     <Compile Include="MTProto\Serializers.cs" />
-    <Compile Include="MTProto\TL.cs" />
     <Compile Include="Network\MtProtoPlainSender.cs" />
     <Compile Include="Network\MtProtoSender.cs" />
     <Compile Include="Network\TcpMessage.cs" />
     <Compile Include="Network\TcpTransport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\AckRequest.cs" />
-    <Compile Include="Requests\AuthCheckPhoneRequest.cs" />
-    <Compile Include="Requests\AuthSendCodeRequest.cs" />
-    <Compile Include="Requests\AuthSendSmsRequest.cs" />
-    <Compile Include="Requests\AuthSignInRequest.cs" />
-    <Compile Include="Requests\AuthSignUpRequest.cs" />
-    <Compile Include="Requests\GetContactsRequest.cs" />
-    <Compile Include="Requests\GetDialogsRequest.cs" />
-    <Compile Include="Requests\GetFileRequest.cs" />
-    <Compile Include="Requests\GetHistoryRequest.cs" />
-    <Compile Include="Requests\GetNearestDcRequest.cs" />
-    <Compile Include="Requests\GetUserFullRequest.cs" />
-    <Compile Include="Requests\GetUsersRequest.cs" />
-    <Compile Include="Requests\ImportByUserName.cs" />
-    <Compile Include="Requests\ImportContactRequest.cs" />
-    <Compile Include="Requests\InitConnectionRequest.cs" />
-    <Compile Include="Requests\MTProtoRequest.cs" />
-    <Compile Include="Requests\SendMessageRequest.cs" />
-    <Compile Include="Requests\Message_SendMediaRequest.cs" />
-    <Compile Include="Requests\Upload_SaveFilePartRequest.cs" />
+    <Compile Include="Requests\PingRequest.cs" />
+    <Compile Include="Utils\UploadHelper.cs" />
     <Compile Include="Session.cs" />
     <Compile Include="TelegramClient.cs" />
     <Compile Include="Utils\Helpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <Compile Include="Requests\CreateChatRequest.cs" />
-    <Compile Include="Requests\AddChatUserRequest.cs" />
-    <Compile Include="Requests\DeleteChatUserRequest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TeleSharp.TL\TeleSharp.TL.csproj">
+      <Project>{d6144517-91d2-4880-86df-e9ff5d7f383a}</Project>
+      <Name>TeleSharp.TL</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

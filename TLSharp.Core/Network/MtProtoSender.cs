@@ -39,7 +39,7 @@ namespace TLSharp.Core.Network
             return confirmed ? _session.Sequence++ * 2 + 1 : _session.Sequence * 2;
         }
 
-        public async Task Send(MTProtoRequest request)
+        public async Task Send(TeleSharp.TL.TLMethod request)
         {
             // TODO: refactor
             if (needConfirmation.Any())
@@ -48,7 +48,7 @@ namespace TLSharp.Core.Network
                 using (var memory = new MemoryStream())
                 using (var writer = new BinaryWriter(memory))
                 {
-                    ackRequest.OnSend(writer);
+                    ackRequest.SerializeBody(writer);
                     await Send(memory.ToArray(), ackRequest);
                     needConfirmation.Clear();
                 }
@@ -58,14 +58,14 @@ namespace TLSharp.Core.Network
             using (var memory = new MemoryStream())
             using (var writer = new BinaryWriter(memory))
             {
-                request.OnSend(writer);
+                request.SerializeBody(writer);
                 await Send(memory.ToArray(), request);
             }
 
             _session.Save();
         }
 
-        public async Task Send(byte[] packet, MTProtoRequest request)
+        public async Task Send(byte[] packet, TeleSharp.TL.TLMethod request)
         {
             request.MessageId = _session.GetNewMessageId();
 
@@ -132,7 +132,7 @@ namespace TLSharp.Core.Network
             return new Tuple<byte[], ulong, int>(message, remoteMessageId, remoteSequence);
         }
 
-        public async Task<byte[]> Receive(MTProtoRequest request)
+        public async Task<byte[]> Receive(TeleSharp.TL.TLMethod request)
         {
             while (!request.ConfirmReceived)
             {
@@ -148,7 +148,20 @@ namespace TLSharp.Core.Network
             return null;
         }
 
-        private bool processMessage(ulong messageId, int sequence, BinaryReader messageReader, MTProtoRequest request)
+        public async Task SendPingAsync()
+        {
+            var pingRequest = new PingRequest();
+            using (var memory = new MemoryStream())
+            using (var writer = new BinaryWriter(memory))
+            {
+                pingRequest.SerializeBody(writer);
+                await Send(memory.ToArray(), pingRequest);
+            }
+
+            await Receive(pingRequest);
+        }
+
+        private bool processMessage(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
         {
             // TODO: check salt
             // TODO: check sessionid
@@ -169,7 +182,7 @@ namespace TLSharp.Core.Network
                     return HandlePing(messageId, sequence, messageReader);
                 case 0x347773c5: // pong
                                  //logger.debug("MSG pong");
-                    return HandlePong(messageId, sequence, messageReader);
+                    return HandlePong(messageId, sequence, messageReader, request);
                 case 0xae500895: // future_salts
                                  //logger.debug("MSG future_salts");
                     return HandleFutureSalts(messageId, sequence, messageReader);
@@ -225,7 +238,7 @@ namespace TLSharp.Core.Network
 			*/
         }
 
-        private bool HandleGzipPacked(ulong messageId, int sequence, BinaryReader messageReader, MTProtoRequest request)
+        private bool HandleGzipPacked(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
         {
             uint code = messageReader.ReadUInt32();
             byte[] packedData = GZipStream.UncompressBuffer(Serializers.Bytes.read(messageReader));
@@ -238,7 +251,7 @@ namespace TLSharp.Core.Network
             return true;
         }
 
-        private bool HandleRpcResult(ulong messageId, int sequence, BinaryReader messageReader, MTProtoRequest request)
+        private bool HandleRpcResult(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
         {
             uint code = messageReader.ReadUInt32();
             ulong requestId = messageReader.ReadUInt64();
@@ -272,16 +285,33 @@ namespace TLSharp.Core.Network
                 {
                     var resultString = Regex.Match(errorMessage, @"\d+").Value;
                     var seconds = int.Parse(resultString);
-                    Debug.WriteLine($"Should wait {seconds} sec.");
-                    Thread.Sleep(1000 * seconds);
+                    throw new FloodException(TimeSpan.FromSeconds(seconds));
                 }
                 else if (errorMessage.StartsWith("PHONE_MIGRATE_"))
                 {
                     var resultString = Regex.Match(errorMessage, @"\d+").Value;
                     var dcIdx = int.Parse(resultString);
-                    var exception = new InvalidOperationException($"Your phone number registered to {dcIdx} dc. Please update settings. See https://github.com/sochix/TLSharp#i-get-an-error-migrate_x for details.");
-                    exception.Data.Add("dcId", dcIdx);
-                    throw exception;
+                    throw new PhoneMigrationException(dcIdx);
+                }
+                else if (errorMessage.StartsWith("FILE_MIGRATE_"))
+                {
+                    var resultString = Regex.Match(errorMessage, @"\d+").Value;
+                    var dcIdx = int.Parse(resultString);
+                    throw new FileMigrationException(dcIdx);
+                }
+                else if (errorMessage.StartsWith("USER_MIGRATE_"))
+                {
+                    var resultString = Regex.Match(errorMessage, @"\d+").Value;
+                    var dcIdx = int.Parse(resultString);
+                    throw new UserMigrationException(dcIdx);
+                }
+                else if (errorMessage == "PHONE_CODE_INVALID")
+                {
+                    throw new InvalidPhoneCodeException("The numeric code used to authenticate does not match the numeric code sent by SMS/Telegram");
+                }
+                else if (errorMessage == "SESSION_PASSWORD_NEEDED")
+                {
+                    throw new CloudPasswordNeededException("This Account has Cloud Password !");
                 }
                 else
                 {
@@ -305,7 +335,7 @@ namespace TLSharp.Core.Network
                         }
                         using (var compressedReader = new BinaryReader(ms))
                         {
-                            request.OnResponse(compressedReader);
+                            request.deserializeResponse(compressedReader);
                         }
                     }
                 }
@@ -317,8 +347,7 @@ namespace TLSharp.Core.Network
             else
             {
                 messageReader.BaseStream.Position -= 4;
-
-                request.OnResponse(messageReader);
+                request.deserializeResponse(messageReader);
             }
 
             return false;
@@ -339,9 +368,9 @@ namespace TLSharp.Core.Network
             switch (errorCode)
             {
                 case 16:
-                    throw new InvalidOperationException(" msg_id too low (most likely, client time is wrong; it would be worthwhile to synchronize it using msg_id notifications and re-send the original message with the “correct” msg_id or wrap it in a container with a new msg_id if the original message had waited too long on the client to be transmitted)");
+                    throw new InvalidOperationException("msg_id too low (most likely, client time is wrong; it would be worthwhile to synchronize it using msg_id notifications and re-send the original message with the “correct” msg_id or wrap it in a container with a new msg_id if the original message had waited too long on the client to be transmitted)");
                 case 17:
-                    throw new InvalidOperationException(" msg_id too high (similar to the previous case, the client time has to be synchronized, and the message re-sent with the correct msg_id)");
+                    throw new InvalidOperationException("msg_id too high (similar to the previous case, the client time has to be synchronized, and the message re-sent with the correct msg_id)");
                 case 18:
                     throw new InvalidOperationException("incorrect two lower order msg_id bits (the server expects client message msg_id to be divisible by 4)");
                 case 19:
@@ -382,7 +411,7 @@ namespace TLSharp.Core.Network
             return true;
         }
 
-        private bool HandleBadServerSalt(ulong messageId, int sequence, BinaryReader messageReader, MTProtoRequest request)
+        private bool HandleBadServerSalt(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
         {
             uint code = messageReader.ReadUInt32();
             ulong badMsgId = messageReader.ReadUInt64();
@@ -443,8 +472,16 @@ namespace TLSharp.Core.Network
             return true;
         }
 
-        private bool HandlePong(ulong messageId, int sequence, BinaryReader messageReader)
+        private bool HandlePong(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
         {
+            uint code = messageReader.ReadUInt32();
+            ulong msgId = messageReader.ReadUInt64();
+
+            if (msgId == (ulong)request.MessageId)
+            {
+                request.ConfirmReceived = true;
+            }
+
             return false;
         }
 
@@ -453,7 +490,7 @@ namespace TLSharp.Core.Network
             return false;
         }
 
-        private bool HandleContainer(ulong messageId, int sequence, BinaryReader messageReader, MTProtoRequest request)
+        private bool HandleContainer(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
         {
             uint code = messageReader.ReadUInt32();
             int size = messageReader.ReadInt32();
@@ -483,6 +520,55 @@ namespace TLSharp.Core.Network
         private MemoryStream makeMemory(int len)
         {
             return new MemoryStream(new byte[len], 0, len, true, true);
+        }
+    }
+
+    public class FloodException : Exception
+    {
+        public TimeSpan TimeToWait { get; private set; }
+
+        internal FloodException(TimeSpan timeToWait)
+            : base($"Flood prevention. Telegram now requires your program to do requests again only after {timeToWait.TotalSeconds} seconds have passed ({nameof(TimeToWait)} property)." +
+                    " If you think the culprit of this problem may lie in TLSharp's implementation, open a Github issue please.")
+        {
+            TimeToWait = timeToWait;
+        }
+    }
+
+    internal abstract class DataCenterMigrationException : Exception
+    {
+        internal int DC { get; private set; }
+
+        private const string REPORT_MESSAGE =
+            " See: https://github.com/sochix/TLSharp#i-get-a-xxxmigrationexception-or-a-migrate_x-error";
+
+        protected DataCenterMigrationException(string msg, int dc) : base (msg + REPORT_MESSAGE)
+        {
+            DC = dc;
+        }
+    }
+
+    internal class PhoneMigrationException : DataCenterMigrationException
+    {
+        internal PhoneMigrationException(int dc)
+            : base ($"Phone number registered to a different DC: {dc}.", dc)
+        {
+        }
+    }
+
+    internal class FileMigrationException : DataCenterMigrationException
+    {
+        internal FileMigrationException(int dc)
+            : base ($"File located on a different DC: {dc}.", dc)
+        {
+        }
+    }
+
+    internal class UserMigrationException : DataCenterMigrationException
+    {
+        internal UserMigrationException(int dc)
+            : base($"User located on a different DC: {dc}.", dc)
+        {
         }
     }
 }

@@ -1,47 +1,55 @@
 #TLSharp
 
+<a href="https://www.paypal.me/IPirozhenko" title="Support project"><img src="https://img.shields.io/badge/Support%20project-paypal-brightgreen.svg"></a>
+[![Join the chat at https://gitter.im/TLSharp/Lobby](https://badges.gitter.im/TLSharp/Lobby.svg)](https://gitter.im/TLSharp/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build status](https://ci.appveyor.com/api/projects/status/95rl618ch5c4h2fa?svg=true)](https://ci.appveyor.com/project/sochix/tlsharp)
+[![NuGet version](https://badge.fury.io/nu/TLSharp.svg)](https://badge.fury.io/nu/TLSharp)
+<a href="https://github.com/sochix/telegram-tools"><img src=https://img.shields.io/badge/Telegram%20Tools-1.0.0-blue.svg /></a>
 
-Telegram (http://telegram.org) client library implemented in C#. Only basic functionality is currently implemented. **Consider donation to speed up development process.** Bitcoin wallet: **3K1ocweFgaHnAibJ3n6hX7RNZWFTFcJjUe**
+_Unofficial_ Telegram (http://telegram.org) client library implemented in C#. Latest TL scheme supported, thanks to Afshin Arani
 
-It's a perfect fit for any developer who would like to send data directly to Telegram users.
+It's a perfect fit for any developer who would like to send data directly to Telegram users or write own custom Telegram client.
 
-:star: If you :heart: library, please star it! :star:
+:star2: If you :heart: library, please star it! :star2:
 
-:exclamation: **Please, don't use it for SPAM!**
+If you have difficulties with library usage, I can support you ( 75$/hour ). Contact me at @sochix.
 
-[How-To: Send messages to Telegram from C#](http://www.sochix.ru/how-to-send-messages-to-telegram-from-c/)
+If you have difficulties with console or writing code, you can try [Telegram Tools](https://github.com/sochix/telegram-tools). It's a GUI for TLSharp.
 
-:ru: Russian description you can find [here](https://habrahabr.ru/post/277079/)
-
-#Table of contents?
+# Table of contents?
 
 - [How do I add this to my project?](#how-do-i-add-this-to-my-project)
 - [Dependencies](#dependencies)
 - [Starter Guide](#starter-guide)
   - [Quick configuration](#quick-configuration)
-  - [Using TLSharp](#using-tlsharp)
+  - [First requests](#first-requests)
+  - [Working with files](#working-with-files)
+- [Available Methods](#available-methods)
 - [Contributing](#contributing)
 - [FAQ](#faq)
 - [Donations](#donations)
 - [License](#license)
 
-#How do I add this to my project?
+# How do I add this to my project?
 
-Library isn't ready for production usage, that's why no Nu-Get package available.
+Install via NuGet
 
-To use it follow next steps:
+```
+	> Install-Package TLSharp
+```
+
+or build from source
 
 1. Clone TLSharp from GitHub
-1. Compile source with VS2015
+1. Compile source with VS2015 or MonoDevelop
 1. Add reference to ```TLSharp.Core.dll``` to your awesome project.
 
-#Dependencies
+# Dependencies
 
 TLSharp has a few dependenices, most of functionality implemented from scratch.
 All dependencies listed in [package.conf file](https://github.com/sochix/TLSharp/blob/master/TLSharp.Core/packages.config).
 
-#Starter Guide
+# Starter Guide
 
 ## Quick Configuration
 Telegram API isn't that easy to start. You need to do some configuration first.
@@ -49,301 +57,192 @@ Telegram API isn't that easy to start. You need to do some configuration first.
 1. Create a [developer account](https://my.telegram.org/) in Telegram. 
 1. Goto [API development tools](https://my.telegram.org/apps) and copy **API_ID** and **API_HASH** from your account. You'll need it later.
 
-## Using TLSharp
+## First requests
+To start work, create an instance of TelegramClient and establish connection
 
-###Initializing client
-
-To initialize client you need to create a store in which TLSharp will save Session info.
-
+```csharp 
+   var client = new TelegramClient(apiId, apiHash);
+   await client.ConnectAsync();
 ```
-var store = new FileSessionStore();
-```
+Now you can work with Telegram API, but ->
+> Only a small portion of the API methods are available to unauthorized users. ([full description](https://core.telegram.org/api/auth)) 
 
-Next, create client instance and connect to Telegram server. You need your **API_ID** and **API_HASH** for this step.
+For authentication you need to run following code
+```csharp
+  var hash = await client.SendCodeRequestAsync("<user_number>");
+  var code = "<code_from_telegram>"; // you can change code in debugger
 
-```
-var client = new TelegramClient(store, "session", API_ID, "API_HASH");
-await client.Connect();
-```
-Now, you can call methods.
-
-All methods except [IsPhoneRegistered](#IsPhoneRegistered) requires to authenticated user. Example usage of all methods you can find in [Tests].
-
-###Supported methods
-Currently supported methods:
- - [IsPhoneRegistered - Check if phone is registered in Telegram](#isphoneregistered)
- - [Authenticate user](#authenticate-user)
- - [Get Contact by Phone number](#get-contact-by-phone-number)
- - [Get Contact by Username](#get-contact-by-username)
- - [Send Message to Contact](#send-message-to-contact)
- - [Send Media to Contact](#send-media-to-contact)
- - [Get Messages History](#get-messages-history)
- - [Get UserFull](#get-userfull)
- - [Create Chat](#create-chat)
- - [Add Chat user](#add-chat-user)
- - [Delete Chat user](#delete-chat-user)
- - [Leave Chat](#leave-chat)
-
-####IsPhoneRegistered
-Check if phone number registered to Telegram.
-
-_Example_:
-
-```
-var result = await client.IsPhoneRegistered(phoneNumber)
-```
-
-* phoneNumber - **string**, phone number in international format (eg. 791812312323)
-
-**Returns:** **bool**, is phone registerd in Telegram or not.
-
-
-####Authenticate user
-Authenticate user by phone number and secret code.
-
-_Example_:
-
-```
-	var hash = await client.SendCodeRequest(phoneNumber);
-    
-	var code = "1234"; //code that you receive from Telegram 
-
-	var user = await client.MakeAuth(phoneNumber, hash, code); 
-```
-* phoneNumber - **string**, phone number in international format (eg. 791812312323)
-
-**Returns:** **User**, authenticated User.
-
-####Get Contact By Phone number
-Get user id by phone number.
-
-_Example_:
-
-```
-var res = await client.ImportContactByPhoneNumber("791812312323");
-```
-
-* phoneNumber - **string**, phone number in international format (eg. 791812312323)
-
-**Returns**: **int?**, User Id or null if no such user. 
-
-####Get Contact By Username
-Get user id by userName.
-
-_Example_:
-
-```
-var res = await client.ImportByUserName(userName);
-```
-
-* userName - **string**, user name  (eg. telegram_bot)
-
-**Returns**: **int?**, User Id or null if no such user. 
-
-####Send Message To Contact
-Send text message to specified user
-
-_Example_:
-
-```
-await client.SendMessage(userId, message);
-```
-* userId - **int**, user id
-* message - **string**, message
-
-####Send Media To Contact
-Send media file to specified contact.
-
-_Example_:
-
-```
-var mediaFile = await client.UploadFile(file_name, file);
-
-var res = await client.SendMediaMessage(userId, mediaFile);
-```
-
-* file_name - **string**, file name with extension (eg. "file.jpg")
-* file - **byte[]**, file content
-* userId - **int**, user id
-* mediaFile - **InputFile**, reference to uploaded file
-
-**Returns**: **bool**, file sent or not
-
-####Get Messages History
-Returns messages history for specified userId.
-
-_Example_:
-
-```
-var hist = await client.GetMessagesHistoryForContact(userId, offset, limit);
+  var user = await client.MakeAuthAsync("<user_number>", hash, code);
 ``` 
 
-* userId - **int**, user id
-* offset - **int**, from what index start load history
-* limit - **int**, how much items return
+Full code you can see at [AuthUser test](https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L70)
 
-**Returns**: **List\<Message\>**, message history
+When user is authenticated, TLSharp creates special file called _session.dat_. In this file TLSharp store all information needed for user session. So you need to authenticate user every time the _session.dat_ file is corrupted or removed.
 
-####Get UserFull
-Returns user's full information for specified userId.
+You can call any method on authenticated user. For example, let's send message to a friend by his phone number:
 
-_Example_:
+```csharp
+  //get available contacts
+  var result = await client.GetContactsAsync();
 
+  //find recipient in contacts
+  var user = result.users.lists
+	  .Where(x => x.GetType() == typeof (TLUser))
+	  .Cast<TLUser>()
+	  .FirstOrDefault(x => x.phone == "<recipient_phone>");
+	
+  //send message
+  await client.SendMessageAsync(new TLInputPeerUser() {user_id = user.id}, "OUR_MESSAGE");
 ```
-var userFull = await client.GetUserFull(userId);
+
+Full code you can see at [SendMessage test](https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L87)
+
+To send message to channel you could use the following code:
+```csharp
+  //get user dialogs
+  var dialogs = await client.GetUserDialogsAsync();
+
+  //find channel by title
+  var chat = dialogs.chats.lists
+    .Where(c => c.GetType() == typeof(TLChannel))
+    .Cast<TLChannel>()
+    .FirstOrDefault(c => c.title == "<channel_title>");
+
+  //send message
+  await client.SendMessageAsync(new TLInputPeerChannel() { channel_id = chat.id, access_hash = chat.access_hash.Value }, "OUR_MESSAGE");
+```
+Full code you can see at [SendMessageToChannel test](https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L107)
+## Working with files
+Telegram separate files to two categories -> big file and small file. File is Big if its size more than 10 Mb. TLSharp tries to hide this complexity from you, thats why we provide one method to upload files **UploadFile**.
+
+```csharp
+	var fileResult = await client.UploadFile("cat.jpg", new StreamReader("data/cat.jpg"));
+```
+
+TLSharp provides two wrappers for sending photo and document
+
+```csharp
+	await client.SendUploadedPhoto(new TLInputPeerUser() { user_id = user.id }, fileResult, "kitty");
+	await client.SendUploadedDocument(
+                new TLInputPeerUser() { user_id = user.id },
+                fileResult,
+                "some zips", //caption
+                "application/zip", //mime-type
+                new TLVector<TLAbsDocumentAttribute>()); //document attributes, such as file name
+```
+Full code you can see at [SendPhotoToContactTest](https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L125) and [SendBigFileToContactTest](https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L143)
+
+To download file you should call **GetFile** method
+```csharp
+	await client.GetFile(
+                new TLInputDocumentFileLocation()
+                {
+                    access_hash = document.access_hash,
+                    id = document.id,
+                    version = document.version
+                },
+                document.size); //size of fileChunk you want to retrieve
+```
+
+Full code you can see at [DownloadFileFromContactTest](https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L167)
+
+# Available Methods
+
+For your convenience TLSharp have wrappers for several Telegram API methods. You could add your own, see details below.
+
+1. IsPhoneRegisteredAsync
+1. SendCodeRequestAsync
+1. MakeAuthAsync
+1. SignUpAsync
+1. GetContactsAsync
+1. SendMessageAsync
+1. SendTypingAsync
+1. GetUserDialogsAsync
+1. SendUploadedPhoto
+1. SendUploadedDocument
+1. GetFile
+1. UploadFile
+1. SendPingAsync
+1. GetHistoryAsync
+
+**What if you can't find needed method at the list?**
+
+Don't panic. You can call any method with help of `SendRequestAsync` function. For example, send user typing method: 
+
+```csharp
+
+  //Create request 
+  var req = new TLRequestSetTyping()
+  {
+    action = new TLSendMessageTypingAction(),
+    peer = peer
+  };
+
+  //run request, and deserialize response to Boolean
+  return await SendRequestAsync<Boolean>(req);
 ``` 
 
-* userId - **int**, user id
+**Where you can find a list of requests and its params?**
 
-**Returns**: **UserFull**, User's information
+The only way is [Telegram API docs](https://core.telegram.org/methods). Yes, it's outdated. But there is no other source.
+Latest scheme in JSON format you can find [here](https://gist.github.com/aarani/b22b7cda024973dff68e1672794b0298)
 
-####Create Chat
-Creates a new chat.
+# Contributing
 
-_Example_:
+Contributing is highly appreciated! Donations required <a href="https://www.paypal.me/IPirozhenko" title="Support project"><img src="https://img.shields.io/badge/Support%20project-paypal-brightgreen.svg"></a>
 
-```
-var statedMessage = await client.CreateChat(title, new List<string> { userId1, userId2 });
-``` 
+## What things can I Implement (Project Roadmap)?
 
-* title - **string**, chat name
-* userIdsToInvite - **List<int>**, list of userIds to invite to chat. Current user will be automatically added to this chat.
+### Release 1.0.0
 
-**Returns**: **Messages_statedMessageConstructor**, Message that contains information about created chat.
-
-####Add Chat user
-Adds a user to a chat and sends a service message on it.
-
-_Example_:
-
-```
-var statedMessage = await client.AddChatUser(chatId, userId);
-``` 
-
-* chatId - **int**, Chat ID
-* userId - **int**, User ID to be added
-
-**Returns**: **Messages_statedMessageConstructor**, Message that contains information about modified chat.
-
-####Delete Chat user
-Deletes a user from a chat and sends a service message on it.
-
-_Example_:
-
-```
-var statedMessage = await client.DeleteChatUser(chatId, userId);
-``` 
-
-* chatId - **int**, Chat ID
-* userId - **int**, User ID to be deleted
-
-**Returns**: **Messages_statedMessageConstructor**, Message that contains information about modified chat.
-
-####Leave Chat
-Leaves the chat by deleting currently authenticated user from it.
-
-_Example_:
-
-```
-var statedMessage = await client.LeaveChat(chatId);
-``` 
-
-* chatId - **int**, Chat ID
-
-**Returns**: **Messages_statedMessageConstructor**, Message that contains information about modified chat.
-
-## Contributing
-
-Contributing is highly appreciated!
-
-###How to add new functions
-
-Adding new functions is easy.
-
-* Just create a new Request class in Requests folder.
-* Derive it from MTProtoRequest.
-
-Requests specification you can find in [Telegram API](https://core.telegram.org/#api-methods) reference.
-
-_Example_:
-
-```
-public class ExampleRequest : MTProtoRequest
-{
-    private int _someParameter;
-
-    // pass needed parameters through constructor, and save it to private vars
-    public InitConnectionRequest(int someParameter)
-    {
-        _someParameter = someParameter;
-    }
-
-    // send all needed params to Telegram
-    public override void OnSend(BinaryWriter writer)
-    {
-        writer.Write(_someParameter); 
-    }
-
-    // read a received data from Telegram 
-    public override void OnResponse(BinaryReader reader)
-    {
-        _someParameter = reader.ReadUInt32();
-    }
-
-    public override void OnException(Exception exception)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override bool Responded { get; }
-
-    public override bool Confirmed => true;
-}
-```
-
-More advanced examples you can find in [Requests folder](https://github.com/sochix/TLSharp/tree/master/TLSharp.Core/Requests). 
-
-###What things can I Implement (Project Roadmap)?
-
-* Factor out current TL language implementation, and use [this one](https://github.com/everbytes/SharpTL)
-* Add possibility to get current user Chats and Users
-* Fix Chat requests (Create, AddUser) 
+* [DONE] Add PHONE_MIGRATE handling
+* [DONE] Add FILE_MIGRATE handling
 * Add Updates handling
-* Add possibility to work with Channels
+* [DONE] Add NuGet package
+* [DONE] Add wrappers for media uploading and downloading
+* Store user session as JSON
 
 # FAQ
 
-#### I get an error MIGRATE_X?
+#### What API layer is supported?
+The latest one - 57. Thanks to Afshin Arani for his TLGenerator
 
-TLSharp library should automatically handle this errors. If you see such errors, pls create a new issue.
+#### I get a xxxMigrationException or a MIGRATE_X error!
 
-#### I get an exception: System.IO.EndOfStreamException: Unable to read beyond the end of the stream. All test methos except that AuthenticationWorks and TestConnection return same error. I did every thing including setting api id and hash, and setting server address.
+TLSharp library should automatically handle these errors. If you see such errors, please open a new Github issue with the details (include a stacktrace, etc.).
+
+#### I get an exception: System.IO.EndOfStreamException: Unable to read beyond the end of the stream. All test methos except that AuthenticationWorks and TestConnection return same error. I did every thing including setting api id and hash, and setting server address.-
 
 You should create a Telegram session. See [configuration guide](#sending-messages-set-up)
 
-#### Why I get FLOOD_WAIT error?
-It's Telegram restrictions. See [this](https://core.telegram.org/api/errors#420-flood)
+#### Why do I get a FloodException/FLOOD_WAIT error?
+It's likely [Telegram restrictions](https://core.telegram.org/api/errors#420-flood), or a bug in TLSharp (if you feel it's the latter, please open a Github issue). You can know the time to wait by accessing the FloodException::TimeToWait property.
 
 #### Why does TLSharp lacks feature XXXX?
 
 Now TLSharp is basic realization of Telegram protocol, you can be a contributor or a sponsor to speed-up developemnt of any feature.
 
 #### Nothing helps
-Create an issue in project bug tracker.
+Ask your question at gitter or create an issue in project bug tracker.
 
-**Attach this information**:
+**Attach following information**:
 
 * Full problem description and exception message
 * Stack-trace
 * Your code that runs in to this exception
 
 Without information listen above your issue will be closed. 
+
 # Donations
 Thanks for donations! It's highly appreciated. 
-Bitcoin wallet: **3K1ocweFgaHnAibJ3n6hX7RNZWFTFcJjUe**
+<a href="https://www.paypal.me/IPirozhenko" title="Support project"><img src="https://img.shields.io/badge/Support%20project-paypal-brightgreen.svg"></a>
 
 List of donators:
 * [mtbitcoin](https://github.com/mtbitcoin)
+
+# Contributors
+* [Afshin Arani](http://aarani.ir) - TLGenerator, and a lot of other usefull things
+* [Knocte](https://github.com/knocte)
 
 # License
 

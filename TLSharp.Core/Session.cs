@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using TeleSharp.TL;
 using TLSharp.Core.MTProto;
 using TLSharp.Core.MTProto.Crypto;
 
@@ -24,7 +25,11 @@ namespace TLSharp.Core
 
         public Session Load(string sessionUserId)
         {
-            using (var stream = new FileStream($"{sessionUserId}.dat", FileMode.Open))
+            var sessionFileName = $"{sessionUserId}.dat";
+            if (!File.Exists(sessionFileName))
+                return null;
+
+            using (var stream = new FileStream(sessionFileName, FileMode.Open))
             {
                 var buffer = new byte[2048];
                 stream.Read(buffer, 0, 2048);
@@ -43,14 +48,15 @@ namespace TLSharp.Core
 
         public Session Load(string sessionUserId)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 
     public class Session
     {
-        private const string defaultConnectionAddress = "91.108.56.165";
-        private const int defaultConnectionPort = 443;
+	    private const string defaultConnectionAddress = "149.154.175.100";//"149.154.167.50";
+
+		private const int defaultConnectionPort = 443;
 
         public string SessionUserId { get; set; }
         public string ServerAddress { get; set; }
@@ -62,7 +68,7 @@ namespace TLSharp.Core
         public int TimeOffset { get; set; }
         public long LastMessageId { get; set; }
         public int SessionExpires { get; set; }
-        public User User { get; set; }
+        public TLUser TLUser { get; set; }
         private Random random;
 
         private ISessionStore _store;
@@ -86,11 +92,11 @@ namespace TLSharp.Core
                 Serializers.String.write(writer, ServerAddress);
                 writer.Write(Port);
 
-                if (User != null)
+                if (TLUser != null)
                 {
                     writer.Write(1);
                     writer.Write(SessionExpires);
-                    User.Write(writer);
+                    ObjectUtils.SerializeObject(TLUser, writer);
                 }
                 else
                 {
@@ -118,11 +124,11 @@ namespace TLSharp.Core
 
                 var isAuthExsist = reader.ReadInt32() == 1;
                 int sessionExpires = 0;
-                User user = null;
+                TLUser TLUser = null;
                 if (isAuthExsist)
                 {
                     sessionExpires = reader.ReadInt32();
-                    user = TL.Parse<User>(reader);
+                    TLUser = (TLUser)ObjectUtils.DeserializeObject(reader);
                 }
 
                 var authData = Serializers.Bytes.read(reader);
@@ -136,7 +142,7 @@ namespace TLSharp.Core
                     LastMessageId = lastMessageId,
                     TimeOffset = timeOffset,
                     SessionExpires = sessionExpires,
-                    User = user,
+                    TLUser = TLUser,
                     SessionUserId = sessionUserId,
                     ServerAddress = serverAddress,
                     Port = port
@@ -151,24 +157,13 @@ namespace TLSharp.Core
 
         public static Session TryLoadOrCreateNew(ISessionStore store, string sessionUserId)
         {
-            Session session;
-
-            try
+            return store.Load(sessionUserId) ?? new Session(store)
             {
-                session = store.Load(sessionUserId);
-            }
-            catch
-            {
-                session = new Session(store)
-                {
-                    Id = GenerateRandomUlong(),
-                    SessionUserId = sessionUserId,
-                    ServerAddress = defaultConnectionAddress,
-                    Port = defaultConnectionPort
-                };
-            }
-
-            return session;
+                Id = GenerateRandomUlong(),
+                SessionUserId = sessionUserId,
+                ServerAddress = defaultConnectionAddress,
+                Port = defaultConnectionPort
+            };
         }
 
         private static ulong GenerateRandomUlong()

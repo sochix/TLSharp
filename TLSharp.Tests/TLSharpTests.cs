@@ -1,356 +1,380 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
+using System;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using TeleSharp.TL;
+using TeleSharp.TL.Messages;
 using TLSharp.Core;
-using TLSharp.Core.Auth;
-using TLSharp.Core.MTProto;
 using TLSharp.Core.Network;
+using TLSharp.Core.Requests;
+using TLSharp.Core.Utils;
 
 namespace TLSharp.Tests
 {
-    [TestClass]
     public class TLSharpTests
     {
         private string NumberToSendMessage { get; set; }
 
         private string NumberToAuthenticate { get; set; }
 
+        private string CodeToAuthenticate { get; set; }
+
+        private string PasswordToAuthenticate { get; set; }
+
+        private string NotRegisteredNumberToSignUp { get; set; }
+
         private string UserNameToSendMessage { get; set; }
 
         private string NumberToGetUserFull { get; set; }
 
-        private string apiHash = "";
+        private string NumberToAddToChat { get; set; }
 
-        private int apiId = 0;
+        private string ApiHash { get; set; }
 
-        [TestInitialize]
-        public void Init()
+        private int ApiId { get; set; }
+
+        class Assert
         {
-            // Setup your phone numbers in app.config
-            NumberToAuthenticate = ConfigurationManager.AppSettings["numberToAuthenticate"];
+            static internal void IsNotNull(object obj)
+            {
+                IsNotNullHanlder(obj);
+            }
+
+            static internal void IsTrue(bool cond)
+            {
+                IsTrueHandler(cond);
+            }
+        }
+
+        internal static Action<object> IsNotNullHanlder;
+        internal static Action<bool> IsTrueHandler;
+
+        protected void Init(Action<object> notNullHandler, Action<bool> trueHandler)
+        {
+            IsNotNullHanlder = notNullHandler;
+            IsTrueHandler = trueHandler;
+
+            // Setup your API settings and phone numbers in app.config
+            GatherTestConfiguration();
+        }
+
+        private TelegramClient NewClient()
+        {
+            try
+            {
+                return new TelegramClient(ApiId, ApiHash);
+            }
+            catch (MissingApiConfigurationException ex)
+            {
+                throw new Exception($"Please add your API settings to the `app.config` file. (More info: {MissingApiConfigurationException.InfoUrl})",
+                                    ex);
+            }
+        }
+
+        private void GatherTestConfiguration()
+        {
+            string appConfigMsgWarning = "{0} not configured in app.config! Some tests may fail.";
+
+            ApiHash = ConfigurationManager.AppSettings[nameof(ApiHash)];
+            if (string.IsNullOrEmpty(ApiHash))
+                Debug.WriteLine(appConfigMsgWarning, nameof(ApiHash));
+
+            var apiId = ConfigurationManager.AppSettings[nameof(ApiId)];
+            if (string.IsNullOrEmpty(apiId))
+                Debug.WriteLine(appConfigMsgWarning, nameof(ApiId));
+            else
+                ApiId = int.Parse(apiId);
+
+            NumberToAuthenticate = ConfigurationManager.AppSettings[nameof(NumberToAuthenticate)];
             if (string.IsNullOrEmpty(NumberToAuthenticate))
-                throw new InvalidOperationException("NumberToAuthenticate is null. Specify number in app.config");
+                Debug.WriteLine(appConfigMsgWarning, nameof(NumberToAuthenticate));
 
-            NumberToSendMessage = ConfigurationManager.AppSettings["numberToSendMessage"];
-            if (string.IsNullOrEmpty(NumberToSendMessage))
-                throw new InvalidOperationException("NumberToSendMessage is null. Specify number in app.config");
+            CodeToAuthenticate = ConfigurationManager.AppSettings[nameof(CodeToAuthenticate)];
+            if (string.IsNullOrEmpty(CodeToAuthenticate))
+                Debug.WriteLine(appConfigMsgWarning, nameof(CodeToAuthenticate));
 
-            UserNameToSendMessage = ConfigurationManager.AppSettings["userNameToSendMessage"];
+            PasswordToAuthenticate = ConfigurationManager.AppSettings[nameof(PasswordToAuthenticate)];
+            if (string.IsNullOrEmpty(PasswordToAuthenticate))
+                Debug.WriteLine(appConfigMsgWarning, nameof(PasswordToAuthenticate));
+
+            NotRegisteredNumberToSignUp = ConfigurationManager.AppSettings[nameof(NotRegisteredNumberToSignUp)];
+            if (string.IsNullOrEmpty(NotRegisteredNumberToSignUp))
+                Debug.WriteLine(appConfigMsgWarning, nameof(NotRegisteredNumberToSignUp));
+
+            UserNameToSendMessage = ConfigurationManager.AppSettings[nameof(UserNameToSendMessage)];
             if (string.IsNullOrEmpty(UserNameToSendMessage))
-                throw new InvalidOperationException("UserNameToSendMessage is null. Specify userName in app.config");
+                Debug.WriteLine(appConfigMsgWarning, nameof(UserNameToSendMessage));
 
-            NumberToGetUserFull = ConfigurationManager.AppSettings["numberToGetUserFull"];
+            NumberToGetUserFull = ConfigurationManager.AppSettings[nameof(NumberToGetUserFull)];
             if (string.IsNullOrEmpty(NumberToGetUserFull))
-                throw new InvalidOperationException("NumberToGetUserFull is null. Specify Number in app.config");
+                Debug.WriteLine(appConfigMsgWarning, nameof(NumberToGetUserFull));
 
+            NumberToAddToChat = ConfigurationManager.AppSettings[nameof(NumberToAddToChat)];
+            if (string.IsNullOrEmpty(NumberToAddToChat))
+                Debug.WriteLine(appConfigMsgWarning, nameof(NumberToAddToChat));
         }
 
-        [TestMethod]
-        public async Task AuthUser()
+        public virtual async Task AuthUser()
         {
-            var store = new FileSessionStore();
-            var client = new TelegramClient(store, "session", apiId, apiHash);
+            var client = NewClient();
 
-            await client.Connect();
+            await client.ConnectAsync();
 
-            var hash = await client.SendCodeRequest(NumberToAuthenticate);
-            var code = "93463"; // you can change code in debugger
+            var hash = await client.SendCodeRequestAsync(NumberToAuthenticate);
+            var code = CodeToAuthenticate; // you can change code in debugger too
 
-            var user = await client.MakeAuth(NumberToAuthenticate, hash, code);
+            if (String.IsNullOrWhiteSpace(code))
+            {
+                throw new Exception("CodeToAuthenticate is empty in the app.config file, fill it with the code you just got now by SMS/Telegram");
+            }
 
+            TLUser user = null;
+            try
+            {
+                user = await client.MakeAuthAsync(NumberToAuthenticate, hash, code);
+            }
+            catch (CloudPasswordNeededException ex)
+            {
+                var password = await client.GetPasswordSetting();
+                var password_str = PasswordToAuthenticate;
+
+                user = await client.MakeAuthWithPasswordAsync(password,password_str);
+            }
+            catch (InvalidPhoneCodeException ex)
+            {
+                throw new Exception("CodeToAuthenticate is wrong in the app.config file, fill it with the code you just got now by SMS/Telegram",
+                                    ex);
+            }
             Assert.IsNotNull(user);
+            Assert.IsTrue(client.IsUserAuthorized());
         }
 
-        [TestMethod]
-        public async Task CheckPhones()
+        public virtual async Task SendMessageTest()
         {
-            var store = new FileSessionStore();
-            var client = new TelegramClient(store, "session", apiId, apiHash);
-            await client.Connect();
+            NumberToSendMessage = ConfigurationManager.AppSettings[nameof(NumberToSendMessage)];
+            if (string.IsNullOrWhiteSpace(NumberToSendMessage))
+                throw new Exception($"Please fill the '{nameof(NumberToSendMessage)}' setting in app.config file first");
 
-            var result = await client.IsPhoneRegistered(NumberToAuthenticate);
+            // this is because the contacts in the address come without the "+" prefix
+            var normalizedNumber = NumberToSendMessage.StartsWith("+") ?
+                NumberToSendMessage.Substring(1, NumberToSendMessage.Length - 1) :
+                NumberToSendMessage;
+
+            var client = NewClient();
+
+            await client.ConnectAsync();
+
+            var result = await client.GetContactsAsync();
+
+            var user = result.users.lists
+                .OfType<TLUser>()
+                .FirstOrDefault(x => x.phone == normalizedNumber);
+
+            if (user == null)
+            {
+                throw new System.Exception("Number was not found in Contacts List of user: " + NumberToSendMessage);
+            }
+
+            await client.SendTypingAsync(new TLInputPeerUser() { user_id = user.id });
+            Thread.Sleep(3000);
+            await client.SendMessageAsync(new TLInputPeerUser() { user_id = user.id }, "TEST");
+        }
+
+        public virtual async Task SendMessageToChannelTest()
+        {
+            var client = NewClient();
+
+            await client.ConnectAsync();
+
+            var dialogs = (TLDialogs) await client.GetUserDialogsAsync();
+            var chat = dialogs.chats.lists
+                .OfType<TLChannel>()
+                .FirstOrDefault(c => c.title == "TestGroup");
+
+            await client.SendMessageAsync(new TLInputPeerChannel() { channel_id = chat.id, access_hash = chat.access_hash.Value }, "TEST MSG");
+        }
+
+        public virtual async Task SendPhotoToContactTest()
+        {
+            var client = NewClient();
+
+            await client.ConnectAsync();
+
+            var result = await client.GetContactsAsync();
+
+            var user = result.users.lists
+                .OfType<TLUser>()
+                .FirstOrDefault(x => x.phone == NumberToSendMessage);
+
+            var fileResult = (TLInputFile)await client.UploadFile("cat.jpg", new StreamReader("data/cat.jpg"));
+            await client.SendUploadedPhoto(new TLInputPeerUser() { user_id = user.id }, fileResult, "kitty");
+        }
+
+        public virtual async Task SendBigFileToContactTest()
+        {
+            var client = NewClient();
+
+            await client.ConnectAsync();
+
+            var result = await client.GetContactsAsync();
+
+            var user = result.users.lists
+                .OfType<TLUser>()
+                .FirstOrDefault(x => x.phone == NumberToSendMessage);
+
+            var fileResult = (TLInputFileBig)await client.UploadFile("some.zip", new StreamReader("<some big file path>"));
+
+            await client.SendUploadedDocument(
+                new TLInputPeerUser() { user_id = user.id },
+                fileResult,
+                "some zips",
+                "application/zip",
+                new TLVector<TLAbsDocumentAttribute>());
+        }
+
+        public virtual async Task DownloadFileFromContactTest()
+        {
+            var client = NewClient();
+
+            await client.ConnectAsync();
+
+            var result = await client.GetContactsAsync();
+
+            var user = result.users.lists
+                .OfType<TLUser>()
+                .FirstOrDefault(x => x.phone == NumberToSendMessage);
+
+            var inputPeer = new TLInputPeerUser() { user_id = user.id };
+            var res = await client.SendRequestAsync<TLMessagesSlice>(new TLRequestGetHistory() { peer = inputPeer });
+            var document = res.messages.lists
+                .OfType<TLMessage>()
+                .Where(m => m.media != null)
+                .Select(m => m.media)
+                .OfType<TLMessageMediaDocument>()
+                .Select(md => md.document)
+                .OfType<TLDocument>()
+                .First();
+
+            var resFile = await client.GetFile(
+                new TLInputDocumentFileLocation()
+                {
+                    access_hash = document.access_hash,
+                    id = document.id,
+                    version = document.version
+                },
+                document.size);
+            
+            Assert.IsTrue(resFile.bytes.Length > 0);
+        }
+
+        public virtual async Task DownloadFileFromWrongLocationTest()
+        {
+            var client = NewClient();
+
+            await client.ConnectAsync();
+
+            var result = await client.GetContactsAsync();
+
+            var user = result.users.lists
+                .OfType<TLUser>()
+                .FirstOrDefault(x => x.id == 5880094);
+    
+            var photo = ((TLUserProfilePhoto)user.photo);
+            var photoLocation = (TLFileLocation) photo.photo_big;
+
+            var resFile = await client.GetFile(new TLInputFileLocation()
+            {
+                local_id = photoLocation.local_id,
+                secret = photoLocation.secret,
+                volume_id = photoLocation.volume_id
+            }, 1024);
+
+            var res = await client.GetUserDialogsAsync(); 
+
+            Assert.IsTrue(resFile.bytes.Length > 0);
+        }
+
+        public virtual async Task SignUpNewUser()
+        {
+            var client = NewClient();
+            await client.ConnectAsync();
+
+            var hash = await client.SendCodeRequestAsync(NotRegisteredNumberToSignUp);
+            var code = "";
+
+            var registeredUser = await client.SignUpAsync(NotRegisteredNumberToSignUp, hash, code, "TLSharp", "User");
+            Assert.IsNotNull(registeredUser);
+            Assert.IsTrue(client.IsUserAuthorized());
+
+            var loggedInUser = await client.MakeAuthAsync(NotRegisteredNumberToSignUp, hash, code);
+            Assert.IsNotNull(loggedInUser);
+        }
+
+        public virtual async Task CheckPhones()
+        {
+            var client = NewClient();
+            await client.ConnectAsync();
+
+            var result = await client.IsPhoneRegisteredAsync(NumberToAuthenticate);
             Assert.IsTrue(result);
         }
 
-        [TestMethod]
-        public async Task ImportContactByPhoneNumber()
+        public virtual async Task FloodExceptionShouldNotCauseCannotReadPackageLengthError()
         {
-            // User should be already authenticated!
-
-            var store = new FileSessionStore();
-            var client = new TelegramClient(store, "session", apiId, apiHash);
-
-            await client.Connect();
-
-            Assert.IsTrue(client.IsUserAuthorized());
-
-            var res = await client.ImportContactByPhoneNumber(NumberToSendMessage);
-
-            Assert.IsNotNull(res);
-        }
-
-        [TestMethod]
-        public async Task ImportByUserName()
-        {
-            var store = new FileSessionStore();
-            var client = new TelegramClient(store, "session", apiId, apiHash);
-
-            await client.Connect();
-
-            Assert.IsTrue(client.IsUserAuthorized());
-
-            var res = await client.ImportByUserName(UserNameToSendMessage);
-
-            Assert.IsNotNull(res);
-        }
-
-        [TestMethod]
-        public async Task ImportByUserNameAndSendMessage()
-        {
-            var store = new FileSessionStore();
-            var client = new TelegramClient(store, "session", apiId, apiHash);
-
-            await client.Connect();
-
-            Assert.IsTrue(client.IsUserAuthorized());
-
-            var res = await client.ImportByUserName(UserNameToSendMessage);
-
-            Assert.IsNotNull(res);
-
-            await client.SendMessage(res.Value, "Test message from TelegramClient");
-        }
-
-        [TestMethod]
-        public async Task ImportContactByPhoneNumberAndSendMessage()
-        {
-            // User should be already authenticated!
-
-            var store = new FileSessionStore();
-            var client = new TelegramClient(store, "session", apiId, apiHash);
-            await client.Connect();
-
-            Assert.IsTrue(client.IsUserAuthorized());
-
-            var res = await client.ImportContactByPhoneNumber(NumberToSendMessage);
-
-            Assert.IsNotNull(res);
-
-            await client.SendMessage(res.Value, "Test message from TelegramClient");
-        }
-
-        [TestMethod]
-        public async Task GetHistory()
-        {
-            var store = new FileSessionStore();
-            var client = new TelegramClient(store, "session", apiId, apiHash);
-            await client.Connect();
-
-            Assert.IsTrue(client.IsUserAuthorized());
-
-            var res = await client.ImportContactByPhoneNumber(NumberToSendMessage);
-
-            Assert.IsNotNull(res);
-
-            var hist = await client.GetMessagesHistoryForContact(res.Value, 0, 5);
-
-            Assert.IsNotNull(hist);
-        }
-
-        [TestMethod]
-        public async Task UploadAndSendMedia()
-        {
-            var store = new FileSessionStore();
-            var client = new TelegramClient(store, "session", apiId, apiHash);
-            await client.Connect();
-
-            Assert.IsTrue(client.IsUserAuthorized());
-
-            var res = await client.ImportContactByPhoneNumber(NumberToSendMessage);
-
-            Assert.IsNotNull(res);
-
-            var file = File.ReadAllBytes("../../data/cat.jpg");
-
-            var mediaFile = await client.UploadFile("test_file.jpg", file);
-
-            Assert.IsNotNull(mediaFile);
-
-            var state = await client.SendMediaMessage(res.Value, mediaFile);
-
-            Assert.IsTrue(state);
-        }
-
-        [TestMethod]
-        public async Task GetFile()
-        {
-            // Get uploaded file from last message (ie: cat.jpg)
-
-            var store = new FileSessionStore();
-            var client = new TelegramClient(store, "session", apiId, apiHash);
-            await client.Connect();
-            Assert.IsTrue(client.IsUserAuthorized());
-
-            var res = await client.ImportContactByPhoneNumber(NumberToSendMessage);
-            Assert.IsNotNull(res);
-
-            // Get last message
-            var hist = await client.GetMessagesHistoryForContact(res.Value, 0, 1);
-            Assert.AreEqual(1, hist.Count);
-
-            var message = (MessageConstructor) hist[0];
-            Assert.AreEqual(typeof (MessageMediaPhotoConstructor), message.media.GetType());
-
-            var media = (MessageMediaPhotoConstructor) message.media;
-            Assert.AreEqual(typeof (PhotoConstructor), media.photo.GetType());
-
-            var photo = (PhotoConstructor) media.photo;
-            Assert.AreEqual(3, photo.sizes.Count);
-            Assert.AreEqual(typeof (PhotoSizeConstructor), photo.sizes[2].GetType());
-
-            var photoSize = (PhotoSizeConstructor) photo.sizes[2];
-            Assert.AreEqual(typeof (FileLocationConstructor), photoSize.location.GetType());
-
-            var fileLocation = (FileLocationConstructor) photoSize.location;
-            var file = await client.GetFile(fileLocation.volume_id, fileLocation.local_id, fileLocation.secret, 0, photoSize.size + 1024);
-            storage_FileType type = file.Item1;
-            byte[] bytes = file.Item2;
-
-            string name = "../../data/get_file.";
-            if (type.GetType() == typeof (Storage_fileJpegConstructor))
-                name += "jpg";
-            else if (type.GetType() == typeof (Storage_fileGifConstructor))
-                name += "gif";
-            else if (type.GetType() == typeof (Storage_filePngConstructor))
-                name += "png";
-
-            using (var fileStream = new FileStream(name, FileMode.Create, FileAccess.Write))
+            for (int i = 0; i < 50; i++)
             {
-                fileStream.Write(bytes, 4, photoSize.size); // The first 4 bytes seem to be the error code
+                try
+                {
+                    await CheckPhones();
+                }
+                catch (FloodException floodException)
+                {
+                    Console.WriteLine($"FLOODEXCEPTION: {floodException}");
+                    Thread.Sleep(floodException.TimeToWait);
+                }
             }
         }
 
-        [TestMethod]
-        public async Task TestConnection()
+        public virtual async Task SendMessageByUserNameTest()
         {
-            var store = new FakeSessionStore();
-            var client = new TelegramClient(store, "", apiId, apiHash);
+            UserNameToSendMessage = ConfigurationManager.AppSettings[nameof(UserNameToSendMessage)];
+            if (string.IsNullOrWhiteSpace(UserNameToSendMessage))
+                throw new Exception($"Please fill the '{nameof(UserNameToSendMessage)}' setting in app.config file first");
 
-            Assert.IsTrue(await client.Connect());
-        }
+            var client = NewClient();
 
-        [TestMethod]
-        public async Task AuthenticationWorks()
-        {
-            using (var transport = new TcpTransport("91.108.56.165", 443))
+            await client.ConnectAsync();
+
+            var result = await client.SearchUserAsync(UserNameToSendMessage);
+
+            var user = result.users.lists
+                .Where(x => x.GetType() == typeof(TLUser))
+                .OfType<TLUser>()
+                .FirstOrDefault(x => x.username == UserNameToSendMessage.TrimStart('@'));
+
+            if (user == null)
             {
-                var authKey = await Authenticator.DoAuthentication(transport);
+                var contacts = await client.GetContactsAsync();
 
-                Assert.IsNotNull(authKey.AuthKey.Data);
-            }
-        }
-
-        [TestMethod]
-        public async Task GetUserFullRequest()
-        {
-            var store = new FileSessionStore();
-            var client = new TelegramClient(store, "session", apiId, apiHash);
-            await client.Connect();
-
-            Assert.IsTrue(client.IsUserAuthorized());
-
-            var res = await client.ImportContactByPhoneNumber(NumberToGetUserFull);
-
-            Assert.IsNotNull(res);
-
-            var userFull = await client.GetUserFull(res.Value);
-
-            Assert.IsNotNull(userFull);
-        }
-
-        [TestMethod]
-        public async Task CreateChatRequest()
-        {
-            var client = await InitializeClient();
-
-            var chatName = Guid.NewGuid().ToString();
-            var statedMessage = await client.CreateChat(chatName, new List<string> {NumberToSendMessage});
-
-            var createdChat = GetChatFromStatedMessage(statedMessage);
-
-            Assert.AreEqual(chatName, createdChat.title);
-            Assert.AreEqual(2, createdChat.participants_count);
-        }
-
-        [TestMethod]
-        public async Task AddChatUserRequest()
-        {
-            var client = await InitializeClient();
-
-            var chatName = Guid.NewGuid().ToString();
-            var statedMessageAfterCreation = await client.CreateChat(chatName, new List<string> { NumberToSendMessage });
-
-            var createdChat = GetChatFromStatedMessage(statedMessageAfterCreation);
-
-            var addUserId = await client.ImportContactByPhoneNumber("380685004559");
-
-            var statedMessageAfterAddUser = await client.AddChatUser(createdChat.id, addUserId.Value);
-            var modifiedChat = GetChatFromStatedMessage(statedMessageAfterAddUser);
-
-            Assert.AreEqual(createdChat.id, modifiedChat.id);
-            Assert.AreEqual(3, modifiedChat.participants_count);
-        }
-
-        [TestMethod]
-        public async Task LeaveChatRequest()
-        {
-            var client = await InitializeClient();
-
-            var chatName = Guid.NewGuid().ToString();
-            var statedMessageAfterCreation = await client.CreateChat(chatName, new List<string> { NumberToSendMessage });
-
-            var createdChat = GetChatFromStatedMessage(statedMessageAfterCreation);
-            
-            var statedMessageAfterLeave = await client.LeaveChat(createdChat.id);
-            var modifiedChat = GetChatFromStatedMessage(statedMessageAfterLeave);
-
-            Assert.AreEqual(createdChat.id, modifiedChat.id);
-            Assert.AreEqual(1, modifiedChat.participants_count);
-        }
-
-        private ChatConstructor GetChatFromStatedMessage(Messages_statedMessageConstructor message)
-        {
-            var serviceMessage = message.message as MessageServiceConstructor;
-            var peerChat = serviceMessage.to_id as PeerChatConstructor;
-
-            var createdChatId = peerChat.chat_id;
-            return message.chats.OfType<ChatConstructor>().Single(c => c.id == createdChatId);
-        }
-
-        private async Task<TelegramClient> InitializeClient()
-        {
-            var store = new FileSessionStore();
-            var client = new TelegramClient(store, "session", apiId, apiHash);
-            await client.Connect();
-
-            if (!client.IsUserAuthorized())
-            {
-                var hash = await client.SendCodeRequest(NumberToAuthenticate);
-
-                var code = ""; // you can change code in debugger
-                Debugger.Break();
-
-                await client.MakeAuth(NumberToAuthenticate, hash, code);
+                user = contacts.users.lists
+                    .Where(x => x.GetType() == typeof(TLUser))
+                    .OfType<TLUser>()
+                    .FirstOrDefault(x => x.username == UserNameToSendMessage.TrimStart('@'));
             }
 
-            Assert.IsTrue(client.IsUserAuthorized());
+            if (user == null)
+            {
+                throw new System.Exception("Username was not found: " + UserNameToSendMessage);
+            }
 
-            return client;
+            await client.SendTypingAsync(new TLInputPeerUser() { user_id = user.id });
+            Thread.Sleep(3000);
+            await client.SendMessageAsync(new TLInputPeerUser() { user_id = user.id }, "TEST");
         }
     }
 }
