@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -227,7 +227,9 @@ namespace TeleSharp.Generator
                 {
                     #region About Class
                     string temp = NormalStyle.Replace("/* NAMESPACE */", GetNameSpace(c.predicate, TargetNamespace).TrimEnd('.'));
-                    temp = (c.type == "himself") ? temp.Replace("/* PARENT */", "TLObject") : temp.Replace("/* PARENT */", GetNameofClass(c.type, true));
+                    temp = (c.type == "himself") ? 
+                        temp.Replace("/* PARENT */", "TLObject") : 
+                        temp.Replace("/* PARENT */", GetNameofClass(c.type, true));
                     temp = temp.Replace("/*Constructor*/", c.id.ToString());
                     temp = temp.Replace("/* NAME */", GetNameofClass(c.predicate, false));
                     #endregion
@@ -243,8 +245,8 @@ namespace TeleSharp.Generator
                         {
                             Property field = new Property
                             {
-                                type = CheckForFlagBase(tmp.type, GetTypeName(tmp.type)),
-                                name = CheckForKeyword(tmp.name)
+                                Type = CheckForFlagBase(tmp.type, GetTypeName(tmp.type)),
+                                Name = CheckForKeyword(tmp.name)
                             };
                             if (!abstractParams.ContainsKey(c.type))
                                 abstractParams.Add(c.type, new List<Property>());
@@ -284,7 +286,8 @@ namespace TeleSharp.Generator
                     #region SerializeFunc
                     var serialize = "";
 
-                    if (c.Params.Any(x => x.name == "flags")) serialize += "ComputeFlags();" + Environment.NewLine + "bw.Write(flags);" + Environment.NewLine;
+                    if (c.Params.Any(x => x.name == "flags")) 
+                        serialize += "ComputeFlags();" + Environment.NewLine + "bw.Write(flags);" + Environment.NewLine;
                     foreach (var p in c.Params.Where(x => x.name != "flags"))
                     {
                         serialize += WriteWriteCode(p) + Environment.NewLine;
@@ -397,7 +400,7 @@ namespace TeleSharp.Generator
             string output = "";
             foreach (var property in list)
             {
-                output += $"        public {property.type} {property.name} {{ get; set; }}" + Environment.NewLine;
+                output += $"        public {property.Type} {property.Name} {{ get; set; }}" + Environment.NewLine;
             }
             return output;
         }
@@ -633,13 +636,17 @@ namespace TeleSharp.Generator
 
     struct Property
     {
-        public string type;
-        public string name;
+        public Property(string type, string name){
+            Type = type;
+            Name = name;
+        }
+        public string Type;
+        public string Name;
         public override bool Equals(object obj)
         {
             if (obj.GetType() == typeof (Property))
             {
-                return ((Property) obj).type == type && ((Property)obj).name == name;
+                return ((Property) obj).Type == Type && ((Property)obj).Name == Name;
             }
             return false;
         }
