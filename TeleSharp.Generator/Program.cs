@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.CodeDom;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using NDesk.Options;
 
 namespace TeleSharp.Generator
 {
@@ -16,39 +17,195 @@ namespace TeleSharp.Generator
         static List<String> keywords = new List<string>(new string[] { "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked", "class", "const", "continue", "decimal", "default", "delegate", "do", "double", "else", "enum", "event", "explicit", "extern", "false", "finally", "fixed", "float", "for", "foreach", "goto", "if", "implicit", "in", "in", "int", "interface", "internal", "is", "lock", "long", "namespace", "new", "null", "object", "operator", "out", "out", "override", "params", "private", "protected", "public", "readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string", "struct", "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort", "using", "virtual", "void", "volatile", "while", "add", "alias", "ascending", "async", "await", "descending", "dynamic", "from", "get", "global", "group", "into", "join", "let", "orderby", "partial", "partial", "remove", "select", "set", "value", "var", "where", "where", "yield" });
         static List<String> interfacesList = new List<string>();
         static List<String> classesList = new List<string>();
+
+        static void DisplayHelp(bool full = true)
+        {
+            Console.WriteLine("TLSharp TL Parser v1.0, a TL schema to C# transcompiler");
+            Console.WriteLine("usage: TeleSharp.Generator [OPTIONS] INPUT [OUTPUT]");
+            Console.WriteLine();
+            if (full)
+            {
+                Console.WriteLine("Options:");
+                Console.WriteLine("  -f,  --format                Sets input format.");
+                Console.WriteLine("                               Accepted formats are \"tl\" and \"json\".");
+                Console.WriteLine("       --template-abstract     Sets the abstract class template");
+                Console.WriteLine("       --template-class        Sets the class template");
+                Console.WriteLine("       --template-method       Sets the method template");
+                Console.WriteLine("       --target-namespace      Sets the target namespace");
+                Console.WriteLine("                               Default is \"TeleSharp.TL\"");
+                Console.WriteLine("       --output-json           Only Parses TL and outputs schema as JSON");
+                Console.WriteLine("  -h,  --help                  Displays this help message");
+                Console.WriteLine();
+                Console.WriteLine("For more information, please read the manual,");
+                Console.WriteLine("or visit the GitHub page.");
+                Console.WriteLine("Submit your bug reports to our GitHub repository.");
+            }
+            else
+            {
+                Console.WriteLine("Try `TeleSharp.Generator --help' for more options.");
+            }
+        }
+
+        enum Format
+        {
+            TL,
+            JSON
+        }
+
         static void Main(string[] args)
         {
+            string Json = "";
+            string inputPath = "";
+            string outputPath = "";
+            Format format = Format.TL;
+            bool forceFormat = false;
+            bool outputJson = false;
+            bool showHelp = false;
+
 
             string AbsStyle = File.ReadAllText("ConstructorAbs.tmp");
             string NormalStyle = File.ReadAllText("Constructor.tmp");
             string MethodStyle = File.ReadAllText("Method.tmp");
-            //string method = File.ReadAllText("constructor.tt");
-            string Json = "";
-            string url;
-            if (args.Count() == 0) url = "tl-schema.json"; else url = args[0];
+            string TargetNamespace = "TeleSharp.TL";
 
-            Json = File.ReadAllText(url);
-            FileStream file = File.OpenWrite("Result.cs");
-            StreamWriter sw = new StreamWriter(file);
+            bool invalidFormat = false;
+            bool invalidTargetNamespace = false;
+
+            OptionSet optionset = new OptionSet()
+                .Add("h|help", h => showHelp = h != null)
+                .Add("f|format=", f =>
+                {
+                    f = f ?? "";
+                    if (f != null)
+                        forceFormat = true;
+                    switch (f.ToLower())
+                    {
+                        case "tl":
+                            format = Format.TL;
+                            break;
+                        case "json":
+                            format = Format.JSON;
+                            break;
+                        case "":
+                            format = Format.TL;
+                            break;
+                        default:
+                            invalidFormat = true;
+                            break;
+                    }
+                })
+                .Add("target-namespace=", a =>
+                {
+                    if (!string.IsNullOrEmpty(a))
+                    {
+                        Match m = Regex.Match(a, @"(@?[a-z_A-Z]\w+(?:\.@?[a-z_A-Z]\w+)*)");
+                        if (m.Success)
+                        {
+                            TargetNamespace = m.Groups[0].Value;
+                        }
+                    }
+                    else
+                    {
+                        invalidTargetNamespace = true;
+                    }
+                })
+                .Add("output-json", a => outputJson = a != null)
+                .Add("template-abstract=", a => AbsStyle = (a != null) ? File.ReadAllText(a) : AbsStyle)
+                .Add("template-normal=", a => NormalStyle = (a != null) ? File.ReadAllText(a) : NormalStyle)
+                .Add("template-method=", a => MethodStyle = (a != null) ? File.ReadAllText(a) : MethodStyle);
+            List<string> extra;
+            try
+            {
+                extra = optionset.Parse(args);
+            }
+            catch (OptionException e)
+            {
+                Console.Write("Error: ");
+                Console.WriteLine(e.Message);
+                Console.WriteLine("Try `TeleSharp.Generator --help' for more information.");
+                return;
+            }
+            if (showHelp)
+            {
+                DisplayHelp(true);
+                return;
+            }
+            if (extra == null || extra.Count == 0)
+            {
+                DisplayHelp(false);
+                return;
+            }
+            if (invalidFormat)
+            {
+                Console.WriteLine("Error: Invalid input format.");
+                Console.WriteLine("Try `TeleSharp.Generator --help' for more information.");
+                return;
+            }
+            if (invalidTargetNamespace)
+            {
+                Console.WriteLine("Error: Invalid target namespace.");
+                Console.WriteLine("Try `TeleSharp.Generator --help' for more information.");
+                return;
+            }
+
+
+            inputPath = extra[0];
+            if (!forceFormat)
+            {
+                string ext = Path.GetExtension(extra[0]);
+                if (ext == "json")
+                {
+                    format = Format.JSON;
+                }
+            }
+            if (extra.Count > 1)
+            {
+                outputPath = extra[1];
+            }
+            else
+            { // no output path provided
+                if (!outputJson)
+                    outputPath = Path.GetDirectoryName(Path.GetFullPath(extra[0]));
+                else
+                    outputPath = Path.ChangeExtension(inputPath, ".json");
+            }
+
+            Console.WriteLine("TLSharp TL Parser v1.0, a TL schema to C# transcompiler");
+
+
+            Json = File.ReadAllText(inputPath);
+
+            if (format == Format.TL)
+            { // if input is tl, convert to json
+                Json = TL2JSON.ParseToJson(Json);
+                Console.WriteLine("Converting TL to JSON...");
+            }
+
+            if (outputJson)
+            {
+                File.WriteAllText(outputPath, Json);
+                return;
+            }
+            #region Translate to C#
+
             Schema schema = JsonConvert.DeserializeObject<Schema>(Json);
             foreach (var c in schema.constructors)
             {
                 interfacesList.Add(c.type);
                 classesList.Add(c.predicate);
             }
+            Console.WriteLine("Implementing abstract classes...");
+            var abstractParams = new Dictionary<string, List<Property>>();
             foreach (var c in schema.constructors)
             {
-                var list = schema.constructors.Where(x => x.type == c.type);
+                var list = schema.constructors.Where(x => x.type == c.type); // check if there is a dependence on this type (it is an abstract class)
                 if (list.Count() > 1)
                 {
-                    string path = (GetNameSpace(c.type).Replace("TeleSharp.TL", "TL\\").Replace(".", "") + "\\" + GetNameofClass(c.type, true) + ".cs").Replace("\\\\", "\\");
+                    string path = Path.Combine(outputPath, GetNameSpace(c.type, TargetNamespace).Replace(TargetNamespace, @"TL\").Replace(".", ""), GetNameofClass(c.type, true) + ".cs").Replace(@"\\", @"\");
                     FileStream classFile = MakeFile(path);
                     using (StreamWriter writer = new StreamWriter(classFile))
                     {
-                        string nspace = (GetNameSpace(c.type).Replace("TeleSharp.TL", "TL\\").Replace(".", "")).Replace("\\\\", "\\").Replace("\\", ".");
-                        if (nspace.EndsWith("."))
-                            nspace = nspace.Remove(nspace.Length - 1, 1);
-                        string temp = AbsStyle.Replace("/* NAMESPACE */", "TeleSharp." + nspace);
+                        string temp = AbsStyle.Replace("/* NAMESPACE */", GetNameSpace(c.type, TargetNamespace).TrimEnd('.'));
                         temp = temp.Replace("/* NAME */", GetNameofClass(c.type, true));
                         writer.Write(temp);
                         writer.Close();
@@ -61,28 +218,49 @@ namespace TeleSharp.Generator
                     list.First().type = "himself";
                 }
             }
+            Console.WriteLine("Implementing types...");
             foreach (var c in schema.constructors)
             {
-                string path = (GetNameSpace(c.predicate).Replace("TeleSharp.TL", "TL\\").Replace(".", "") + "\\" + GetNameofClass(c.predicate, false) + ".cs").Replace("\\\\", "\\");
+                string path = Path.Combine(outputPath, GetNameSpace(c.predicate, TargetNamespace).Replace(TargetNamespace, @"TL\").Replace(".", ""), GetNameofClass(c.predicate, false) + ".cs").Replace(@"\\", @"\");
                 FileStream classFile = MakeFile(path);
                 using (StreamWriter writer = new StreamWriter(classFile))
                 {
                     #region About Class
-                    string nspace = (GetNameSpace(c.predicate).Replace("TeleSharp.TL", "TL\\").Replace(".", "")).Replace("\\\\", "\\").Replace("\\", ".");
-                    if (nspace.EndsWith("."))
-                        nspace = nspace.Remove(nspace.Length - 1, 1);
-                    string temp = NormalStyle.Replace("/* NAMESPACE */", "TeleSharp." + nspace);
+                    string temp = NormalStyle.Replace("/* NAMESPACE */", GetNameSpace(c.predicate, TargetNamespace).TrimEnd('.'));
                     temp = (c.type == "himself") ? temp.Replace("/* PARENT */", "TLObject") : temp.Replace("/* PARENT */", GetNameofClass(c.type, true));
                     temp = temp.Replace("/*Constructor*/", c.id.ToString());
                     temp = temp.Replace("/* NAME */", GetNameofClass(c.predicate, false));
                     #endregion
                     #region Fields
-                    string fields = "";
-                    foreach (var tmp in c.Params)
+                    /*
+                     Note: Fields were mostly moved to abstract classes to provide maximum polymorphism usability.
+                     */
+                    //string fields = "";
+                    string parent_name = GetNameofClass(c.type, true);
+                    if (c.type != "himself")
                     {
-                        fields += $"     public {CheckForFlagBase(tmp.type, GetTypeName(tmp.type))} {CheckForKeyword(tmp.name)} " + "{get;set;}" + Environment.NewLine;
+                        foreach (var tmp in c.Params)
+                        {
+                            Property field = new Property
+                            {
+                                type = CheckForFlagBase(tmp.type, GetTypeName(tmp.type)),
+                                name = CheckForKeyword(tmp.name)
+                            };
+                            if (!abstractParams.ContainsKey(c.type))
+                                abstractParams.Add(c.type, new List<Property>());
+                            else if (!abstractParams[c.type].Contains(field))
+                                abstractParams[c.type].Add(field);
+                        }
                     }
-                    temp = temp.Replace("/* PARAMS */", fields);
+                    else
+                    {
+                        string fields = "";
+                        foreach (var tmp in c.Params)
+                        {
+                            fields += $"        public {CheckForFlagBase(tmp.type, GetTypeName(tmp.type))} {CheckForKeyword(tmp.name)} " + "{ get; set; }" + Environment.NewLine;
+                        }
+                        temp = temp.Replace("/* PARAMS */", fields);
+                    }
                     #endregion
                     #region ComputeFlagFunc
                     if (!c.Params.Any(x => x.name == "flags")) temp = temp.Replace("/* COMPUTE */", "");
@@ -127,17 +305,15 @@ namespace TeleSharp.Generator
                     classFile.Close();
                 }
             }
+            Console.WriteLine("Implementing methods...");
             foreach (var c in schema.methods)
             {
-                string path = (GetNameSpace(c.method).Replace("TeleSharp.TL", "TL\\").Replace(".", "") + "\\" + GetNameofClass(c.method, false, true) + ".cs").Replace("\\\\", "\\");
+                string path = Path.Combine(outputPath, GetNameSpace(c.method, TargetNamespace).Replace(TargetNamespace, @"TL\").Replace(".", ""), GetNameofClass(c.method, false, true) + ".cs").Replace(@"\\", @"\");
                 FileStream classFile = MakeFile(path);
                 using (StreamWriter writer = new StreamWriter(classFile))
                 {
                     #region About Class
-                    string nspace = (GetNameSpace(c.method).Replace("TeleSharp.TL", "TL\\").Replace(".", "")).Replace("\\\\", "\\").Replace("\\", ".");
-                    if (nspace.EndsWith("."))
-                        nspace = nspace.Remove(nspace.Length - 1, 1);
-                    string temp = MethodStyle.Replace("/* NAMESPACE */", "TeleSharp." + nspace);
+                    string temp = MethodStyle.Replace("/* NAMESPACE */", GetNameSpace(c.method, TargetNamespace).TrimEnd('.'));
                     temp = temp.Replace("/* PARENT */", "TLMethod");
                     temp = temp.Replace("/*Constructor*/", c.id.ToString());
                     temp = temp.Replace("/* NAME */", GetNameofClass(c.method, false, true));
@@ -200,11 +376,36 @@ namespace TeleSharp.Generator
                     classFile.Close();
                 }
             }
+            Console.WriteLine("Adding fields to abstract classes...");
+            // add fields to abstract classes
+            foreach (KeyValuePair<string, List<Property>> absClass in abstractParams)
+            {
+                if(absClass.Key == "himself")
+                    throw new InvalidOperationException("ARGH! It was a class without a parent, why it came into the list? :|");
+                string path = Path.Combine(outputPath, GetNameSpace(absClass.Key, TargetNamespace).Replace(TargetNamespace, @"TL\").Replace(".", ""), GetNameofClass(absClass.Key, true) + ".cs").Replace(@"\\", @"\");
+                string tmp = File.ReadAllText(path);
+                tmp = tmp.Replace("/* PARAMS */", ConvertPropertyList(absClass.Value));
+                File.WriteAllText(path, tmp);
+            }
+
+            #endregion
+            Console.WriteLine("Done.");
         }
+
+        public static string ConvertPropertyList(List<Property> list)
+        {
+            string output = "";
+            foreach (var property in list)
+            {
+                output += $"        public {property.type} {property.name} {{ get; set; }}" + Environment.NewLine;
+            }
+            return output;
+        }
+
         public static string FormatName(string input)
         {
             if (String.IsNullOrEmpty(input))
-                throw new ArgumentException("ARGH!");
+                throw new ArgumentException("ARGH! Class Name was empty.");
             if (input.IndexOf('.') != -1)
             {
                 input = input.Replace(".", " ");
@@ -255,12 +456,12 @@ namespace TeleSharp.Generator
         {
             return type.Split('?')[1] == "true";
         }
-        public static string GetNameSpace(string type)
+        public static string GetNameSpace(string type, string targetns)
         {
             if (type.IndexOf('.') != -1)
-                return "TeleSharp.TL" + FormatName(type.Split('.')[0]);
+                return targetns + FormatName(type.Split('.')[0]);
             else
-                return "TeleSharp.TL";
+                return targetns;
         }
         public static string CheckForFlagBase(string type, string result)
         {
@@ -298,15 +499,16 @@ namespace TeleSharp.Generator
                     return "TLObject";
                 case "x":
                     return "TLObject";
+                case "vector t":
+                    return "List<T>";
             }
 
-            if (type.StartsWith("Vector"))
+            if (type.StartsWith("Vector<"))
                 return "TLVector<" + GetTypeName(type.Replace("Vector<", "").Replace(">", "")) + ">";
 
             if (type.ToLower().Contains("inputcontact"))
                 return "TLInputPhoneContact";
-
-
+            
             if (type.IndexOf('.') != -1 && type.IndexOf('?') == -1)
             {
 
@@ -426,6 +628,20 @@ namespace TeleSharp.Generator
             if (File.Exists(path))
                 File.Delete(path);
             return File.OpenWrite(path);
+        }
+    }
+
+    struct Property
+    {
+        public string type;
+        public string name;
+        public override bool Equals(object obj)
+        {
+            if (obj.GetType() == typeof (Property))
+            {
+                return ((Property) obj).type == type && ((Property)obj).name == name;
+            }
+            return false;
         }
     }
 
