@@ -27,7 +27,8 @@ namespace TeleSharp.Generator
                 },
                 RegexOptions.Singleline);
         }
-        public static string RemoveEmptyLines(string input) => Regex.Replace(input, @"^\s+$[\r\n]*", "", RegexOptions.Multiline);
+        public static string RemoveEmptyLines(string input) => 
+            Regex.Replace(input, @"^\s+$[\r\n]*", "", RegexOptions.Multiline);
 
         public static string ParseTypeLine(string line)
         {
