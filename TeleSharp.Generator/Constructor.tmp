@@ -17,7 +17,7 @@ namespace /* NAMESPACE */
                 return /*Constructor*/;
             }
         }
-        /* OVERRIDE_PARAMS */
+        /* PARAMS */
 		public void ComputeFlags()
 		{
 			/* COMPUTE */
