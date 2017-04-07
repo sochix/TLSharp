@@ -465,7 +465,7 @@ namespace TeleSharp.Generator
         public static string GetNameSpace(string type, string targetns)
         {
             if (type.IndexOf('.') != -1)
-                return targetns + FormatName(type.Split('.')[0]);
+                return targetns + "." + FormatName(type.Split('.')[0]);
             else
                 return targetns;
         }
