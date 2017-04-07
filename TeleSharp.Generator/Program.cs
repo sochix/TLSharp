@@ -642,23 +642,4 @@ namespace TeleSharp.Generator
             return File.OpenWrite(path);
         }
     }
-
-    struct Property
-    {
-        public Property(string type, string name){
-            Type = type;
-            Name = name;
-        }
-        public string Type;
-        public string Name;
-        public override bool Equals(object obj)
-        {
-            if (obj.GetType() == typeof (Property))
-            {
-                return ((Property) obj).Type == Type && ((Property)obj).Name == Name;
-            }
-            return false;
-        }
-    }
-
 }
