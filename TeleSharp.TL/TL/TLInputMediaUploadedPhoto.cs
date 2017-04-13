@@ -20,7 +20,7 @@ namespace TeleSharp.TL
 
              public int flags {get;set;}
      public TLAbsInputFile file {get;set;}
-        private string caption;
+     private string caption;
      public string Caption
         {
             get

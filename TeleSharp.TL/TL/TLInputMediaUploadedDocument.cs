@@ -22,7 +22,7 @@ namespace TeleSharp.TL
      public TLAbsInputFile file {get;set;}
      public string mime_type {get;set;}
      public TLVector<TLAbsDocumentAttribute> attributes {get;set;}
-        private string caption;
+     private string caption;
      public string Caption
         {
             get
