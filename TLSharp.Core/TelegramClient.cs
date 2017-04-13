@@ -285,7 +285,7 @@ namespace TLSharp.Core
                 media = new TLInputMediaUploadedDocument()
                 {
                     file = file,
-                    caption = caption,
+                    Caption = caption,
                     mime_type = mimeType,
                     attributes = attributes
                 },
