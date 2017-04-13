@@ -6,9 +6,6 @@ namespace TLSharp.Core.Network
 {
     public class TcpMessage
     {
-        public int SequneceNumber { get; private set; }
-        public byte[] Body { get; private set; }
-
         public TcpMessage(int seqNumber, byte[] body)
         {
             if (body == null)
@@ -17,6 +14,9 @@ namespace TLSharp.Core.Network
             SequneceNumber = seqNumber;
             Body = body;
         }
+
+        public int SequneceNumber { get; }
+        public byte[] Body { get; }
 
         public byte[] Encode()
         {
@@ -66,17 +66,15 @@ namespace TLSharp.Core.Network
                         throw new InvalidOperationException(string.Format("invalid packet length: {0}", packetLength));
 
                     var seq = binaryReader.ReadInt32();
-                    byte[] packet = binaryReader.ReadBytes(packetLength - 12);
-                    var checksum = (int)binaryReader.ReadInt32();
+                    var packet = binaryReader.ReadBytes(packetLength - 12);
+                    var checksum = binaryReader.ReadInt32();
 
                     var crc32 = new CRC32();
                     crc32.SlurpBlock(body, 0, packetLength - 4);
                     var validChecksum = crc32.Crc32Result;
 
                     if (checksum != validChecksum)
-                    {
                         throw new InvalidOperationException("invalid checksum! skip");
-                    }
 
                     return new TcpMessage(seq, packet);
                 }

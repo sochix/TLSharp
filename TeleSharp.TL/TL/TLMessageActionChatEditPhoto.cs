@@ -1,42 +1,28 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
-	[TLObject(2144015272)]
+    [TLObject(2144015272)]
     public class TLMessageActionChatEditPhoto : TLAbsMessageAction
     {
-        public override int Constructor
+        public override int Constructor => 2144015272;
+
+        public TLAbsPhoto photo { get; set; }
+
+
+        public void ComputeFlags()
         {
-            get
-            {
-                return 2144015272;
-            }
         }
-
-             public TLAbsPhoto photo {get;set;}
-
-
-		public void ComputeFlags()
-		{
-			
-		}
 
         public override void DeserializeBody(BinaryReader br)
         {
-            photo = (TLAbsPhoto)ObjectUtils.DeserializeObject(br);
-
+            photo = (TLAbsPhoto) ObjectUtils.DeserializeObject(br);
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            ObjectUtils.SerializeObject(photo,bw);
-
+            bw.Write(Constructor);
+            ObjectUtils.SerializeObject(photo, bw);
         }
     }
 }

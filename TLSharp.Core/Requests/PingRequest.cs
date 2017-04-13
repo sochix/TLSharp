@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using TeleSharp.TL;
 using TLSharp.Core.Utils;
 
 namespace TLSharp.Core.Requests
 {
-    public class PingRequest : TeleSharp.TL.TLMethod
+    public class PingRequest : TLMethod
     {
-        public PingRequest()
-        {
-        }
+        public override int Constructor => 0x7abe77ec;
 
         public override void SerializeBody(BinaryWriter writer)
         {
@@ -26,14 +23,6 @@ namespace TLSharp.Core.Requests
         public override void deserializeResponse(BinaryReader stream)
         {
             throw new NotImplementedException();
-        }
-
-        public override int Constructor
-        {
-            get
-            {
-                return 0x7abe77ec;
-            }
         }
     }
 }

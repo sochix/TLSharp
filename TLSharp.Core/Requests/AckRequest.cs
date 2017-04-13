@@ -5,7 +5,7 @@ using TeleSharp.TL;
 
 namespace TLSharp.Core.Requests
 {
-    public class AckRequest : TeleSharp.TL.TLMethod
+    public class AckRequest : TLMethod
     {
         private readonly List<ulong> _msgs;
 
@@ -14,15 +14,18 @@ namespace TLSharp.Core.Requests
             _msgs = msgs;
         }
 
+        public override bool Confirmed => false;
+        public override bool Responded { get; }
+
+        public override int Constructor => 0x62d6b459;
+
         public override void SerializeBody(BinaryWriter writer)
         {
             writer.Write(0x62d6b459); // msgs_ack
             writer.Write(0x1cb5c415); // Vector
             writer.Write(_msgs.Count);
-            foreach (ulong messageId in _msgs)
-            {
+            foreach (var messageId in _msgs)
                 writer.Write(messageId);
-            }
         }
 
         public override void DeserializeBody(BinaryReader reader)
@@ -33,17 +36,6 @@ namespace TLSharp.Core.Requests
         public override void deserializeResponse(BinaryReader stream)
         {
             throw new NotImplementedException();
-        }
-
-        public override bool Confirmed => false;
-        public override bool Responded { get; }
-
-        public override int Constructor
-        {
-            get
-            {
-                return 0x62d6b459;
-            }
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿
-using System.Threading.Tasks;
-
+﻿using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TLSharp.Tests
@@ -13,7 +11,7 @@ namespace TLSharp.Tests
         {
             base.Init(o => Assert.IsNotNull(o), b => Assert.IsTrue(b));
         }
-        
+
         [TestMethod]
         public override async Task AuthUser()
         {
@@ -67,6 +65,7 @@ namespace TLSharp.Tests
         {
             await base.CheckPhones();
         }
+
         [TestMethod]
         [Ignore]
         public override async Task FloodExceptionShouldNotCauseCannotReadPackageLengthError()

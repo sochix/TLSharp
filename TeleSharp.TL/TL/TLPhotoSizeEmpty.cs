@@ -1,42 +1,28 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
-	[TLObject(236446268)]
+    [TLObject(236446268)]
     public class TLPhotoSizeEmpty : TLAbsPhotoSize
     {
-        public override int Constructor
+        public override int Constructor => 236446268;
+
+        public string type { get; set; }
+
+
+        public void ComputeFlags()
         {
-            get
-            {
-                return 236446268;
-            }
         }
-
-             public string type {get;set;}
-
-
-		public void ComputeFlags()
-		{
-			
-		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             type = StringUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            StringUtil.Serialize(type,bw);
-
+            bw.Write(Constructor);
+            StringUtil.Serialize(type, bw);
         }
     }
 }

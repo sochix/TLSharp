@@ -1,48 +1,34 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Account
 {
-	[TLObject(-545786948)]
+    [TLObject(-545786948)]
     public class TLRequestResetAuthorization : TLMethod
     {
-        public override int Constructor
+        public override int Constructor => -545786948;
+
+        public long hash { get; set; }
+        public bool Response { get; set; }
+
+
+        public void ComputeFlags()
         {
-            get
-            {
-                return -545786948;
-            }
         }
-
-                public long hash {get;set;}
-        public bool Response{ get; set;}
-
-
-		public void ComputeFlags()
-		{
-			
-		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             hash = br.ReadInt64();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
+            bw.Write(Constructor);
             bw.Write(hash);
-
         }
-		public override void deserializeResponse(BinaryReader br)
-		{
-			Response = BoolUtil.Deserialize(br);
 
-		}
+        public override void deserializeResponse(BinaryReader br)
+        {
+            Response = BoolUtil.Deserialize(br);
+        }
     }
 }

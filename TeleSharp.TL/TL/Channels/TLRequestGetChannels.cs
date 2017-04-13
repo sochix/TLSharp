@@ -1,48 +1,35 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+using TeleSharp.TL.Messages;
+
 namespace TeleSharp.TL.Channels
 {
-	[TLObject(176122811)]
+    [TLObject(176122811)]
     public class TLRequestGetChannels : TLMethod
     {
-        public override int Constructor
+        public override int Constructor => 176122811;
+
+        public TLVector<TLAbsInputChannel> id { get; set; }
+        public TLChats Response { get; set; }
+
+
+        public void ComputeFlags()
         {
-            get
-            {
-                return 176122811;
-            }
         }
-
-                public TLVector<TLAbsInputChannel> id {get;set;}
-        public Messages.TLChats Response{ get; set;}
-
-
-		public void ComputeFlags()
-		{
-			
-		}
 
         public override void DeserializeBody(BinaryReader br)
         {
-            id = (TLVector<TLAbsInputChannel>)ObjectUtils.DeserializeVector<TLAbsInputChannel>(br);
-
+            id = ObjectUtils.DeserializeVector<TLAbsInputChannel>(br);
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            ObjectUtils.SerializeObject(id,bw);
-
+            bw.Write(Constructor);
+            ObjectUtils.SerializeObject(id, bw);
         }
-		public override void deserializeResponse(BinaryReader br)
-		{
-			Response = (Messages.TLChats)ObjectUtils.DeserializeObject(br);
 
-		}
+        public override void deserializeResponse(BinaryReader br)
+        {
+            Response = (TLChats) ObjectUtils.DeserializeObject(br);
+        }
     }
 }

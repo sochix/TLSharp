@@ -1,7 +1,4 @@
-﻿
-using System;
-using System.Threading.Tasks;
-
+﻿using System.Threading.Tasks;
 using NUnit.Framework;
 
 namespace TLSharp.Tests
@@ -16,7 +13,7 @@ namespace TLSharp.Tests
         }
 
         [Test]
-        public async override Task AuthUser()
+        public override async Task AuthUser()
         {
             await base.AuthUser();
         }
