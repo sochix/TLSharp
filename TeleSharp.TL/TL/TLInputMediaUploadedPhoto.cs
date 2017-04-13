@@ -21,7 +21,17 @@ namespace TeleSharp.TL
              public int flags {get;set;}
      public TLAbsInputFile file {get;set;}
         private string caption;
-     public string Caption { get { return caption; } set { caption = value.Length > 200 ? value.Remove(199, value.Length - 199) : value; } }
+     public string Caption
+        {
+            get
+            {
+                return caption;
+            }
+            set
+            {
+                caption = value.Length > 200 ? value.Remove(199, value.Length - 199) : value;
+            }
+        }
         public TLVector<TLAbsInputDocument> stickers {get;set;}
 
 
