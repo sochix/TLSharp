@@ -17,7 +17,7 @@ namespace TLSharp.Core.Auth
 
     public class Step1_PQRequest
     {
-        private byte[] nonce;
+        private readonly byte[] nonce;
 
         public Step1_PQRequest()
         {
@@ -52,33 +52,27 @@ namespace TLSharp.Core.Auth
                     const int responseConstructorNumber = 0x05162463;
                     var responseCode = binaryReader.ReadInt32();
                     if (responseCode != responseConstructorNumber)
-                    {
                         throw new InvalidOperationException($"invalid response code: {responseCode}");
-                    }
 
                     var nonceFromServer = binaryReader.ReadBytes(16);
 
                     if (!nonceFromServer.SequenceEqual(nonce))
-                    {
                         throw new InvalidOperationException("invalid nonce from server");
-                    }
 
                     var serverNonce = binaryReader.ReadBytes(16);
 
-                    byte[] pqbytes = Serializers.Bytes.read(binaryReader);
+                    var pqbytes = Serializers.Bytes.read(binaryReader);
                     var pq = new BigInteger(1, pqbytes);
 
                     var vectorId = binaryReader.ReadInt32();
                     const int vectorConstructorNumber = 0x1cb5c415;
                     if (vectorId != vectorConstructorNumber)
-                    {
                         throw new InvalidOperationException($"Invalid vector constructor number {vectorId}");
-                    }
 
                     var fingerprintCount = binaryReader.ReadInt32();
                     for (var i = 0; i < fingerprintCount; i++)
                     {
-                        byte[] fingerprint = binaryReader.ReadBytes(8);
+                        var fingerprint = binaryReader.ReadBytes(8);
                         fingerprints.Add(fingerprint);
                     }
 

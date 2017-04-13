@@ -43,7 +43,6 @@ namespace TLSharp.Core
     {
         public void Save(Session session)
         {
-
         }
 
         public Session Load(string sessionUserId)
@@ -54,9 +53,18 @@ namespace TLSharp.Core
 
     public class Session
     {
-	    private const string defaultConnectionAddress = "149.154.175.100";//"149.154.167.50";
+        private const string defaultConnectionAddress = "149.154.175.100"; //"149.154.167.50";
 
-		private const int defaultConnectionPort = 443;
+        private const int defaultConnectionPort = 443;
+
+        private readonly ISessionStore _store;
+        private readonly Random random;
+
+        private Session(ISessionStore store)
+        {
+            random = new Random();
+            _store = store;
+        }
 
         public string SessionUserId { get; set; }
         public string ServerAddress { get; set; }
@@ -69,15 +77,6 @@ namespace TLSharp.Core
         public long LastMessageId { get; set; }
         public int SessionExpires { get; set; }
         public TLUser TLUser { get; set; }
-        private Random random;
-
-        private ISessionStore _store;
-
-        private Session(ISessionStore store)
-        {
-            random = new Random();
-            _store = store;
-        }
 
         public byte[] ToBytes()
         {
@@ -123,12 +122,12 @@ namespace TLSharp.Core
                 var port = reader.ReadInt32();
 
                 var isAuthExsist = reader.ReadInt32() == 1;
-                int sessionExpires = 0;
+                var sessionExpires = 0;
                 TLUser TLUser = null;
                 if (isAuthExsist)
                 {
                     sessionExpires = reader.ReadInt32();
-                    TLUser = (TLUser)ObjectUtils.DeserializeObject(reader);
+                    TLUser = (TLUser) ObjectUtils.DeserializeObject(reader);
                 }
 
                 var authData = Serializers.Bytes.read(reader);
@@ -169,22 +168,20 @@ namespace TLSharp.Core
         private static ulong GenerateRandomUlong()
         {
             var random = new Random();
-            ulong rand = (((ulong)random.Next()) << 32) | ((ulong)random.Next());
+            var rand = ((ulong) random.Next() << 32) | (ulong) random.Next();
             return rand;
         }
 
         public long GetNewMessageId()
         {
-            long time = Convert.ToInt64((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds);
-            long newMessageId = ((time / 1000 + TimeOffset) << 32) |
-                                ((time % 1000) << 22) |
-                                (random.Next(524288) << 2); // 2^19
-                                                            // [ unix timestamp : 32 bit] [ milliseconds : 10 bit ] [ buffer space : 1 bit ] [ random : 19 bit ] [ msg_id type : 2 bit ] = [ msg_id : 64 bit ]
+            var time = Convert.ToInt64((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds);
+            var newMessageId = ((time / 1000 + TimeOffset) << 32) |
+                               ((time % 1000) << 22) |
+                               (random.Next(524288) << 2); // 2^19
+            // [ unix timestamp : 32 bit] [ milliseconds : 10 bit ] [ buffer space : 1 bit ] [ random : 19 bit ] [ msg_id type : 2 bit ] = [ msg_id : 64 bit ]
 
             if (LastMessageId >= newMessageId)
-            {
                 newMessageId = LastMessageId + 4;
-            }
 
             LastMessageId = newMessageId;
             return newMessageId;

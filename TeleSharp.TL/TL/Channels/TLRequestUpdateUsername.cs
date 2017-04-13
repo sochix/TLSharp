@@ -1,51 +1,37 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Channels
 {
-	[TLObject(890549214)]
+    [TLObject(890549214)]
     public class TLRequestUpdateUsername : TLMethod
     {
-        public override int Constructor
+        public override int Constructor => 890549214;
+
+        public TLAbsInputChannel channel { get; set; }
+        public string username { get; set; }
+        public bool Response { get; set; }
+
+
+        public void ComputeFlags()
         {
-            get
-            {
-                return 890549214;
-            }
         }
-
-                public TLAbsInputChannel channel {get;set;}
-        public string username {get;set;}
-        public bool Response{ get; set;}
-
-
-		public void ComputeFlags()
-		{
-			
-		}
 
         public override void DeserializeBody(BinaryReader br)
         {
-            channel = (TLAbsInputChannel)ObjectUtils.DeserializeObject(br);
-username = StringUtil.Deserialize(br);
-
+            channel = (TLAbsInputChannel) ObjectUtils.DeserializeObject(br);
+            username = StringUtil.Deserialize(br);
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            ObjectUtils.SerializeObject(channel,bw);
-StringUtil.Serialize(username,bw);
-
+            bw.Write(Constructor);
+            ObjectUtils.SerializeObject(channel, bw);
+            StringUtil.Serialize(username, bw);
         }
-		public override void deserializeResponse(BinaryReader br)
-		{
-			Response = BoolUtil.Deserialize(br);
 
-		}
+        public override void deserializeResponse(BinaryReader br)
+        {
+            Response = BoolUtil.Deserialize(br);
+        }
     }
 }

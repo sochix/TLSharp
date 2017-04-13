@@ -1,42 +1,28 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
-	[TLObject(524838915)]
+    [TLObject(524838915)]
     public class TLExportedMessageLink : TLObject
     {
-        public override int Constructor
+        public override int Constructor => 524838915;
+
+        public string link { get; set; }
+
+
+        public void ComputeFlags()
         {
-            get
-            {
-                return 524838915;
-            }
         }
-
-             public string link {get;set;}
-
-
-		public void ComputeFlags()
-		{
-			
-		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             link = StringUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            StringUtil.Serialize(link,bw);
-
+            bw.Write(Constructor);
+            StringUtil.Serialize(link, bw);
         }
     }
 }

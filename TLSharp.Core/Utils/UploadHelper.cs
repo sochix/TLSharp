@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,7 +19,7 @@ namespace TLSharp.Core.Utils
                 var hash = md5.ComputeHash(data);
                 var hashResult = new StringBuilder(hash.Length * 2);
 
-                foreach (byte t in hash)
+                foreach (var t in hash)
                     hashResult.Append(t.ToString("x2"));
 
                 md5_checksum = hashResult.ToString();
@@ -29,7 +28,8 @@ namespace TLSharp.Core.Utils
             return md5_checksum;
         }
 
-        public static async Task<TLAbsInputFile> UploadFile(this TelegramClient client, string name, StreamReader reader)
+        public static async Task<TLAbsInputFile> UploadFile(this TelegramClient client, string name,
+            StreamReader reader)
         {
             const long tenMb = 10 * 1024 * 1024;
             return await UploadFile(name, reader, client, reader.BaseStream.Length >= tenMb);
@@ -41,7 +41,7 @@ namespace TLSharp.Core.Utils
 
             using (reader)
             {
-                reader.BaseStream.Read(file, 0, (int)reader.BaseStream.Length);
+                reader.BaseStream.Read(file, 0, (int) reader.BaseStream.Length);
             }
 
             return file;
@@ -56,8 +56,7 @@ namespace TLSharp.Core.Utils
             using (var stream = new MemoryStream(file))
             {
                 while (stream.Position != stream.Length)
-                {
-                    if ((stream.Length - stream.Position) > maxFilePart)
+                    if (stream.Length - stream.Position > maxFilePart)
                     {
                         var temp = new byte[maxFilePart];
                         stream.Read(temp, 0, maxFilePart);
@@ -67,10 +66,9 @@ namespace TLSharp.Core.Utils
                     {
                         var length = stream.Length - stream.Position;
                         var temp = new byte[length];
-                        stream.Read(temp, 0, (int)(length));
+                        stream.Read(temp, 0, (int) length);
                         fileParts.Enqueue(temp);
                     }
-                }
             }
 
             return fileParts;
@@ -82,15 +80,14 @@ namespace TLSharp.Core.Utils
             var file = GetFile(reader);
             var fileParts = GetFileParts(file);
 
-            int partNumber = 0;
-            int partsCount = fileParts.Count;
-            long file_id = BitConverter.ToInt64(Helpers.GenerateRandomBytes(8), 0);
+            var partNumber = 0;
+            var partsCount = fileParts.Count;
+            var file_id = BitConverter.ToInt64(Helpers.GenerateRandomBytes(8), 0);
             while (fileParts.Count != 0)
             {
                 var part = fileParts.Dequeue();
 
                 if (isBigFileUpload)
-                {
                     await client.SendRequestAsync<bool>(new TLRequestSaveBigFilePart
                     {
                         file_id = file_id,
@@ -98,38 +95,30 @@ namespace TLSharp.Core.Utils
                         bytes = part,
                         file_total_parts = partsCount
                     });
-                }
                 else
-                {
                     await client.SendRequestAsync<bool>(new TLRequestSaveFilePart
                     {
                         file_id = file_id,
                         file_part = partNumber,
                         bytes = part
                     });
-                }
                 partNumber++;
             }
 
             if (isBigFileUpload)
-            {
                 return new TLInputFileBig
                 {
                     id = file_id,
                     name = name,
                     parts = partsCount
                 };
-            }
-            else
+            return new TLInputFile
             {
-                return new TLInputFile
-                {
-                    id = file_id,
-                    name = name,
-                    parts = partsCount,
-                    md5_checksum = GetFileHash(file)
-                };
-            }
+                id = file_id,
+                name = name,
+                parts = partsCount,
+                md5_checksum = GetFileHash(file)
+            };
         }
     }
 }

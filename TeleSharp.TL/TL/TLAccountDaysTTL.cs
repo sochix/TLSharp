@@ -1,42 +1,28 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
-	[TLObject(-1194283041)]
+    [TLObject(-1194283041)]
     public class TLAccountDaysTTL : TLObject
     {
-        public override int Constructor
+        public override int Constructor => -1194283041;
+
+        public int days { get; set; }
+
+
+        public void ComputeFlags()
         {
-            get
-            {
-                return -1194283041;
-            }
         }
-
-             public int days {get;set;}
-
-
-		public void ComputeFlags()
-		{
-			
-		}
 
         public override void DeserializeBody(BinaryReader br)
         {
             days = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
+            bw.Write(Constructor);
             bw.Write(days);
-
         }
     }
 }
