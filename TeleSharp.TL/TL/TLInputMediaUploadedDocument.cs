@@ -31,7 +31,14 @@ namespace TeleSharp.TL
             }
             set
             {
-                caption = value.Length > 200 ? value.Remove(199, value.Length - 199) : value;
+                if (value.Length > 200)
+                {
+                    throw new System.ArgumentException("too long caption plase make it less than 200 char");
+                }
+                else
+                {
+                    caption = value;
+                }
             }
         }
      public TLVector<TLAbsInputDocument> stickers {get;set;}
