@@ -379,6 +379,16 @@ namespace TLSharp.Core
             _session.Save();
         }
 
+        public bool IsConnected
+        {
+            get
+            {
+                if (_transport == null)
+                    return false;
+                return _transport.IsConnected;
+            }
+        }
+
         public void Dispose()
         {
             if (_transport != null)
