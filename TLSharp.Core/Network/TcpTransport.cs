@@ -86,6 +86,15 @@ namespace TLSharp.Core.Network
             return new TcpMessage(seq, body);
         }
 
+        public bool IsConnected
+        {
+            get
+            {
+                return this._tcpClient.Connected;
+            }
+        }
+
+
         public void Dispose()
         {
             if (_tcpClient.Connected)
