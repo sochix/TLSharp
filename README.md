@@ -1,4 +1,5 @@
-#TLSharp
+TLSharp
+-------------------------------
 
 <a href="https://www.paypal.me/IPirozhenko" title="Support project"><img src="https://img.shields.io/badge/Support%20project-paypal-brightgreen.svg"></a>
 [![Join the chat at https://gitter.im/TLSharp/Lobby](https://badges.gitter.im/TLSharp/Lobby.svg)](https://gitter.im/TLSharp/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -12,11 +13,23 @@ It's a perfect fit for any developer who would like to send data directly to Tel
 
 :star2: If you :heart: library, please star it! :star2:
 
-If you have difficulties with library usage, I can support you ( 75$/hour ). Contact me at @sochix.
+# News
+* **JavaScript Telegram Client**
+	
+	Hi everyone! I want to create JavaScript client for Telegram, it will have next features:
 
-If you have difficulties with console or writing code, you can try [Telegram Tools](https://github.com/sochix/telegram-tools). It's a GUI for TLSharp.
+	* send & receieve messages from users/groups/channels
+	* easy installation with npm or yarn
+	* latest Telegram Schema
+	* examples and documentation
 
-# Table of contents?
+	If you like this idea, please leave your email [here](http://eepurl.com/cBXX8n).
+
+* **TLSharp GUI**
+	
+	If you have difficulties with console or writing code, you can try [Telegram Tools](https://github.com/sochix/telegram-tools). It's a GUI for TLSharp.
+
+# Table of contents
 
 - [How do I add this to my project?](#how-do-i-add-this-to-my-project)
 - [Dependencies](#dependencies)
