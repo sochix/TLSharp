@@ -29,9 +29,10 @@ namespace TLSharp.Core
         private Session _session;
         private List<TLDcOption> dcOptions;
         private TcpClientConnectionHandler _handler;
+        private bool _keepAlive;
 
         public TelegramClient(int apiId, string apiHash,
-            ISessionStore store = null, string sessionUserId = "session", TcpClientConnectionHandler handler = null)
+            ISessionStore store = null, string sessionUserId = "session", bool keepAlive = false, TcpClientConnectionHandler handler = null)
         {
             if (apiId == default(int))
                 throw new MissingApiConfigurationException("API_ID");
@@ -45,9 +46,10 @@ namespace TLSharp.Core
             _apiHash = apiHash;
             _apiId = apiId;
             _handler = handler;
+            _keepAlive = keepAlive;
 
             _session = Session.TryLoadOrCreateNew(store, sessionUserId);
-            _transport = new TcpTransport(_session.ServerAddress, _session.Port, _handler);
+            _transport = new TcpTransport(_session.ServerAddress, _session.Port, _keepAlive, _handler);
         }
 
         public async Task<bool> ConnectAsync(bool reconnect = false)
@@ -88,7 +90,7 @@ namespace TLSharp.Core
 
             var dc = dcOptions.First(d => d.id == dcId);
 
-            _transport = new TcpTransport(dc.ip_address, dc.port, _handler);
+            _transport = new TcpTransport(dc.ip_address, dc.port, _keepAlive, _handler);
             _session.ServerAddress = dc.ip_address;
             _session.Port = dc.port;
 
@@ -110,7 +112,7 @@ namespace TLSharp.Core
 
             var authCheckPhoneRequest = new TLRequestCheckPhone() { phone_number = phoneNumber };
             var completed = false;
-            while(!completed)
+            while (!completed)
             {
                 try
                 {
@@ -118,7 +120,7 @@ namespace TLSharp.Core
                     await _sender.Receive(authCheckPhoneRequest);
                     completed = true;
                 }
-                catch(PhoneMigrationException e)
+                catch (PhoneMigrationException e)
                 {
                     await ReconnectToDcAsync(e.DC);
                 }
@@ -338,7 +340,7 @@ namespace TLSharp.Core
 
                 _session.AuthKey = authKey;
                 _session.TimeOffset = timeOffset;
-                _transport = new TcpTransport(serverAddress, serverPort);
+                _transport = new TcpTransport(serverAddress, serverPort, _keepAlive);
                 _session.ServerAddress = serverAddress;
                 _session.Port = serverPort;
                 await ConnectAsync();
