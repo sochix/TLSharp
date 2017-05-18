@@ -283,7 +283,7 @@ namespace TLSharp.Core
                 random_id = Helpers.GenerateRandomLong(),
                 background = false,
                 clear_draft = false,
-                media = new TLInputMediaUploadedPhoto() { file = file, caption = caption },
+                media = new TLInputMediaUploadedPhoto() { file = file, Caption = caption },
                 peer = peer
             });
         }
@@ -299,7 +299,7 @@ namespace TLSharp.Core
                 media = new TLInputMediaUploadedDocument()
                 {
                     file = file,
-                    caption = caption,
+                    Caption = caption,
                     mime_type = mimeType,
                     attributes = attributes
                 },
