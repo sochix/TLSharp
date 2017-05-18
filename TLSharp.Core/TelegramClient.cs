@@ -166,8 +166,22 @@ namespace TLSharp.Core
                 throw new ArgumentNullException(nameof(code));
 
             var request = new TLRequestSignIn() { phone_number = phoneNumber, phone_code_hash = phoneCodeHash, phone_code = code };
-            await _sender.Send(request);
-            await _sender.Receive(request);
+
+            var completed = false;
+
+            while (!completed)
+            {
+                try
+                {
+                    await _sender.Send(request);
+                    await _sender.Receive(request);
+                    completed = true;
+                }
+                catch (PhoneMigrationException e)
+                {
+                    await ReconnectToDcAsync(e.DC);
+                }
+            }
 
             OnUserAuthenticated(((TLUser)request.Response.user));
 
