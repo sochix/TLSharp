@@ -22,7 +22,18 @@ namespace TeleSharp.TL
      public TLAbsInputFile file {get;set;}
      public string mime_type {get;set;}
      public TLVector<TLAbsDocumentAttribute> attributes {get;set;}
-     public string caption {get;set;}
+     private string caption;
+     public string Caption
+        {
+            get
+            {
+                return caption;
+            }
+            set
+            {
+                caption = value.Length > 200 ? value.Remove(199, value.Length - 199) : value;
+            }
+        }
      public TLVector<TLAbsInputDocument> stickers {get;set;}
 
 
@@ -39,7 +50,7 @@ flags = stickers != null ? (flags | 1) : (flags & ~1);
 file = (TLAbsInputFile)ObjectUtils.DeserializeObject(br);
 mime_type = StringUtil.Deserialize(br);
 attributes = (TLVector<TLAbsDocumentAttribute>)ObjectUtils.DeserializeVector<TLAbsDocumentAttribute>(br);
-caption = StringUtil.Deserialize(br);
+Caption = StringUtil.Deserialize(br);
 if ((flags & 1) != 0)
 stickers = (TLVector<TLAbsInputDocument>)ObjectUtils.DeserializeVector<TLAbsInputDocument>(br);
 else
@@ -56,7 +67,7 @@ bw.Write(flags);
 ObjectUtils.SerializeObject(file,bw);
 StringUtil.Serialize(mime_type,bw);
 ObjectUtils.SerializeObject(attributes,bw);
-StringUtil.Serialize(caption,bw);
+StringUtil.Serialize(Caption,bw);
 if ((flags & 1) != 0)
 ObjectUtils.SerializeObject(stickers,bw);
 
