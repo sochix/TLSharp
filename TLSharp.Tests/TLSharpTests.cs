@@ -199,6 +199,50 @@ namespace TLSharp.Tests
             await client.SendMessageAsync(new TLInputPeerChannel() { channel_id = chat.id, access_hash = chat.access_hash.Value }, "TEST MSG");
         }
 
+        public virtual async Task GetChannelMessagesTest()
+        {
+            var client = NewClient();
+
+            await client.ConnectAsync();
+
+            var dialogsObject = await client.GetUserDialogsAsync();
+
+            IEnumerable<TLChannel> chats = null;
+
+            var o = dialogsObject as TLDialogs;
+            if (o != null)
+            {
+                var dialogs = o;
+                chats = dialogs.chats.lists
+                    .Where(c => c.GetType() == typeof (TLChannel))
+                    .Cast<TLChannel>();
+
+            }
+            var o1 = dialogsObject as TLDialogsSlice;
+            if (o1 != null)
+            {
+                var dialogs = o1;
+                chats = dialogs.chats.lists
+                    .Where(c => c.GetType() == typeof(TLChannel))
+                    .Cast<TLChannel>();
+            }
+
+            foreach (var chat in chats)
+            {
+                client = NewClient();
+
+                await client.ConnectAsync();
+
+                TLAbsChannelDifference result = await client.GetFirst100HundredUpdatesFromTheChannel(chat);
+
+                foreach (var item in (result as TLChannelDifference).new_messages.lists)
+                {
+                    var m = item as TLMessage;
+                    if (m != null)
+                        Console.WriteLine(m.message);
+                }
+            }
+        }
         public virtual async Task SendPhotoToContactTest()
         {
             var client = NewClient();
