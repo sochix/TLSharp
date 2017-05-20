@@ -175,7 +175,7 @@ namespace TLSharp.Core.Auth
 
                         if (!newNonceHash1.SequenceEqual(newNonceHashCalculated))
                         {
-                            throw new InvalidOperationException("invalid new nonce hash");
+                            throw new InvalidNewNonceHashException();
                         }
 
                         //logger.info("generated new auth key: {0}", gab);
@@ -204,6 +204,13 @@ namespace TLSharp.Core.Auth
                     }
                 }
             }
+        }
+    }
+    internal class InvalidNewNonceHashException : Exception
+    {
+        internal InvalidNewNonceHashException() : base($"invalid new nonce hash")
+        {
+
         }
     }
 }
