@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.CodeDom;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using NDesk.Options;
 
 namespace TeleSharp.Generator
 {
@@ -16,40 +17,196 @@ namespace TeleSharp.Generator
         static List<String> keywords = new List<string>(new string[] { "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked", "class", "const", "continue", "decimal", "default", "delegate", "do", "double", "else", "enum", "event", "explicit", "extern", "false", "finally", "fixed", "float", "for", "foreach", "goto", "if", "implicit", "in", "in", "int", "interface", "internal", "is", "lock", "long", "namespace", "new", "null", "object", "operator", "out", "out", "override", "params", "private", "protected", "public", "readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string", "struct", "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort", "using", "virtual", "void", "volatile", "while", "add", "alias", "ascending", "async", "await", "descending", "dynamic", "from", "get", "global", "group", "into", "join", "let", "orderby", "partial", "partial", "remove", "select", "set", "value", "var", "where", "where", "yield" });
         static List<String> interfacesList = new List<string>();
         static List<String> classesList = new List<string>();
+
+        static void DisplayHelp(bool full = true)
+        {
+            Console.WriteLine("TLSharp TL Parser v1.0, a TL schema to C# transcompiler");
+            Console.WriteLine("usage: TeleSharp.Generator [OPTIONS] INPUT [OUTPUT]");
+            Console.WriteLine();
+            if (full)
+            {
+                Console.WriteLine("Options:");
+                Console.WriteLine("  -f,  --format                Sets input format.");
+                Console.WriteLine("                               Accepted formats are \"tl\" and \"json\".");
+                Console.WriteLine("       --template-abstract     Sets the abstract class template");
+                Console.WriteLine("       --template-class        Sets the class template");
+                Console.WriteLine("       --template-method       Sets the method template");
+                Console.WriteLine("       --target-namespace      Sets the target namespace");
+                Console.WriteLine("                               Default is \"TeleSharp.TL\"");
+                Console.WriteLine("       --output-json           Only Parses TL and outputs schema as JSON");
+                Console.WriteLine("  -h,  --help                  Displays this help message");
+                Console.WriteLine();
+                Console.WriteLine("For more information, please read the manual,");
+                Console.WriteLine("or visit the GitHub page.");
+                Console.WriteLine("Submit your bug reports to our GitHub repository.");
+            }
+            else
+            {
+                Console.WriteLine("Try `TeleSharp.Generator --help' for more options.");
+            }
+        }
+
+        enum Format
+        {
+            TL,
+            JSON
+        }
+
         static void Main(string[] args)
         {
+            string Json = "";
+            string inputPath = "";
+            string outputPath = "";
+            Format format = Format.TL;
+            bool forceFormat = false;
+            bool outputJson = false;
+            bool showHelp = false;
+
 
             string AbsStyle = File.ReadAllText("ConstructorAbs.tmp");
             string NormalStyle = File.ReadAllText("Constructor.tmp");
             string MethodStyle = File.ReadAllText("Method.tmp");
-            //string method = File.ReadAllText("constructor.tt");
-            string Json = "";
-            string url;
-            if (args.Count() == 0) url = "tl-schema.json"; else url = args[0];
+            string TargetNamespace = "TeleSharp.TL";
 
-            Json = File.ReadAllText(url);
-            FileStream file = File.OpenWrite("Result.cs");
-            StreamWriter sw = new StreamWriter(file);
-            Schema schema = JsonConvert.DeserializeObject<Schema>(Json);
-            foreach (var c in schema.constructors)
+            bool invalidFormat = false;
+            bool invalidTargetNamespace = false;
+
+            OptionSet optionset = new OptionSet()
+                .Add("h|help", h => showHelp = h != null)
+                .Add("f|format=", f =>
+                {
+                    f = f ?? "";
+                    if (f != null)
+                        forceFormat = true;
+                    switch (f.ToLower())
+                    {
+                        case "tl":
+                            format = Format.TL;
+                            break;
+                        case "json":
+                            format = Format.JSON;
+                            break;
+                        case "":
+                            format = Format.TL;
+                            break;
+                        default:
+                            invalidFormat = true;
+                            break;
+                    }
+                })
+                .Add("target-namespace=", a =>
+                {
+                    if (!string.IsNullOrEmpty(a))
+                    {
+                        Match m = Regex.Match(a, @"(@?[a-z_A-Z]\w+(?:\.@?[a-z_A-Z]\w+)*)");
+                        if (m.Success)
+                        {
+                            TargetNamespace = m.Groups[0].Value;
+                        }
+                    }
+                    else
+                    {
+                        invalidTargetNamespace = true;
+                    }
+                })
+                .Add("output-json", a => outputJson = a != null)
+                .Add("template-abstract=", a => AbsStyle = (a != null) ? File.ReadAllText(a) : AbsStyle)
+                .Add("template-normal=", a => NormalStyle = (a != null) ? File.ReadAllText(a) : NormalStyle)
+                .Add("template-method=", a => MethodStyle = (a != null) ? File.ReadAllText(a) : MethodStyle);
+            List<string> extra;
+            try
             {
-                interfacesList.Add(c.type);
-                classesList.Add(c.predicate);
+                extra = optionset.Parse(args);
             }
-            foreach (var c in schema.constructors)
+            catch (OptionException e)
             {
-                var list = schema.constructors.Where(x => x.type == c.type);
+                Console.Write("Error: ");
+                Console.WriteLine(e.Message);
+                Console.WriteLine("Try `TeleSharp.Generator --help' for more information.");
+                return;
+            }
+            if (showHelp)
+            {
+                DisplayHelp(true);
+                return;
+            }
+            if (extra == null || extra.Count == 0)
+            {
+                DisplayHelp(false);
+                return;
+            }
+            if (invalidFormat)
+            {
+                Console.WriteLine("Error: Invalid input format.");
+                Console.WriteLine("Try `TeleSharp.Generator --help' for more information.");
+                return;
+            }
+            if (invalidTargetNamespace)
+            {
+                Console.WriteLine("Error: Invalid target namespace.");
+                Console.WriteLine("Try `TeleSharp.Generator --help' for more information.");
+                return;
+            }
+            
+            inputPath = extra[0];
+            if (!forceFormat)
+            {
+                string ext = Path.GetExtension(extra[0]);
+                if (ext == "json")
+                {
+                    format = Format.JSON;
+                }
+            }
+            if (extra.Count > 1)
+            {
+                outputPath = extra[1];
+            }
+            else
+            { // no output path provided
+                if (!outputJson)
+                    outputPath = Path.GetDirectoryName(Path.GetFullPath(extra[0]));
+                else
+                    outputPath = Path.ChangeExtension(inputPath, ".json");
+            }
+
+            Console.WriteLine("TLSharp TL Parser v1.0, a TL schema to C# transcompiler");
+
+
+            Json = File.ReadAllText(inputPath);
+
+            if (format == Format.TL)
+            { // if input is tl, convert to json
+                Json = TL2JSON.ParseToJson(Json);
+                Console.WriteLine("Converting TL to JSON...");
+            }
+
+            if (outputJson)
+            {
+                File.WriteAllText(outputPath, Json);
+                return;
+            }
+            #region Translate to C#
+
+            Schema schema = JsonConvert.DeserializeObject<Schema>(Json);
+            foreach (var c in schema.Constructors)
+            {
+                interfacesList.Add(c.BaseType);
+                classesList.Add(c.ConstructorName);
+            }
+            Console.WriteLine("Implementing abstract classes...");
+            var abstractParams = new Dictionary<string, List<Param>>();
+            #region Abstract classes
+            foreach (var c in schema.Constructors)
+            {
+                var list = schema.Constructors.Where(x => x.BaseType == c.BaseType); // check if there is a dependence on base type of this class (base type is an abstract class)
                 if (list.Count() > 1)
                 {
-                    string path = (GetNameSpace(c.type).Replace("TeleSharp.TL", "TL\\").Replace(".", "") + "\\" + GetNameofClass(c.type, true) + ".cs").Replace("\\\\", "\\");
+                    string path = Path.Combine(outputPath, GetNameSpace(c.BaseType, TargetNamespace).Replace(TargetNamespace, @"TL\").Replace(".", ""), GetNameofClass(c.BaseType, true) + ".cs").Replace(@"\\", @"\");
                     FileStream classFile = MakeFile(path);
                     using (StreamWriter writer = new StreamWriter(classFile))
                     {
-                        string nspace = (GetNameSpace(c.type).Replace("TeleSharp.TL", "TL\\").Replace(".", "")).Replace("\\\\", "\\").Replace("\\", ".");
-                        if (nspace.EndsWith("."))
-                            nspace = nspace.Remove(nspace.Length - 1, 1);
-                        string temp = AbsStyle.Replace("/* NAMESPACE */", "TeleSharp." + nspace);
-                        temp = temp.Replace("/* NAME */", GetNameofClass(c.type, true));
+                        string temp = AbsStyle.Replace("/* NAMESPACE */", GetNameSpace(c.BaseType, TargetNamespace).TrimEnd('.'));
+                        temp = temp.Replace("/* NAME */", GetNameofClass(c.BaseType, true));
                         writer.Write(temp);
                         writer.Close();
                         classFile.Close();
@@ -57,47 +214,70 @@ namespace TeleSharp.Generator
                 }
                 else
                 {
-                    interfacesList.Remove(list.First().type);
-                    list.First().type = "himself";
+                    interfacesList.Remove(list.First().BaseType);
+                    list.First().BaseType = "himself";
                 }
             }
-            foreach (var c in schema.constructors)
+            #endregion
+
+            Console.WriteLine("Implementing types...");
+            #region Constructors
+            foreach (var c in schema.Constructors)
             {
-                string path = (GetNameSpace(c.predicate).Replace("TeleSharp.TL", "TL\\").Replace(".", "") + "\\" + GetNameofClass(c.predicate, false) + ".cs").Replace("\\\\", "\\");
+                string path = Path.Combine(outputPath, GetNameSpace(c.ConstructorName, TargetNamespace).Replace(TargetNamespace, @"TL\").Replace(".", ""), GetNameofClass(c.ConstructorName, false) + ".cs").Replace(@"\\", @"\");
                 FileStream classFile = MakeFile(path);
                 using (StreamWriter writer = new StreamWriter(classFile))
                 {
                     #region About Class
-                    string nspace = (GetNameSpace(c.predicate).Replace("TeleSharp.TL", "TL\\").Replace(".", "")).Replace("\\\\", "\\").Replace("\\", ".");
-                    if (nspace.EndsWith("."))
-                        nspace = nspace.Remove(nspace.Length - 1, 1);
-                    string temp = NormalStyle.Replace("/* NAMESPACE */", "TeleSharp." + nspace);
-                    temp = (c.type == "himself") ? temp.Replace("/* PARENT */", "TLObject") : temp.Replace("/* PARENT */", GetNameofClass(c.type, true));
-                    temp = temp.Replace("/*Constructor*/", c.id.ToString());
-                    temp = temp.Replace("/* NAME */", GetNameofClass(c.predicate, false));
+                    string temp = NormalStyle.Replace("/* NAMESPACE */", GetNameSpace(c.ConstructorName, TargetNamespace).TrimEnd('.'));
+                    temp = (c.BaseType == "himself") ? 
+                        temp.Replace("/* PARENT */", "TLObject") : 
+                        temp.Replace("/* PARENT */", GetNameofClass(c.BaseType, true));
+                    temp = temp.Replace("/*Constructor*/", c.Id.ToString());
+                    temp = temp.Replace("/* NAME */", GetNameofClass(c.ConstructorName, false));
                     #endregion
                     #region Fields
-                    string fields = "";
-                    foreach (var tmp in c.Params)
+                    /*
+                     Note: Fields were mostly moved to abstract classes to provide maximum polymorphism usability.
+                     */
+                    //string fields = "";
+                    string parent_name = GetNameofClass(c.BaseType, true);
+                    
+                    if (c.BaseType != "himself")
                     {
-                        fields += $"     public {CheckForFlagBase(tmp.type, GetTypeName(tmp.type))} {CheckForKeyword(tmp.name)} " + "{get;set;}" + Environment.NewLine;
+                        foreach (var tmp in c.Params)
+                        {
+                            Param field = new Param {Name = tmp.Name, Type = tmp.Type};
+                            if (abstractParams.All(item => item.Key != c.BaseType))
+                                abstractParams.Add(c.BaseType, new List<Param>());
+                            else if (!abstractParams[c.BaseType].Any(f => f.Name == field.Name && f.Type == field.Type))
+                                abstractParams[c.BaseType].Add(field);
+                        }
                     }
-                    temp = temp.Replace("/* PARAMS */", fields);
+                    else
+                    {
+                        string fields = "";
+                        foreach (var param in c.Params)
+                        {
+                            fields += $"        public {CheckForFlagBase(param.Type, GetTypeName(param.Type))} {CheckForKeyword(param.Name)} " + "{ get; set; }" + Environment.NewLine;
+                        }
+                        temp = temp.Replace("/* PARAMS */", fields);
+                    }
                     #endregion
                     #region ComputeFlagFunc
-                    if (!c.Params.Any(x => x.name == "flags")) temp = temp.Replace("/* COMPUTE */", "");
+                    if (c.Params.All(x => x.Name != "flags")) temp = temp.Replace("/* COMPUTE */", "");
                     else
                     {
                         var compute = "flags = 0;" + Environment.NewLine;
-                        foreach (var param in c.Params.Where(x => IsFlagBase(x.type)))
+                        foreach (var param in c.Params.Where(x => IsFlagBase(x.Type)))
                         {
-                            if (IsTrueFlag(param.type))
+                            if (IsTrueFlag(param.Type))
                             {
-                                compute += $"flags = {CheckForKeyword(param.name)} ? (flags | {GetBitMask(param.type)}) : (flags & ~{GetBitMask(param.type)});" + Environment.NewLine;
+                                compute += $"flags = {CheckForKeyword(param.Name)} ? (flags | {GetBitMask(param.Type)}) : (flags & ~{GetBitMask(param.Type)});" + Environment.NewLine;
                             }
                             else
                             {
-                                compute += $"flags = {CheckForKeyword(param.name)} != null ? (flags | {GetBitMask(param.type)}) : (flags & ~{GetBitMask(param.type)});" + Environment.NewLine;
+                                compute += $"flags = {CheckForKeyword(param.Name)} != null ? (flags | {GetBitMask(param.Type)}) : (flags & ~{GetBitMask(param.Type)});" + Environment.NewLine;
                             }
                         }
                         temp = temp.Replace("/* COMPUTE */", compute);
@@ -106,8 +286,9 @@ namespace TeleSharp.Generator
                     #region SerializeFunc
                     var serialize = "";
 
-                    if (c.Params.Any(x => x.name == "flags")) serialize += "ComputeFlags();" + Environment.NewLine + "bw.Write(flags);" + Environment.NewLine;
-                    foreach (var p in c.Params.Where(x => x.name != "flags"))
+                    if (c.Params.Any(x => x.Name == "flags")) 
+                        serialize += "ComputeFlags();" + Environment.NewLine + "bw.Write(flags);" + Environment.NewLine;
+                    foreach (var p in c.Params.Where(x => x.Name != "flags"))
                     {
                         serialize += WriteWriteCode(p) + Environment.NewLine;
                     }
@@ -127,44 +308,45 @@ namespace TeleSharp.Generator
                     classFile.Close();
                 }
             }
-            foreach (var c in schema.methods)
+            #endregion
+
+            Console.WriteLine("Implementing methods...");
+            #region Methods
+            foreach (var c in schema.Methods)
             {
-                string path = (GetNameSpace(c.method).Replace("TeleSharp.TL", "TL\\").Replace(".", "") + "\\" + GetNameofClass(c.method, false, true) + ".cs").Replace("\\\\", "\\");
+                string path = Path.Combine(outputPath, GetNameSpace(c.MethodName, TargetNamespace).Replace(TargetNamespace, @"TL\").Replace(".", ""), GetNameofClass(c.MethodName, false, true) + ".cs").Replace(@"\\", @"\");
                 FileStream classFile = MakeFile(path);
                 using (StreamWriter writer = new StreamWriter(classFile))
                 {
                     #region About Class
-                    string nspace = (GetNameSpace(c.method).Replace("TeleSharp.TL", "TL\\").Replace(".", "")).Replace("\\\\", "\\").Replace("\\", ".");
-                    if (nspace.EndsWith("."))
-                        nspace = nspace.Remove(nspace.Length - 1, 1);
-                    string temp = MethodStyle.Replace("/* NAMESPACE */", "TeleSharp." + nspace);
+                    string temp = MethodStyle.Replace("/* NAMESPACE */", GetNameSpace(c.MethodName, TargetNamespace).TrimEnd('.'));
                     temp = temp.Replace("/* PARENT */", "TLMethod");
-                    temp = temp.Replace("/*Constructor*/", c.id.ToString());
-                    temp = temp.Replace("/* NAME */", GetNameofClass(c.method, false, true));
+                    temp = temp.Replace("/*Constructor*/", c.Id.ToString());
+                    temp = temp.Replace("/* NAME */", GetNameofClass(c.MethodName, false, true));
                     #endregion
                     #region Fields
                     string fields = "";
                     foreach (var tmp in c.Params)
                     {
-                        fields += $"        public {CheckForFlagBase(tmp.type, GetTypeName(tmp.type))} {CheckForKeyword(tmp.name)} " + "{get;set;}" + Environment.NewLine;
+                        fields += $"        public {CheckForFlagBase(tmp.Type, GetTypeName(tmp.Type))} {CheckForKeyword(tmp.Name)} " + "{ get; set; }" + Environment.NewLine;
                     }
-                    fields += $"        public {CheckForFlagBase(c.type, GetTypeName(c.type))} Response" + "{ get; set;}" + Environment.NewLine;
+                    fields += $"        public {CheckForFlagBase(c.ResponseType, GetTypeName(c.ResponseType))} Response" + "{ get; set; }" + Environment.NewLine;
                     temp = temp.Replace("/* PARAMS */", fields);
                     #endregion
                     #region ComputeFlagFunc
-                    if (!c.Params.Any(x => x.name == "flags")) temp = temp.Replace("/* COMPUTE */", "");
+                    if (!c.Params.Any(x => x.Name == "flags")) temp = temp.Replace("/* COMPUTE */", "");
                     else
                     {
                         var compute = "flags = 0;" + Environment.NewLine;
-                        foreach (var param in c.Params.Where(x => IsFlagBase(x.type)))
+                        foreach (var param in c.Params.Where(x => IsFlagBase(x.Type)))
                         {
-                            if (IsTrueFlag(param.type))
+                            if (IsTrueFlag(param.Type))
                             {
-                                compute += $"flags = {CheckForKeyword(param.name)} ? (flags | {GetBitMask(param.type)}) : (flags & ~{GetBitMask(param.type)});" + Environment.NewLine;
+                                compute += $"flags = {CheckForKeyword(param.Name)} ? (flags | {GetBitMask(param.Type)}) : (flags & ~{GetBitMask(param.Type)});" + Environment.NewLine;
                             }
                             else
                             {
-                                compute += $"flags = {CheckForKeyword(param.name)} != null ? (flags | {GetBitMask(param.type)}) : (flags & ~{GetBitMask(param.type)});" + Environment.NewLine;
+                                compute += $"flags = {CheckForKeyword(param.Name)} != null ? (flags | {GetBitMask(param.Type)}) : (flags & ~{GetBitMask(param.Type)});" + Environment.NewLine;
                             }
                         }
                         temp = temp.Replace("/* COMPUTE */", compute);
@@ -173,8 +355,8 @@ namespace TeleSharp.Generator
                     #region SerializeFunc
                     var serialize = "";
 
-                    if (c.Params.Any(x => x.name == "flags")) serialize += "ComputeFlags();" + Environment.NewLine + "bw.Write(flags);" + Environment.NewLine;
-                    foreach (var p in c.Params.Where(x => x.name != "flags"))
+                    if (c.Params.Any(x => x.Name == "flags")) serialize += "ComputeFlags();" + Environment.NewLine + "bw.Write(flags);" + Environment.NewLine;
+                    foreach (var p in c.Params.Where(x => x.Name != "flags"))
                     {
                         serialize += WriteWriteCode(p) + Environment.NewLine;
                     }
@@ -191,7 +373,7 @@ namespace TeleSharp.Generator
                     #endregion
                     #region DeSerializeRespFunc
                     var deserializeResp = "";
-                    Param p2 = new Param() { name = "Response", type = c.type };
+                    Param p2 = new Param() { Name = "Response", Type = c.ResponseType };
                     deserializeResp += WriteReadCode(p2) + Environment.NewLine;
                     temp = temp.Replace("/* DESERIALIZEResp */", deserializeResp);
                     #endregion
@@ -200,11 +382,36 @@ namespace TeleSharp.Generator
                     classFile.Close();
                 }
             }
+            #endregion
+
+            Console.WriteLine("Adding fields to abstract classes...");
+            // add fields to abstract classes
+            foreach (KeyValuePair<string, List<Param>> absClass in abstractParams)
+            {
+                string path = Path.Combine(outputPath, GetNameSpace(absClass.Key, TargetNamespace).Replace(TargetNamespace, @"TL\").Replace(".", ""), GetNameofClass(absClass.Key, true) + ".cs").Replace(@"\\", @"\");
+                string tmp = File.ReadAllText(path);
+                tmp = tmp.Replace("/* PARAMS */", ConvertPropertyList(absClass.Value));
+                File.WriteAllText(path, tmp);
+            }
+            #endregion
+
+            Console.WriteLine("Done.");
         }
+
+        public static string ConvertPropertyList(List<Param> list)
+        {
+            string output = "";
+            foreach (var param in list)
+            {
+                output += $"        public {CheckForFlagBase(param.Type, GetTypeName(param.Type))} {CheckForKeyword(param.Name)} " + "{ get; set; }" + Environment.NewLine;
+            }
+            return output;
+        }
+
         public static string FormatName(string input)
         {
             if (String.IsNullOrEmpty(input))
-                throw new ArgumentException("ARGH!");
+                throw new ArgumentException("ARGH! Class Name was empty.");
             if (input.IndexOf('.') != -1)
             {
                 input = input.Replace(".", " ");
@@ -255,24 +462,27 @@ namespace TeleSharp.Generator
         {
             return type.Split('?')[1] == "true";
         }
-        public static string GetNameSpace(string type)
+        public static string GetNameSpace(string type, string targetns)
         {
             if (type.IndexOf('.') != -1)
-                return "TeleSharp.TL" + FormatName(type.Split('.')[0]);
+                return targetns + "." + FormatName(type.Split('.')[0]);
             else
-                return "TeleSharp.TL";
+                return targetns;
         }
         public static string CheckForFlagBase(string type, string result)
         {
             if (type.IndexOf('?') == -1)
                 return result;
-            else
-            {
-                string innerType = type.Split('?')[1];
-                if (innerType == "true") return result;
-                else if ((new string[] { "bool", "int", "uint", "long", "double" }).Contains(result)) return result + "?";
-                else return result;
-            }
+
+            string innerType = type.Split('?')[1];
+
+            if (innerType == "true")
+                return result;
+
+            if ((new string[] { "bool", "int", "uint", "long", "BigMath.Int128", "BigMath.Int256", "double" }).Contains(result))
+                return result + "?";
+
+            return result;
         }
         public static string GetTypeName(string type)
         {
@@ -281,6 +491,10 @@ namespace TeleSharp.Generator
                 case "#":
                 case "int":
                     return "int";
+                case "int128":
+                    return "BigMath.Int128";
+                case "int256":
+                    return "BigMath.Int256";
                 case "uint":
                     return "uint";
                 case "long":
@@ -298,18 +512,18 @@ namespace TeleSharp.Generator
                     return "TLObject";
                 case "x":
                     return "TLObject";
+                case "vector t":
+                    return "List<T>";
             }
 
-            if (type.StartsWith("Vector"))
+            if (type.StartsWith("Vector<"))
                 return "TLVector<" + GetTypeName(type.Replace("Vector<", "").Replace(">", "")) + ">";
 
             if (type.ToLower().Contains("inputcontact"))
                 return "TLInputPhoneContact";
-
-
+            
             if (type.IndexOf('.') != -1 && type.IndexOf('?') == -1)
             {
-
                 if (interfacesList.Any(x => x.ToLower() == (type).ToLower()))
                     return FormatName(type.Split('.')[0]) + "." + "TLAbs" + type.Split('.')[1];
                 else if (classesList.Any(x => x.ToLower() == (type).ToLower()))
@@ -344,34 +558,34 @@ namespace TeleSharp.Generator
         }
         public static string WriteWriteCode(Param p, bool flag = false)
         {
-            switch (p.type.ToLower())
+            switch (p.Type.ToLower())
             {
                 case "#":
                 case "int":
-                    return flag ? $"bw.Write({CheckForKeyword(p.name)}.Value);" : $"bw.Write({CheckForKeyword(p.name)});";
+                    return flag ? $"bw.Write({CheckForKeyword(p.Name)}.Value);" : $"bw.Write({CheckForKeyword(p.Name)});";
                 case "long":
-                    return flag ? $"bw.Write({CheckForKeyword(p.name)}.Value);" : $"bw.Write({CheckForKeyword(p.name)});";
+                    return flag ? $"bw.Write({CheckForKeyword(p.Name)}.Value);" : $"bw.Write({CheckForKeyword(p.Name)});";
                 case "string":
-                    return $"StringUtil.Serialize({CheckForKeyword(p.name)},bw);";
+                    return $"StringUtil.Serialize({CheckForKeyword(p.Name)},bw);";
                 case "bool":
-                    return flag ? $"BoolUtil.Serialize({CheckForKeyword(p.name)}.Value,bw);" : $"BoolUtil.Serialize({CheckForKeyword(p.name)},bw);";
+                    return flag ? $"BoolUtil.Serialize({CheckForKeyword(p.Name)}.Value,bw);" : $"BoolUtil.Serialize({CheckForKeyword(p.Name)},bw);";
                 case "true":
-                    return $"BoolUtil.Serialize({CheckForKeyword(p.name)},bw);";
+                    return $"BoolUtil.Serialize({CheckForKeyword(p.Name)},bw);";
                 case "bytes":
-                    return $"BytesUtil.Serialize({CheckForKeyword(p.name)},bw);";
+                    return $"BytesUtil.Serialize({CheckForKeyword(p.Name)},bw);";
                 case "double":
-                    return flag ? $"bw.Write({CheckForKeyword(p.name)}.Value);" : $"bw.Write({CheckForKeyword(p.name)});";
+                    return flag ? $"bw.Write({CheckForKeyword(p.Name)}.Value);" : $"bw.Write({CheckForKeyword(p.Name)});";
                 default:
-                    if (!IsFlagBase(p.type))
-                        return $"ObjectUtils.SerializeObject({CheckForKeyword(p.name)},bw);";
+                    if (!IsFlagBase(p.Type))
+                        return $"ObjectUtils.SerializeObject({CheckForKeyword(p.Name)},bw);";
                     else
                     {
-                        if (IsTrueFlag(p.type))
+                        if (IsTrueFlag(p.Type))
                             return $"";
                         else
                         {
-                            Param p2 = new Param() { name = p.name, type = p.type.Split('?')[1] };
-                            return $"if ((flags & {GetBitMask(p.type).ToString()}) != 0)" + Environment.NewLine +
+                            Param p2 = new Param() { Name = p.Name, Type = p.Type.Split('?')[1] };
+                            return $"if ((flags & {GetBitMask(p.Type).ToString()}) != 0)" + Environment.NewLine +
                                 WriteWriteCode(p2, true);
                         }
                     }
@@ -379,42 +593,42 @@ namespace TeleSharp.Generator
         }
         public static string WriteReadCode(Param p)
         {
-            switch (p.type.ToLower())
+            switch (p.Type.ToLower())
             {
                 case "#":
                 case "int":
-                    return $"{CheckForKeyword(p.name)} = br.ReadInt32();";
+                    return $"{CheckForKeyword(p.Name)} = br.ReadInt32();";
                 case "long":
-                    return $"{CheckForKeyword(p.name)} = br.ReadInt64();";
+                    return $"{CheckForKeyword(p.Name)} = br.ReadInt64();";
                 case "string":
-                    return $"{CheckForKeyword(p.name)} = StringUtil.Deserialize(br);";
+                    return $"{CheckForKeyword(p.Name)} = StringUtil.Deserialize(br);";
                 case "bool":
                 case "true":
-                    return $"{CheckForKeyword(p.name)} = BoolUtil.Deserialize(br);";
+                    return $"{CheckForKeyword(p.Name)} = BoolUtil.Deserialize(br);";
                 case "bytes":
-                    return $"{CheckForKeyword(p.name)} = BytesUtil.Deserialize(br);";
+                    return $"{CheckForKeyword(p.Name)} = BytesUtil.Deserialize(br);";
                 case "double":
-                    return $"{CheckForKeyword(p.name)} = br.ReadDouble();";
+                    return $"{CheckForKeyword(p.Name)} = br.ReadDouble();";
                 default:
-                    if (!IsFlagBase(p.type))
+                    if (!IsFlagBase(p.Type))
                     {
-                        if (p.type.ToLower().Contains("vector"))
+                        if (p.Type.ToLower().Contains("vector"))
                         {
-                            return $"{CheckForKeyword(p.name)} = ({GetTypeName(p.type)})ObjectUtils.DeserializeVector<{GetTypeName(p.type).Replace("TLVector<", "").Replace(">", "")}>(br);";
+                            return $"{CheckForKeyword(p.Name)} = ({GetTypeName(p.Type)})ObjectUtils.DeserializeVector<{GetTypeName(p.Type).Replace("TLVector<", "").Replace(">", "")}>(br);";
                         }
-                        else return $"{CheckForKeyword(p.name)} = ({GetTypeName(p.type)})ObjectUtils.DeserializeObject(br);";
+                        else return $"{CheckForKeyword(p.Name)} = ({GetTypeName(p.Type)})ObjectUtils.DeserializeObject(br);";
                     }
                     else
                     {
-                        if (IsTrueFlag(p.type))
-                            return $"{CheckForKeyword(p.name)} = (flags & {GetBitMask(p.type).ToString()}) != 0;";
+                        if (IsTrueFlag(p.Type))
+                            return $"{CheckForKeyword(p.Name)} = (flags & {GetBitMask(p.Type).ToString()}) != 0;";
                         else
                         {
-                            Param p2 = new Param() { name = p.name, type = p.type.Split('?')[1] };
-                            return $"if ((flags & {GetBitMask(p.type).ToString()}) != 0)" + Environment.NewLine +
+                            Param p2 = new Param() { Name = p.Name, Type = p.Type.Split('?')[1] };
+                            return $"if ((flags & {GetBitMask(p.Type).ToString()}) != 0)" + Environment.NewLine +
                                 WriteReadCode(p2) + Environment.NewLine +
                             "else" + Environment.NewLine +
-                                $"{CheckForKeyword(p.name)} = null;" + Environment.NewLine;
+                                $"{CheckForKeyword(p.Name)} = null;" + Environment.NewLine;
                         }
                     }
             }
@@ -428,5 +642,4 @@ namespace TeleSharp.Generator
             return File.OpenWrite(path);
         }
     }
-
 }

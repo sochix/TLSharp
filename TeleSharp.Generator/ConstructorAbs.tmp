@@ -9,5 +9,6 @@ namespace /* NAMESPACE */
 {
     public abstract class /* NAME */ : TLObject
     {
+        /* PARAMS */
     }
 }
