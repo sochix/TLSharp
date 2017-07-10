@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(-787638374)]
+	[TLObject(773059779)]
     public class TLUser : TLAbsUser
     {
         public override int Constructor
         {
             get
             {
-                return -787638374;
+                return 773059779;
             }
         }
 
@@ -41,6 +41,7 @@ namespace TeleSharp.TL
      public int? bot_info_version {get;set;}
      public string restriction_reason {get;set;}
      public string bot_inline_placeholder {get;set;}
+     public string lang_code {get;set;}
 
 
 		public void ComputeFlags()
@@ -67,6 +68,7 @@ flags = status != null ? (flags | 64) : (flags & ~64);
 flags = bot_info_version != null ? (flags | 16384) : (flags & ~16384);
 flags = restriction_reason != null ? (flags | 262144) : (flags & ~262144);
 flags = bot_inline_placeholder != null ? (flags | 524288) : (flags & ~524288);
+flags = lang_code != null ? (flags | 4194304) : (flags & ~4194304);
 
 		}
 
@@ -135,6 +137,11 @@ bot_inline_placeholder = StringUtil.Deserialize(br);
 else
 bot_inline_placeholder = null;
 
+if ((flags & 4194304) != 0)
+lang_code = StringUtil.Deserialize(br);
+else
+lang_code = null;
+
 
         }
 
@@ -175,6 +182,8 @@ if ((flags & 262144) != 0)
 StringUtil.Serialize(restriction_reason,bw);
 if ((flags & 524288) != 0)
 StringUtil.Serialize(bot_inline_placeholder,bw);
+if ((flags & 4194304) != 0)
+StringUtil.Serialize(lang_code,bw);
 
         }
     }

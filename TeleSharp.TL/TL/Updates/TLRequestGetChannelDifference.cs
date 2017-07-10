@@ -7,18 +7,20 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Updates
 {
-	[TLObject(-1154295872)]
+	[TLObject(51854712)]
     public class TLRequestGetChannelDifference : TLMethod
     {
         public override int Constructor
         {
             get
             {
-                return -1154295872;
+                return 51854712;
             }
         }
 
-                public TLAbsInputChannel channel {get;set;}
+                public int flags {get;set;}
+        public bool force {get;set;}
+        public TLAbsInputChannel channel {get;set;}
         public TLAbsChannelMessagesFilter filter {get;set;}
         public int pts {get;set;}
         public int limit {get;set;}
@@ -27,12 +29,16 @@ namespace TeleSharp.TL.Updates
 
 		public void ComputeFlags()
 		{
-			
+			flags = 0;
+flags = force ? (flags | 1) : (flags & ~1);
+
 		}
 
         public override void DeserializeBody(BinaryReader br)
         {
-            channel = (TLAbsInputChannel)ObjectUtils.DeserializeObject(br);
+            flags = br.ReadInt32();
+force = (flags & 1) != 0;
+channel = (TLAbsInputChannel)ObjectUtils.DeserializeObject(br);
 filter = (TLAbsChannelMessagesFilter)ObjectUtils.DeserializeObject(br);
 pts = br.ReadInt32();
 limit = br.ReadInt32();
@@ -42,7 +48,10 @@ limit = br.ReadInt32();
         public override void SerializeBody(BinaryWriter bw)
         {
 			bw.Write(Constructor);
-            ObjectUtils.SerializeObject(channel,bw);
+            ComputeFlags();
+bw.Write(flags);
+
+ObjectUtils.SerializeObject(channel,bw);
 ObjectUtils.SerializeObject(filter,bw);
 bw.Write(pts);
 bw.Write(limit);

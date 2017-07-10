@@ -19,6 +19,7 @@ namespace TeleSharp.TL
         }
 
              public int flags {get;set;}
+     public bool pinned {get;set;}
      public TLAbsPeer peer {get;set;}
      public int top_message {get;set;}
      public int read_inbox_max_id {get;set;}
@@ -32,6 +33,7 @@ namespace TeleSharp.TL
 		public void ComputeFlags()
 		{
 			flags = 0;
+flags = pinned ? (flags | 4) : (flags & ~4);
 flags = pts != null ? (flags | 1) : (flags & ~1);
 flags = draft != null ? (flags | 2) : (flags & ~2);
 
@@ -40,6 +42,7 @@ flags = draft != null ? (flags | 2) : (flags & ~2);
         public override void DeserializeBody(BinaryReader br)
         {
             flags = br.ReadInt32();
+pinned = (flags & 4) != 0;
 peer = (TLAbsPeer)ObjectUtils.DeserializeObject(br);
 top_message = br.ReadInt32();
 read_inbox_max_id = br.ReadInt32();
@@ -64,6 +67,7 @@ draft = null;
 			bw.Write(Constructor);
             ComputeFlags();
 bw.Write(flags);
+
 ObjectUtils.SerializeObject(peer,bw);
 bw.Write(top_message);
 bw.Write(read_inbox_max_id);

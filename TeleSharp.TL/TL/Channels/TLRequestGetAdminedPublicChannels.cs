@@ -18,7 +18,7 @@ namespace TeleSharp.TL.Channels
             }
         }
 
-                public Messages.TLChats Response{ get; set;}
+                public Messages.TLAbsChats Response{ get; set;}
 
 
 		public void ComputeFlags()
@@ -38,7 +38,7 @@ namespace TeleSharp.TL.Channels
         }
 		public override void deserializeResponse(BinaryReader br)
 		{
-			Response = (Messages.TLChats)ObjectUtils.DeserializeObject(br);
+			Response = (Messages.TLAbsChats)ObjectUtils.DeserializeObject(br);
 
 		}
     }

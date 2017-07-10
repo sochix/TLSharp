@@ -8,7 +8,7 @@ using TeleSharp.TL;
 namespace TeleSharp.TL.Upload
 {
 	[TLObject(157948117)]
-    public class TLFile : TLObject
+    public class TLFile : TLAbsFile
     {
         public override int Constructor
         {

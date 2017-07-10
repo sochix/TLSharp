@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Messages
 {
-	[TLObject(-1324486149)]
+	[TLObject(911761060)]
     public class TLBotCallbackAnswer : TLObject
     {
         public override int Constructor
         {
             get
             {
-                return -1324486149;
+                return 911761060;
             }
         }
 
@@ -23,6 +23,7 @@ namespace TeleSharp.TL.Messages
      public bool has_url {get;set;}
      public string message {get;set;}
      public string url {get;set;}
+     public int cache_time {get;set;}
 
 
 		public void ComputeFlags()
@@ -50,6 +51,7 @@ url = StringUtil.Deserialize(br);
 else
 url = null;
 
+cache_time = br.ReadInt32();
 
         }
 
@@ -64,6 +66,7 @@ if ((flags & 1) != 0)
 StringUtil.Serialize(message,bw);
 if ((flags & 4) != 0)
 StringUtil.Serialize(url,bw);
+bw.Write(cache_time);
 
         }
     }

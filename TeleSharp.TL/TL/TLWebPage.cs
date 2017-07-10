@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(-897446185)]
+	[TLObject(1594340540)]
     public class TLWebPage : TLAbsWebPage
     {
         public override int Constructor
         {
             get
             {
-                return -897446185;
+                return 1594340540;
             }
         }
 
@@ -22,6 +22,7 @@ namespace TeleSharp.TL
      public long id {get;set;}
      public string url {get;set;}
      public string display_url {get;set;}
+     public int hash {get;set;}
      public string type {get;set;}
      public string site_name {get;set;}
      public string title {get;set;}
@@ -34,6 +35,7 @@ namespace TeleSharp.TL
      public int? duration {get;set;}
      public string author {get;set;}
      public TLAbsDocument document {get;set;}
+     public TLAbsPage cached_page {get;set;}
 
 
 		public void ComputeFlags()
@@ -51,6 +53,7 @@ flags = embed_height != null ? (flags | 64) : (flags & ~64);
 flags = duration != null ? (flags | 128) : (flags & ~128);
 flags = author != null ? (flags | 256) : (flags & ~256);
 flags = document != null ? (flags | 512) : (flags & ~512);
+flags = cached_page != null ? (flags | 1024) : (flags & ~1024);
 
 		}
 
@@ -60,6 +63,7 @@ flags = document != null ? (flags | 512) : (flags & ~512);
 id = br.ReadInt64();
 url = StringUtil.Deserialize(br);
 display_url = StringUtil.Deserialize(br);
+hash = br.ReadInt32();
 if ((flags & 1) != 0)
 type = StringUtil.Deserialize(br);
 else
@@ -120,6 +124,11 @@ document = (TLAbsDocument)ObjectUtils.DeserializeObject(br);
 else
 document = null;
 
+if ((flags & 1024) != 0)
+cached_page = (TLAbsPage)ObjectUtils.DeserializeObject(br);
+else
+cached_page = null;
+
 
         }
 
@@ -131,6 +140,7 @@ bw.Write(flags);
 bw.Write(id);
 StringUtil.Serialize(url,bw);
 StringUtil.Serialize(display_url,bw);
+bw.Write(hash);
 if ((flags & 1) != 0)
 StringUtil.Serialize(type,bw);
 if ((flags & 2) != 0)
@@ -155,6 +165,8 @@ if ((flags & 256) != 0)
 StringUtil.Serialize(author,bw);
 if ((flags & 512) != 0)
 ObjectUtils.SerializeObject(document,bw);
+if ((flags & 1024) != 0)
+ObjectUtils.SerializeObject(cached_page,bw);
 
         }
     }

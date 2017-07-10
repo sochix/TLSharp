@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Messages
 {
-	[TLObject(-920136629)]
+	[TLObject(-712043766)]
     public class TLRequestSetBotCallbackAnswer : TLMethod
     {
         public override int Constructor
         {
             get
             {
-                return -920136629;
+                return -712043766;
             }
         }
 
@@ -23,6 +23,7 @@ namespace TeleSharp.TL.Messages
         public long query_id {get;set;}
         public string message {get;set;}
         public string url {get;set;}
+        public int cache_time {get;set;}
         public bool Response{ get; set;}
 
 
@@ -50,6 +51,7 @@ url = StringUtil.Deserialize(br);
 else
 url = null;
 
+cache_time = br.ReadInt32();
 
         }
 
@@ -64,6 +66,7 @@ if ((flags & 1) != 0)
 StringUtil.Serialize(message,bw);
 if ((flags & 4) != 0)
 StringUtil.Serialize(url,bw);
+bw.Write(cache_time);
 
         }
 		public override void deserializeResponse(BinaryReader br)

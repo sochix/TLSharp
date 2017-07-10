@@ -21,7 +21,7 @@ namespace TeleSharp.TL.Upload
                 public TLAbsInputFileLocation location {get;set;}
         public int offset {get;set;}
         public int limit {get;set;}
-        public Upload.TLFile Response{ get; set;}
+        public Upload.TLAbsFile Response{ get; set;}
 
 
 		public void ComputeFlags()
@@ -47,7 +47,7 @@ bw.Write(limit);
         }
 		public override void deserializeResponse(BinaryReader br)
 		{
-			Response = (Upload.TLFile)ObjectUtils.DeserializeObject(br);
+			Response = (Upload.TLAbsFile)ObjectUtils.DeserializeObject(br);
 
 		}
     }

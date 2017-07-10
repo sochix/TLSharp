@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Messages
 {
-	[TLObject(627509670)]
+	[TLObject(-858565059)]
     public class TLBotResults : TLObject
     {
         public override int Constructor
         {
             get
             {
-                return 627509670;
+                return -858565059;
             }
         }
 
@@ -24,6 +24,7 @@ namespace TeleSharp.TL.Messages
      public string next_offset {get;set;}
      public TLInlineBotSwitchPM switch_pm {get;set;}
      public TLVector<TLAbsBotInlineResult> results {get;set;}
+     public int cache_time {get;set;}
 
 
 		public void ComputeFlags()
@@ -51,6 +52,7 @@ else
 switch_pm = null;
 
 results = (TLVector<TLAbsBotInlineResult>)ObjectUtils.DeserializeVector<TLAbsBotInlineResult>(br);
+cache_time = br.ReadInt32();
 
         }
 
@@ -66,6 +68,7 @@ StringUtil.Serialize(next_offset,bw);
 if ((flags & 4) != 0)
 ObjectUtils.SerializeObject(switch_pm,bw);
 ObjectUtils.SerializeObject(results,bw);
+bw.Write(cache_time);
 
         }
     }

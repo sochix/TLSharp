@@ -72,7 +72,7 @@ namespace TLSharp.Core
                 query = config,
                 system_version = "Win 10.0"
             };
-            var invokewithLayer = new TLRequestInvokeWithLayer() { layer = 57, query = request };
+            var invokewithLayer = new TLRequestInvokeWithLayer() { layer = 66, query = request };
             await _sender.Send(invokewithLayer);
             await _sender.Receive(invokewithLayer);
 

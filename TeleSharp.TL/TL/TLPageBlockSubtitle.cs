@@ -5,20 +5,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TeleSharp.TL;
-namespace TeleSharp.TL.Help
+namespace TeleSharp.TL
 {
-	[TLObject(-1350696044)]
-    public class TLAppChangelogEmpty : TLAbsAppChangelog
+	[TLObject(-1879401953)]
+    public class TLPageBlockSubtitle : TLAbsPageBlock
     {
         public override int Constructor
         {
             get
             {
-                return -1350696044;
+                return -1879401953;
             }
         }
 
-        
+             public TLAbsRichText text {get;set;}
+
 
 		public void ComputeFlags()
 		{
@@ -27,13 +28,15 @@ namespace TeleSharp.TL.Help
 
         public override void DeserializeBody(BinaryReader br)
         {
-            
+            text = (TLAbsRichText)ObjectUtils.DeserializeObject(br);
+
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
 			bw.Write(Constructor);
-            
+            ObjectUtils.SerializeObject(text,bw);
+
         }
     }
 }

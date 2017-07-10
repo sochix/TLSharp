@@ -7,18 +7,19 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(-1704251862)]
+	[TLObject(-882895228)]
     public class TLConfig : TLObject
     {
         public override int Constructor
         {
             get
             {
-                return -1704251862;
+                return -882895228;
             }
         }
 
              public int flags {get;set;}
+     public bool phonecalls_enabled {get;set;}
      public int date {get;set;}
      public int expires {get;set;}
      public bool test_mode {get;set;}
@@ -41,12 +42,19 @@ namespace TeleSharp.TL
      public int rating_e_decay {get;set;}
      public int stickers_recent_limit {get;set;}
      public int? tmp_sessions {get;set;}
+     public int pinned_dialogs_count_max {get;set;}
+     public int call_receive_timeout_ms {get;set;}
+     public int call_ring_timeout_ms {get;set;}
+     public int call_connect_timeout_ms {get;set;}
+     public int call_packet_timeout_ms {get;set;}
+     public string me_url_prefix {get;set;}
      public TLVector<TLDisabledFeature> disabled_features {get;set;}
 
 
 		public void ComputeFlags()
 		{
 			flags = 0;
+flags = phonecalls_enabled ? (flags | 2) : (flags & ~2);
 flags = tmp_sessions != null ? (flags | 1) : (flags & ~1);
 
 		}
@@ -54,6 +62,7 @@ flags = tmp_sessions != null ? (flags | 1) : (flags & ~1);
         public override void DeserializeBody(BinaryReader br)
         {
             flags = br.ReadInt32();
+phonecalls_enabled = (flags & 2) != 0;
 date = br.ReadInt32();
 expires = br.ReadInt32();
 test_mode = BoolUtil.Deserialize(br);
@@ -80,6 +89,12 @@ tmp_sessions = br.ReadInt32();
 else
 tmp_sessions = null;
 
+pinned_dialogs_count_max = br.ReadInt32();
+call_receive_timeout_ms = br.ReadInt32();
+call_ring_timeout_ms = br.ReadInt32();
+call_connect_timeout_ms = br.ReadInt32();
+call_packet_timeout_ms = br.ReadInt32();
+me_url_prefix = StringUtil.Deserialize(br);
 disabled_features = (TLVector<TLDisabledFeature>)ObjectUtils.DeserializeVector<TLDisabledFeature>(br);
 
         }
@@ -89,6 +104,7 @@ disabled_features = (TLVector<TLDisabledFeature>)ObjectUtils.DeserializeVector<T
 			bw.Write(Constructor);
             ComputeFlags();
 bw.Write(flags);
+
 bw.Write(date);
 bw.Write(expires);
 BoolUtil.Serialize(test_mode,bw);
@@ -112,6 +128,12 @@ bw.Write(rating_e_decay);
 bw.Write(stickers_recent_limit);
 if ((flags & 1) != 0)
 bw.Write(tmp_sessions.Value);
+bw.Write(pinned_dialogs_count_max);
+bw.Write(call_receive_timeout_ms);
+bw.Write(call_ring_timeout_ms);
+bw.Write(call_connect_timeout_ms);
+bw.Write(call_packet_timeout_ms);
+StringUtil.Serialize(me_url_prefix,bw);
 ObjectUtils.SerializeObject(disabled_features,bw);
 
         }
