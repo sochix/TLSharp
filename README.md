@@ -218,7 +218,7 @@ Contributing is highly appreciated! Donations required <a href="https://www.payp
 # FAQ
 
 #### What API layer is supported?
-The latest one - 57. Thanks to Afshin Arani for his TLGenerator
+The latest one - 66. Thanks to Afshin Arani for his TLGenerator
 
 #### I get a xxxMigrationException or a MIGRATE_X error!
 
