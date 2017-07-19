@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Upload
 {
-	[TLObject(-1449145777)]
+    [TLObject(-1449145777)]
     public class TLCdnFile : TLAbsCdnFile
     {
         public override int Constructor
@@ -18,13 +18,13 @@ namespace TeleSharp.TL.Upload
             }
         }
 
-             public byte[] bytes {get;set;}
+        public byte[] bytes { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,8 +34,8 @@ namespace TeleSharp.TL.Upload
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            BytesUtil.Serialize(bytes,bw);
+            bw.Write(Constructor);
+            BytesUtil.Serialize(bytes, bw);
 
         }
     }

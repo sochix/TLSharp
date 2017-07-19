@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(-2095595325)]
+    [TLObject(-2095595325)]
     public class TLUpdateBotWebhookJSON : TLAbsUpdate
     {
         public override int Constructor
@@ -18,13 +18,13 @@ namespace TeleSharp.TL
             }
         }
 
-             public TLDataJSON data {get;set;}
+        public TLDataJSON data { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,8 +34,8 @@ namespace TeleSharp.TL
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            ObjectUtils.SerializeObject(data,bw);
+            bw.Write(Constructor);
+            ObjectUtils.SerializeObject(data, bw);
 
         }
     }

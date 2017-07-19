@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(-1425052898)]
+    [TLObject(-1425052898)]
     public class TLUpdatePhoneCall : TLAbsUpdate
     {
         public override int Constructor
@@ -18,13 +18,13 @@ namespace TeleSharp.TL
             }
         }
 
-             public TLAbsPhoneCall phone_call {get;set;}
+        public TLAbsPhoneCall phone_call { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,8 +34,8 @@ namespace TeleSharp.TL
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            ObjectUtils.SerializeObject(phone_call,bw);
+            bw.Write(Constructor);
+            ObjectUtils.SerializeObject(phone_call, bw);
 
         }
     }

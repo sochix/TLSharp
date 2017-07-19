@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(-1336546578)]
+    [TLObject(-1336546578)]
     public class TLMessageActionChannelMigrateFrom : TLAbsMessageAction
     {
         public override int Constructor
@@ -18,27 +18,27 @@ namespace TeleSharp.TL
             }
         }
 
-             public string title {get;set;}
-     public int chat_id {get;set;}
+        public string title { get; set; }
+        public int chat_id { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
             title = StringUtil.Deserialize(br);
-chat_id = br.ReadInt32();
+            chat_id = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            StringUtil.Serialize(title,bw);
-bw.Write(chat_id);
+            bw.Write(Constructor);
+            StringUtil.Serialize(title, bw);
+            bw.Write(chat_id);
 
         }
     }

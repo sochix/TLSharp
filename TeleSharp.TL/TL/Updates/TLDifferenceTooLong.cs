@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Updates
 {
-	[TLObject(1258196845)]
+    [TLObject(1258196845)]
     public class TLDifferenceTooLong : TLAbsDifference
     {
         public override int Constructor
@@ -18,13 +18,13 @@ namespace TeleSharp.TL.Updates
             }
         }
 
-             public int pts {get;set;}
+        public int pts { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,7 +34,7 @@ namespace TeleSharp.TL.Updates
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
+            bw.Write(Constructor);
             bw.Write(pts);
 
         }

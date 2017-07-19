@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Bots
 {
-	[TLObject(-434028723)]
+    [TLObject(-434028723)]
     public class TLRequestAnswerWebhookJSONQuery : TLMethod
     {
         public override int Constructor
@@ -18,34 +18,34 @@ namespace TeleSharp.TL.Bots
             }
         }
 
-                public long query_id {get;set;}
-        public TLDataJSON data {get;set;}
-        public bool Response{ get; set;}
+        public long query_id { get; set; }
+        public TLDataJSON data { get; set; }
+        public bool Response { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
             query_id = br.ReadInt64();
-data = (TLDataJSON)ObjectUtils.DeserializeObject(br);
+            data = (TLDataJSON)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
+            bw.Write(Constructor);
             bw.Write(query_id);
-ObjectUtils.SerializeObject(data,bw);
+            ObjectUtils.SerializeObject(data, bw);
 
         }
-		public override void deserializeResponse(BinaryReader br)
-		{
-			Response = BoolUtil.Deserialize(br);
+        public override void deserializeResponse(BinaryReader br)
+        {
+            Response = BoolUtil.Deserialize(br);
 
-		}
+        }
     }
 }

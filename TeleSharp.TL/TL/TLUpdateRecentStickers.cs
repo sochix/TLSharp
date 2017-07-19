@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(-1706939360)]
+    [TLObject(-1706939360)]
     public class TLUpdateRecentStickers : TLAbsUpdate
     {
         public override int Constructor
@@ -18,22 +18,22 @@ namespace TeleSharp.TL
             }
         }
 
-        
 
-		public void ComputeFlags()
-		{
-			
-		}
+
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            
+
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            
+            bw.Write(Constructor);
+
         }
     }
 }

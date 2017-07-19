@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(250621158)]
+    [TLObject(250621158)]
     public class TLDocumentAttributeVideo : TLAbsDocumentAttribute
     {
         public override int Constructor
@@ -18,39 +18,39 @@ namespace TeleSharp.TL
             }
         }
 
-             public int flags {get;set;}
-     public bool round_message {get;set;}
-     public int duration {get;set;}
-     public int w {get;set;}
-     public int h {get;set;}
+        public int flags { get; set; }
+        public bool round_message { get; set; }
+        public int duration { get; set; }
+        public int w { get; set; }
+        public int h { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			flags = 0;
-flags = round_message ? (flags | 1) : (flags & ~1);
+        public void ComputeFlags()
+        {
+            flags = 0;
+            flags = round_message ? (flags | 1) : (flags & ~1);
 
-		}
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
             flags = br.ReadInt32();
-round_message = (flags & 1) != 0;
-duration = br.ReadInt32();
-w = br.ReadInt32();
-h = br.ReadInt32();
+            round_message = (flags & 1) != 0;
+            duration = br.ReadInt32();
+            w = br.ReadInt32();
+            h = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
+            bw.Write(Constructor);
             ComputeFlags();
-bw.Write(flags);
+            bw.Write(flags);
 
-bw.Write(duration);
-bw.Write(w);
-bw.Write(h);
+            bw.Write(duration);
+            bw.Write(w);
+            bw.Write(h);
 
         }
     }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Contacts
 {
-	[TLObject(-995929106)]
+    [TLObject(-995929106)]
     public class TLRequestGetStatuses : TLMethod
     {
         public override int Constructor
@@ -18,28 +18,28 @@ namespace TeleSharp.TL.Contacts
             }
         }
 
-                public TLVector<TLContactStatus> Response{ get; set;}
+        public TLVector<TLContactStatus> Response { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            
+
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            
-        }
-		public override void deserializeResponse(BinaryReader br)
-		{
-			Response = (TLVector<TLContactStatus>)ObjectUtils.DeserializeVector<TLContactStatus>(br);
+            bw.Write(Constructor);
 
-		}
+        }
+        public override void deserializeResponse(BinaryReader br)
+        {
+            Response = (TLVector<TLContactStatus>)ObjectUtils.DeserializeVector<TLContactStatus>(br);
+
+        }
     }
 }

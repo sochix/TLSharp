@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Help
 {
-	[TLObject(415997816)]
+    [TLObject(415997816)]
     public class TLInviteText : TLObject
     {
         public override int Constructor
@@ -18,13 +18,13 @@ namespace TeleSharp.TL.Help
             }
         }
 
-             public string message {get;set;}
+        public string message { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,8 +34,8 @@ namespace TeleSharp.TL.Help
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            StringUtil.Serialize(message,bw);
+            bw.Write(Constructor);
+            StringUtil.Serialize(message, bw);
 
         }
     }

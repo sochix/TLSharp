@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(320652927)]
+    [TLObject(320652927)]
     public class TLInputPrivacyValueAllowUsers : TLAbsInputPrivacyRule
     {
         public override int Constructor
@@ -18,13 +18,13 @@ namespace TeleSharp.TL
             }
         }
 
-             public TLVector<TLAbsInputUser> users {get;set;}
+        public TLVector<TLAbsInputUser> users { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,8 +34,8 @@ namespace TeleSharp.TL
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            ObjectUtils.SerializeObject(users,bw);
+            bw.Write(Constructor);
+            ObjectUtils.SerializeObject(users, bw);
 
         }
     }

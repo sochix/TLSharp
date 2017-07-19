@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(-1036396922)]
+    [TLObject(-1036396922)]
     public class TLInputWebFileLocation : TLObject
     {
         public override int Constructor
@@ -18,27 +18,27 @@ namespace TeleSharp.TL
             }
         }
 
-             public string url {get;set;}
-     public long access_hash {get;set;}
+        public string url { get; set; }
+        public long access_hash { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
             url = StringUtil.Deserialize(br);
-access_hash = br.ReadInt64();
+            access_hash = br.ReadInt64();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            StringUtil.Serialize(url,bw);
-bw.Write(access_hash);
+            bw.Write(Constructor);
+            StringUtil.Serialize(url, bw);
+            bw.Write(access_hash);
 
         }
     }

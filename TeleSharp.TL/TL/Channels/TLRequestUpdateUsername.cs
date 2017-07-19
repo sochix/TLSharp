@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Channels
 {
-	[TLObject(890549214)]
+    [TLObject(890549214)]
     public class TLRequestUpdateUsername : TLMethod
     {
         public override int Constructor
@@ -18,34 +18,34 @@ namespace TeleSharp.TL.Channels
             }
         }
 
-                public TLAbsInputChannel channel {get;set;}
-        public string username {get;set;}
-        public bool Response{ get; set;}
+        public TLAbsInputChannel channel { get; set; }
+        public string username { get; set; }
+        public bool Response { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
             channel = (TLAbsInputChannel)ObjectUtils.DeserializeObject(br);
-username = StringUtil.Deserialize(br);
+            username = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            ObjectUtils.SerializeObject(channel,bw);
-StringUtil.Serialize(username,bw);
+            bw.Write(Constructor);
+            ObjectUtils.SerializeObject(channel, bw);
+            StringUtil.Serialize(username, bw);
 
         }
-		public override void deserializeResponse(BinaryReader br)
-		{
-			Response = BoolUtil.Deserialize(br);
+        public override void deserializeResponse(BinaryReader br)
+        {
+            Response = BoolUtil.Deserialize(br);
 
-		}
+        }
     }
 }

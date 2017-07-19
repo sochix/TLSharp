@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Contacts
 {
-	[TLObject(-1878523231)]
+    [TLObject(-1878523231)]
     public class TLBlockedSlice : TLAbsBlocked
     {
         public override int Constructor
@@ -18,30 +18,30 @@ namespace TeleSharp.TL.Contacts
             }
         }
 
-             public int count {get;set;}
-     public TLVector<TLContactBlocked> blocked {get;set;}
-     public TLVector<TLAbsUser> users {get;set;}
+        public int count { get; set; }
+        public TLVector<TLContactBlocked> blocked { get; set; }
+        public TLVector<TLAbsUser> users { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
             count = br.ReadInt32();
-blocked = (TLVector<TLContactBlocked>)ObjectUtils.DeserializeVector<TLContactBlocked>(br);
-users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
+            blocked = (TLVector<TLContactBlocked>)ObjectUtils.DeserializeVector<TLContactBlocked>(br);
+            users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
+            bw.Write(Constructor);
             bw.Write(count);
-ObjectUtils.SerializeObject(blocked,bw);
-ObjectUtils.SerializeObject(users,bw);
+            ObjectUtils.SerializeObject(blocked, bw);
+            ObjectUtils.SerializeObject(users, bw);
 
         }
     }

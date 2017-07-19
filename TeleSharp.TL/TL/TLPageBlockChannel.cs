@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(-283684427)]
+    [TLObject(-283684427)]
     public class TLPageBlockChannel : TLAbsPageBlock
     {
         public override int Constructor
@@ -18,13 +18,13 @@ namespace TeleSharp.TL
             }
         }
 
-             public TLAbsChat channel {get;set;}
+        public TLAbsChat channel { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,8 +34,8 @@ namespace TeleSharp.TL
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            ObjectUtils.SerializeObject(channel,bw);
+            bw.Write(Constructor);
+            ObjectUtils.SerializeObject(channel, bw);
 
         }
     }

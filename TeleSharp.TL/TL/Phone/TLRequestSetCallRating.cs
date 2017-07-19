@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Phone
 {
-	[TLObject(475228724)]
+    [TLObject(475228724)]
     public class TLRequestSetCallRating : TLMethod
     {
         public override int Constructor
@@ -18,37 +18,37 @@ namespace TeleSharp.TL.Phone
             }
         }
 
-                public TLInputPhoneCall peer {get;set;}
-        public int rating {get;set;}
-        public string comment {get;set;}
-        public TLAbsUpdates Response{ get; set;}
+        public TLInputPhoneCall peer { get; set; }
+        public int rating { get; set; }
+        public string comment { get; set; }
+        public TLAbsUpdates Response { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
             peer = (TLInputPhoneCall)ObjectUtils.DeserializeObject(br);
-rating = br.ReadInt32();
-comment = StringUtil.Deserialize(br);
+            rating = br.ReadInt32();
+            comment = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            ObjectUtils.SerializeObject(peer,bw);
-bw.Write(rating);
-StringUtil.Serialize(comment,bw);
+            bw.Write(Constructor);
+            ObjectUtils.SerializeObject(peer, bw);
+            bw.Write(rating);
+            StringUtil.Serialize(comment, bw);
 
         }
-		public override void deserializeResponse(BinaryReader br)
-		{
-			Response = (TLAbsUpdates)ObjectUtils.DeserializeObject(br);
+        public override void deserializeResponse(BinaryReader br)
+        {
+            Response = (TLAbsUpdates)ObjectUtils.DeserializeObject(br);
 
-		}
+        }
     }
 }

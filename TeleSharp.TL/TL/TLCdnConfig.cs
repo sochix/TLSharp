@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(1462101002)]
+    [TLObject(1462101002)]
     public class TLCdnConfig : TLObject
     {
         public override int Constructor
@@ -18,13 +18,13 @@ namespace TeleSharp.TL
             }
         }
 
-             public TLVector<TLCdnPublicKey> public_keys {get;set;}
+        public TLVector<TLCdnPublicKey> public_keys { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,8 +34,8 @@ namespace TeleSharp.TL
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            ObjectUtils.SerializeObject(public_keys,bw);
+            bw.Write(Constructor);
+            ObjectUtils.SerializeObject(public_keys, bw);
 
         }
     }

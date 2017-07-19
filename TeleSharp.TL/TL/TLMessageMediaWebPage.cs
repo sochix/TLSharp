@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(-1557277184)]
+    [TLObject(-1557277184)]
     public class TLMessageMediaWebPage : TLAbsMessageMedia
     {
         public override int Constructor
@@ -18,13 +18,13 @@ namespace TeleSharp.TL
             }
         }
 
-             public TLAbsWebPage webpage {get;set;}
+        public TLAbsWebPage webpage { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,8 +34,8 @@ namespace TeleSharp.TL
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            ObjectUtils.SerializeObject(webpage,bw);
+            bw.Write(Constructor);
+            ObjectUtils.SerializeObject(webpage, bw);
 
         }
     }

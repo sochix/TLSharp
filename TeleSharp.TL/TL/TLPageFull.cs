@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(-677274263)]
+    [TLObject(-677274263)]
     public class TLPageFull : TLAbsPage
     {
         public override int Constructor
@@ -18,30 +18,30 @@ namespace TeleSharp.TL
             }
         }
 
-             public TLVector<TLAbsPageBlock> blocks {get;set;}
-     public TLVector<TLAbsPhoto> photos {get;set;}
-     public TLVector<TLAbsDocument> videos {get;set;}
+        public TLVector<TLAbsPageBlock> blocks { get; set; }
+        public TLVector<TLAbsPhoto> photos { get; set; }
+        public TLVector<TLAbsDocument> videos { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
             blocks = (TLVector<TLAbsPageBlock>)ObjectUtils.DeserializeVector<TLAbsPageBlock>(br);
-photos = (TLVector<TLAbsPhoto>)ObjectUtils.DeserializeVector<TLAbsPhoto>(br);
-videos = (TLVector<TLAbsDocument>)ObjectUtils.DeserializeVector<TLAbsDocument>(br);
+            photos = (TLVector<TLAbsPhoto>)ObjectUtils.DeserializeVector<TLAbsPhoto>(br);
+            videos = (TLVector<TLAbsDocument>)ObjectUtils.DeserializeVector<TLAbsDocument>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            ObjectUtils.SerializeObject(blocks,bw);
-ObjectUtils.SerializeObject(photos,bw);
-ObjectUtils.SerializeObject(videos,bw);
+            bw.Write(Constructor);
+            ObjectUtils.SerializeObject(blocks, bw);
+            ObjectUtils.SerializeObject(photos, bw);
+            ObjectUtils.SerializeObject(videos, bw);
 
         }
     }

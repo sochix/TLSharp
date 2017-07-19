@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Payments
 {
-	[TLObject(1800845601)]
+    [TLObject(1800845601)]
     public class TLPaymentVerficationNeeded : TLAbsPaymentResult
     {
         public override int Constructor
@@ -18,13 +18,13 @@ namespace TeleSharp.TL.Payments
             }
         }
 
-             public string url {get;set;}
+        public string url { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,8 +34,8 @@ namespace TeleSharp.TL.Payments
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            StringUtil.Serialize(url,bw);
+            bw.Write(Constructor);
+            StringUtil.Serialize(url, bw);
 
         }
     }

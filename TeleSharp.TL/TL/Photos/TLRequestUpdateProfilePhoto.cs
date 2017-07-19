@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Photos
 {
-	[TLObject(-256159406)]
+    [TLObject(-256159406)]
     public class TLRequestUpdateProfilePhoto : TLMethod
     {
         public override int Constructor
@@ -18,14 +18,14 @@ namespace TeleSharp.TL.Photos
             }
         }
 
-                public TLAbsInputPhoto id {get;set;}
-        public TLAbsUserProfilePhoto Response{ get; set;}
+        public TLAbsInputPhoto id { get; set; }
+        public TLAbsUserProfilePhoto Response { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -35,14 +35,14 @@ namespace TeleSharp.TL.Photos
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            ObjectUtils.SerializeObject(id,bw);
+            bw.Write(Constructor);
+            ObjectUtils.SerializeObject(id, bw);
 
         }
-		public override void deserializeResponse(BinaryReader br)
-		{
-			Response = (TLAbsUserProfilePhoto)ObjectUtils.DeserializeObject(br);
+        public override void deserializeResponse(BinaryReader br)
+        {
+            Response = (TLAbsUserProfilePhoto)ObjectUtils.DeserializeObject(br);
 
-		}
+        }
     }
 }

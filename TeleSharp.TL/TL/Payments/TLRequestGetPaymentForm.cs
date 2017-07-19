@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Payments
 {
-	[TLObject(-1712285883)]
+    [TLObject(-1712285883)]
     public class TLRequestGetPaymentForm : TLMethod
     {
         public override int Constructor
@@ -18,14 +18,14 @@ namespace TeleSharp.TL.Payments
             }
         }
 
-                public int msg_id {get;set;}
-        public Payments.TLPaymentForm Response{ get; set;}
+        public int msg_id { get; set; }
+        public Payments.TLPaymentForm Response { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -35,14 +35,14 @@ namespace TeleSharp.TL.Payments
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
+            bw.Write(Constructor);
             bw.Write(msg_id);
 
         }
-		public override void deserializeResponse(BinaryReader br)
-		{
-			Response = (Payments.TLPaymentForm)ObjectUtils.DeserializeObject(br);
+        public override void deserializeResponse(BinaryReader br)
+        {
+            Response = (Payments.TLPaymentForm)ObjectUtils.DeserializeObject(br);
 
-		}
+        }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(2120376535)]
+    [TLObject(2120376535)]
     public class TLTextConcat : TLAbsRichText
     {
         public override int Constructor
@@ -18,13 +18,13 @@ namespace TeleSharp.TL
             }
         }
 
-             public TLVector<TLAbsRichText> texts {get;set;}
+        public TLVector<TLAbsRichText> texts { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,8 +34,8 @@ namespace TeleSharp.TL
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            ObjectUtils.SerializeObject(texts,bw);
+            bw.Write(Constructor);
+            ObjectUtils.SerializeObject(texts, bw);
 
         }
     }

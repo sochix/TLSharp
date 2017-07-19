@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Stickers
 {
-	[TLObject(-2041315650)]
+    [TLObject(-2041315650)]
     public class TLRequestAddStickerToSet : TLMethod
     {
         public override int Constructor
@@ -18,34 +18,34 @@ namespace TeleSharp.TL.Stickers
             }
         }
 
-                public TLAbsInputStickerSet stickerset {get;set;}
-        public TLInputStickerSetItem sticker {get;set;}
-        public Messages.TLStickerSet Response{ get; set;}
+        public TLAbsInputStickerSet stickerset { get; set; }
+        public TLInputStickerSetItem sticker { get; set; }
+        public Messages.TLStickerSet Response { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
             stickerset = (TLAbsInputStickerSet)ObjectUtils.DeserializeObject(br);
-sticker = (TLInputStickerSetItem)ObjectUtils.DeserializeObject(br);
+            sticker = (TLInputStickerSetItem)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            ObjectUtils.SerializeObject(stickerset,bw);
-ObjectUtils.SerializeObject(sticker,bw);
+            bw.Write(Constructor);
+            ObjectUtils.SerializeObject(stickerset, bw);
+            ObjectUtils.SerializeObject(sticker, bw);
 
         }
-		public override void deserializeResponse(BinaryReader br)
-		{
-			Response = (Messages.TLStickerSet)ObjectUtils.DeserializeObject(br);
+        public override void deserializeResponse(BinaryReader br)
+        {
+            Response = (Messages.TLStickerSet)ObjectUtils.DeserializeObject(br);
 
-		}
+        }
     }
 }

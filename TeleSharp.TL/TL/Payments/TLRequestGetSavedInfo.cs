@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Payments
 {
-	[TLObject(578650699)]
+    [TLObject(578650699)]
     public class TLRequestGetSavedInfo : TLMethod
     {
         public override int Constructor
@@ -18,28 +18,28 @@ namespace TeleSharp.TL.Payments
             }
         }
 
-                public Payments.TLSavedInfo Response{ get; set;}
+        public Payments.TLSavedInfo Response { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            
+
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            
-        }
-		public override void deserializeResponse(BinaryReader br)
-		{
-			Response = (Payments.TLSavedInfo)ObjectUtils.DeserializeObject(br);
+            bw.Write(Constructor);
 
-		}
+        }
+        public override void deserializeResponse(BinaryReader br)
+        {
+            Response = (Payments.TLSavedInfo)ObjectUtils.DeserializeObject(br);
+
+        }
     }
 }

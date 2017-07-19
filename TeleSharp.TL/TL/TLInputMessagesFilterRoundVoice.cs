@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(2054952868)]
+    [TLObject(2054952868)]
     public class TLInputMessagesFilterRoundVoice : TLAbsMessagesFilter
     {
         public override int Constructor
@@ -18,22 +18,22 @@ namespace TeleSharp.TL
             }
         }
 
-        
 
-		public void ComputeFlags()
-		{
-			
-		}
+
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            
+
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            
+            bw.Write(Constructor);
+
         }
     }
 }
