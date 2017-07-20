@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Messages
 {
-	[TLObject(82699215)]
+    [TLObject(82699215)]
     public class TLFeaturedStickersNotModified : TLAbsFeaturedStickers
     {
         public override int Constructor
@@ -18,22 +18,22 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        
 
-		public void ComputeFlags()
-		{
-			
-		}
+
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            
+
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            
+            bw.Write(Constructor);
+
         }
     }
 }

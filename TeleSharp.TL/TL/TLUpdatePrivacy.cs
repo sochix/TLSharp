@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-	[TLObject(-298113238)]
+    [TLObject(-298113238)]
     public class TLUpdatePrivacy : TLAbsUpdate
     {
         public override int Constructor
@@ -18,27 +18,27 @@ namespace TeleSharp.TL
             }
         }
 
-             public TLAbsPrivacyKey key {get;set;}
-     public TLVector<TLAbsPrivacyRule> rules {get;set;}
+        public TLAbsPrivacyKey key { get; set; }
+        public TLVector<TLAbsPrivacyRule> rules { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
             key = (TLAbsPrivacyKey)ObjectUtils.DeserializeObject(br);
-rules = (TLVector<TLAbsPrivacyRule>)ObjectUtils.DeserializeVector<TLAbsPrivacyRule>(br);
+            rules = (TLVector<TLAbsPrivacyRule>)ObjectUtils.DeserializeVector<TLAbsPrivacyRule>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            ObjectUtils.SerializeObject(key,bw);
-ObjectUtils.SerializeObject(rules,bw);
+            bw.Write(Constructor);
+            ObjectUtils.SerializeObject(key, bw);
+            ObjectUtils.SerializeObject(rules, bw);
 
         }
     }

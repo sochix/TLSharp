@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Account
 {
-	[TLObject(313765169)]
+    [TLObject(313765169)]
     public class TLRequestGetNotifySettings : TLMethod
     {
         public override int Constructor
@@ -18,14 +18,14 @@ namespace TeleSharp.TL.Account
             }
         }
 
-                public TLAbsInputNotifyPeer peer {get;set;}
-        public TLAbsPeerNotifySettings Response{ get; set;}
+        public TLAbsInputNotifyPeer peer { get; set; }
+        public TLAbsPeerNotifySettings Response { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -35,14 +35,14 @@ namespace TeleSharp.TL.Account
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            ObjectUtils.SerializeObject(peer,bw);
+            bw.Write(Constructor);
+            ObjectUtils.SerializeObject(peer, bw);
 
         }
-		public override void deserializeResponse(BinaryReader br)
-		{
-			Response = (TLAbsPeerNotifySettings)ObjectUtils.DeserializeObject(br);
+        public override void deserializeResponse(BinaryReader br)
+        {
+            Response = (TLAbsPeerNotifySettings)ObjectUtils.DeserializeObject(br);
 
-		}
+        }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Auth
 {
-	[TLObject(1877286395)]
+    [TLObject(1877286395)]
     public class TLRequestCheckPhone : TLMethod
     {
         public override int Constructor
@@ -18,14 +18,14 @@ namespace TeleSharp.TL.Auth
             }
         }
 
-                public string phone_number {get;set;}
-        public Auth.TLCheckedPhone Response{ get; set;}
+        public string phone_number { get; set; }
+        public Auth.TLCheckedPhone Response { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -35,14 +35,14 @@ namespace TeleSharp.TL.Auth
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            StringUtil.Serialize(phone_number,bw);
+            bw.Write(Constructor);
+            StringUtil.Serialize(phone_number, bw);
 
         }
-		public override void deserializeResponse(BinaryReader br)
-		{
-			Response = (Auth.TLCheckedPhone)ObjectUtils.DeserializeObject(br);
+        public override void deserializeResponse(BinaryReader br)
+        {
+            Response = (Auth.TLCheckedPhone)ObjectUtils.DeserializeObject(br);
 
-		}
+        }
     }
 }

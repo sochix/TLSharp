@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Storage
 {
-	[TLObject(1086091090)]
+    [TLObject(1086091090)]
     public class TLFilePartial : TLAbsFileType
     {
         public override int Constructor
@@ -18,22 +18,22 @@ namespace TeleSharp.TL.Storage
             }
         }
 
-        
 
-		public void ComputeFlags()
-		{
-			
-		}
+
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            
+
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            
+            bw.Write(Constructor);
+
         }
     }
 }

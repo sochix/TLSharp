@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Messages
 {
-	[TLObject(904138920)]
+    [TLObject(904138920)]
     public class TLStickerSetInstallResultArchive : TLAbsStickerSetInstallResult
     {
         public override int Constructor
@@ -18,13 +18,13 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-             public TLVector<TLAbsStickerSetCovered> sets {get;set;}
+        public TLVector<TLAbsStickerSetCovered> sets { get; set; }
 
 
-		public void ComputeFlags()
-		{
-			
-		}
+        public void ComputeFlags()
+        {
+
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -34,8 +34,8 @@ namespace TeleSharp.TL.Messages
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
-            ObjectUtils.SerializeObject(sets,bw);
+            bw.Write(Constructor);
+            ObjectUtils.SerializeObject(sets, bw);
 
         }
     }
