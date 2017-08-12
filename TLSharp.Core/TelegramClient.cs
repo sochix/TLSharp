@@ -329,20 +329,24 @@ namespace TLSharp.Core
                 var serverPort = _session.Port;
 
                 await ReconnectToDcAsync(ex.DC);
-                var auth = await SendRequestAsync<TLAuthorization>(new TLRequestImportAuthorization
+                try
                 {
-                    bytes = exportedAuth.bytes,
-                    id = exportedAuth.id
-                });
-                result = await GetFile(location, filePartSize, offset);
-
-                _session.AuthKey = authKey;
-                _session.TimeOffset = timeOffset;
-                _transport = new TcpTransport(serverAddress, serverPort);
-                _session.ServerAddress = serverAddress;
-                _session.Port = serverPort;
-                await ConnectAsync();
-
+                    var auth = await SendRequestAsync<TLAuthorization>(new TLRequestImportAuthorization
+                    {
+                        bytes = exportedAuth.bytes,
+                        id = exportedAuth.id
+                    });
+                    result = await GetFile(location, filePartSize, offset);
+                }
+                finally
+                {
+                    _session.AuthKey = authKey;
+                    _session.TimeOffset = timeOffset;
+                    _transport = new TcpTransport(serverAddress, serverPort);
+                    _session.ServerAddress = serverAddress;
+                    _session.Port = serverPort;
+                    await ConnectAsync();
+                }
             }
 
             return result;
