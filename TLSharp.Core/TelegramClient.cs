@@ -347,6 +347,110 @@ namespace TLSharp.Core
 
             return result;
         }
+        
+        /// <summary>
+        /// Gets user avatar that is used now.
+        /// </summary>
+        /// <param name="limit">Provide a number of maximum possible profile images user may have</param>
+        /// <returns></returns>
+        public async Task<byte[]> GetUserProfileImage(TLUser inputUser, int limit)
+        {
+            byte[] byteImage = null;
+            try
+            {
+                TLInputUser inputUserTL = new TLInputUser();
+                inputUserTL.user_id = inputUser.id;
+
+                TeleSharp.TL.Photos.TLPhotos photo = new TeleSharp.TL.Photos.TLPhotos();
+                photo = await GetUserPhotos(inputUserTL, 0, 0, limit);
+                TeleSharp.TL.TLFileLocation fileLocation = new TLFileLocation();
+                List<TLAbsPhoto> photoList = photo.photos.lists;
+                TLPhoto photo1 = (TLPhoto)photoList[0];
+                TLVector<TLAbsPhotoSize> photoSizeList = photo1.sizes;
+                List<TLAbsPhotoSize> photoSizeList2 = photoSizeList.lists;
+                TLPhotoSize size1 = (TLPhotoSize)photoSizeList2[0];
+                TLFileLocation location1 = (TLFileLocation)size1.location;
+
+                TLInputFileLocation inputLocation = new TLInputFileLocation()
+                {
+                    volume_id = location1.volume_id,
+                    local_id = location1.local_id,
+                    secret = location1.secret
+                };
+
+                TeleSharp.TL.Upload.TLFile recievedFile = await GetFile(inputLocation, Convert.ToInt32(inputLocation.volume_id));
+                byteImage = recievedFile.bytes;
+            }
+            catch (FileMigrationException ex)
+            {
+                var exportedAuth = await SendRequestAsync<TLExportedAuthorization>(new TLRequestExportAuthorization() { dc_id = ex.DC });
+
+                var authKey = _session.AuthKey;
+                var timeOffset = _session.TimeOffset;
+                var serverAddress = _session.ServerAddress;
+                var serverPort = _session.Port;
+
+                await ReconnectToDcAsync(ex.DC);
+                var auth = await SendRequestAsync<TLAuthorization>(new TLRequestImportAuthorization
+                {
+                    bytes = exportedAuth.bytes,
+                    id = exportedAuth.id
+                });
+
+                byteImage = await GetUserProfileImage(inputUser, limit);
+
+                _session.AuthKey = authKey;
+                _session.TimeOffset = timeOffset;
+                _transport = new TcpTransport(serverAddress, serverPort);
+                _session.ServerAddress = serverAddress;
+                _session.Port = serverPort;
+                await ConnectAsync();
+            }
+
+            return byteImage;
+        }
+
+        public async Task<TeleSharp.TL.Photos.TLPhotos> GetUserPhotos(TeleSharp.TL.TLInputUser user_id, int offset, long max_id, int limit)
+        {
+            TeleSharp.TL.Photos.TLPhotos resultPhoto = null;
+            try
+            {
+                resultPhoto = await SendRequestAsync<TeleSharp.TL.Photos.TLPhotos>(new TeleSharp.TL.Photos.TLRequestGetUserPhotos()
+                {
+                    user_id = user_id,
+                    offset = offset,
+                    max_id = max_id,
+                    limit = limit
+                });
+            }
+            catch (FileMigrationException ex)
+            {
+                var exportedAuth = await SendRequestAsync<TLExportedAuthorization>(new TLRequestExportAuthorization() { dc_id = ex.DC });
+
+                var authKey = _session.AuthKey;
+                var timeOffset = _session.TimeOffset;
+                var serverAddress = _session.ServerAddress;
+                var serverPort = _session.Port;
+
+                await ReconnectToDcAsync(ex.DC);
+                var auth = await SendRequestAsync<TLAuthorization>(new TLRequestImportAuthorization
+                {
+                    bytes = exportedAuth.bytes,
+                    id = exportedAuth.id
+                });
+
+                resultPhoto = await GetUserPhotos(user_id, offset, max_id, limit);
+
+                _session.AuthKey = authKey;
+                _session.TimeOffset = timeOffset;
+                _transport = new TcpTransport(serverAddress, serverPort);
+                _session.ServerAddress = serverAddress;
+                _session.Port = serverPort;
+                await ConnectAsync();
+            }
+
+            return resultPhoto;
+        }
 
         public async Task SendPingAsync()
         {
