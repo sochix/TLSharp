@@ -305,6 +305,12 @@ namespace TLSharp.Core.Network
                     var dcIdx = int.Parse(resultString);
                     throw new UserMigrationException(dcIdx);
                 }
+                else if (errorMessage.StartsWith("NETWORK_MIGRATE_"))
+                {
+                    var resultString = Regex.Match(errorMessage, @"\d+").Value;
+                    var dcIdx = int.Parse(resultString);
+                    throw new NetworkMigrationException(dcIdx);
+                }
                 else if (errorMessage == "PHONE_CODE_INVALID")
                 {
                     throw new InvalidPhoneCodeException("The numeric code used to authenticate does not match the numeric code sent by SMS/Telegram");
@@ -568,6 +574,14 @@ namespace TLSharp.Core.Network
     {
         internal UserMigrationException(int dc)
             : base($"User located on a different DC: {dc}.", dc)
+        {
+        }
+    }
+    
+    internal class NetworkMigrationException : DataCenterMigrationException
+    {
+        internal NetworkMigrationException(int dc)
+            : base($"Network located on a different DC: {dc}.", dc)
         {
         }
     }

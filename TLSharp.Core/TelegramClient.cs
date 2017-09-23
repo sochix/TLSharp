@@ -145,7 +145,7 @@ namespace TLSharp.Core
 
                     completed = true;
                 }
-                catch (PhoneMigrationException ex)
+                catch (DataCenterMigrationException ex)
                 {
                     await ReconnectToDcAsync(ex.DC);
                 }
