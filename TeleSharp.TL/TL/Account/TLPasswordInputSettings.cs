@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Account
 {
     [TLObject(-2037289493)]
@@ -24,7 +19,6 @@ namespace TeleSharp.TL.Account
         public string hint { get; set; }
         public string email { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
@@ -32,7 +26,6 @@ namespace TeleSharp.TL.Account
             flags = new_password_hash != null ? (flags | 1) : (flags & ~1);
             flags = hint != null ? (flags | 1) : (flags & ~1);
             flags = email != null ? (flags | 2) : (flags & ~2);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -57,8 +50,6 @@ namespace TeleSharp.TL.Account
                 email = StringUtil.Deserialize(br);
             else
                 email = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -74,7 +65,6 @@ namespace TeleSharp.TL.Account
                 StringUtil.Serialize(hint, bw);
             if ((flags & 2) != 0)
                 StringUtil.Serialize(email, bw);
-
         }
     }
 }

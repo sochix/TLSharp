@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(421243333)]
@@ -26,12 +21,10 @@ namespace TeleSharp.TL.Messages
         public int limit { get; set; }
         public Messages.TLAbsDialogs Response { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = exclude_pinned ? (flags | 1) : (flags & ~1);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -42,7 +35,6 @@ namespace TeleSharp.TL.Messages
             offset_id = br.ReadInt32();
             offset_peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
             limit = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -55,12 +47,11 @@ namespace TeleSharp.TL.Messages
             bw.Write(offset_id);
             ObjectUtils.SerializeObject(offset_peer, bw);
             bw.Write(limit);
-
         }
+
         public override void deserializeResponse(BinaryReader br)
         {
             Response = (Messages.TLAbsDialogs)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

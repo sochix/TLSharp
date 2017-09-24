@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(1661770481)]
@@ -23,12 +18,10 @@ namespace TeleSharp.TL
         public string caption { get; set; }
         public TLVector<TLAbsInputDocument> stickers { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = stickers != null ? (flags | 1) : (flags & ~1);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -40,8 +33,6 @@ namespace TeleSharp.TL
                 stickers = (TLVector<TLAbsInputDocument>)ObjectUtils.DeserializeVector<TLAbsInputDocument>(br);
             else
                 stickers = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -53,7 +44,6 @@ namespace TeleSharp.TL
             StringUtil.Serialize(caption, bw);
             if ((flags & 1) != 0)
                 ObjectUtils.SerializeObject(stickers, bw);
-
         }
     }
 }

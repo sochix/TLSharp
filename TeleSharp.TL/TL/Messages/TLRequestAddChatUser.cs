@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(-106911223)]
@@ -23,10 +18,8 @@ namespace TeleSharp.TL.Messages
         public int fwd_limit { get; set; }
         public TLAbsUpdates Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -34,7 +27,6 @@ namespace TeleSharp.TL.Messages
             chat_id = br.ReadInt32();
             user_id = (TLAbsInputUser)ObjectUtils.DeserializeObject(br);
             fwd_limit = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -43,12 +35,11 @@ namespace TeleSharp.TL.Messages
             bw.Write(chat_id);
             ObjectUtils.SerializeObject(user_id, bw);
             bw.Write(fwd_limit);
-
         }
+
         public override void deserializeResponse(BinaryReader br)
         {
             Response = (TLAbsUpdates)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

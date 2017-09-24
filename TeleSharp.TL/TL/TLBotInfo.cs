@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1729618630)]
@@ -22,10 +17,8 @@ namespace TeleSharp.TL
         public string description { get; set; }
         public TLVector<TLBotCommand> commands { get; set; }
 
-
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -33,7 +26,6 @@ namespace TeleSharp.TL
             user_id = br.ReadInt32();
             description = StringUtil.Deserialize(br);
             commands = (TLVector<TLBotCommand>)ObjectUtils.DeserializeVector<TLBotCommand>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -42,7 +34,6 @@ namespace TeleSharp.TL
             bw.Write(user_id);
             StringUtil.Serialize(description, bw);
             ObjectUtils.SerializeObject(commands, bw);
-
         }
     }
 }

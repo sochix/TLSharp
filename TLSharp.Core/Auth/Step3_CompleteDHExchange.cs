@@ -11,7 +11,6 @@ namespace TLSharp.Core.Auth
     {
         public AuthKey AuthKey { get; set; }
         public int TimeOffset { get; set; }
-
     }
 
     public class Step3_CompleteDHExchange
@@ -143,7 +142,6 @@ namespace TLSharp.Core.Auth
                     { // dh_gen_ok
                       //logger.debug("dh_gen_ok");
 
-
                         byte[] nonceFromServer = responseReader.ReadBytes(16);
                         // TODO
                         /*
@@ -191,7 +189,6 @@ namespace TLSharp.Core.Auth
                     else if (code == 0x46dc1fb9)
                     { // dh_gen_retry
                         throw new NotImplementedException("dh_gen_retry");
-
                     }
                     else if (code == 0xa69dae02)
                     {

@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(1769565673)]
@@ -26,10 +21,8 @@ namespace TeleSharp.TL
         public TLObject query { get; set; }
         public TLObject Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -40,7 +33,6 @@ namespace TeleSharp.TL
             app_version = StringUtil.Deserialize(br);
             lang_code = StringUtil.Deserialize(br);
             query = (TLObject)ObjectUtils.DeserializeObject(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -52,12 +44,11 @@ namespace TeleSharp.TL
             StringUtil.Serialize(app_version, bw);
             StringUtil.Serialize(lang_code, bw);
             ObjectUtils.SerializeObject(query, bw);
-
         }
+
         public override void deserializeResponse(BinaryReader br)
         {
             Response = (TLObject)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

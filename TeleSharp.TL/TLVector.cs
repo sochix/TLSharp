@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TeleSharp.TL
 {
@@ -11,6 +9,7 @@ namespace TeleSharp.TL
     {
         [TLObject(481674261)]
         public List<T> lists = new List<T>();
+
         public override int Constructor
         {
             get

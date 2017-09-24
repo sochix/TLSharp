@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-840826671)]
@@ -28,7 +23,6 @@ namespace TeleSharp.TL
         public int h { get; set; }
         public TLAbsRichText caption { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
@@ -37,7 +31,6 @@ namespace TeleSharp.TL
             flags = url != null ? (flags | 2) : (flags & ~2);
             flags = html != null ? (flags | 4) : (flags & ~4);
             flags = poster_photo_id != null ? (flags | 16) : (flags & ~16);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -63,7 +56,6 @@ namespace TeleSharp.TL
             w = br.ReadInt32();
             h = br.ReadInt32();
             caption = (TLAbsRichText)ObjectUtils.DeserializeObject(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -71,7 +63,6 @@ namespace TeleSharp.TL
             bw.Write(Constructor);
             ComputeFlags();
             bw.Write(flags);
-
 
             if ((flags & 2) != 0)
                 StringUtil.Serialize(url, bw);
@@ -82,7 +73,6 @@ namespace TeleSharp.TL
             bw.Write(w);
             bw.Write(h);
             ObjectUtils.SerializeObject(caption, bw);
-
         }
     }
 }

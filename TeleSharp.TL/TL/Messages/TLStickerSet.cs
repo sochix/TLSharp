@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(-1240849242)]
@@ -22,10 +17,8 @@ namespace TeleSharp.TL.Messages
         public TLVector<TLStickerPack> packs { get; set; }
         public TLVector<TLAbsDocument> documents { get; set; }
 
-
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -33,7 +26,6 @@ namespace TeleSharp.TL.Messages
             @set = (TLStickerSet)ObjectUtils.DeserializeObject(br);
             packs = (TLVector<TLStickerPack>)ObjectUtils.DeserializeVector<TLStickerPack>(br);
             documents = (TLVector<TLAbsDocument>)ObjectUtils.DeserializeVector<TLAbsDocument>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -42,7 +34,6 @@ namespace TeleSharp.TL.Messages
             ObjectUtils.SerializeObject(@set, bw);
             ObjectUtils.SerializeObject(packs, bw);
             ObjectUtils.SerializeObject(documents, bw);
-
         }
     }
 }

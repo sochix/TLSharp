@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(1248893260)]
@@ -24,10 +19,8 @@ namespace TeleSharp.TL
         public int dc_id { get; set; }
         public int key_fingerprint { get; set; }
 
-
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -37,7 +30,6 @@ namespace TeleSharp.TL
             size = br.ReadInt32();
             dc_id = br.ReadInt32();
             key_fingerprint = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -48,7 +40,6 @@ namespace TeleSharp.TL
             bw.Write(size);
             bw.Write(dc_id);
             bw.Write(key_fingerprint);
-
         }
     }
 }

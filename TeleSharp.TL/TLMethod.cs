@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-using TeleSharp.TL;
 namespace TeleSharp.TL
 {
     public abstract class TLMethod : TLObject
     {
-        
         public abstract void deserializeResponse(BinaryReader stream);
+
         #region MTPROTO
+
         public long MessageId { get; set; }
         public int Sequence { get; set; }
         public bool Dirty { get; set; }
@@ -40,7 +36,7 @@ namespace TeleSharp.TL
                 return Dirty || (Confirmed && !ConfirmReceived && DateTime.Now - SendTime > TimeSpan.FromSeconds(3));
             }
         }
-        #endregion
 
+        #endregion MTPROTO
     }
 }

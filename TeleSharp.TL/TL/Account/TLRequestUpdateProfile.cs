@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Account
 {
     [TLObject(2018596725)]
@@ -24,14 +19,12 @@ namespace TeleSharp.TL.Account
         public string about { get; set; }
         public TLAbsUser Response { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = first_name != null ? (flags | 1) : (flags & ~1);
             flags = last_name != null ? (flags | 2) : (flags & ~2);
             flags = about != null ? (flags | 4) : (flags & ~4);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -51,8 +44,6 @@ namespace TeleSharp.TL.Account
                 about = StringUtil.Deserialize(br);
             else
                 about = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -66,12 +57,11 @@ namespace TeleSharp.TL.Account
                 StringUtil.Serialize(last_name, bw);
             if ((flags & 4) != 0)
                 StringUtil.Serialize(about, bw);
-
         }
+
         public override void deserializeResponse(BinaryReader br)
         {
             Response = (TLAbsUser)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

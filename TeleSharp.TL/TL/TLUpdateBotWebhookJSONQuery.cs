@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1684914010)]
@@ -22,10 +17,8 @@ namespace TeleSharp.TL
         public TLDataJSON data { get; set; }
         public int timeout { get; set; }
 
-
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -33,7 +26,6 @@ namespace TeleSharp.TL
             query_id = br.ReadInt64();
             data = (TLDataJSON)ObjectUtils.DeserializeObject(br);
             timeout = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -42,7 +34,6 @@ namespace TeleSharp.TL
             bw.Write(query_id);
             ObjectUtils.SerializeObject(data, bw);
             bw.Write(timeout);
-
         }
     }
 }

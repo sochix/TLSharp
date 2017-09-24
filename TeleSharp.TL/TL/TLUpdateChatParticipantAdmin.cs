@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1232070311)]
@@ -23,10 +18,8 @@ namespace TeleSharp.TL
         public bool is_admin { get; set; }
         public int version { get; set; }
 
-
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -35,7 +28,6 @@ namespace TeleSharp.TL
             user_id = br.ReadInt32();
             is_admin = BoolUtil.Deserialize(br);
             version = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -45,7 +37,6 @@ namespace TeleSharp.TL
             bw.Write(user_id);
             BoolUtil.Serialize(is_admin, bw);
             bw.Write(version);
-
         }
     }
 }

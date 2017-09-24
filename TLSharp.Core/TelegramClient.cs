@@ -110,7 +110,7 @@ namespace TLSharp.Core
 
             var authCheckPhoneRequest = new TLRequestCheckPhone() { phone_number = phoneNumber };
             var completed = false;
-            while(!completed)
+            while (!completed)
             {
                 try
                 {
@@ -118,7 +118,7 @@ namespace TLSharp.Core
                     await _sender.Receive(authCheckPhoneRequest);
                     completed = true;
                 }
-                catch(PhoneMigrationException e)
+                catch (PhoneMigrationException e)
                 {
                     await ReconnectToDcAsync(e.DC);
                 }
@@ -187,6 +187,7 @@ namespace TLSharp.Core
 
             return ((TLUser)request.Response.user);
         }
+
         public async Task<TLPassword> GetPasswordSetting()
         {
             var request = new TLRequestGetPassword();
@@ -199,7 +200,6 @@ namespace TLSharp.Core
 
         public async Task<TLUser> MakeAuthWithPasswordAsync(TLPassword password, string password_str)
         {
-
             byte[] password_bytes = Encoding.UTF8.GetBytes(password_str);
             IEnumerable<byte> rv = password.current_salt.Concat(password_bytes).Concat(password.current_salt);
 
@@ -225,6 +225,7 @@ namespace TLSharp.Core
 
             return ((TLUser)request.Response.user);
         }
+
         public async Task<T> SendRequestAsync<T>(TLMethod methodToExecute)
         {
             await _sender.Send(methodToExecute);
@@ -342,7 +343,6 @@ namespace TLSharp.Core
                 _session.ServerAddress = serverAddress;
                 _session.Port = serverPort;
                 await ConnectAsync();
-
             }
 
             return result;
@@ -425,10 +425,15 @@ namespace TLSharp.Core
 
     public class InvalidPhoneCodeException : Exception
     {
-        internal InvalidPhoneCodeException(string msg) : base(msg) { }
+        internal InvalidPhoneCodeException(string msg) : base(msg)
+        {
+        }
     }
+
     public class CloudPasswordNeededException : Exception
     {
-        internal CloudPasswordNeededException(string msg) : base(msg) { }
+        internal CloudPasswordNeededException(string msg) : base(msg)
+        {
+        }
     }
 }

@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(-1137057461)]
@@ -26,14 +21,12 @@ namespace TeleSharp.TL.Messages
         public TLVector<TLAbsMessageEntity> entities { get; set; }
         public bool Response { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = no_webpage ? (flags | 2) : (flags & ~2);
             flags = reply_to_msg_id != null ? (flags | 1) : (flags & ~1);
             flags = entities != null ? (flags | 8) : (flags & ~8);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -51,8 +44,6 @@ namespace TeleSharp.TL.Messages
                 entities = (TLVector<TLAbsMessageEntity>)ObjectUtils.DeserializeVector<TLAbsMessageEntity>(br);
             else
                 entities = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -67,12 +58,11 @@ namespace TeleSharp.TL.Messages
             StringUtil.Serialize(message, bw);
             if ((flags & 8) != 0)
                 ObjectUtils.SerializeObject(entities, bw);
-
         }
+
         public override void deserializeResponse(BinaryReader br)
         {
             Response = BoolUtil.Deserialize(br);
-
         }
     }
 }

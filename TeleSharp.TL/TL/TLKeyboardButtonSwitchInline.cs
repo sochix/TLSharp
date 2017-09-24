@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(90744648)]
@@ -23,12 +18,10 @@ namespace TeleSharp.TL
         public string text { get; set; }
         public string query { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = same_peer ? (flags | 1) : (flags & ~1);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -37,7 +30,6 @@ namespace TeleSharp.TL
             same_peer = (flags & 1) != 0;
             text = StringUtil.Deserialize(br);
             query = StringUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -48,7 +40,6 @@ namespace TeleSharp.TL
 
             StringUtil.Serialize(text, bw);
             StringUtil.Serialize(query, bw);
-
         }
     }
 }

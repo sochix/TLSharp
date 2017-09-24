@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(-712043766)]
@@ -26,14 +21,12 @@ namespace TeleSharp.TL.Messages
         public int cache_time { get; set; }
         public bool Response { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = alert ? (flags | 2) : (flags & ~2);
             flags = message != null ? (flags | 1) : (flags & ~1);
             flags = url != null ? (flags | 4) : (flags & ~4);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -52,7 +45,6 @@ namespace TeleSharp.TL.Messages
                 url = null;
 
             cache_time = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -67,12 +59,11 @@ namespace TeleSharp.TL.Messages
             if ((flags & 4) != 0)
                 StringUtil.Serialize(url, bw);
             bw.Write(cache_time);
-
         }
+
         public override void deserializeResponse(BinaryReader br)
         {
             Response = BoolUtil.Deserialize(br);
-
         }
     }
 }

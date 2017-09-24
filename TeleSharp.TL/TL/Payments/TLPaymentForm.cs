@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Payments
 {
     [TLObject(1062645411)]
@@ -31,7 +26,6 @@ namespace TeleSharp.TL.Payments
         public TLPaymentSavedCredentialsCard saved_credentials { get; set; }
         public TLVector<TLAbsUser> users { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
@@ -41,7 +35,6 @@ namespace TeleSharp.TL.Payments
             flags = native_params != null ? (flags | 16) : (flags & ~16);
             flags = saved_info != null ? (flags | 1) : (flags & ~1);
             flags = saved_credentials != null ? (flags | 2) : (flags & ~2);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -74,7 +67,6 @@ namespace TeleSharp.TL.Payments
                 saved_credentials = null;
 
             users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -82,7 +74,6 @@ namespace TeleSharp.TL.Payments
             bw.Write(Constructor);
             ComputeFlags();
             bw.Write(flags);
-
 
             bw.Write(bot_id);
             ObjectUtils.SerializeObject(invoice, bw);
@@ -97,7 +88,6 @@ namespace TeleSharp.TL.Payments
             if ((flags & 2) != 0)
                 ObjectUtils.SerializeObject(saved_credentials, bw);
             ObjectUtils.SerializeObject(users, bw);
-
         }
     }
 }

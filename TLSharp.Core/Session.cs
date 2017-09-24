@@ -9,6 +9,7 @@ namespace TLSharp.Core
     public interface ISessionStore
     {
         void Save(Session session);
+
         Session Load(string sessionUserId);
     }
 
@@ -43,7 +44,6 @@ namespace TLSharp.Core
     {
         public void Save(Session session)
         {
-
         }
 
         public Session Load(string sessionUserId)
@@ -54,9 +54,9 @@ namespace TLSharp.Core
 
     public class Session
     {
-	    private const string defaultConnectionAddress = "149.154.175.100";//"149.154.167.50";
+        private const string defaultConnectionAddress = "149.154.175.100";//"149.154.167.50";
 
-		private const int defaultConnectionPort = 443;
+        private const int defaultConnectionPort = 443;
 
         public string SessionUserId { get; set; }
         public string ServerAddress { get; set; }

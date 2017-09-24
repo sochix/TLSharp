@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-337352679)]
@@ -26,13 +21,11 @@ namespace TeleSharp.TL
         public TLAbsMessageMedia media { get; set; }
         public TLVector<TLAbsMessageEntity> entities { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = popup ? (flags | 1) : (flags & ~1);
             flags = inbox_date != null ? (flags | 2) : (flags & ~2);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -48,7 +41,6 @@ namespace TeleSharp.TL
             message = StringUtil.Deserialize(br);
             media = (TLAbsMessageMedia)ObjectUtils.DeserializeObject(br);
             entities = (TLVector<TLAbsMessageEntity>)ObjectUtils.DeserializeVector<TLAbsMessageEntity>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -63,7 +55,6 @@ namespace TeleSharp.TL
             StringUtil.Serialize(message, bw);
             ObjectUtils.SerializeObject(media, bw);
             ObjectUtils.SerializeObject(entities, bw);
-
         }
     }
 }

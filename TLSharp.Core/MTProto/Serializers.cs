@@ -6,7 +6,6 @@ namespace TLSharp.Core.MTProto
 {
     public class Serializers
     {
-
         public static class Bytes
         {
             public static byte[] read(BinaryReader binaryReader)
@@ -18,7 +17,8 @@ namespace TLSharp.Core.MTProto
                     len = binaryReader.ReadByte() | (binaryReader.ReadByte() << 8) | (binaryReader.ReadByte() << 16);
                     padding = len % 4;
                 }
-                else {
+                else
+                {
                     len = firstByte;
                     padding = (len + 1) % 4;
                 }
@@ -47,7 +47,8 @@ namespace TLSharp.Core.MTProto
                     binaryWriter.Write((byte)data.Length);
                     binaryWriter.Write(data);
                 }
-                else {
+                else
+                {
                     padding = (data.Length) % 4;
                     if (padding != 0)
                     {
@@ -60,7 +61,6 @@ namespace TLSharp.Core.MTProto
                     binaryWriter.Write((byte)(data.Length >> 16));
                     binaryWriter.Write(data);
                 }
-
 
                 for (int i = 0; i < padding; i++)
                 {

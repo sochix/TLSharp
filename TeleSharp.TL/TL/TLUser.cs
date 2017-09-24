@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(773059779)]
@@ -43,7 +38,6 @@ namespace TeleSharp.TL
         public string bot_inline_placeholder { get; set; }
         public string lang_code { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
@@ -69,7 +63,6 @@ namespace TeleSharp.TL
             flags = restriction_reason != null ? (flags | 262144) : (flags & ~262144);
             flags = bot_inline_placeholder != null ? (flags | 524288) : (flags & ~524288);
             flags = lang_code != null ? (flags | 4194304) : (flags & ~4194304);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -141,8 +134,6 @@ namespace TeleSharp.TL
                 lang_code = StringUtil.Deserialize(br);
             else
                 lang_code = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -150,16 +141,6 @@ namespace TeleSharp.TL
             bw.Write(Constructor);
             ComputeFlags();
             bw.Write(flags);
-
-
-
-
-
-
-
-
-
-
 
             bw.Write(id);
             if ((flags & 1) != 0)
@@ -184,7 +165,6 @@ namespace TeleSharp.TL
                 StringUtil.Serialize(bot_inline_placeholder, bw);
             if ((flags & 4194304) != 0)
                 StringUtil.Serialize(lang_code, bw);
-
         }
     }
 }

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TLSharp.Core.MTProto.Crypto
 {
@@ -56,6 +53,7 @@ namespace TLSharp.Core.MTProto.Crypto
                 return salts.Count;
             }
         }
+
         // TODO: get actual salt and other...
     }
 

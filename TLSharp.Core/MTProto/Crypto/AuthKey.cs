@@ -9,6 +9,7 @@ namespace TLSharp.Core.MTProto.Crypto
         private byte[] key;
         private ulong keyId;
         private ulong auxHash;
+
         public AuthKey(BigInteger gab)
         {
             key = gab.ToByteArrayUnsigned();

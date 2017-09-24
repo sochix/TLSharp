@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-971322408)]
@@ -25,10 +20,8 @@ namespace TeleSharp.TL
         public TLVector<TLAbsDocumentAttribute> attributes { get; set; }
         public int dc_id { get; set; }
 
-
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -39,7 +32,6 @@ namespace TeleSharp.TL
             mime_type = StringUtil.Deserialize(br);
             attributes = (TLVector<TLAbsDocumentAttribute>)ObjectUtils.DeserializeVector<TLAbsDocumentAttribute>(br);
             dc_id = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -51,7 +43,6 @@ namespace TeleSharp.TL
             StringUtil.Serialize(mime_type, bw);
             ObjectUtils.SerializeObject(attributes, bw);
             bw.Write(dc_id);
-
         }
     }
 }

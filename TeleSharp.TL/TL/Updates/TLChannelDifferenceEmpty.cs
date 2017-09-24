@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Updates
 {
     [TLObject(1041346555)]
@@ -23,13 +18,11 @@ namespace TeleSharp.TL.Updates
         public int pts { get; set; }
         public int? timeout { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = final ? (flags | 1) : (flags & ~1);
             flags = timeout != null ? (flags | 2) : (flags & ~2);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -41,8 +34,6 @@ namespace TeleSharp.TL.Updates
                 timeout = br.ReadInt32();
             else
                 timeout = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -54,7 +45,6 @@ namespace TeleSharp.TL.Updates
             bw.Write(pts);
             if ((flags & 2) != 0)
                 bw.Write(timeout.Value);
-
         }
     }
 }

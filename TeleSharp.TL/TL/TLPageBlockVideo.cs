@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-640214938)]
@@ -24,13 +19,11 @@ namespace TeleSharp.TL
         public long video_id { get; set; }
         public TLAbsRichText caption { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = autoplay ? (flags | 1) : (flags & ~1);
             flags = loop ? (flags | 2) : (flags & ~2);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -40,7 +33,6 @@ namespace TeleSharp.TL
             loop = (flags & 2) != 0;
             video_id = br.ReadInt64();
             caption = (TLAbsRichText)ObjectUtils.DeserializeObject(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -49,10 +41,8 @@ namespace TeleSharp.TL
             ComputeFlags();
             bw.Write(flags);
 
-
             bw.Write(video_id);
             ObjectUtils.SerializeObject(caption, bw);
-
         }
     }
 }

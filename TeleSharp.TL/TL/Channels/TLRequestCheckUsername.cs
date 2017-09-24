@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Channels
 {
     [TLObject(283557164)]
@@ -22,17 +17,14 @@ namespace TeleSharp.TL.Channels
         public string username { get; set; }
         public bool Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             channel = (TLAbsInputChannel)ObjectUtils.DeserializeObject(br);
             username = StringUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -40,12 +32,11 @@ namespace TeleSharp.TL.Channels
             bw.Write(Constructor);
             ObjectUtils.SerializeObject(channel, bw);
             StringUtil.Serialize(username, bw);
-
         }
+
         public override void deserializeResponse(BinaryReader br)
         {
             Response = BoolUtil.Deserialize(br);
-
         }
     }
 }

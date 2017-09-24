@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1032140601)]
@@ -21,17 +16,14 @@ namespace TeleSharp.TL
         public string command { get; set; }
         public string description { get; set; }
 
-
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             command = StringUtil.Deserialize(br);
             description = StringUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -39,7 +31,6 @@ namespace TeleSharp.TL
             bw.Write(Constructor);
             StringUtil.Serialize(command, bw);
             StringUtil.Serialize(description, bw);
-
         }
     }
 }

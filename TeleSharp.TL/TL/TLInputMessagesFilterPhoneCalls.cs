@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-2134272152)]
@@ -21,19 +16,16 @@ namespace TeleSharp.TL
         public int flags { get; set; }
         public bool missed { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = missed ? (flags | 1) : (flags & ~1);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             flags = br.ReadInt32();
             missed = (flags & 1) != 0;
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -41,8 +33,6 @@ namespace TeleSharp.TL
             bw.Write(Constructor);
             ComputeFlags();
             bw.Write(flags);
-
-
         }
     }
 }

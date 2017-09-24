@@ -1,8 +1,4 @@
-﻿
-using System;
-using System.Threading.Tasks;
-
-using NUnit.Framework;
+﻿using System.Threading.Tasks;
 
 namespace TLSharp.Tests
 {

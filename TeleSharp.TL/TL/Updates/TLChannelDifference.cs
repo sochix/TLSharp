@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Updates
 {
     [TLObject(543450958)]
@@ -27,13 +22,11 @@ namespace TeleSharp.TL.Updates
         public TLVector<TLAbsChat> chats { get; set; }
         public TLVector<TLAbsUser> users { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = final ? (flags | 1) : (flags & ~1);
             flags = timeout != null ? (flags | 2) : (flags & ~2);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -50,7 +43,6 @@ namespace TeleSharp.TL.Updates
             other_updates = (TLVector<TLAbsUpdate>)ObjectUtils.DeserializeVector<TLAbsUpdate>(br);
             chats = (TLVector<TLAbsChat>)ObjectUtils.DeserializeVector<TLAbsChat>(br);
             users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -66,7 +58,6 @@ namespace TeleSharp.TL.Updates
             ObjectUtils.SerializeObject(other_updates, bw);
             ObjectUtils.SerializeObject(chats, bw);
             ObjectUtils.SerializeObject(users, bw);
-
         }
     }
 }

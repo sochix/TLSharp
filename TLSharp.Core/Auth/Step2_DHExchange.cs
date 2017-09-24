@@ -114,7 +114,6 @@ namespace TLSharp.Core.Auth
 					}
 					*/
 
-
                     byte[] serverNonceFromServer = responseReader.ReadBytes(16);
 
                     // TODO: !

@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-103646630)]
@@ -26,13 +21,11 @@ namespace TeleSharp.TL
         public byte[] data { get; set; }
         public string game_short_name { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = data != null ? (flags | 1) : (flags & ~1);
             flags = game_short_name != null ? (flags | 2) : (flags & ~2);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -51,8 +44,6 @@ namespace TeleSharp.TL
                 game_short_name = StringUtil.Deserialize(br);
             else
                 game_short_name = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -68,7 +59,6 @@ namespace TeleSharp.TL
                 BytesUtil.Serialize(data, bw);
             if ((flags & 2) != 0)
                 StringUtil.Serialize(game_short_name, bw);
-
         }
     }
 }

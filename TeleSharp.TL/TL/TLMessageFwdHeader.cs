@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-947462709)]
@@ -24,14 +19,12 @@ namespace TeleSharp.TL
         public int? channel_id { get; set; }
         public int? channel_post { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = from_id != null ? (flags | 1) : (flags & ~1);
             flags = channel_id != null ? (flags | 2) : (flags & ~2);
             flags = channel_post != null ? (flags | 4) : (flags & ~4);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -52,8 +45,6 @@ namespace TeleSharp.TL
                 channel_post = br.ReadInt32();
             else
                 channel_post = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -68,7 +59,6 @@ namespace TeleSharp.TL
                 bw.Write(channel_id.Value);
             if ((flags & 4) != 0)
                 bw.Write(channel_post.Value);
-
         }
     }
 }

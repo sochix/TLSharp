@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(-923703407)]
@@ -29,7 +24,6 @@ namespace TeleSharp.TL.Messages
         public TLAbsReplyMarkup reply_markup { get; set; }
         public TLAbsUpdates Response { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
@@ -38,7 +32,6 @@ namespace TeleSharp.TL.Messages
             flags = clear_draft ? (flags | 128) : (flags & ~128);
             flags = reply_to_msg_id != null ? (flags | 1) : (flags & ~1);
             flags = reply_markup != null ? (flags | 4) : (flags & ~4);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -59,8 +52,6 @@ namespace TeleSharp.TL.Messages
                 reply_markup = (TLAbsReplyMarkup)ObjectUtils.DeserializeObject(br);
             else
                 reply_markup = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -69,8 +60,6 @@ namespace TeleSharp.TL.Messages
             ComputeFlags();
             bw.Write(flags);
 
-
-
             ObjectUtils.SerializeObject(peer, bw);
             if ((flags & 1) != 0)
                 bw.Write(reply_to_msg_id.Value);
@@ -78,12 +67,11 @@ namespace TeleSharp.TL.Messages
             bw.Write(random_id);
             if ((flags & 4) != 0)
                 ObjectUtils.SerializeObject(reply_markup, bw);
-
         }
+
         public override void deserializeResponse(BinaryReader br)
         {
             Response = (TLAbsUpdates)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

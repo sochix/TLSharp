@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1588737454)]
@@ -40,7 +35,6 @@ namespace TeleSharp.TL
         public int version { get; set; }
         public string restriction_reason { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
@@ -59,7 +53,6 @@ namespace TeleSharp.TL
             flags = access_hash != null ? (flags | 8192) : (flags & ~8192);
             flags = username != null ? (flags | 64) : (flags & ~64);
             flags = restriction_reason != null ? (flags | 512) : (flags & ~512);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -96,8 +89,6 @@ namespace TeleSharp.TL
                 restriction_reason = StringUtil.Deserialize(br);
             else
                 restriction_reason = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -105,17 +96,6 @@ namespace TeleSharp.TL
             bw.Write(Constructor);
             ComputeFlags();
             bw.Write(flags);
-
-
-
-
-
-
-
-
-
-
-
 
             bw.Write(id);
             if ((flags & 8192) != 0)
@@ -128,7 +108,6 @@ namespace TeleSharp.TL
             bw.Write(version);
             if ((flags & 512) != 0)
                 StringUtil.Serialize(restriction_reason, bw);
-
         }
     }
 }

@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(-1444503762)]
@@ -23,10 +18,8 @@ namespace TeleSharp.TL.Messages
         public bool is_admin { get; set; }
         public bool Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -34,7 +27,6 @@ namespace TeleSharp.TL.Messages
             chat_id = br.ReadInt32();
             user_id = (TLAbsInputUser)ObjectUtils.DeserializeObject(br);
             is_admin = BoolUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -43,12 +35,11 @@ namespace TeleSharp.TL.Messages
             bw.Write(chat_id);
             ObjectUtils.SerializeObject(user_id, bw);
             BoolUtil.Serialize(is_admin, bw);
-
         }
+
         public override void deserializeResponse(BinaryReader br)
         {
             Response = BoolUtil.Deserialize(br);
-
         }
     }
 }

@@ -147,7 +147,6 @@ namespace TLSharp.Core.MTProto.Crypto
 
         public static byte[] EncryptIGE(byte[] originPlaintext, byte[] key, byte[] iv)
         {
-
             byte[] plaintext;
             using (MemoryStream plaintextBuffer = new MemoryStream(originPlaintext.Length + 40))
             {
@@ -216,10 +215,7 @@ namespace TLSharp.Core.MTProto.Crypto
                 result[i] = (byte)(buffer1[i] ^ buffer2[i]);
             return result;
         }
-
-
     }
-
 
     // AES engine implementation
 
@@ -227,6 +223,7 @@ namespace TLSharp.Core.MTProto.Crypto
     {
         // The S box
         private const uint m1 = 0x80808080;
+
         private const uint m2 = 0x7f7f7f7f;
         private const uint m3 = 0x0000001b;
         private const int BLOCK_SIZE = 16;
@@ -576,7 +573,8 @@ namespace TLSharp.Core.MTProto.Crypto
             {
                 EncryptBlock(WorkingKey);
             }
-            else {
+            else
+            {
                 DecryptBlock(WorkingKey);
             }
 
@@ -712,7 +710,6 @@ namespace TLSharp.Core.MTProto.Crypto
                  (((uint)Si[(r0 >> 24) & 255]) << 24) ^ KW[0, 3];
         }
     }
-
 
     internal sealed class Pack
     {

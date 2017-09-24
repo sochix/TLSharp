@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-94974410)]
@@ -26,10 +21,8 @@ namespace TeleSharp.TL
         public byte[] g_a_or_b { get; set; }
         public long key_fingerprint { get; set; }
 
-
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -41,7 +34,6 @@ namespace TeleSharp.TL
             participant_id = br.ReadInt32();
             g_a_or_b = BytesUtil.Deserialize(br);
             key_fingerprint = br.ReadInt64();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -54,7 +46,6 @@ namespace TeleSharp.TL
             bw.Write(participant_id);
             BytesUtil.Serialize(g_a_or_b, bw);
             bw.Write(key_fingerprint);
-
         }
     }
 }

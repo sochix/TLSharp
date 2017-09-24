@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Auth
 {
     [TLObject(1738800940)]
@@ -24,11 +19,9 @@ namespace TeleSharp.TL.Auth
         public string bot_auth_token { get; set; }
         public Auth.TLAuthorization Response { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -37,7 +30,6 @@ namespace TeleSharp.TL.Auth
             api_id = br.ReadInt32();
             api_hash = StringUtil.Deserialize(br);
             bot_auth_token = StringUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -48,12 +40,11 @@ namespace TeleSharp.TL.Auth
             bw.Write(api_id);
             StringUtil.Serialize(api_hash, bw);
             StringUtil.Serialize(bot_auth_token, bw);
-
         }
+
         public override void deserializeResponse(BinaryReader br)
         {
             Response = (Auth.TLAuthorization)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

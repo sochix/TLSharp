@@ -5,10 +5,8 @@ using System.Security.Cryptography;
 
 namespace TLSharp.Core.MTProto.Crypto
 {
-
-    class RSAServerKey
+    internal class RSAServerKey
     {
-
         private string fingerprint;
         private BigInteger m;
         private BigInteger e;
@@ -22,7 +20,6 @@ namespace TLSharp.Core.MTProto.Crypto
 
         public byte[] Encrypt(byte[] data, int offset, int length)
         {
-
             using (MemoryStream buffer = new MemoryStream(255))
             using (BinaryWriter writer = new BinaryWriter(buffer))
             {
@@ -46,7 +43,8 @@ namespace TLSharp.Core.MTProto.Crypto
                 {
                     return ciphertext;
                 }
-                else {
+                else
+                {
                     byte[] paddedCiphertext = new byte[256];
                     int padding = 256 - ciphertext.Length;
                     for (int i = 0; i < padding; i++)
@@ -57,9 +55,9 @@ namespace TLSharp.Core.MTProto.Crypto
                     return paddedCiphertext;
                 }
             }
-
         }
     }
+
     public class RSA
     {
         private static readonly Dictionary<string, RSAServerKey> serverKeys = new Dictionary<string, RSAServerKey>() {
@@ -79,5 +77,4 @@ namespace TLSharp.Core.MTProto.Crypto
             return key.Encrypt(data, offset, length);
         }
     }
-
 }

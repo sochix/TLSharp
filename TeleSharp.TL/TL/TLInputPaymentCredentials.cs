@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(873977640)]
@@ -22,12 +17,10 @@ namespace TeleSharp.TL
         public bool save { get; set; }
         public TLDataJSON data { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = save ? (flags | 1) : (flags & ~1);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -35,7 +28,6 @@ namespace TeleSharp.TL
             flags = br.ReadInt32();
             save = (flags & 1) != 0;
             data = (TLDataJSON)ObjectUtils.DeserializeObject(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -45,7 +37,6 @@ namespace TeleSharp.TL
             bw.Write(flags);
 
             ObjectUtils.SerializeObject(data, bw);
-
         }
     }
 }

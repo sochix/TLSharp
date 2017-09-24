@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-852477119)]
@@ -30,7 +25,6 @@ namespace TeleSharp.TL
         public int count { get; set; }
         public int hash { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
@@ -38,7 +32,6 @@ namespace TeleSharp.TL
             flags = archived ? (flags | 2) : (flags & ~2);
             flags = official ? (flags | 4) : (flags & ~4);
             flags = masks ? (flags | 8) : (flags & ~8);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -54,7 +47,6 @@ namespace TeleSharp.TL
             short_name = StringUtil.Deserialize(br);
             count = br.ReadInt32();
             hash = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -63,16 +55,12 @@ namespace TeleSharp.TL
             ComputeFlags();
             bw.Write(flags);
 
-
-
-
             bw.Write(id);
             bw.Write(access_hash);
             StringUtil.Serialize(title, bw);
             StringUtil.Serialize(short_name, bw);
             bw.Write(count);
             bw.Write(hash);
-
         }
     }
 }

@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(-346119674)]
@@ -28,7 +23,6 @@ namespace TeleSharp.TL.Messages
         public TLInlineBotSwitchPM switch_pm { get; set; }
         public bool Response { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
@@ -36,7 +30,6 @@ namespace TeleSharp.TL.Messages
             flags = @private ? (flags | 2) : (flags & ~2);
             flags = next_offset != null ? (flags | 4) : (flags & ~4);
             flags = switch_pm != null ? (flags | 8) : (flags & ~8);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -56,8 +49,6 @@ namespace TeleSharp.TL.Messages
                 switch_pm = (TLInlineBotSwitchPM)ObjectUtils.DeserializeObject(br);
             else
                 switch_pm = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -66,7 +57,6 @@ namespace TeleSharp.TL.Messages
             ComputeFlags();
             bw.Write(flags);
 
-
             bw.Write(query_id);
             ObjectUtils.SerializeObject(results, bw);
             bw.Write(cache_time);
@@ -74,12 +64,11 @@ namespace TeleSharp.TL.Messages
                 StringUtil.Serialize(next_offset, bw);
             if ((flags & 8) != 0)
                 ObjectUtils.SerializeObject(switch_pm, bw);
-
         }
+
         public override void deserializeResponse(BinaryReader br)
         {
             Response = BoolUtil.Deserialize(br);
-
         }
     }
 }

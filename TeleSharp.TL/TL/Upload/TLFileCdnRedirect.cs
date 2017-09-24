@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Upload
 {
     [TLObject(352864346)]
@@ -23,10 +18,8 @@ namespace TeleSharp.TL.Upload
         public byte[] encryption_key { get; set; }
         public byte[] encryption_iv { get; set; }
 
-
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -35,7 +28,6 @@ namespace TeleSharp.TL.Upload
             file_token = BytesUtil.Deserialize(br);
             encryption_key = BytesUtil.Deserialize(br);
             encryption_iv = BytesUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -45,7 +37,6 @@ namespace TeleSharp.TL.Upload
             BytesUtil.Serialize(file_token, bw);
             BytesUtil.Serialize(encryption_key, bw);
             BytesUtil.Serialize(encryption_iv, bw);
-
         }
     }
 }

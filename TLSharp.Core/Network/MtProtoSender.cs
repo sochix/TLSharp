@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
-using Ionic.Zlib;
 using TLSharp.Core.MTProto;
 using TLSharp.Core.MTProto.Crypto;
 using TLSharp.Core.Requests;
@@ -53,7 +50,6 @@ namespace TLSharp.Core.Network
                     needConfirmation.Clear();
                 }
             }
-
 
             using (var memory = new MemoryStream())
             using (var writer = new BinaryWriter(memory))
@@ -177,36 +173,47 @@ namespace TLSharp.Core.Network
                 case 0x73f1f8dc: // container
                                  //logger.debug("MSG container");
                     return HandleContainer(messageId, sequence, messageReader, request);
+
                 case 0x7abe77ec: // ping
                                  //logger.debug("MSG ping");
                     return HandlePing(messageId, sequence, messageReader);
+
                 case 0x347773c5: // pong
                                  //logger.debug("MSG pong");
                     return HandlePong(messageId, sequence, messageReader, request);
+
                 case 0xae500895: // future_salts
                                  //logger.debug("MSG future_salts");
                     return HandleFutureSalts(messageId, sequence, messageReader);
+
                 case 0x9ec20908: // new_session_created
                                  //logger.debug("MSG new_session_created");
                     return HandleNewSessionCreated(messageId, sequence, messageReader);
+
                 case 0x62d6b459: // msgs_ack
                                  //logger.debug("MSG msds_ack");
                     return HandleMsgsAck(messageId, sequence, messageReader);
+
                 case 0xedab447b: // bad_server_salt
                                  //logger.debug("MSG bad_server_salt");
                     return HandleBadServerSalt(messageId, sequence, messageReader, request);
+
                 case 0xa7eff811: // bad_msg_notification
                                  //logger.debug("MSG bad_msg_notification");
                     return HandleBadMsgNotification(messageId, sequence, messageReader);
+
                 case 0x276d3ec6: // msg_detailed_info
                                  //logger.debug("MSG msg_detailed_info");
                     return HandleMsgDetailedInfo(messageId, sequence, messageReader);
+
                 case 0xf35c6d01: // rpc_result
                                  //logger.debug("MSG rpc_result");
                     return HandleRpcResult(messageId, sequence, messageReader, request);
+
                 case 0x3072cfa1: // gzip_packed
                                  //logger.debug("MSG gzip_packed");
                     return HandleGzipPacked(messageId, sequence, messageReader, request);
+
                 case 0xe317af7e:
                 case 0xd3f45784:
                 case 0x2b2fbd4e:
@@ -214,6 +221,7 @@ namespace TLSharp.Core.Network
                 case 0x725b04c3:
                 case 0x74ae4240:
                     return HandleUpdate(messageId, sequence, messageReader);
+
                 default:
                     //logger.debug("unknown message: {0}", code);
                     return false;
@@ -317,7 +325,6 @@ namespace TLSharp.Core.Network
                 {
                     throw new InvalidOperationException(errorMessage);
                 }
-
             }
             else if (innerCode == 0x3072cfa1)
             {
@@ -341,7 +348,6 @@ namespace TLSharp.Core.Network
                 }
                 catch (ZlibException ex)
                 {
-
                 }
             }
             else
@@ -389,7 +395,6 @@ namespace TLSharp.Core.Network
                     throw new InvalidOperationException("incorrect server salt (in this case, the bad_server_salt response is received with the correct salt, and the message is to be re-sent with it)");
                 case 64:
                     throw new InvalidOperationException("invalid container");
-
             }
             throw new NotImplementedException("This should never happens");
             /*
@@ -431,7 +436,6 @@ namespace TLSharp.Core.Network
                 return true;
             }
             */
-
 
             //MTProtoRequest request = runningRequests[badMsgId];
             //request.OnException(new MTProtoBadServerSaltException(salt));
@@ -542,7 +546,7 @@ namespace TLSharp.Core.Network
         private const string REPORT_MESSAGE =
             " See: https://github.com/sochix/TLSharp#i-get-a-xxxmigrationexception-or-a-migrate_x-error";
 
-        protected DataCenterMigrationException(string msg, int dc) : base (msg + REPORT_MESSAGE)
+        protected DataCenterMigrationException(string msg, int dc) : base(msg + REPORT_MESSAGE)
         {
             DC = dc;
         }
@@ -551,7 +555,7 @@ namespace TLSharp.Core.Network
     internal class PhoneMigrationException : DataCenterMigrationException
     {
         internal PhoneMigrationException(int dc)
-            : base ($"Phone number registered to a different DC: {dc}.", dc)
+            : base($"Phone number registered to a different DC: {dc}.", dc)
         {
         }
     }
@@ -559,7 +563,7 @@ namespace TLSharp.Core.Network
     internal class FileMigrationException : DataCenterMigrationException
     {
         internal FileMigrationException(int dc)
-            : base ($"File located on a different DC: {dc}.", dc)
+            : base($"File located on a different DC: {dc}.", dc)
         {
         }
     }

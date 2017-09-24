@@ -1,24 +1,18 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.CodeDom;
-using System.Reflection;
-using System.Text.RegularExpressions;
 
 namespace TeleSharp.Generator
 {
-    class Program
+    internal class Program
     {
-        static List<String> keywords = new List<string>(new string[] { "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked", "class", "const", "continue", "decimal", "default", "delegate", "do", "double", "else", "enum", "event", "explicit", "extern", "false", "finally", "fixed", "float", "for", "foreach", "goto", "if", "implicit", "in", "in", "int", "interface", "internal", "is", "lock", "long", "namespace", "new", "null", "object", "operator", "out", "out", "override", "params", "private", "protected", "public", "readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string", "struct", "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort", "using", "virtual", "void", "volatile", "while", "add", "alias", "ascending", "async", "await", "descending", "dynamic", "from", "get", "global", "group", "into", "join", "let", "orderby", "partial", "partial", "remove", "select", "set", "value", "var", "where", "where", "yield" });
-        static List<String> interfacesList = new List<string>();
-        static List<String> classesList = new List<string>();
-        static void Main(string[] args)
-        {
+        private static List<String> keywords = new List<string>(new string[] { "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked", "class", "const", "continue", "decimal", "default", "delegate", "do", "double", "else", "enum", "event", "explicit", "extern", "false", "finally", "fixed", "float", "for", "foreach", "goto", "if", "implicit", "in", "in", "int", "interface", "internal", "is", "lock", "long", "namespace", "new", "null", "object", "operator", "out", "out", "override", "params", "private", "protected", "public", "readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string", "struct", "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort", "using", "virtual", "void", "volatile", "while", "add", "alias", "ascending", "async", "await", "descending", "dynamic", "from", "get", "global", "group", "into", "join", "let", "orderby", "partial", "partial", "remove", "select", "set", "value", "var", "where", "where", "yield" });
+        private static List<String> interfacesList = new List<string>();
+        private static List<String> classesList = new List<string>();
 
+        private static void Main(string[] args)
+        {
             string AbsStyle = File.ReadAllText("ConstructorAbs.tmp");
             string NormalStyle = File.ReadAllText("Constructor.tmp");
             string MethodStyle = File.ReadAllText("Method.tmp");
@@ -68,6 +62,7 @@ namespace TeleSharp.Generator
                 using (StreamWriter writer = new StreamWriter(classFile))
                 {
                     #region About Class
+
                     string nspace = (GetNameSpace(c.predicate).Replace("TeleSharp.TL", "TL\\").Replace(".", "")).Replace("\\\\", "\\").Replace("\\", ".");
                     if (nspace.EndsWith("."))
                         nspace = nspace.Remove(nspace.Length - 1, 1);
@@ -75,16 +70,22 @@ namespace TeleSharp.Generator
                     temp = (c.type == "himself") ? temp.Replace("/* PARENT */", "TLObject") : temp.Replace("/* PARENT */", GetNameofClass(c.type, true));
                     temp = temp.Replace("/*Constructor*/", c.id.ToString());
                     temp = temp.Replace("/* NAME */", GetNameofClass(c.predicate, false));
-                    #endregion
+
+                    #endregion About Class
+
                     #region Fields
+
                     string fields = "";
                     foreach (var tmp in c.Params)
                     {
                         fields += $"     public {CheckForFlagBase(tmp.type, GetTypeName(tmp.type))} {CheckForKeyword(tmp.name)} " + "{get;set;}" + Environment.NewLine;
                     }
                     temp = temp.Replace("/* PARAMS */", fields);
-                    #endregion
+
+                    #endregion Fields
+
                     #region ComputeFlagFunc
+
                     if (!c.Params.Any(x => x.name == "flags")) temp = temp.Replace("/* COMPUTE */", "");
                     else
                     {
@@ -102,8 +103,11 @@ namespace TeleSharp.Generator
                         }
                         temp = temp.Replace("/* COMPUTE */", compute);
                     }
-                    #endregion
+
+                    #endregion ComputeFlagFunc
+
                     #region SerializeFunc
+
                     var serialize = "";
 
                     if (c.Params.Any(x => x.name == "flags")) serialize += "ComputeFlags();" + Environment.NewLine + "bw.Write(flags);" + Environment.NewLine;
@@ -112,8 +116,11 @@ namespace TeleSharp.Generator
                         serialize += WriteWriteCode(p) + Environment.NewLine;
                     }
                     temp = temp.Replace("/* SERIALIZE */", serialize);
-                    #endregion
+
+                    #endregion SerializeFunc
+
                     #region DeSerializeFunc
+
                     var deserialize = "";
 
                     foreach (var p in c.Params)
@@ -121,7 +128,9 @@ namespace TeleSharp.Generator
                         deserialize += WriteReadCode(p) + Environment.NewLine;
                     }
                     temp = temp.Replace("/* DESERIALIZE */", deserialize);
-                    #endregion
+
+                    #endregion DeSerializeFunc
+
                     writer.Write(temp);
                     writer.Close();
                     classFile.Close();
@@ -134,6 +143,7 @@ namespace TeleSharp.Generator
                 using (StreamWriter writer = new StreamWriter(classFile))
                 {
                     #region About Class
+
                     string nspace = (GetNameSpace(c.method).Replace("TeleSharp.TL", "TL\\").Replace(".", "")).Replace("\\\\", "\\").Replace("\\", ".");
                     if (nspace.EndsWith("."))
                         nspace = nspace.Remove(nspace.Length - 1, 1);
@@ -141,8 +151,11 @@ namespace TeleSharp.Generator
                     temp = temp.Replace("/* PARENT */", "TLMethod");
                     temp = temp.Replace("/*Constructor*/", c.id.ToString());
                     temp = temp.Replace("/* NAME */", GetNameofClass(c.method, false, true));
-                    #endregion
+
+                    #endregion About Class
+
                     #region Fields
+
                     string fields = "";
                     foreach (var tmp in c.Params)
                     {
@@ -150,8 +163,11 @@ namespace TeleSharp.Generator
                     }
                     fields += $"        public {CheckForFlagBase(c.type, GetTypeName(c.type))} Response" + "{ get; set;}" + Environment.NewLine;
                     temp = temp.Replace("/* PARAMS */", fields);
-                    #endregion
+
+                    #endregion Fields
+
                     #region ComputeFlagFunc
+
                     if (!c.Params.Any(x => x.name == "flags")) temp = temp.Replace("/* COMPUTE */", "");
                     else
                     {
@@ -169,8 +185,11 @@ namespace TeleSharp.Generator
                         }
                         temp = temp.Replace("/* COMPUTE */", compute);
                     }
-                    #endregion
+
+                    #endregion ComputeFlagFunc
+
                     #region SerializeFunc
+
                     var serialize = "";
 
                     if (c.Params.Any(x => x.name == "flags")) serialize += "ComputeFlags();" + Environment.NewLine + "bw.Write(flags);" + Environment.NewLine;
@@ -179,8 +198,11 @@ namespace TeleSharp.Generator
                         serialize += WriteWriteCode(p) + Environment.NewLine;
                     }
                     temp = temp.Replace("/* SERIALIZE */", serialize);
-                    #endregion
+
+                    #endregion SerializeFunc
+
                     #region DeSerializeFunc
+
                     var deserialize = "";
 
                     foreach (var p in c.Params)
@@ -188,19 +210,25 @@ namespace TeleSharp.Generator
                         deserialize += WriteReadCode(p) + Environment.NewLine;
                     }
                     temp = temp.Replace("/* DESERIALIZE */", deserialize);
-                    #endregion
+
+                    #endregion DeSerializeFunc
+
                     #region DeSerializeRespFunc
+
                     var deserializeResp = "";
                     Param p2 = new Param() { name = "Response", type = c.type };
                     deserializeResp += WriteReadCode(p2) + Environment.NewLine;
                     temp = temp.Replace("/* DESERIALIZEResp */", deserializeResp);
-                    #endregion
+
+                    #endregion DeSerializeRespFunc
+
                     writer.Write(temp);
                     writer.Close();
                     classFile.Close();
                 }
             }
         }
+
         public static string FormatName(string input)
         {
             if (String.IsNullOrEmpty(input))
@@ -217,11 +245,13 @@ namespace TeleSharp.Generator
             }
             return input.First().ToString().ToUpper() + input.Substring(1);
         }
+
         public static string CheckForKeyword(string name)
         {
             if (keywords.Contains(name)) return "@" + name;
             return name;
         }
+
         public static string GetNameofClass(string type, bool isinterface = false, bool ismethod = false)
         {
             if (!ismethod)
@@ -243,18 +273,22 @@ namespace TeleSharp.Generator
                     return "TLRequest" + FormatName(type);
             }
         }
+
         private static bool IsFlagBase(string type)
         {
             return type.IndexOf("?") != -1;
         }
+
         private static int GetBitMask(string type)
         {
             return (int)Math.Pow((double)2, (double)int.Parse(type.Split('?')[0].Split('.')[1]));
         }
+
         private static bool IsTrueFlag(string type)
         {
             return type.Split('?')[1] == "true";
         }
+
         public static string GetNameSpace(string type)
         {
             if (type.IndexOf('.') != -1)
@@ -262,6 +296,7 @@ namespace TeleSharp.Generator
             else
                 return "TeleSharp.TL";
         }
+
         public static string CheckForFlagBase(string type, string result)
         {
             if (type.IndexOf('?') == -1)
@@ -274,6 +309,7 @@ namespace TeleSharp.Generator
                 else return result;
             }
         }
+
         public static string GetTypeName(string type)
         {
             switch (type.ToLower())
@@ -281,21 +317,29 @@ namespace TeleSharp.Generator
                 case "#":
                 case "int":
                     return "int";
+
                 case "uint":
                     return "uint";
+
                 case "long":
                     return "long";
+
                 case "double":
                     return "double";
+
                 case "string":
                     return "string";
+
                 case "bytes":
                     return "byte[]";
+
                 case "true":
                 case "bool":
                     return "bool";
+
                 case "!x":
                     return "TLObject";
+
                 case "x":
                     return "TLObject";
             }
@@ -306,10 +350,8 @@ namespace TeleSharp.Generator
             if (type.ToLower().Contains("inputcontact"))
                 return "TLInputPhoneContact";
 
-
             if (type.IndexOf('.') != -1 && type.IndexOf('?') == -1)
             {
-
                 if (interfacesList.Any(x => x.ToLower() == (type).ToLower()))
                     return FormatName(type.Split('.')[0]) + "." + "TLAbs" + type.Split('.')[1];
                 else if (classesList.Any(x => x.ToLower() == (type).ToLower()))
@@ -330,9 +372,8 @@ namespace TeleSharp.Generator
             {
                 return GetTypeName(type.Split('?')[1]);
             }
-
-
         }
+
         public static string LookTypeInLists(string src)
         {
             if (interfacesList.Any(x => x.ToLower() == src.ToLower()))
@@ -342,6 +383,7 @@ namespace TeleSharp.Generator
             else
                 return src;
         }
+
         public static string WriteWriteCode(Param p, bool flag = false)
         {
             switch (p.type.ToLower())
@@ -377,6 +419,7 @@ namespace TeleSharp.Generator
                     }
             }
         }
+
         public static string WriteReadCode(Param p)
         {
             switch (p.type.ToLower())
@@ -419,6 +462,7 @@ namespace TeleSharp.Generator
                     }
             }
         }
+
         public static FileStream MakeFile(string path)
         {
             if (!Directory.Exists(Path.GetDirectoryName(path)))
@@ -428,5 +472,4 @@ namespace TeleSharp.Generator
             return File.OpenWrite(path);
         }
     }
-
 }

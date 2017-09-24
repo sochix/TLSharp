@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Updates
 {
     [TLObject(630429265)]
@@ -25,12 +20,10 @@ namespace TeleSharp.TL.Updates
         public int qts { get; set; }
         public Updates.TLAbsDifference Response { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = pts_total_limit != null ? (flags | 1) : (flags & ~1);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -44,7 +37,6 @@ namespace TeleSharp.TL.Updates
 
             date = br.ReadInt32();
             qts = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -57,12 +49,11 @@ namespace TeleSharp.TL.Updates
                 bw.Write(pts_total_limit.Value);
             bw.Write(date);
             bw.Write(qts);
-
         }
+
         public override void deserializeResponse(BinaryReader br)
         {
             Response = (Updates.TLAbsDifference)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

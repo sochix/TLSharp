@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1844103547)]
@@ -27,12 +22,10 @@ namespace TeleSharp.TL
         public string provider { get; set; }
         public string start_param { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = photo != null ? (flags | 1) : (flags & ~1);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -49,7 +42,6 @@ namespace TeleSharp.TL
             payload = BytesUtil.Deserialize(br);
             provider = StringUtil.Deserialize(br);
             start_param = StringUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -65,7 +57,6 @@ namespace TeleSharp.TL
             BytesUtil.Serialize(payload, bw);
             StringUtil.Serialize(provider, bw);
             StringUtil.Serialize(start_param, bw);
-
         }
     }
 }

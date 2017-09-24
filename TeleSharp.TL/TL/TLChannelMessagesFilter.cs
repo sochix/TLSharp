@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-847783593)]
@@ -22,12 +17,10 @@ namespace TeleSharp.TL
         public bool exclude_new_messages { get; set; }
         public TLVector<TLMessageRange> ranges { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = exclude_new_messages ? (flags | 2) : (flags & ~2);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -35,7 +28,6 @@ namespace TeleSharp.TL
             flags = br.ReadInt32();
             exclude_new_messages = (flags & 2) != 0;
             ranges = (TLVector<TLMessageRange>)ObjectUtils.DeserializeVector<TLMessageRange>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -45,7 +37,6 @@ namespace TeleSharp.TL
             bw.Write(flags);
 
             ObjectUtils.SerializeObject(ranges, bw);
-
         }
     }
 }

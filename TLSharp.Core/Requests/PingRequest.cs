@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using TeleSharp.TL;
 using TLSharp.Core.Utils;
 
 namespace TLSharp.Core.Requests

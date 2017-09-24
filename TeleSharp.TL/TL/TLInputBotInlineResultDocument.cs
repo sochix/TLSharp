@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-459324)]
@@ -26,13 +21,11 @@ namespace TeleSharp.TL
         public TLAbsInputDocument document { get; set; }
         public TLAbsInputBotInlineMessage send_message { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = title != null ? (flags | 2) : (flags & ~2);
             flags = description != null ? (flags | 4) : (flags & ~4);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -52,7 +45,6 @@ namespace TeleSharp.TL
 
             document = (TLAbsInputDocument)ObjectUtils.DeserializeObject(br);
             send_message = (TLAbsInputBotInlineMessage)ObjectUtils.DeserializeObject(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -68,7 +60,6 @@ namespace TeleSharp.TL
                 StringUtil.Serialize(description, bw);
             ObjectUtils.SerializeObject(document, bw);
             ObjectUtils.SerializeObject(send_message, bw);
-
         }
     }
 }

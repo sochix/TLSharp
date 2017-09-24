@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(1728035348)]
@@ -29,14 +24,12 @@ namespace TeleSharp.TL
         public int? pts { get; set; }
         public TLAbsDraftMessage draft { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = pinned ? (flags | 4) : (flags & ~4);
             flags = pts != null ? (flags | 1) : (flags & ~1);
             flags = draft != null ? (flags | 2) : (flags & ~2);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -58,8 +51,6 @@ namespace TeleSharp.TL
                 draft = (TLAbsDraftMessage)ObjectUtils.DeserializeObject(br);
             else
                 draft = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -78,7 +69,6 @@ namespace TeleSharp.TL
                 bw.Write(pts.Value);
             if ((flags & 2) != 0)
                 ObjectUtils.SerializeObject(draft, bw);
-
         }
     }
 }

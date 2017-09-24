@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Contacts
 {
     [TLObject(986597452)]
@@ -22,10 +17,8 @@ namespace TeleSharp.TL.Contacts
         public TLAbsContactLink foreign_link { get; set; }
         public TLAbsUser user { get; set; }
 
-
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -33,7 +26,6 @@ namespace TeleSharp.TL.Contacts
             my_link = (TLAbsContactLink)ObjectUtils.DeserializeObject(br);
             foreign_link = (TLAbsContactLink)ObjectUtils.DeserializeObject(br);
             user = (TLAbsUser)ObjectUtils.DeserializeObject(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -42,7 +34,6 @@ namespace TeleSharp.TL.Contacts
             ObjectUtils.SerializeObject(my_link, bw);
             ObjectUtils.SerializeObject(foreign_link, bw);
             ObjectUtils.SerializeObject(user, bw);
-
         }
     }
 }

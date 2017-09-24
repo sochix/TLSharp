@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(253890367)]
@@ -30,7 +25,6 @@ namespace TeleSharp.TL
         public TLBotInfo bot_info { get; set; }
         public int common_chats_count { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
@@ -40,7 +34,6 @@ namespace TeleSharp.TL
             flags = about != null ? (flags | 2) : (flags & ~2);
             flags = profile_photo != null ? (flags | 4) : (flags & ~4);
             flags = bot_info != null ? (flags | 8) : (flags & ~8);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -68,7 +61,6 @@ namespace TeleSharp.TL
                 bot_info = null;
 
             common_chats_count = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -76,8 +68,6 @@ namespace TeleSharp.TL
             bw.Write(Constructor);
             ComputeFlags();
             bw.Write(flags);
-
-
 
             ObjectUtils.SerializeObject(user, bw);
             if ((flags & 2) != 0)
@@ -89,7 +79,6 @@ namespace TeleSharp.TL
             if ((flags & 8) != 0)
                 ObjectUtils.SerializeObject(bot_info, bw);
             bw.Write(common_chats_count);
-
         }
     }
 }

@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Auth
 {
     [TLObject(-841733627)]
@@ -24,10 +19,8 @@ namespace TeleSharp.TL.Auth
         public byte[] encrypted_message { get; set; }
         public bool Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -36,7 +29,6 @@ namespace TeleSharp.TL.Auth
             nonce = br.ReadInt64();
             expires_at = br.ReadInt32();
             encrypted_message = BytesUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -46,12 +38,11 @@ namespace TeleSharp.TL.Auth
             bw.Write(nonce);
             bw.Write(expires_at);
             BytesUtil.Serialize(encrypted_message, bw);
-
         }
+
         public override void deserializeResponse(BinaryReader br)
         {
             Response = BoolUtil.Deserialize(br);
-
         }
     }
 }

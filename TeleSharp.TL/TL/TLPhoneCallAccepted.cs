@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(1828732223)]
@@ -26,10 +21,8 @@ namespace TeleSharp.TL
         public byte[] g_b { get; set; }
         public TLPhoneCallProtocol protocol { get; set; }
 
-
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -41,7 +34,6 @@ namespace TeleSharp.TL
             participant_id = br.ReadInt32();
             g_b = BytesUtil.Deserialize(br);
             protocol = (TLPhoneCallProtocol)ObjectUtils.DeserializeObject(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -54,7 +46,6 @@ namespace TeleSharp.TL
             bw.Write(participant_id);
             BytesUtil.Serialize(g_b, bw);
             ObjectUtils.SerializeObject(protocol, bw);
-
         }
     }
 }

@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Auth
 {
     [TLObject(453408308)]
@@ -25,10 +20,8 @@ namespace TeleSharp.TL.Auth
         public string last_name { get; set; }
         public Auth.TLAuthorization Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -38,7 +31,6 @@ namespace TeleSharp.TL.Auth
             phone_code = StringUtil.Deserialize(br);
             first_name = StringUtil.Deserialize(br);
             last_name = StringUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -49,12 +41,11 @@ namespace TeleSharp.TL.Auth
             StringUtil.Serialize(phone_code, bw);
             StringUtil.Serialize(first_name, bw);
             StringUtil.Serialize(last_name, bw);
-
         }
+
         public override void deserializeResponse(BinaryReader br)
         {
             Response = (Auth.TLAuthorization)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Upload
 {
     [TLObject(157948117)]
@@ -22,10 +17,8 @@ namespace TeleSharp.TL.Upload
         public int mtime { get; set; }
         public byte[] bytes { get; set; }
 
-
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -33,7 +26,6 @@ namespace TeleSharp.TL.Upload
             type = (Storage.TLAbsFileType)ObjectUtils.DeserializeObject(br);
             mtime = br.ReadInt32();
             bytes = BytesUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -42,7 +34,6 @@ namespace TeleSharp.TL.Upload
             ObjectUtils.SerializeObject(type, bw);
             bw.Write(mtime);
             BytesUtil.Serialize(bytes, bw);
-
         }
     }
 }

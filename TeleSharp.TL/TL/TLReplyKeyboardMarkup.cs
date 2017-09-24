@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(889353612)]
@@ -24,14 +19,12 @@ namespace TeleSharp.TL
         public bool selective { get; set; }
         public TLVector<TLKeyboardButtonRow> rows { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = resize ? (flags | 1) : (flags & ~1);
             flags = single_use ? (flags | 2) : (flags & ~2);
             flags = selective ? (flags | 4) : (flags & ~4);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -41,7 +34,6 @@ namespace TeleSharp.TL
             single_use = (flags & 2) != 0;
             selective = (flags & 4) != 0;
             rows = (TLVector<TLKeyboardButtonRow>)ObjectUtils.DeserializeVector<TLKeyboardButtonRow>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -50,10 +42,7 @@ namespace TeleSharp.TL
             ComputeFlags();
             bw.Write(flags);
 
-
-
             ObjectUtils.SerializeObject(rows, bw);
-
         }
     }
 }

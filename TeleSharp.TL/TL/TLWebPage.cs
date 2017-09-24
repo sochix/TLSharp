@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(1594340540)]
@@ -37,7 +32,6 @@ namespace TeleSharp.TL
         public TLAbsDocument document { get; set; }
         public TLAbsPage cached_page { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
@@ -54,7 +48,6 @@ namespace TeleSharp.TL
             flags = author != null ? (flags | 256) : (flags & ~256);
             flags = document != null ? (flags | 512) : (flags & ~512);
             flags = cached_page != null ? (flags | 1024) : (flags & ~1024);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -128,8 +121,6 @@ namespace TeleSharp.TL
                 cached_page = (TLAbsPage)ObjectUtils.DeserializeObject(br);
             else
                 cached_page = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -167,7 +158,6 @@ namespace TeleSharp.TL
                 ObjectUtils.SerializeObject(document, bw);
             if ((flags & 1024) != 0)
                 ObjectUtils.SerializeObject(cached_page, bw);
-
         }
     }
 }

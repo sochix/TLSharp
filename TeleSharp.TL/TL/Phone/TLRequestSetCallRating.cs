@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Phone
 {
     [TLObject(475228724)]
@@ -23,10 +18,8 @@ namespace TeleSharp.TL.Phone
         public string comment { get; set; }
         public TLAbsUpdates Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -34,7 +27,6 @@ namespace TeleSharp.TL.Phone
             peer = (TLInputPhoneCall)ObjectUtils.DeserializeObject(br);
             rating = br.ReadInt32();
             comment = StringUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -43,12 +35,11 @@ namespace TeleSharp.TL.Phone
             ObjectUtils.SerializeObject(peer, bw);
             bw.Write(rating);
             StringUtil.Serialize(comment, bw);
-
         }
+
         public override void deserializeResponse(BinaryReader br)
         {
             Response = (TLAbsUpdates)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

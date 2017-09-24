@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(1406570614)]
@@ -23,10 +18,8 @@ namespace TeleSharp.TL
         public int local_id { get; set; }
         public long secret { get; set; }
 
-
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -35,7 +28,6 @@ namespace TeleSharp.TL
             volume_id = br.ReadInt64();
             local_id = br.ReadInt32();
             secret = br.ReadInt64();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -45,7 +37,6 @@ namespace TeleSharp.TL
             bw.Write(volume_id);
             bw.Write(local_id);
             bw.Write(secret);
-
         }
     }
 }

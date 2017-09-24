@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1660057)]
@@ -30,10 +25,8 @@ namespace TeleSharp.TL
         public TLVector<TLPhoneConnection> alternative_connections { get; set; }
         public int start_date { get; set; }
 
-
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -49,7 +42,6 @@ namespace TeleSharp.TL
             connection = (TLPhoneConnection)ObjectUtils.DeserializeObject(br);
             alternative_connections = (TLVector<TLPhoneConnection>)ObjectUtils.DeserializeVector<TLPhoneConnection>(br);
             start_date = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -66,7 +58,6 @@ namespace TeleSharp.TL
             ObjectUtils.SerializeObject(connection, bw);
             ObjectUtils.SerializeObject(alternative_connections, bw);
             bw.Write(start_date);
-
         }
     }
 }

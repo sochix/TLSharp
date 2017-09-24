@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Auth
 {
     [TLObject(-2035355412)]
@@ -26,13 +21,11 @@ namespace TeleSharp.TL.Auth
         public string api_hash { get; set; }
         public Auth.TLSentCode Response { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = allow_flashcall ? (flags | 1) : (flags & ~1);
             flags = current_number != null ? (flags | 1) : (flags & ~1);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -47,7 +40,6 @@ namespace TeleSharp.TL.Auth
 
             api_id = br.ReadInt32();
             api_hash = StringUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -61,12 +53,11 @@ namespace TeleSharp.TL.Auth
                 BoolUtil.Serialize(current_number.Value, bw);
             bw.Write(api_id);
             StringUtil.Serialize(api_hash, bw);
-
         }
+
         public override void deserializeResponse(BinaryReader br)
         {
             Response = (Auth.TLSentCode)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

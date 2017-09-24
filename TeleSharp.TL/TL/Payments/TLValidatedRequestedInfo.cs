@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Payments
 {
     [TLObject(-784000893)]
@@ -22,13 +17,11 @@ namespace TeleSharp.TL.Payments
         public string id { get; set; }
         public TLVector<TLShippingOption> shipping_options { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = id != null ? (flags | 1) : (flags & ~1);
             flags = shipping_options != null ? (flags | 2) : (flags & ~2);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -43,8 +36,6 @@ namespace TeleSharp.TL.Payments
                 shipping_options = (TLVector<TLShippingOption>)ObjectUtils.DeserializeVector<TLShippingOption>(br);
             else
                 shipping_options = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -56,7 +47,6 @@ namespace TeleSharp.TL.Payments
                 StringUtil.Serialize(id, bw);
             if ((flags & 2) != 0)
                 ObjectUtils.SerializeObject(shipping_options, bw);
-
         }
     }
 }

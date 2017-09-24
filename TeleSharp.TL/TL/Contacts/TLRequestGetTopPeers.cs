@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Contacts
 {
     [TLObject(-728224331)]
@@ -30,7 +25,6 @@ namespace TeleSharp.TL.Contacts
         public int hash { get; set; }
         public Contacts.TLAbsTopPeers Response { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
@@ -40,7 +34,6 @@ namespace TeleSharp.TL.Contacts
             flags = phone_calls ? (flags | 8) : (flags & ~8);
             flags = groups ? (flags | 1024) : (flags & ~1024);
             flags = channels ? (flags | 32768) : (flags & ~32768);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -55,7 +48,6 @@ namespace TeleSharp.TL.Contacts
             offset = br.ReadInt32();
             limit = br.ReadInt32();
             hash = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -64,20 +56,14 @@ namespace TeleSharp.TL.Contacts
             ComputeFlags();
             bw.Write(flags);
 
-
-
-
-
-
             bw.Write(offset);
             bw.Write(limit);
             bw.Write(hash);
-
         }
+
         public override void deserializeResponse(BinaryReader br)
         {
             Response = (Contacts.TLAbsTopPeers)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

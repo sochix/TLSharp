@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(462375633)]
@@ -27,12 +22,10 @@ namespace TeleSharp.TL
         public TLPhoneCallProtocol protocol { get; set; }
         public int? receive_date { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = receive_date != null ? (flags | 1) : (flags & ~1);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -48,8 +41,6 @@ namespace TeleSharp.TL
                 receive_date = br.ReadInt32();
             else
                 receive_date = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -65,7 +56,6 @@ namespace TeleSharp.TL
             ObjectUtils.SerializeObject(protocol, bw);
             if ((flags & 1) != 0)
                 bw.Write(receive_date.Value);
-
         }
     }
 }

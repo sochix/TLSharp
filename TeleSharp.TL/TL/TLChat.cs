@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-652419756)]
@@ -33,7 +28,6 @@ namespace TeleSharp.TL
         public int version { get; set; }
         public TLAbsInputChannel migrated_to { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
@@ -44,7 +38,6 @@ namespace TeleSharp.TL
             flags = admin ? (flags | 16) : (flags & ~16);
             flags = deactivated ? (flags | 32) : (flags & ~32);
             flags = migrated_to != null ? (flags | 64) : (flags & ~64);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -66,8 +59,6 @@ namespace TeleSharp.TL
                 migrated_to = (TLAbsInputChannel)ObjectUtils.DeserializeObject(br);
             else
                 migrated_to = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -75,11 +66,6 @@ namespace TeleSharp.TL
             bw.Write(Constructor);
             ComputeFlags();
             bw.Write(flags);
-
-
-
-
-
 
             bw.Write(id);
             StringUtil.Serialize(title, bw);
@@ -89,7 +75,6 @@ namespace TeleSharp.TL
             bw.Write(version);
             if ((flags & 64) != 0)
                 ObjectUtils.SerializeObject(migrated_to, bw);
-
         }
     }
 }

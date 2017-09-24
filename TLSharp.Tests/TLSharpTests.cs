@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
@@ -11,7 +10,6 @@ using TeleSharp.TL;
 using TeleSharp.TL.Messages;
 using TLSharp.Core;
 using TLSharp.Core.Network;
-using TLSharp.Core.Requests;
 using TLSharp.Core.Utils;
 
 namespace TLSharp.Tests
@@ -38,7 +36,7 @@ namespace TLSharp.Tests
 
         private int ApiId { get; set; }
 
-        class Assert
+        private class Assert
         {
             static internal void IsNotNull(object obj)
             {
@@ -143,7 +141,7 @@ namespace TLSharp.Tests
                 var password = await client.GetPasswordSetting();
                 var password_str = PasswordToAuthenticate;
 
-                user = await client.MakeAuthWithPasswordAsync(password,password_str);
+                user = await client.MakeAuthWithPasswordAsync(password, password_str);
             }
             catch (InvalidPhoneCodeException ex)
             {
@@ -191,7 +189,7 @@ namespace TLSharp.Tests
 
             await client.ConnectAsync();
 
-            var dialogs = (TLDialogs) await client.GetUserDialogsAsync();
+            var dialogs = (TLDialogs)await client.GetUserDialogsAsync();
             var chat = dialogs.chats.lists
                 .OfType<TLChannel>()
                 .FirstOrDefault(c => c.title == "TestGroup");
@@ -268,7 +266,7 @@ namespace TLSharp.Tests
                     version = document.version
                 },
                 document.size);
-            
+
             Assert.IsTrue(resFile.bytes.Length > 0);
         }
 
@@ -283,9 +281,9 @@ namespace TLSharp.Tests
             var user = result.users.lists
                 .OfType<TLUser>()
                 .FirstOrDefault(x => x.id == 5880094);
-    
+
             var photo = ((TLUserProfilePhoto)user.photo);
-            var photoLocation = (TLFileLocation) photo.photo_big;
+            var photoLocation = (TLFileLocation)photo.photo_big;
 
             var resFile = await client.GetFile(new TLInputFileLocation()
             {
@@ -294,7 +292,7 @@ namespace TLSharp.Tests
                 volume_id = photoLocation.volume_id
             }, 1024);
 
-            var res = await client.GetUserDialogsAsync(); 
+            var res = await client.GetUserDialogsAsync();
 
             Assert.IsTrue(resFile.bytes.Length > 0);
         }

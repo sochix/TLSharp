@@ -17,6 +17,7 @@ namespace TLSharp.Core.MTProto.Crypto
 *
 * @return the size, in bytes, of the digest produced by this message digest.
 */
+
         int GetDigestSize();
 
         /**
@@ -24,6 +25,7 @@ namespace TLSharp.Core.MTProto.Crypto
 *
 * @return the size, in bytes, of the internal buffer used by this digest.
 */
+
         int GetByteLength();
 
         /**
@@ -31,6 +33,7 @@ namespace TLSharp.Core.MTProto.Crypto
 *
 * @param inByte the input byte to be entered.
 */
+
         void Update(byte input);
 
         /**
@@ -40,6 +43,7 @@ namespace TLSharp.Core.MTProto.Crypto
 * @param inOff the offset into the byte array where the data starts.
 * @param len the length of the data.
 */
+
         void BlockUpdate(byte[] input, int inOff, int length);
 
         /**
@@ -49,17 +53,18 @@ namespace TLSharp.Core.MTProto.Crypto
 * @param output the array the digest is to be copied into.
 * @param outOff the offset into the out array the digest is to start at.
 */
+
         int DoFinal(byte[] output, int outOff);
 
         /**
 * reset the digest back to it's initial state.
 */
+
         void Reset();
     }
 
     public class MD5
     {
-
         public static string GetMd5String(string data)
         {
             return BitConverter.ToString(GetMd5Bytes(Encoding.UTF8.GetBytes(data))).Replace("-", "").ToLower();
@@ -184,7 +189,9 @@ namespace TLSharp.Core.MTProto.Crypto
         }
 
         public abstract string AlgorithmName { get; }
+
         public abstract int GetDigestSize();
+
         public abstract int DoFinal(byte[] output, int outOff);
 
         public void Finish()
@@ -202,7 +209,9 @@ namespace TLSharp.Core.MTProto.Crypto
         }
 
         internal abstract void ProcessWord(byte[] input, int inOff);
+
         internal abstract void ProcessLength(long bitLength);
+
         internal abstract void ProcessBlock();
     }
 
@@ -215,6 +224,7 @@ namespace TLSharp.Core.MTProto.Crypto
         // round 1 left rotates
         //
         private static readonly int S11 = 7;
+
         private static readonly int S12 = 12;
         private static readonly int S13 = 17;
         private static readonly int S14 = 22;
@@ -223,6 +233,7 @@ namespace TLSharp.Core.MTProto.Crypto
         // round 2 left rotates
         //
         private static readonly int S21 = 5;
+
         private static readonly int S22 = 9;
         private static readonly int S23 = 14;
         private static readonly int S24 = 20;
@@ -231,6 +242,7 @@ namespace TLSharp.Core.MTProto.Crypto
         // round 3 left rotates
         //
         private static readonly int S31 = 4;
+
         private static readonly int S32 = 11;
         private static readonly int S33 = 16;
         private static readonly int S34 = 23;
@@ -239,6 +251,7 @@ namespace TLSharp.Core.MTProto.Crypto
         // round 4 left rotates
         //
         private static readonly int S41 = 6;
+
         private static readonly int S42 = 10;
         private static readonly int S43 = 15;
         private static readonly int S44 = 21;

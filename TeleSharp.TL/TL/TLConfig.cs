@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-882895228)]
@@ -50,13 +45,11 @@ namespace TeleSharp.TL
         public string me_url_prefix { get; set; }
         public TLVector<TLDisabledFeature> disabled_features { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = phonecalls_enabled ? (flags | 2) : (flags & ~2);
             flags = tmp_sessions != null ? (flags | 1) : (flags & ~1);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -96,7 +89,6 @@ namespace TeleSharp.TL
             call_packet_timeout_ms = br.ReadInt32();
             me_url_prefix = StringUtil.Deserialize(br);
             disabled_features = (TLVector<TLDisabledFeature>)ObjectUtils.DeserializeVector<TLDisabledFeature>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -135,7 +127,6 @@ namespace TeleSharp.TL
             bw.Write(call_packet_timeout_ms);
             StringUtil.Serialize(me_url_prefix, bw);
             ObjectUtils.SerializeObject(disabled_features, bw);
-
         }
     }
 }

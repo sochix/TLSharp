@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1857044719)]
@@ -34,7 +29,6 @@ namespace TeleSharp.TL
         public int? reply_to_msg_id { get; set; }
         public TLVector<TLAbsMessageEntity> entities { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
@@ -46,7 +40,6 @@ namespace TeleSharp.TL
             flags = via_bot_id != null ? (flags | 2048) : (flags & ~2048);
             flags = reply_to_msg_id != null ? (flags | 8) : (flags & ~8);
             flags = entities != null ? (flags | 128) : (flags & ~128);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -81,8 +74,6 @@ namespace TeleSharp.TL
                 entities = (TLVector<TLAbsMessageEntity>)ObjectUtils.DeserializeVector<TLAbsMessageEntity>(br);
             else
                 entities = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -90,9 +81,6 @@ namespace TeleSharp.TL
             bw.Write(Constructor);
             ComputeFlags();
             bw.Write(flags);
-
-
-
 
             bw.Write(id);
             bw.Write(user_id);
@@ -108,7 +96,6 @@ namespace TeleSharp.TL
                 bw.Write(reply_to_msg_id.Value);
             if ((flags & 128) != 0)
                 ObjectUtils.SerializeObject(entities, bw);
-
         }
     }
 }

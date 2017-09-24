@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1036396922)]
@@ -21,17 +16,14 @@ namespace TeleSharp.TL
         public string url { get; set; }
         public long access_hash { get; set; }
 
-
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             url = StringUtil.Deserialize(br);
             access_hash = br.ReadInt64();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -39,7 +31,6 @@ namespace TeleSharp.TL
             bw.Write(Constructor);
             StringUtil.Serialize(url, bw);
             bw.Write(access_hash);
-
         }
     }
 }

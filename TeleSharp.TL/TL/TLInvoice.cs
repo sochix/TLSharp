@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1022713000)]
@@ -28,7 +23,6 @@ namespace TeleSharp.TL
         public string currency { get; set; }
         public TLVector<TLLabeledPrice> prices { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
@@ -38,7 +32,6 @@ namespace TeleSharp.TL
             flags = email_requested ? (flags | 8) : (flags & ~8);
             flags = shipping_address_requested ? (flags | 16) : (flags & ~16);
             flags = flexible ? (flags | 32) : (flags & ~32);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -52,7 +45,6 @@ namespace TeleSharp.TL
             flexible = (flags & 32) != 0;
             currency = StringUtil.Deserialize(br);
             prices = (TLVector<TLLabeledPrice>)ObjectUtils.DeserializeVector<TLLabeledPrice>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -61,14 +53,8 @@ namespace TeleSharp.TL
             ComputeFlags();
             bw.Write(flags);
 
-
-
-
-
-
             StringUtil.Serialize(currency, bw);
             ObjectUtils.SerializeObject(prices, bw);
-
         }
     }
 }

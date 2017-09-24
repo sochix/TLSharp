@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(163765653)]
@@ -24,13 +19,11 @@ namespace TeleSharp.TL.Messages
         public string error { get; set; }
         public bool Response { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = success ? (flags | 2) : (flags & ~2);
             flags = error != null ? (flags | 1) : (flags & ~1);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -42,8 +35,6 @@ namespace TeleSharp.TL.Messages
                 error = StringUtil.Deserialize(br);
             else
                 error = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -55,12 +46,11 @@ namespace TeleSharp.TL.Messages
             bw.Write(query_id);
             if ((flags & 1) != 0)
                 StringUtil.Serialize(error, bw);
-
         }
+
         public override void deserializeResponse(BinaryReader br)
         {
             Response = BoolUtil.Deserialize(br);
-
         }
     }
 }

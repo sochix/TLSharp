@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(-1269012015)]
@@ -22,10 +17,8 @@ namespace TeleSharp.TL.Messages
         public int pts_count { get; set; }
         public int offset { get; set; }
 
-
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -33,7 +26,6 @@ namespace TeleSharp.TL.Messages
             pts = br.ReadInt32();
             pts_count = br.ReadInt32();
             offset = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -42,7 +34,6 @@ namespace TeleSharp.TL.Messages
             bw.Write(pts);
             bw.Write(pts_count);
             bw.Write(offset);
-
         }
     }
 }

@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1009430225)]
@@ -37,7 +32,6 @@ namespace TeleSharp.TL
         public int? migrated_from_max_id { get; set; }
         public int? pinned_msg_id { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
@@ -49,7 +43,6 @@ namespace TeleSharp.TL
             flags = migrated_from_chat_id != null ? (flags | 16) : (flags & ~16);
             flags = migrated_from_max_id != null ? (flags | 16) : (flags & ~16);
             flags = pinned_msg_id != null ? (flags | 32) : (flags & ~32);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -95,8 +88,6 @@ namespace TeleSharp.TL
                 pinned_msg_id = br.ReadInt32();
             else
                 pinned_msg_id = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -104,7 +95,6 @@ namespace TeleSharp.TL
             bw.Write(Constructor);
             ComputeFlags();
             bw.Write(flags);
-
 
             bw.Write(id);
             StringUtil.Serialize(about, bw);
@@ -127,7 +117,6 @@ namespace TeleSharp.TL
                 bw.Write(migrated_from_max_id.Value);
             if ((flags & 32) != 0)
                 bw.Write(pinned_msg_id.Value);
-
         }
     }
 }

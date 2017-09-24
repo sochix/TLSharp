@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1063525281)]
@@ -38,7 +33,6 @@ namespace TeleSharp.TL
         public int? views { get; set; }
         public int? edit_date { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
@@ -56,7 +50,6 @@ namespace TeleSharp.TL
             flags = entities != null ? (flags | 128) : (flags & ~128);
             flags = views != null ? (flags | 1024) : (flags & ~1024);
             flags = edit_date != null ? (flags | 32768) : (flags & ~32768);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -115,8 +108,6 @@ namespace TeleSharp.TL
                 edit_date = br.ReadInt32();
             else
                 edit_date = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -124,10 +115,6 @@ namespace TeleSharp.TL
             bw.Write(Constructor);
             ComputeFlags();
             bw.Write(flags);
-
-
-
-
 
             bw.Write(id);
             if ((flags & 256) != 0)
@@ -151,7 +138,6 @@ namespace TeleSharp.TL
                 bw.Write(views.Value);
             if ((flags & 32768) != 0)
                 bw.Write(edit_date.Value);
-
         }
     }
 }

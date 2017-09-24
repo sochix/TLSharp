@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(-993483427)]
@@ -23,10 +18,8 @@ namespace TeleSharp.TL.Messages
         public bool increment { get; set; }
         public TLVector<int> Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -34,7 +27,6 @@ namespace TeleSharp.TL.Messages
             peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
             id = (TLVector<int>)ObjectUtils.DeserializeVector<int>(br);
             increment = BoolUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -43,12 +35,11 @@ namespace TeleSharp.TL.Messages
             ObjectUtils.SerializeObject(peer, bw);
             ObjectUtils.SerializeObject(id, bw);
             BoolUtil.Serialize(increment, bw);
-
         }
+
         public override void deserializeResponse(BinaryReader br)
         {
             Response = (TLVector<int>)ObjectUtils.DeserializeVector<int>(br);
-
         }
     }
 }

@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(1888354709)]
@@ -28,14 +23,12 @@ namespace TeleSharp.TL.Messages
         public TLAbsInputPeer to_peer { get; set; }
         public TLAbsUpdates Response { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = silent ? (flags | 32) : (flags & ~32);
             flags = background ? (flags | 64) : (flags & ~64);
             flags = with_my_score ? (flags | 256) : (flags & ~256);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -48,7 +41,6 @@ namespace TeleSharp.TL.Messages
             id = (TLVector<int>)ObjectUtils.DeserializeVector<int>(br);
             random_id = (TLVector<long>)ObjectUtils.DeserializeVector<long>(br);
             to_peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -57,18 +49,15 @@ namespace TeleSharp.TL.Messages
             ComputeFlags();
             bw.Write(flags);
 
-
-
             ObjectUtils.SerializeObject(from_peer, bw);
             ObjectUtils.SerializeObject(id, bw);
             ObjectUtils.SerializeObject(random_id, bw);
             ObjectUtils.SerializeObject(to_peer, bw);
-
         }
+
         public override void deserializeResponse(BinaryReader br)
         {
             Response = (TLAbsUpdates)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

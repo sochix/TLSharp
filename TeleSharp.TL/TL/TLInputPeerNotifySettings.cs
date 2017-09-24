@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(949182130)]
@@ -24,13 +19,11 @@ namespace TeleSharp.TL
         public int mute_until { get; set; }
         public string sound { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = show_previews ? (flags | 1) : (flags & ~1);
             flags = silent ? (flags | 2) : (flags & ~2);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -40,7 +33,6 @@ namespace TeleSharp.TL
             silent = (flags & 2) != 0;
             mute_until = br.ReadInt32();
             sound = StringUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -49,10 +41,8 @@ namespace TeleSharp.TL
             ComputeFlags();
             bw.Write(flags);
 
-
             bw.Write(mute_until);
             StringUtil.Serialize(sound, bw);
-
         }
     }
 }

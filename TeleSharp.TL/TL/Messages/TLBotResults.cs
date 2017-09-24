@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(-858565059)]
@@ -26,14 +21,12 @@ namespace TeleSharp.TL.Messages
         public TLVector<TLAbsBotInlineResult> results { get; set; }
         public int cache_time { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = gallery ? (flags | 1) : (flags & ~1);
             flags = next_offset != null ? (flags | 2) : (flags & ~2);
             flags = switch_pm != null ? (flags | 4) : (flags & ~4);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -53,7 +46,6 @@ namespace TeleSharp.TL.Messages
 
             results = (TLVector<TLAbsBotInlineResult>)ObjectUtils.DeserializeVector<TLAbsBotInlineResult>(br);
             cache_time = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -69,7 +61,6 @@ namespace TeleSharp.TL.Messages
                 ObjectUtils.SerializeObject(switch_pm, bw);
             ObjectUtils.SerializeObject(results, bw);
             bw.Write(cache_time);
-
         }
     }
 }

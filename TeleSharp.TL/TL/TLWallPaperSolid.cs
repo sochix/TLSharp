@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(1662091044)]
@@ -23,10 +18,8 @@ namespace TeleSharp.TL
         public int bg_color { get; set; }
         public int color { get; set; }
 
-
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -35,7 +28,6 @@ namespace TeleSharp.TL
             title = StringUtil.Deserialize(br);
             bg_color = br.ReadInt32();
             color = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -45,7 +37,6 @@ namespace TeleSharp.TL
             StringUtil.Serialize(title, bw);
             bw.Write(bg_color);
             bw.Write(color);
-
         }
     }
 }

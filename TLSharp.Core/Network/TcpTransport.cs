@@ -94,7 +94,6 @@ namespace TLSharp.Core.Network
             }
         }
 
-
         public void Dispose()
         {
             if (_tcpClient.Connected)

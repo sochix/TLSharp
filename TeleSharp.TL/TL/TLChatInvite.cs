@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-613092008)]
@@ -28,7 +23,6 @@ namespace TeleSharp.TL
         public int participants_count { get; set; }
         public TLVector<TLAbsUser> participants { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
@@ -37,7 +31,6 @@ namespace TeleSharp.TL
             flags = @public ? (flags | 4) : (flags & ~4);
             flags = megagroup ? (flags | 8) : (flags & ~8);
             flags = participants != null ? (flags | 16) : (flags & ~16);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -54,8 +47,6 @@ namespace TeleSharp.TL
                 participants = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
             else
                 participants = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -64,15 +55,11 @@ namespace TeleSharp.TL
             ComputeFlags();
             bw.Write(flags);
 
-
-
-
             StringUtil.Serialize(title, bw);
             ObjectUtils.SerializeObject(photo, bw);
             bw.Write(participants_count);
             if ((flags & 16) != 0)
                 ObjectUtils.SerializeObject(participants, bw);
-
         }
     }
 }

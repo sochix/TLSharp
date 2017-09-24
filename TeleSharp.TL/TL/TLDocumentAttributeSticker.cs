@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(1662637586)]
@@ -24,13 +19,11 @@ namespace TeleSharp.TL
         public TLAbsInputStickerSet stickerset { get; set; }
         public TLMaskCoords mask_coords { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = mask ? (flags | 2) : (flags & ~2);
             flags = mask_coords != null ? (flags | 1) : (flags & ~1);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -43,8 +36,6 @@ namespace TeleSharp.TL
                 mask_coords = (TLMaskCoords)ObjectUtils.DeserializeObject(br);
             else
                 mask_coords = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -57,7 +48,6 @@ namespace TeleSharp.TL
             ObjectUtils.SerializeObject(stickerset, bw);
             if ((flags & 1) != 0)
                 ObjectUtils.SerializeObject(mask_coords, bw);
-
         }
     }
 }

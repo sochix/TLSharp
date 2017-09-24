@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1642487306)]
@@ -31,7 +26,6 @@ namespace TeleSharp.TL
         public int date { get; set; }
         public TLAbsMessageAction action { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
@@ -42,7 +36,6 @@ namespace TeleSharp.TL
             flags = post ? (flags | 16384) : (flags & ~16384);
             flags = from_id != null ? (flags | 256) : (flags & ~256);
             flags = reply_to_msg_id != null ? (flags | 8) : (flags & ~8);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -67,7 +60,6 @@ namespace TeleSharp.TL
 
             date = br.ReadInt32();
             action = (TLAbsMessageAction)ObjectUtils.DeserializeObject(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -75,10 +67,6 @@ namespace TeleSharp.TL
             bw.Write(Constructor);
             ComputeFlags();
             bw.Write(flags);
-
-
-
-
 
             bw.Write(id);
             if ((flags & 256) != 0)
@@ -88,7 +76,6 @@ namespace TeleSharp.TL
                 bw.Write(reply_to_msg_id.Value);
             bw.Write(date);
             ObjectUtils.SerializeObject(action, bw);
-
         }
     }
 }

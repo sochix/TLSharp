@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Account
 {
     [TLObject(353818557)]
@@ -24,13 +19,11 @@ namespace TeleSharp.TL.Account
         public bool? current_number { get; set; }
         public Auth.TLSentCode Response { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = allow_flashcall ? (flags | 1) : (flags & ~1);
             flags = current_number != null ? (flags | 1) : (flags & ~1);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -42,8 +35,6 @@ namespace TeleSharp.TL.Account
                 current_number = BoolUtil.Deserialize(br);
             else
                 current_number = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -55,12 +46,11 @@ namespace TeleSharp.TL.Account
             StringUtil.Serialize(hash, bw);
             if ((flags & 1) != 0)
                 BoolUtil.Serialize(current_number.Value, bw);
-
         }
+
         public override void deserializeResponse(BinaryReader br)
         {
             Response = (Auth.TLSentCode)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

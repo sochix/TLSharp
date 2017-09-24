@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(239663460)]
@@ -25,13 +20,11 @@ namespace TeleSharp.TL
         public string id { get; set; }
         public TLInputBotInlineMessageID msg_id { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = geo != null ? (flags | 1) : (flags & ~1);
             flags = msg_id != null ? (flags | 2) : (flags & ~2);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -49,8 +42,6 @@ namespace TeleSharp.TL
                 msg_id = (TLInputBotInlineMessageID)ObjectUtils.DeserializeObject(br);
             else
                 msg_id = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -65,7 +56,6 @@ namespace TeleSharp.TL
             StringUtil.Serialize(id, bw);
             if ((flags & 2) != 0)
                 ObjectUtils.SerializeObject(msg_id, bw);
-
         }
     }
 }

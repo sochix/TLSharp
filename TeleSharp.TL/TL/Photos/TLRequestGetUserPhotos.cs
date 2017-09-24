@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Photos
 {
     [TLObject(-1848823128)]
@@ -24,10 +19,8 @@ namespace TeleSharp.TL.Photos
         public int limit { get; set; }
         public Photos.TLAbsPhotos Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -36,7 +29,6 @@ namespace TeleSharp.TL.Photos
             offset = br.ReadInt32();
             max_id = br.ReadInt64();
             limit = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -46,12 +38,11 @@ namespace TeleSharp.TL.Photos
             bw.Write(offset);
             bw.Write(max_id);
             bw.Write(limit);
-
         }
+
         public override void deserializeResponse(BinaryReader br)
         {
             Response = (Photos.TLAbsPhotos)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

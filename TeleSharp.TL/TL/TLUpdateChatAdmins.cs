@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(1855224129)]
@@ -22,10 +17,8 @@ namespace TeleSharp.TL
         public bool enabled { get; set; }
         public int version { get; set; }
 
-
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -33,7 +26,6 @@ namespace TeleSharp.TL
             chat_id = br.ReadInt32();
             enabled = BoolUtil.Deserialize(br);
             version = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -42,7 +34,6 @@ namespace TeleSharp.TL
             bw.Write(chat_id);
             BoolUtil.Serialize(enabled, bw);
             bw.Write(version);
-
         }
     }
 }

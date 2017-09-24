@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1836524247)]
@@ -25,12 +20,10 @@ namespace TeleSharp.TL
         public int date { get; set; }
         public TLVector<TLAbsPhotoSize> sizes { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
             flags = has_stickers ? (flags | 1) : (flags & ~1);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -41,7 +34,6 @@ namespace TeleSharp.TL
             access_hash = br.ReadInt64();
             date = br.ReadInt32();
             sizes = (TLVector<TLAbsPhotoSize>)ObjectUtils.DeserializeVector<TLAbsPhotoSize>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -54,7 +46,6 @@ namespace TeleSharp.TL
             bw.Write(access_hash);
             bw.Write(date);
             ObjectUtils.SerializeObject(sizes, bw);
-
         }
     }
 }

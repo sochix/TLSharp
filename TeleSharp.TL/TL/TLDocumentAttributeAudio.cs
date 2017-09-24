@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1739392570)]
@@ -25,7 +20,6 @@ namespace TeleSharp.TL
         public string performer { get; set; }
         public byte[] waveform { get; set; }
 
-
         public void ComputeFlags()
         {
             flags = 0;
@@ -33,7 +27,6 @@ namespace TeleSharp.TL
             flags = title != null ? (flags | 1) : (flags & ~1);
             flags = performer != null ? (flags | 2) : (flags & ~2);
             flags = waveform != null ? (flags | 4) : (flags & ~4);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -55,8 +48,6 @@ namespace TeleSharp.TL
                 waveform = BytesUtil.Deserialize(br);
             else
                 waveform = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -72,7 +63,6 @@ namespace TeleSharp.TL
                 StringUtil.Serialize(performer, bw);
             if ((flags & 4) != 0)
                 BytesUtil.Serialize(waveform, bw);
-
         }
     }
 }

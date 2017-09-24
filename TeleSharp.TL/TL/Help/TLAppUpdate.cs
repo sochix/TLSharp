@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Help
 {
     [TLObject(-1987579119)]
@@ -23,10 +18,8 @@ namespace TeleSharp.TL.Help
         public string url { get; set; }
         public string text { get; set; }
 
-
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -35,7 +28,6 @@ namespace TeleSharp.TL.Help
             critical = BoolUtil.Deserialize(br);
             url = StringUtil.Deserialize(br);
             text = StringUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -45,7 +37,6 @@ namespace TeleSharp.TL.Help
             BoolUtil.Serialize(critical, bw);
             StringUtil.Serialize(url, bw);
             StringUtil.Serialize(text, bw);
-
         }
     }
 }
