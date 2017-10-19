@@ -1,0 +1,2679 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BigMath</name>
+    </assembly>
+    <members>
+        <member name="T:BigMath.BigInteger">
+            <summary>
+                Big integer.
+            </summary>
+        </member>
+        <member name="M:BigMath.BigInteger.#ctor(System.Byte)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.BigInteger"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.BigInteger.#ctor(System.Boolean)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.BigInteger"/> struct.
+            </summary>
+            <param name="value">if set to <c>true</c> [value].</param>
+        </member>
+        <member name="M:BigMath.BigInteger.#ctor(System.Char)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.BigInteger"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.BigInteger.#ctor(System.Decimal)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.BigInteger"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.BigInteger.#ctor(System.Double)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.BigInteger"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.BigInteger.#ctor(System.Single)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.BigInteger"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.BigInteger.#ctor(System.Int16)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.BigInteger"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.BigInteger.#ctor(System.Int32)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.BigInteger"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.BigInteger.#ctor(System.Int64)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.BigInteger"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.BigInteger.#ctor(System.SByte)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.BigInteger"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.BigInteger.#ctor(System.UInt16)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.BigInteger"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.BigInteger.#ctor(System.UInt32)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.BigInteger"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.BigInteger.#ctor(System.UInt64)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.BigInteger"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.BigInteger.#ctor(System.Guid)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.BigInteger"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.BigInteger.#ctor(BigMath.Int128)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.BigInteger"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.BigInteger.#ctor(BigMath.Int256)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.BigInteger"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.BigInteger.System#IComparable#CompareTo(System.Object)">
+            <summary>
+                Compares the current instance with another object of the same type and returns an integer that indicates whether
+                the current instance precedes, follows, or occurs in the same position in the sort order as the other object.
+            </summary>
+            <param name="obj">An object to compare with this instance.</param>
+            <returns>
+                A value that indicates the relative order of the objects being compared. The return value has these meanings: Value
+                Meaning Less than zero This instance is less than <paramref name="obj" />. Zero This instance is equal to
+                <paramref name="obj" />. Greater than zero This instance is greater than <paramref name="obj" />.
+            </returns>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="obj" /> is not the same type as this instance.
+            </exception>
+        </member>
+        <member name="M:BigMath.BigInteger.CompareTo(BigMath.BigInteger)">
+            <summary>
+                Compares this instance to a specified big integer and returns an indication of their relative values.
+            </summary>
+            <param name="value">An integer to compare.</param>
+            <returns>A signed number indicating the relative values of this instance and value.</returns>
+        </member>
+        <member name="M:BigMath.BigInteger.ToString(System.String,System.IFormatProvider)">
+            <summary>
+                Returns a <see cref="T:System.String"/> that represents this instance.
+            </summary>
+            <param name="format">
+                The format. Only x, X, g, G, d, D, b, B are supported.
+            </param>
+            <param name="formatProvider">Format provider.</param>
+            <returns>
+                A <see cref="T:System.String"/> that represents this instance.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Implicit(System.Boolean)~BigMath.BigInteger">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.Boolean"/> to <see cref="T:BigMath.BigInteger"/>.
+            </summary>
+            <param name="value">if set to <c>true</c> [value].</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Implicit(System.Byte)~BigMath.BigInteger">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.Byte"/> to <see cref="T:BigMath.BigInteger"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Implicit(System.Char)~BigMath.BigInteger">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.Char"/> to <see cref="T:BigMath.BigInteger"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Explicit(System.Decimal)~BigMath.BigInteger">
+            <summary>
+                Performs an explicit conversion from <see cref="T:System.Decimal"/> to <see cref="T:BigMath.BigInteger"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Explicit(System.Double)~BigMath.BigInteger">
+            <summary>
+                Performs an explicit conversion from <see cref="T:System.Double"/> to <see cref="T:BigMath.BigInteger"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Implicit(System.Int16)~BigMath.BigInteger">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.Int16"/> to <see cref="T:BigMath.BigInteger"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Implicit(System.Int32)~BigMath.BigInteger">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.Int32"/> to <see cref="T:BigMath.BigInteger"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Implicit(System.Int64)~BigMath.BigInteger">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.Int64"/> to <see cref="T:BigMath.BigInteger"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Implicit(System.SByte)~BigMath.BigInteger">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.SByte"/> to <see cref="T:BigMath.BigInteger"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Explicit(System.Single)~BigMath.BigInteger">
+            <summary>
+                Performs an explicit conversion from <see cref="T:System.Single"/> to <see cref="T:BigMath.BigInteger"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Implicit(System.UInt16)~BigMath.BigInteger">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.UInt16"/> to <see cref="T:BigMath.BigInteger"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Implicit(System.UInt32)~BigMath.BigInteger">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.UInt32"/> to <see cref="T:BigMath.BigInteger"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Implicit(System.UInt64)~BigMath.BigInteger">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.UInt64"/> to <see cref="T:BigMath.BigInteger"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Implicit(BigMath.Int128)~BigMath.BigInteger">
+            <summary>
+                Performs an implicit conversion from <see cref="T:BigMath.Int128"/> to <see cref="T:BigMath.BigInteger"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Implicit(BigMath.Int256)~BigMath.BigInteger">
+            <summary>
+                Performs an implicit conversion from <see cref="T:BigMath.Int256"/> to <see cref="T:BigMath.BigInteger"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Explicit(BigMath.BigInteger)~System.Boolean">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.BigInteger"/> to <see cref="T:System.Boolean"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Explicit(BigMath.BigInteger)~System.Byte">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.BigInteger"/> to <see cref="T:System.Byte"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Explicit(BigMath.BigInteger)~System.Char">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.BigInteger"/> to <see cref="T:System.Char"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Explicit(BigMath.BigInteger)~System.Decimal">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.BigInteger"/> to <see cref="T:System.Decimal"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Explicit(BigMath.BigInteger)~System.Double">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.BigInteger"/> to <see cref="T:System.Double"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Explicit(BigMath.BigInteger)~System.Single">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.BigInteger"/> to <see cref="T:System.Single"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Explicit(BigMath.BigInteger)~System.Int16">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.BigInteger"/> to <see cref="T:System.Int16"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Explicit(BigMath.BigInteger)~System.UInt16">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.BigInteger"/> to <see cref="T:System.UInt16"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Explicit(BigMath.BigInteger)~System.Int32">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.BigInteger"/> to <see cref="T:System.Int32"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Explicit(BigMath.BigInteger)~System.UInt32">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.BigInteger"/> to <see cref="T:System.UInt32"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Explicit(BigMath.BigInteger)~System.Int64">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.BigInteger"/> to <see cref="T:System.Int64"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Explicit(BigMath.BigInteger)~System.UInt64">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.BigInteger"/> to <see cref="T:System.UInt64"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Explicit(BigMath.BigInteger)~BigMath.Int128">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.BigInteger"/> to <see cref="T:BigMath.Int128"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Explicit(BigMath.BigInteger)~BigMath.Int256">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.BigInteger"/> to <see cref="T:BigMath.Int256"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_GreaterThan(BigMath.BigInteger,BigMath.BigInteger)">
+            <summary>
+                Implements the operator &gt;.
+            </summary>
+            <param name="left">The x.</param>
+            <param name="right">The y.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_LessThan(BigMath.BigInteger,BigMath.BigInteger)">
+            <summary>
+                Implements the operator &lt;.
+            </summary>
+            <param name="left">The x.</param>
+            <param name="right">The y.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_GreaterThanOrEqual(BigMath.BigInteger,BigMath.BigInteger)">
+            <summary>
+                Implements the operator &gt;=.
+            </summary>
+            <param name="left">The x.</param>
+            <param name="right">The y.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_LessThanOrEqual(BigMath.BigInteger,BigMath.BigInteger)">
+            <summary>
+                Implements the operator &lt;=.
+            </summary>
+            <param name="left">The x.</param>
+            <param name="right">The y.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Inequality(BigMath.BigInteger,BigMath.BigInteger)">
+            <summary>
+                Implements the operator !=.
+            </summary>
+            <param name="left">The x.</param>
+            <param name="right">The y.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Equality(BigMath.BigInteger,BigMath.BigInteger)">
+            <summary>
+                Implements the operator ==.
+            </summary>
+            <param name="left">The x.</param>
+            <param name="right">The y.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_UnaryPlus(BigMath.BigInteger)">
+            <summary>
+                Implements the operator +.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_UnaryNegation(BigMath.BigInteger)">
+            <summary>
+                Implements the operator -.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Addition(BigMath.BigInteger,BigMath.BigInteger)">
+            <summary>
+                Implements the operator +.
+            </summary>
+            <param name="left">The x.</param>
+            <param name="right">The y.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Subtraction(BigMath.BigInteger,BigMath.BigInteger)">
+            <summary>
+                Implements the operator -.
+            </summary>
+            <param name="left">The x.</param>
+            <param name="right">The y.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Modulus(BigMath.BigInteger,BigMath.BigInteger)">
+            <summary>
+                Implements the operator %.
+            </summary>
+            <param name="dividend">The dividend.</param>
+            <param name="divisor">The divisor.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Division(BigMath.BigInteger,BigMath.BigInteger)">
+            <summary>
+                Implements the operator /.
+            </summary>
+            <param name="dividend">The dividend.</param>
+            <param name="divisor">The divisor.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Multiply(BigMath.BigInteger,BigMath.BigInteger)">
+            <summary>
+                Implements the operator *.
+            </summary>
+            <param name="left">The x.</param>
+            <param name="right">The y.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_RightShift(BigMath.BigInteger,System.Int32)">
+            <summary>
+                Implements the operator &gt;&gt;.
+            </summary>
+            <param name="value">The value.</param>
+            <param name="shift">The shift.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_LeftShift(BigMath.BigInteger,System.Int32)">
+            <summary>
+                Implements the operator &lt;&lt;.
+            </summary>
+            <param name="value">The value.</param>
+            <param name="shift">The shift.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_BitwiseOr(BigMath.BigInteger,BigMath.BigInteger)">
+            <summary>
+                Implements the operator |.
+            </summary>
+            <param name="left">The left.</param>
+            <param name="right">The right.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_BitwiseAnd(BigMath.BigInteger,BigMath.BigInteger)">
+            <summary>
+                Implements the operator &amp;.
+            </summary>
+            <param name="left">The left.</param>
+            <param name="right">The right.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_OnesComplement(BigMath.BigInteger)">
+            <summary>
+                Implements the operator ~.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Increment(BigMath.BigInteger)">
+            <summary>
+                Implements the operator ++.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:BigMath.BigInteger.op_Decrement(BigMath.BigInteger)">
+            <summary>
+                Implements the operator --.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:BigMath.BigInteger.AddMagnitudes(System.Int32[],System.Int32[])">
+            return a = a + b - b preserved.
+        </member>
+        <member name="M:BigMath.BigInteger.CompareTo(System.Int32,System.Int32[],System.Int32,System.Int32[])">
+            unsigned comparison on two arrays - note the arrays may
+            start with leading zeros.
+        </member>
+        <member name="M:BigMath.BigInteger.Divide(System.Int32[],System.Int32[])">
+            return z = x / y - done in place (z value preserved, x contains the
+            remainder)
+        </member>
+        <member name="M:BigMath.BigInteger.IsProbablePrime(System.Int32)">
+            return whether or not a BigInteger is probably prime with a
+            probability of 1 - (1/2)**certainty.
+            <p>From Knuth Vol 2, pg 395.</p>
+        </member>
+        <member name="M:BigMath.BigInteger.ExtEuclid(BigMath.BigInteger,BigMath.BigInteger,BigMath.BigInteger,BigMath.BigInteger)">
+             Calculate the numbers u1, u2, and u3 such that:
+            
+             u1 * a + u2 * b = u3
+            
+             where u3 is the greatest common divider of a and b.
+             a and b using the extended Euclid algorithm (refer p. 323
+             of The Art of Computer Programming vol 2, 2nd ed).
+             This also seems to have the side effect of calculating
+             some form of multiplicative inverse.
+            
+             @param a    First number to calculate gcd for
+             @param b    Second number to calculate gcd for
+             @param u1Out      the return object for the u1 value
+             @param u2Out      the return object for the u2 value
+             @return     The greatest common divisor of a and b
+        </member>
+        <member name="M:BigMath.BigInteger.Square(System.Int32[],System.Int32[])">
+            return w with w = x * x - w is assumed to have enough space.
+        </member>
+        <member name="M:BigMath.BigInteger.Multiply(System.Int32[],System.Int32[],System.Int32[])">
+            return x with x = y * z - x is assumed to have enough space.
+        </member>
+        <member name="M:BigMath.BigInteger.GetMQuote">
+            Calculate mQuote = -m^(-1) mod b with b = 2^32 (32 = word size)
+        </member>
+        <member name="M:BigMath.BigInteger.MultiplyMonty(System.Int32[],System.Int32[],System.Int32[],System.Int32[],System.Int64)">
+            Montgomery multiplication: a = x * y * R^(-1) mod m
+            <br/>
+            Based algorithm 14.36 of Handbook of Applied Cryptography.
+            <br/>
+            <li> m, x, y should have length n </li>
+            <li> a should have length (n + 1) </li>
+            <li> b = 2^32, R = b^n </li>
+            <br/>
+            The result is put in x
+            <br/>
+            NOTE: the indices of x, y, m, a different in HAC and in Java
+        </member>
+        <member name="M:BigMath.BigInteger.Remainder(System.Int32[],System.Int32[])">
+            return x = x % y - done in place (y value preserved)
+        </member>
+        <member name="M:BigMath.BigInteger.ShiftLeft(System.Int32[],System.Int32)">
+            do a left shift - this returns a new array.
+        </member>
+        <member name="M:BigMath.BigInteger.ShiftRightInPlace(System.Int32,System.Int32[],System.Int32)">
+            do a right shift - this does it in place.
+        </member>
+        <member name="M:BigMath.BigInteger.ShiftRightOneInPlace(System.Int32,System.Int32[])">
+            do a right shift by one - this does it in place.
+        </member>
+        <member name="M:BigMath.BigInteger.Subtract(System.Int32,System.Int32[],System.Int32,System.Int32[])">
+            returns x = x - y - we assume x is >= y
+        </member>
+        <member name="M:BigMath.BigInteger.Compare(BigMath.BigInteger,System.Object)">
+            <summary>
+                Compares two BigInteger values and returns an integer that indicates whether the first value is less than, equal
+                to, or
+                greater than the second value.
+            </summary>
+            <param name="left">The first value to compare.</param>
+            <param name="right">The second value to compare.</param>
+            <returns>A signed integer that indicates the relative values of left and right, as shown in the following table.</returns>
+        </member>
+        <member name="M:BigMath.BigInteger.Compare(BigMath.BigInteger,BigMath.BigInteger)">
+            <summary>
+                Compares two 256-bit signed integer values and returns an integer that indicates whether the first value is less
+                than, equal to, or greater than the second value.
+            </summary>
+            <param name="left">The first value to compare.</param>
+            <param name="right">The second value to compare.</param>
+            <returns>
+                A signed number indicating the relative values of this instance and value.
+            </returns>
+        </member>
+        <member name="T:BigMath.Int128">
+            <summary>
+                Represents a 128-bit signed integer.
+            </summary>
+        </member>
+        <member name="F:BigMath.Int128.Zero">
+            <summary>
+                Gets a value that represents the number 0 (zero).
+            </summary>
+        </member>
+        <member name="F:BigMath.Int128.MaxValue">
+            <summary>
+                Represents the largest possible value of an Int128.
+            </summary>
+        </member>
+        <member name="F:BigMath.Int128.MinValue">
+            <summary>
+                Represents the smallest possible value of an Int128.
+            </summary>
+        </member>
+        <member name="M:BigMath.Int128.#ctor(System.Byte)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int128"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.Int128.#ctor(System.Boolean)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int128"/> struct.
+            </summary>
+            <param name="value">if set to <c>true</c> [value].</param>
+        </member>
+        <member name="M:BigMath.Int128.#ctor(System.Char)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int128"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.Int128.#ctor(System.Decimal)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int128"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.Int128.#ctor(System.Double)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int128"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.Int128.#ctor(System.Single)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int128"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.Int128.#ctor(System.Int16)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int128"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.Int128.#ctor(System.Int32)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int128"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.Int128.#ctor(System.Int64)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int128"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.Int128.#ctor(System.SByte)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int128"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.Int128.#ctor(System.UInt16)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int128"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.Int128.#ctor(System.UInt32)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int128"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.Int128.#ctor(System.UInt64)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int128"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.Int128.#ctor(System.Guid)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int128"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.Int128.#ctor(BigMath.Int256)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int128"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.Int128.#ctor(System.Int32,System.UInt32[])">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int128"/> struct.
+            </summary>
+            <param name="sign">The sign.</param>
+            <param name="ints">The ints.</param>
+        </member>
+        <member name="M:BigMath.Int128.GetHashCode">
+            <summary>
+                Returns a hash code for this instance.
+            </summary>
+            <returns>
+                A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.Equals(System.Object)">
+            <summary>
+                Returns a value indicating whether this instance is equal to a specified object.
+            </summary>
+            <param name="obj">An object to compare with this instance.</param>
+            <returns>
+                true if obj has the same value as this instance; otherwise, false.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.Equals(BigMath.Int128)">
+            <summary>
+                Returns a value indicating whether this instance is equal to a specified Int64 value.
+            </summary>
+            <param name="obj">The obj.</param>
+            <returns>
+                true if obj has the same value as this instance; otherwise, false.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.ToString">
+            <summary>
+                Returns a <see cref="T:System.String"/> that represents this instance.
+            </summary>
+            <returns>
+                A <see cref="T:System.String"/> that represents this instance.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.ToString(System.String,System.IFormatProvider)">
+            <summary>
+                Returns a <see cref="T:System.String"/> that represents this instance.
+            </summary>
+            <param name="format">The format. Only x, X, g, G, d, D are supported.</param>
+            <param name="formatProvider">An object that supplies culture-specific formatting information about this instance.</param>
+            <returns>
+                A <see cref="T:System.String"/> that represents this instance.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.TryConvert(System.Type,System.IFormatProvider,System.Boolean,System.Object@)">
+            <summary>
+                Converts the numeric value to an equivalent object. The return value indicates whether the conversion succeeded.
+            </summary>
+            <param name="conversionType">The target conversion type.</param>
+            <param name="provider">An object that supplies culture-specific information about the conversion.</param>
+            <param name="asLittleEndian">As little endian.</param>
+            <param name="value">
+                When this method returns, contains the value that is equivalent to the numeric value, if the
+                conversion succeeded, or is null if the conversion failed. This parameter is passed uninitialized.
+            </param>
+            <returns>true if this value was converted successfully; otherwise, false.</returns>
+        </member>
+        <member name="M:BigMath.Int128.Parse(System.String)">
+            <summary>
+                Converts the string representation of a number to its Int128 equivalent.
+            </summary>
+            <param name="value">A string that contains a number to convert.</param>
+            <returns>
+                A value that is equivalent to the number specified in the value parameter.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.Parse(System.String,System.Globalization.NumberStyles)">
+            <summary>
+                Converts the string representation of a number in a specified style format to its Int128 equivalent.
+            </summary>
+            <param name="value">A string that contains a number to convert.</param>
+            <param name="style">A bitwise combination of the enumeration values that specify the permitted format of value.</param>
+            <returns>
+                A value that is equivalent to the number specified in the value parameter.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.Parse(System.String,System.IFormatProvider)">
+            <summary>
+                Converts the string representation of a number in a culture-specific format to its Int128 equivalent.
+            </summary>
+            <param name="value">A string that contains a number to convert.</param>
+            <param name="provider">An object that provides culture-specific formatting information about value.</param>
+            <returns>
+                A value that is equivalent to the number specified in the value parameter.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.Parse(System.String,System.Globalization.NumberStyles,System.IFormatProvider)">
+            <summary>
+                Converts the string representation of a number in a specified style and culture-specific format to its Int128
+                equivalent.
+            </summary>
+            <param name="value">A string that contains a number to convert.</param>
+            <param name="style">A bitwise combination of the enumeration values that specify the permitted format of value.</param>
+            <param name="provider">An object that provides culture-specific formatting information about value.</param>
+            <returns>A value that is equivalent to the number specified in the value parameter.</returns>
+        </member>
+        <member name="M:BigMath.Int128.TryParse(System.String,BigMath.Int128@)">
+            <summary>
+                Tries to convert the string representation of a number to its Int128 equivalent, and returns a value that indicates
+                whether the conversion succeeded..
+            </summary>
+            <param name="value">The string representation of a number.</param>
+            <param name="result">
+                When this method returns, contains the Int128 equivalent to the number that is contained in value,
+                or Int128.Zero if the conversion failed. This parameter is passed uninitialized.
+            </param>
+            <returns>
+                true if the value parameter was converted successfully; otherwise, false.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.TryParse(System.String,System.Globalization.NumberStyles,System.IFormatProvider,BigMath.Int128@)">
+            <summary>
+                Tries to convert the string representation of a number in a specified style and culture-specific format to its
+                Int128 equivalent, and returns a value that indicates whether the conversion succeeded..
+            </summary>
+            <param name="value">
+                The string representation of a number. The string is interpreted using the style specified by
+                style.
+            </param>
+            <param name="style">
+                A bitwise combination of enumeration values that indicates the style elements that can be present
+                in value. A typical value to specify is NumberStyles.Integer.
+            </param>
+            <param name="provider">An object that supplies culture-specific formatting information about value.</param>
+            <param name="result">
+                When this method returns, contains the Int128 equivalent to the number that is contained in value,
+                or Int128.Zero if the conversion failed. This parameter is passed uninitialized.
+            </param>
+            <returns>true if the value parameter was converted successfully; otherwise, false.</returns>
+        </member>
+        <member name="M:BigMath.Int128.ToType(System.Type,System.IFormatProvider,System.Boolean)">
+            <summary>
+                Converts the value of this instance to an <see cref="T:System.Object" /> of the specified
+                <see cref="T:System.Type" /> that has an equivalent value, using the specified culture-specific formatting
+                information.
+            </summary>
+            <param name="conversionType">The <see cref="T:System.Type" /> to which the value of this instance is converted.</param>
+            <param name="provider">
+                An <see cref="T:System.IFormatProvider" /> interface implementation that supplies
+                culture-specific formatting information.
+            </param>
+            <param name="asLittleEndian">As little endian.</param>
+            <returns>
+                An <see cref="T:System.Object" /> instance of type <paramref name="conversionType" /> whose value is equivalent to
+                the value of this instance.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.System#IComparable#CompareTo(System.Object)">
+            <summary>
+                Compares the current instance with another object of the same type and returns an integer that indicates whether
+                the current instance precedes, follows, or occurs in the same position in the sort order as the other object.
+            </summary>
+            <param name="obj">An object to compare with this instance.</param>
+            <returns>
+                A value that indicates the relative order of the objects being compared. The return value has these meanings: Value
+                Meaning Less than zero This instance is less than <paramref name="obj" />. Zero This instance is equal to
+                <paramref name="obj" />. Greater than zero This instance is greater than <paramref name="obj" />.
+            </returns>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="obj" /> is not the same type as this instance.
+            </exception>
+        </member>
+        <member name="M:BigMath.Int128.Compare(BigMath.Int128,System.Object)">
+            <summary>
+                Compares two Int128 values and returns an integer that indicates whether the first value is less than, equal to, or
+                greater than the second value.
+            </summary>
+            <param name="left">The first value to compare.</param>
+            <param name="right">The second value to compare.</param>
+            <returns>A signed integer that indicates the relative values of left and right, as shown in the following table.</returns>
+        </member>
+        <member name="M:BigMath.Int128.Compare(BigMath.Int128,BigMath.Int128)">
+            <summary>
+                Compares two 128-bit signed integer values and returns an integer that indicates whether the first value is less
+                than, equal to, or greater than the second value.
+            </summary>
+            <param name="left">The first value to compare.</param>
+            <param name="right">The second value to compare.</param>
+            <returns>
+                A signed number indicating the relative values of this instance and value.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.CompareTo(BigMath.Int128)">
+            <summary>
+                Compares this instance to a specified 128-bit signed integer and returns an indication of their relative values.
+            </summary>
+            <param name="value">An integer to compare.</param>
+            <returns>A signed number indicating the relative values of this instance and value.</returns>
+        </member>
+        <member name="M:BigMath.Int128.Negate(BigMath.Int128)">
+            <summary>
+                Negates a specified Int128 value.
+            </summary>
+            <param name="value">The value to negate.</param>
+            <returns>The result of the value parameter multiplied by negative one (-1).</returns>
+        </member>
+        <member name="M:BigMath.Int128.ToAbs">
+            <summary>
+                Gets the absolute value this object.
+            </summary>
+            <returns>The absolute value.</returns>
+        </member>
+        <member name="M:BigMath.Int128.Abs(BigMath.Int128)">
+            <summary>
+                Gets the absolute value of an Int128 object.
+            </summary>
+            <param name="value">A number.</param>
+            <returns>
+                The absolute value.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.Add(BigMath.Int128,BigMath.Int128)">
+            <summary>
+                Adds two Int128 values and returns the result.
+            </summary>
+            <param name="left">The first value to add.</param>
+            <param name="right">The second value to add.</param>
+            <returns>The sum of left and right.</returns>
+        </member>
+        <member name="M:BigMath.Int128.Subtract(BigMath.Int128,BigMath.Int128)">
+            <summary>
+                Subtracts one Int128 value from another and returns the result.
+            </summary>
+            <param name="left">The value to subtract from (the minuend).</param>
+            <param name="right">The value to subtract (the subtrahend).</param>
+            <returns>The result of subtracting right from left.</returns>
+        </member>
+        <member name="M:BigMath.Int128.Divide(BigMath.Int128,BigMath.Int128)">
+            <summary>
+                Divides one Int128 value by another and returns the result.
+            </summary>
+            <param name="dividend">The value to be divided.</param>
+            <param name="divisor">The value to divide by.</param>
+            <returns>The quotient of the division.</returns>
+        </member>
+        <member name="M:BigMath.Int128.DivRem(BigMath.Int128,BigMath.Int128,BigMath.Int128@)">
+            <summary>
+                Divides one Int128 value by another, returns the result, and returns the remainder in an output parameter.
+            </summary>
+            <param name="dividend">The value to be divided.</param>
+            <param name="divisor">The value to divide by.</param>
+            <param name="remainder">
+                When this method returns, contains an Int128 value that represents the remainder from the
+                division. This parameter is passed uninitialized.
+            </param>
+            <returns>
+                The quotient of the division.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.Remainder(BigMath.Int128,BigMath.Int128)">
+            <summary>
+                Performs integer division on two Int128 values and returns the remainder.
+            </summary>
+            <param name="dividend">The value to be divided.</param>
+            <param name="divisor">The value to divide by.</param>
+            <returns>The remainder after dividing dividend by divisor.</returns>
+        </member>
+        <member name="M:BigMath.Int128.ToUIn64Array">
+            <summary>
+                Converts an Int128 value to an unsigned long array.
+            </summary>
+            <returns>
+                The value of the current Int128 object converted to an array of unsigned integers.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.ToUIn32Array">
+            <summary>
+                Converts an Int128 value to an unsigned integer array.
+            </summary>
+            <returns>The value of the current Int128 object converted to an array of unsigned integers.</returns>
+        </member>
+        <member name="M:BigMath.Int128.Multiply(BigMath.Int128,BigMath.Int128)">
+            <summary>
+                Returns the product of two Int128 values.
+            </summary>
+            <param name="left">The first number to multiply.</param>
+            <param name="right">The second number to multiply.</param>
+            <returns>The product of the left and right parameters.</returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Implicit(System.Boolean)~BigMath.Int128">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.Boolean"/> to <see cref="T:BigMath.Int128"/>.
+            </summary>
+            <param name="value">if set to <c>true</c> [value].</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Implicit(System.Byte)~BigMath.Int128">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.Byte"/> to <see cref="T:BigMath.Int128"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Implicit(System.Char)~BigMath.Int128">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.Char"/> to <see cref="T:BigMath.Int128"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Explicit(System.Decimal)~BigMath.Int128">
+            <summary>
+                Performs an explicit conversion from <see cref="T:System.Decimal"/> to <see cref="T:BigMath.Int128"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Explicit(System.Double)~BigMath.Int128">
+            <summary>
+                Performs an explicit conversion from <see cref="T:System.Double"/> to <see cref="T:BigMath.Int128"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Implicit(System.Int16)~BigMath.Int128">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.Int16"/> to <see cref="T:BigMath.Int128"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Implicit(System.Int32)~BigMath.Int128">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.Int32"/> to <see cref="T:BigMath.Int128"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Implicit(System.Int64)~BigMath.Int128">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.Int64"/> to <see cref="T:BigMath.Int128"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Implicit(System.SByte)~BigMath.Int128">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.SByte"/> to <see cref="T:BigMath.Int128"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Explicit(System.Single)~BigMath.Int128">
+            <summary>
+                Performs an explicit conversion from <see cref="T:System.Single"/> to <see cref="T:BigMath.Int128"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Implicit(System.UInt16)~BigMath.Int128">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.UInt16"/> to <see cref="T:BigMath.Int128"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Implicit(System.UInt32)~BigMath.Int128">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.UInt32"/> to <see cref="T:BigMath.Int128"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Implicit(System.UInt64)~BigMath.Int128">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.UInt64"/> to <see cref="T:BigMath.Int128"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Explicit(BigMath.Int256)~BigMath.Int128">
+            <summary>
+                Performs an implicit conversion from <see cref="T:BigMath.Int256"/> to <see cref="T:BigMath.Int128"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Explicit(BigMath.Int128)~BigMath.Int256">
+            <summary>
+                Performs an implicit conversion from <see cref="T:BigMath.Int128"/> to <see cref="T:BigMath.Int256"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Explicit(BigMath.Int128)~System.Boolean">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.Int128"/> to <see cref="T:System.Boolean"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Explicit(BigMath.Int128)~System.Byte">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.Int128"/> to <see cref="T:System.Byte"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Explicit(BigMath.Int128)~System.Char">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.Int128"/> to <see cref="T:System.Char"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Explicit(BigMath.Int128)~System.Decimal">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.Int128"/> to <see cref="T:System.Decimal"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Explicit(BigMath.Int128)~System.Double">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.Int128"/> to <see cref="T:System.Double"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Explicit(BigMath.Int128)~System.Single">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.Int128"/> to <see cref="T:System.Single"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Explicit(BigMath.Int128)~System.Int16">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.Int128"/> to <see cref="T:System.Int16"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Explicit(BigMath.Int128)~System.Int32">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.Int128"/> to <see cref="T:System.Int32"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Explicit(BigMath.Int128)~System.Int64">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.Int128"/> to <see cref="T:System.Int64"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Explicit(BigMath.Int128)~System.UInt32">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.Int128"/> to <see cref="T:System.UInt32"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Explicit(BigMath.Int128)~System.UInt16">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.Int128"/> to <see cref="T:System.UInt16"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Explicit(BigMath.Int128)~System.UInt64">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.Int128"/> to <see cref="T:System.UInt64"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_GreaterThan(BigMath.Int128,BigMath.Int128)">
+            <summary>
+                Implements the operator &gt;.
+            </summary>
+            <param name="left">The x.</param>
+            <param name="right">The y.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_LessThan(BigMath.Int128,BigMath.Int128)">
+            <summary>
+                Implements the operator &lt;.
+            </summary>
+            <param name="left">The x.</param>
+            <param name="right">The y.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_GreaterThanOrEqual(BigMath.Int128,BigMath.Int128)">
+            <summary>
+                Implements the operator &gt;=.
+            </summary>
+            <param name="left">The x.</param>
+            <param name="right">The y.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_LessThanOrEqual(BigMath.Int128,BigMath.Int128)">
+            <summary>
+                Implements the operator &lt;=.
+            </summary>
+            <param name="left">The x.</param>
+            <param name="right">The y.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Inequality(BigMath.Int128,BigMath.Int128)">
+            <summary>
+                Implements the operator !=.
+            </summary>
+            <param name="left">The x.</param>
+            <param name="right">The y.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Equality(BigMath.Int128,BigMath.Int128)">
+            <summary>
+                Implements the operator ==.
+            </summary>
+            <param name="left">The x.</param>
+            <param name="right">The y.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_UnaryPlus(BigMath.Int128)">
+            <summary>
+                Implements the operator +.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_UnaryNegation(BigMath.Int128)">
+            <summary>
+                Implements the operator -.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Addition(BigMath.Int128,BigMath.Int128)">
+            <summary>
+                Implements the operator +.
+            </summary>
+            <param name="left">The x.</param>
+            <param name="right">The y.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Subtraction(BigMath.Int128,BigMath.Int128)">
+            <summary>
+                Implements the operator -.
+            </summary>
+            <param name="left">The x.</param>
+            <param name="right">The y.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Modulus(BigMath.Int128,BigMath.Int128)">
+            <summary>
+                Implements the operator %.
+            </summary>
+            <param name="dividend">The dividend.</param>
+            <param name="divisor">The divisor.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Division(BigMath.Int128,BigMath.Int128)">
+            <summary>
+                Implements the operator /.
+            </summary>
+            <param name="dividend">The dividend.</param>
+            <param name="divisor">The divisor.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Multiply(BigMath.Int128,BigMath.Int128)">
+            <summary>
+                Implements the operator *.
+            </summary>
+            <param name="left">The x.</param>
+            <param name="right">The y.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int128.op_RightShift(BigMath.Int128,System.Int32)">
+            <summary>
+                Implements the operator &gt;&gt;.
+            </summary>
+            <param name="value">The value.</param>
+            <param name="shift">The shift.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:BigMath.Int128.op_LeftShift(BigMath.Int128,System.Int32)">
+            <summary>
+                Implements the operator &lt;&lt;.
+            </summary>
+            <param name="value">The value.</param>
+            <param name="shift">The shift.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:BigMath.Int128.op_BitwiseOr(BigMath.Int128,BigMath.Int128)">
+            <summary>
+                Implements the operator |.
+            </summary>
+            <param name="left">The left.</param>
+            <param name="right">The right.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:BigMath.Int128.op_BitwiseAnd(BigMath.Int128,BigMath.Int128)">
+            <summary>
+                Implements the operator &amp;.
+            </summary>
+            <param name="left">The left.</param>
+            <param name="right">The right.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:BigMath.Int128.op_OnesComplement(BigMath.Int128)">
+            <summary>
+                Implements the operator ~.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Increment(BigMath.Int128)">
+            <summary>
+                Implements the operator ++.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:BigMath.Int128.op_Decrement(BigMath.Int128)">
+            <summary>
+                Implements the operator --.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="P:BigMath.Int128.High">
+            <summary>
+                Higher 64 bits.
+            </summary>
+        </member>
+        <member name="P:BigMath.Int128.Low">
+            <summary>
+                Lower 64 bits.
+            </summary>
+        </member>
+        <member name="P:BigMath.Int128.Sign">
+            <summary>
+                Gets a number that indicates the sign (negative, positive, or zero) of the current Int128 object.
+            </summary>
+            <value>A number that indicates the sign of the Int128 object</value>
+        </member>
+        <member name="T:BigMath.Int256">
+            <summary>
+                Represents a 256-bit signed integer.
+            </summary>
+        </member>
+        <member name="F:BigMath.Int256.Zero">
+            <summary>
+                Gets a value that represents the number 0 (zero).
+            </summary>
+        </member>
+        <member name="F:BigMath.Int256.MaxValue">
+            <summary>
+                Represents the largest possible value of an Int256.
+            </summary>
+        </member>
+        <member name="F:BigMath.Int256.MinValue">
+            <summary>
+                Represents the smallest possible value of an Int256.
+            </summary>
+        </member>
+        <member name="M:BigMath.Int256.#ctor(System.Byte)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int256"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.Int256.#ctor(System.Boolean)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int256"/> struct.
+            </summary>
+            <param name="value">if set to <c>true</c> [value].</param>
+        </member>
+        <member name="M:BigMath.Int256.#ctor(System.Char)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int256"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.Int256.#ctor(System.Decimal)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int256"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.Int256.#ctor(System.Double)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int256"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.Int256.#ctor(System.Single)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int256"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.Int256.#ctor(System.Int16)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int256"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.Int256.#ctor(System.Int32)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int256"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.Int256.#ctor(System.Int64)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int256"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.Int256.#ctor(System.SByte)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int256"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.Int256.#ctor(System.UInt16)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int256"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.Int256.#ctor(System.UInt32)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int256"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.Int256.#ctor(System.UInt64)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int256"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.Int256.#ctor(System.Guid)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int256"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.Int256.#ctor(BigMath.Int128)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int256"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:BigMath.Int256.#ctor(System.Int32,System.UInt32[])">
+            <summary>
+                Initializes a new instance of the <see cref="T:BigMath.Int256"/> struct.
+            </summary>
+            <param name="sign">The sign.</param>
+            <param name="ints">The ints.</param>
+        </member>
+        <member name="M:BigMath.Int256.GetHashCode">
+            <summary>
+                Returns a hash code for this instance.
+            </summary>
+            <returns>
+                A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.Equals(System.Object)">
+            <summary>
+                Returns a value indicating whether this instance is equal to a specified object.
+            </summary>
+            <param name="obj">An object to compare with this instance.</param>
+            <returns>
+                true if obj has the same value as this instance; otherwise, false.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.Equals(BigMath.Int256)">
+            <summary>
+                Returns a value indicating whether this instance is equal to a specified Int64 value.
+            </summary>
+            <param name="obj">The obj.</param>
+            <returns>
+                true if obj has the same value as this instance; otherwise, false.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.ToString">
+            <summary>
+                Returns a <see cref="T:System.String"/> that represents this instance.
+            </summary>
+            <returns>
+                A <see cref="T:System.String"/> that represents this instance.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.ToString(System.String,System.IFormatProvider)">
+            <summary>
+                Returns a <see cref="T:System.String"/> that represents this instance.
+            </summary>
+            <param name="format">The format. Only x, X, g, G, d, D are supported.</param>
+            <param name="formatProvider">An object that supplies culture-specific formatting information about this instance.</param>
+            <returns>
+                A <see cref="T:System.String"/> that represents this instance.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.TryConvert(System.Type,System.IFormatProvider,System.Boolean,System.Object@)">
+            <summary>
+                Converts the numeric value to an equivalent object. The return value indicates whether the conversion succeeded.
+            </summary>
+            <param name="conversionType">The target conversion type.</param>
+            <param name="provider">An object that supplies culture-specific information about the conversion.</param>
+            <param name="asLittleEndian">As little endian.</param>
+            <param name="value">
+                When this method returns, contains the value that is equivalent to the numeric value, if the
+                conversion succeeded, or is null if the conversion failed. This parameter is passed uninitialized.
+            </param>
+            <returns>true if this value was converted successfully; otherwise, false.</returns>
+        </member>
+        <member name="M:BigMath.Int256.Parse(System.String)">
+            <summary>
+                Converts the string representation of a number to its Int256 equivalent.
+            </summary>
+            <param name="value">A string that contains a number to convert.</param>
+            <returns>
+                A value that is equivalent to the number specified in the value parameter.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.Parse(System.String,System.Globalization.NumberStyles)">
+            <summary>
+                Converts the string representation of a number in a specified style format to its Int256 equivalent.
+            </summary>
+            <param name="value">A string that contains a number to convert.</param>
+            <param name="style">A bitwise combination of the enumeration values that specify the permitted format of value.</param>
+            <returns>
+                A value that is equivalent to the number specified in the value parameter.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.Parse(System.String,System.IFormatProvider)">
+            <summary>
+                Converts the string representation of a number in a culture-specific format to its Int256 equivalent.
+            </summary>
+            <param name="value">A string that contains a number to convert.</param>
+            <param name="provider">An object that provides culture-specific formatting information about value.</param>
+            <returns>
+                A value that is equivalent to the number specified in the value parameter.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.Parse(System.String,System.Globalization.NumberStyles,System.IFormatProvider)">
+            <summary>
+                Converts the string representation of a number in a specified style and culture-specific format to its Int256
+                equivalent.
+            </summary>
+            <param name="value">A string that contains a number to convert.</param>
+            <param name="style">A bitwise combination of the enumeration values that specify the permitted format of value.</param>
+            <param name="provider">An object that provides culture-specific formatting information about value.</param>
+            <returns>A value that is equivalent to the number specified in the value parameter.</returns>
+        </member>
+        <member name="M:BigMath.Int256.TryParse(System.String,BigMath.Int256@)">
+            <summary>
+                Tries to convert the string representation of a number to its Int256 equivalent, and returns a value that indicates
+                whether the conversion succeeded..
+            </summary>
+            <param name="value">The string representation of a number.</param>
+            <param name="result">
+                When this method returns, contains the Int256 equivalent to the number that is contained in value,
+                or Int256.Zero if the conversion failed. This parameter is passed uninitialized.
+            </param>
+            <returns>
+                true if the value parameter was converted successfully; otherwise, false.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.TryParse(System.String,System.Globalization.NumberStyles,System.IFormatProvider,BigMath.Int256@)">
+            <summary>
+                Tries to convert the string representation of a number in a specified style and culture-specific format to its
+                Int256 equivalent, and returns a value that indicates whether the conversion succeeded..
+            </summary>
+            <param name="value">
+                The string representation of a number. The string is interpreted using the style specified by
+                style.
+            </param>
+            <param name="style">
+                A bitwise combination of enumeration values that indicates the style elements that can be present
+                in value. A typical value to specify is NumberStyles.Integer.
+            </param>
+            <param name="provider">An object that supplies culture-specific formatting information about value.</param>
+            <param name="result">
+                When this method returns, contains the Int256 equivalent to the number that is contained in value,
+                or Int256.Zero if the conversion failed. This parameter is passed uninitialized.
+            </param>
+            <returns>true if the value parameter was converted successfully; otherwise, false.</returns>
+        </member>
+        <member name="M:BigMath.Int256.ToType(System.Type,System.IFormatProvider,System.Boolean)">
+            <summary>
+                Converts the value of this instance to an <see cref="T:System.Object" /> of the specified
+                <see cref="T:System.Type" /> that has an equivalent value, using the specified culture-specific formatting
+                information.
+            </summary>
+            <param name="conversionType">The <see cref="T:System.Type" /> to which the value of this instance is converted.</param>
+            <param name="provider">
+                An <see cref="T:System.IFormatProvider" /> interface implementation that supplies
+                culture-specific formatting information.
+            </param>
+            <param name="asLittleEndian">As little endian.</param>
+            <returns>
+                An <see cref="T:System.Object" /> instance of type <paramref name="conversionType" /> whose value is equivalent to
+                the value of this instance.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.System#IComparable#CompareTo(System.Object)">
+            <summary>
+                Compares the current instance with another object of the same type and returns an integer that indicates whether
+                the current instance precedes, follows, or occurs in the same position in the sort order as the other object.
+            </summary>
+            <param name="obj">An object to compare with this instance.</param>
+            <returns>
+                A value that indicates the relative order of the objects being compared. The return value has these meanings: Value
+                Meaning Less than zero This instance is less than <paramref name="obj" />. Zero This instance is equal to
+                <paramref name="obj" />. Greater than zero This instance is greater than <paramref name="obj" />.
+            </returns>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="obj" /> is not the same type as this instance.
+            </exception>
+        </member>
+        <member name="M:BigMath.Int256.Compare(BigMath.Int256,System.Object)">
+            <summary>
+                Compares two Int256 values and returns an integer that indicates whether the first value is less than, equal to, or
+                greater than the second value.
+            </summary>
+            <param name="left">The first value to compare.</param>
+            <param name="right">The second value to compare.</param>
+            <returns>A signed integer that indicates the relative values of left and right, as shown in the following table.</returns>
+        </member>
+        <member name="M:BigMath.Int256.Compare(BigMath.Int256,BigMath.Int256)">
+            <summary>
+                Compares two 256-bit signed integer values and returns an integer that indicates whether the first value is less
+                than, equal to, or greater than the second value.
+            </summary>
+            <param name="left">The first value to compare.</param>
+            <param name="right">The second value to compare.</param>
+            <returns>
+                A signed number indicating the relative values of this instance and value.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.CompareTo(BigMath.Int256)">
+            <summary>
+                Compares this instance to a specified 256-bit signed integer and returns an indication of their relative values.
+            </summary>
+            <param name="value">An integer to compare.</param>
+            <returns>A signed number indicating the relative values of this instance and value.</returns>
+        </member>
+        <member name="M:BigMath.Int256.Negate(BigMath.Int256)">
+            <summary>
+                Negates a specified Int256 value.
+            </summary>
+            <param name="value">The value to negate.</param>
+            <returns>The result of the value parameter multiplied by negative one (-1).</returns>
+        </member>
+        <member name="M:BigMath.Int256.ToAbs">
+            <summary>
+                Gets the absolute value this object.
+            </summary>
+            <returns>The absolute value.</returns>
+        </member>
+        <member name="M:BigMath.Int256.Abs(BigMath.Int256)">
+            <summary>
+                Gets the absolute value of an Int256 object.
+            </summary>
+            <param name="value">A number.</param>
+            <returns>
+                The absolute value.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.Add(BigMath.Int256,BigMath.Int256)">
+            <summary>
+                Adds two Int256 values and returns the result.
+            </summary>
+            <param name="left">The first value to add.</param>
+            <param name="right">The second value to add.</param>
+            <returns>The sum of left and right.</returns>
+        </member>
+        <member name="M:BigMath.Int256.Subtract(BigMath.Int256,BigMath.Int256)">
+            <summary>
+                Subtracts one Int256 value from another and returns the result.
+            </summary>
+            <param name="left">The value to subtract from (the minuend).</param>
+            <param name="right">The value to subtract (the subtrahend).</param>
+            <returns>The result of subtracting right from left.</returns>
+        </member>
+        <member name="M:BigMath.Int256.Divide(BigMath.Int256,BigMath.Int256)">
+            <summary>
+                Divides one Int256 value by another and returns the result.
+            </summary>
+            <param name="dividend">The value to be divided.</param>
+            <param name="divisor">The value to divide by.</param>
+            <returns>The quotient of the division.</returns>
+        </member>
+        <member name="M:BigMath.Int256.Remainder(BigMath.Int256,BigMath.Int256)">
+            <summary>
+                Performs integer division on two Int256 values and returns the remainder.
+            </summary>
+            <param name="dividend">The value to be divided.</param>
+            <param name="divisor">The value to divide by.</param>
+            <returns>The remainder after dividing dividend by divisor.</returns>
+        </member>
+        <member name="M:BigMath.Int256.DivRem(BigMath.Int256,BigMath.Int256,BigMath.Int256@)">
+            <summary>
+                Divides one Int256 value by another, returns the result, and returns the remainder in an output parameter.
+            </summary>
+            <param name="dividend">The value to be divided.</param>
+            <param name="divisor">The value to divide by.</param>
+            <param name="remainder">
+                When this method returns, contains an Int256 value that represents the remainder from the
+                division. This parameter is passed uninitialized.
+            </param>
+            <returns>
+                The quotient of the division.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.ToUIn64Array">
+            <summary>
+                Converts an Int256 value to an unsigned long array.
+            </summary>
+            <returns>
+                The value of the current Int256 object converted to an array of unsigned integers.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.ToUIn32Array">
+            <summary>
+                Converts an Int256 value to an unsigned integer array.
+            </summary>
+            <returns>The value of the current Int256 object converted to an array of unsigned integers.</returns>
+        </member>
+        <member name="M:BigMath.Int256.Multiply(BigMath.Int256,BigMath.Int256)">
+            <summary>
+                Returns the product of two Int256 values.
+            </summary>
+            <param name="left">The first number to multiply.</param>
+            <param name="right">The second number to multiply.</param>
+            <returns>The product of the left and right parameters.</returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Implicit(System.Boolean)~BigMath.Int256">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.Boolean"/> to <see cref="T:BigMath.Int256"/>.
+            </summary>
+            <param name="value">if set to <c>true</c> [value].</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Implicit(System.Byte)~BigMath.Int256">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.Byte"/> to <see cref="T:BigMath.Int256"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Implicit(System.Char)~BigMath.Int256">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.Char"/> to <see cref="T:BigMath.Int256"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Explicit(System.Decimal)~BigMath.Int256">
+            <summary>
+                Performs an explicit conversion from <see cref="T:System.Decimal"/> to <see cref="T:BigMath.Int256"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Explicit(System.Double)~BigMath.Int256">
+            <summary>
+                Performs an explicit conversion from <see cref="T:System.Double"/> to <see cref="T:BigMath.Int256"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Implicit(System.Int16)~BigMath.Int256">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.Int16"/> to <see cref="T:BigMath.Int256"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Implicit(System.Int32)~BigMath.Int256">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.Int32"/> to <see cref="T:BigMath.Int256"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Implicit(System.Int64)~BigMath.Int256">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.Int64"/> to <see cref="T:BigMath.Int256"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Implicit(System.SByte)~BigMath.Int256">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.SByte"/> to <see cref="T:BigMath.Int256"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Explicit(System.Single)~BigMath.Int256">
+            <summary>
+                Performs an explicit conversion from <see cref="T:System.Single"/> to <see cref="T:BigMath.Int256"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Implicit(System.UInt16)~BigMath.Int256">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.UInt16"/> to <see cref="T:BigMath.Int256"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Implicit(System.UInt32)~BigMath.Int256">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.UInt32"/> to <see cref="T:BigMath.Int256"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Implicit(System.UInt64)~BigMath.Int256">
+            <summary>
+                Performs an implicit conversion from <see cref="T:System.UInt64"/> to <see cref="T:BigMath.Int256"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Explicit(BigMath.Int256)~System.Boolean">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.Int256"/> to <see cref="T:System.Boolean"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Explicit(BigMath.Int256)~System.Byte">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.Int256"/> to <see cref="T:System.Byte"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Explicit(BigMath.Int256)~System.Char">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.Int256"/> to <see cref="T:System.Char"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Explicit(BigMath.Int256)~System.Decimal">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.Int256"/> to <see cref="T:System.Decimal"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Explicit(BigMath.Int256)~System.Double">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.Int256"/> to <see cref="T:System.Double"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Explicit(BigMath.Int256)~System.Single">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.Int256"/> to <see cref="T:System.Single"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Explicit(BigMath.Int256)~System.Int16">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.Int256"/> to <see cref="T:System.Int16"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Explicit(BigMath.Int256)~System.Int32">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.Int256"/> to <see cref="T:System.Int32"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Explicit(BigMath.Int256)~System.Int64">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.Int256"/> to <see cref="T:System.Int64"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Explicit(BigMath.Int256)~System.UInt32">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.Int256"/> to <see cref="T:System.UInt32"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Explicit(BigMath.Int256)~System.UInt16">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.Int256"/> to <see cref="T:System.UInt16"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Explicit(BigMath.Int256)~System.UInt64">
+            <summary>
+                Performs an explicit conversion from <see cref="T:BigMath.Int256"/> to <see cref="T:System.UInt64"/>.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the conversion.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_GreaterThan(BigMath.Int256,BigMath.Int256)">
+            <summary>
+                Implements the operator &gt;.
+            </summary>
+            <param name="left">The x.</param>
+            <param name="right">The y.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_LessThan(BigMath.Int256,BigMath.Int256)">
+            <summary>
+                Implements the operator &lt;.
+            </summary>
+            <param name="left">The x.</param>
+            <param name="right">The y.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_GreaterThanOrEqual(BigMath.Int256,BigMath.Int256)">
+            <summary>
+                Implements the operator &gt;=.
+            </summary>
+            <param name="left">The x.</param>
+            <param name="right">The y.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_LessThanOrEqual(BigMath.Int256,BigMath.Int256)">
+            <summary>
+                Implements the operator &lt;=.
+            </summary>
+            <param name="left">The x.</param>
+            <param name="right">The y.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Inequality(BigMath.Int256,BigMath.Int256)">
+            <summary>
+                Implements the operator !=.
+            </summary>
+            <param name="left">The x.</param>
+            <param name="right">The y.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Equality(BigMath.Int256,BigMath.Int256)">
+            <summary>
+                Implements the operator ==.
+            </summary>
+            <param name="left">The x.</param>
+            <param name="right">The y.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_UnaryPlus(BigMath.Int256)">
+            <summary>
+                Implements the operator +.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_UnaryNegation(BigMath.Int256)">
+            <summary>
+                Implements the operator -.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Addition(BigMath.Int256,BigMath.Int256)">
+            <summary>
+                Implements the operator +.
+            </summary>
+            <param name="left">The x.</param>
+            <param name="right">The y.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Subtraction(BigMath.Int256,BigMath.Int256)">
+            <summary>
+                Implements the operator -.
+            </summary>
+            <param name="left">The x.</param>
+            <param name="right">The y.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Modulus(BigMath.Int256,BigMath.Int256)">
+            <summary>
+                Implements the operator %.
+            </summary>
+            <param name="dividend">The dividend.</param>
+            <param name="divisor">The divisor.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Division(BigMath.Int256,BigMath.Int256)">
+            <summary>
+                Implements the operator /.
+            </summary>
+            <param name="dividend">The dividend.</param>
+            <param name="divisor">The divisor.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Multiply(BigMath.Int256,BigMath.Int256)">
+            <summary>
+                Implements the operator *.
+            </summary>
+            <param name="left">The x.</param>
+            <param name="right">The y.</param>
+            <returns>
+                The result of the operator.
+            </returns>
+        </member>
+        <member name="M:BigMath.Int256.op_RightShift(BigMath.Int256,System.Int32)">
+            <summary>
+                Implements the operator &gt;&gt;.
+            </summary>
+            <param name="value">The value.</param>
+            <param name="shift">The shift.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:BigMath.Int256.op_LeftShift(BigMath.Int256,System.Int32)">
+            <summary>
+                Implements the operator &lt;&lt;.
+            </summary>
+            <param name="value">The value.</param>
+            <param name="shift">The shift.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:BigMath.Int256.op_BitwiseOr(BigMath.Int256,BigMath.Int256)">
+            <summary>
+                Implements the operator |.
+            </summary>
+            <param name="left">The left.</param>
+            <param name="right">The right.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:BigMath.Int256.op_BitwiseAnd(BigMath.Int256,BigMath.Int256)">
+            <summary>
+                Implements the operator &amp;.
+            </summary>
+            <param name="left">The left.</param>
+            <param name="right">The right.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:BigMath.Int256.op_OnesComplement(BigMath.Int256)">
+            <summary>
+                Implements the operator ~.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Increment(BigMath.Int256)">
+            <summary>
+                Implements the operator ++.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="M:BigMath.Int256.op_Decrement(BigMath.Int256)">
+            <summary>
+                Implements the operator --.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>The result of the operator.</returns>
+        </member>
+        <member name="P:BigMath.Int256.A">
+            <summary>
+                Higher 64 bits of the higher 128 bits.
+            </summary>
+        </member>
+        <member name="P:BigMath.Int256.B">
+            <summary>
+                Lower 64 bits of the higher 128 bits.
+            </summary>
+        </member>
+        <member name="P:BigMath.Int256.C">
+            <summary>
+                Higher 64 bits of the lower 128 bits.
+            </summary>
+        </member>
+        <member name="P:BigMath.Int256.D">
+            <summary>
+                Lower 64 bits of the lower 128 bits.
+            </summary>
+        </member>
+        <member name="P:BigMath.Int256.Sign">
+            <summary>
+                Gets a number that indicates the sign (negative, positive, or zero) of the current Int256 object.
+            </summary>
+            <value>A number that indicates the sign of the Int256 object</value>
+        </member>
+        <member name="T:BigMath.Utils.ArrayUtils">
+            <summary>
+                Utils for the <see cref="T:System.Array"/> class.
+            </summary>
+        </member>
+        <member name="M:BigMath.Utils.ArrayUtils.ConvertAll``2(``0[],System.Func{``0,``1})">
+            <summary>
+                Converts an array of one type to an array of another type.
+            </summary>
+            <returns>
+                An array of the target type containing the converted elements from the source array.
+            </returns>
+            <param name="array">The one-dimensional, zero-based <see cref="T:System.Array"/> to convert to a target type.</param>
+            <param name="convert">A <see cref="T:System.Func`2"/> that converts each element from one type to another type.</param>
+            <typeparam name="TInput">The type of the elements of the source array.</typeparam>
+            <typeparam name="TOutput">The type of the elements of the target array.</typeparam>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="array"/> is null.-or-<paramref name="convert"/> is
+                null.
+            </exception>
+        </member>
+        <member name="M:BigMath.Utils.ArrayUtils.GetNonZeroLength(System.Byte[],System.Nullable{System.Boolean})">
+            <summary>
+                Get length of serial non zero items.
+            </summary>
+            <param name="bytes">Array of bytes.</param>
+            <param name="asLittleEndian">True - skip all zero items from high. False - skip all zero items from low.</param>
+            <returns>Length of serial non zero items.</returns>
+        </member>
+        <member name="M:BigMath.Utils.ArrayUtils.TrimZeros(System.Byte[],System.Nullable{System.Boolean})">
+            <summary>
+                Trim zero items.
+            </summary>
+            <param name="bytes">Array of bytes.</param>
+            <param name="asLittleEndian">True - trim from high, False - trim from low.</param>
+            <returns>Trimmed array of bytes.</returns>
+        </member>
+        <member name="M:BigMath.Utils.ArrayUtils.ToHexString(System.Byte[],System.Boolean,System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+                Converts array of bytes to hexadecimal string.
+            </summary>
+            <param name="bytes">Bytes.</param>
+            <param name="caps">Capitalize chars.</param>
+            <param name="min">Minimum string length. 0 if there is no minimum length.</param>
+            <param name="spaceEveryByte">Space every byte.</param>
+            <param name="trimZeros">Trim zeros in the result string.</param>
+            <returns>Hexadecimal string representation of the bytes array.</returns>
+        </member>
+        <member name="M:BigMath.Utils.ArrayUtils.ToHexString(System.ArraySegment{System.Byte},System.Boolean,System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+                Converts array of bytes to hexadecimal string.
+            </summary>
+            <param name="bytes">Bytes.</param>
+            <param name="caps">Capitalize chars.</param>
+            <param name="min">Minimum string length. 0 if there is no minimum length.</param>
+            <param name="spaceEveryByte">Space every byte.</param>
+            <param name="trimZeros">Trim zeros in the result string.</param>
+            <returns>Hexadecimal string representation of the bytes array.</returns>
+        </member>
+        <member name="M:BigMath.Utils.ArrayUtils.HexToBytes(System.String)">
+            <summary>
+                Converts string of hex numbers to array of bytes.
+            </summary>
+            <param name="hexString">String value.</param>
+            <returns>Array of bytes.</returns>
+        </member>
+        <member name="T:BigMath.Utils.Crc32">
+            <summary>
+                Crc32 calculator.
+            </summary>
+        </member>
+        <member name="M:BigMath.Utils.Crc32.Init">
+            <summary>
+                Reset CRC.
+            </summary>
+        </member>
+        <member name="T:BigMath.Utils.MathUtils">
+            <summary>
+                Math utils.
+            </summary>
+        </member>
+        <member name="M:BigMath.Utils.MathUtils.Shift(System.UInt64[],System.Int32)">
+            <summary>
+                Bitwise shift array of <see cref="T:System.UInt64"/>.
+            </summary>
+            <param name="values">Bits to shift. Lower bits have lower index in array.</param>
+            <param name="shift">Shift amount in bits. Negative for left shift, positive for right shift.</param>
+            <returns>Shifted values.</returns>
+        </member>
+        <member name="M:BigMath.Utils.MathUtils.ShiftRight(System.UInt64[],System.Int32)">
+            <summary>
+                Bitwise right shift.
+            </summary>
+            <param name="values">Bits to shift. Lower bits have lower index in array.</param>
+            <param name="shift">Shift amount in bits.</param>
+            <returns>Shifted values.</returns>
+        </member>
+        <member name="M:BigMath.Utils.MathUtils.ShiftRightSigned(System.UInt64[],System.Int32)">
+            <summary>
+                Bitwise right shift.
+                
+                Using an array of ulong's, but when called from Int128 and Int256, value is really a signed number, so we need to preserve the sign bits
+            </summary>
+            <param name="values">Bits to shift. Lower bits have lower index in array.</param>
+            <param name="shift">Shift amount in bits.</param>
+            <returns>Shifted values.</returns>
+        </member>
+        <member name="M:BigMath.Utils.MathUtils.ShiftLeft(System.UInt64[],System.Int32)">
+            <summary>
+                Bitwise right shift.
+            </summary>
+            <param name="values">Bits to shift. Lower bits have lower index in array.</param>
+            <param name="shift">Shift amount in bits.</param>
+            <returns>Shifted values.</returns>
+        </member>
+        <member name="T:BigMath.Utils.ExtendedBitConverter">
+            <summary>
+                Bit converter methods which support explicit endian.
+            </summary>
+        </member>
+        <member name="F:BigMath.Utils.ExtendedBitConverter.IsLittleEndian">
+            <summary>
+                Indicates the byte order ("endianness") in which data is stored in this computer architecture.
+            </summary>
+        </member>
+        <member name="M:BigMath.Utils.ExtendedBitConverter.ToBytes(System.Int16,System.Nullable{System.Boolean})">
+            <summary>
+                Converts <see cref="T:System.Int16"/> to array of bytes.
+            </summary>
+            <param name="value">Value.</param>
+            <param name="asLittleEndian">Convert to little endian.</param>
+            <returns>Array of bytes.</returns>
+        </member>
+        <member name="M:BigMath.Utils.ExtendedBitConverter.ToBytes(System.Int16,System.Byte[],System.Int32,System.Nullable{System.Boolean})">
+            <summary>
+                Converts <see cref="T:System.Int16"/> to array of bytes.
+            </summary>
+            <param name="value">Value.</param>
+            <param name="buffer">Buffer at least 2 bytes.</param>
+            <param name="offset">The starting position within <paramref name="buffer"/>.</param>
+            <param name="asLittleEndian">Convert to little endian.</param>
+            <returns>Array of bytes.</returns>
+        </member>
+        <member name="M:BigMath.Utils.ExtendedBitConverter.ToInt16(System.Byte[],System.Int32,System.Nullable{System.Boolean})">
+            <summary>
+                Converts array of bytes to <see cref="T:System.Int16"/>.
+            </summary>
+            <param name="bytes">An array of bytes.</param>
+            <param name="offset">The starting position within <paramref name="bytes"/>.</param>
+            <param name="asLittleEndian">Convert from little endian.</param>
+            <returns><see cref="T:System.Int16"/> value.</returns>
+        </member>
+        <member name="M:BigMath.Utils.ExtendedBitConverter.ToBytes(System.UInt16,System.Nullable{System.Boolean})">
+            <summary>
+                Converts <see cref="T:System.UInt16"/> to array of bytes.
+            </summary>
+            <param name="value">Value.</param>
+            <param name="asLittleEndian">Convert to little endian.</param>
+            <returns>Array of bytes.</returns>
+        </member>
+        <member name="M:BigMath.Utils.ExtendedBitConverter.ToBytes(System.UInt16,System.Byte[],System.Int32,System.Nullable{System.Boolean})">
+            <summary>
+                Converts <see cref="T:System.UInt16"/> to array of bytes.
+            </summary>
+            <param name="value">Value.</param>
+            <param name="buffer">Buffer at least 2 bytes.</param>
+            <param name="offset">The starting position within <paramref name="buffer"/>.</param>
+            <param name="asLittleEndian">Convert to little endian.</param>
+            <returns>Array of bytes.</returns>
+        </member>
+        <member name="M:BigMath.Utils.ExtendedBitConverter.ToUInt16(System.Byte[],System.Int32,System.Nullable{System.Boolean})">
+            <summary>
+                Converts array of bytes to <see cref="T:System.UInt16"/>.
+            </summary>
+            <param name="bytes">An array of bytes.</param>
+            <param name="offset">The starting position within <paramref name="bytes"/>.</param>
+            <param name="asLittleEndian">Convert from little endian.</param>
+            <returns><see cref="T:System.UInt16"/> value.</returns>
+        </member>
+        <member name="M:BigMath.Utils.ExtendedBitConverter.ToBytes(System.Int32,System.Nullable{System.Boolean})">
+            <summary>
+                Converts <see cref="T:System.Int32"/> to array of bytes.
+            </summary>
+            <param name="value">Value.</param>
+            <param name="asLittleEndian">Convert to little endian.</param>
+            <returns>Array of bytes.</returns>
+        </member>
+        <member name="M:BigMath.Utils.ExtendedBitConverter.ToBytes(System.Int32,System.Byte[],System.Int32,System.Nullable{System.Boolean})">
+            <summary>
+                Converts <see cref="T:System.Int32"/> to array of bytes.
+            </summary>
+            <param name="value">Value.</param>
+            <param name="buffer">Buffer at least 4 bytes.</param>
+            <param name="offset">The starting position within <paramref name="buffer"/>.</param>
+            <param name="asLittleEndian">Convert to little endian.</param>
+            <returns>Array of bytes.</returns>
+        </member>
+        <member name="M:BigMath.Utils.ExtendedBitConverter.ToInt32(System.Byte[],System.Int32,System.Nullable{System.Boolean})">
+            <summary>
+                Converts array of bytes to <see cref="T:System.Int32"/>.
+            </summary>
+            <param name="bytes">An array of bytes.</param>
+            <param name="offset">The starting position within <paramref name="bytes"/>.</param>
+            <param name="asLittleEndian">Convert from little endian.</param>
+            <returns><see cref="T:System.Int32"/> value.</returns>
+        </member>
+        <member name="M:BigMath.Utils.ExtendedBitConverter.ToBytes(System.UInt32,System.Nullable{System.Boolean})">
+            <summary>
+                Converts <see cref="T:System.UInt32"/> to array of bytes.
+            </summary>
+            <param name="value">Value.</param>
+            <param name="asLittleEndian">Convert to little endian.</param>
+            <returns>Array of bytes.</returns>
+        </member>
+        <member name="M:BigMath.Utils.ExtendedBitConverter.ToBytes(System.UInt32,System.Byte[],System.Int32,System.Nullable{System.Boolean})">
+            <summary>
+                Converts <see cref="T:System.UInt32"/> to array of bytes.
+            </summary>
+            <param name="value">Value.</param>
+            <param name="buffer">Buffer at least 4 bytes.</param>
+            <param name="offset">The starting position within <paramref name="buffer"/>.</param>
+            <param name="asLittleEndian">Convert to little endian.</param>
+            <returns>Array of bytes.</returns>
+        </member>
+        <member name="M:BigMath.Utils.ExtendedBitConverter.ToUInt32(System.Byte[],System.Int32,System.Nullable{System.Boolean})">
+            <summary>
+                Converts array of bytes to <see cref="T:System.UInt32"/>.
+            </summary>
+            <param name="bytes">An array of bytes.</param>
+            <param name="offset">The starting position within <paramref name="bytes"/>.</param>
+            <param name="asLittleEndian">Convert from little endian.</param>
+            <returns><see cref="T:System.UInt32"/> value.</returns>
+        </member>
+        <member name="M:BigMath.Utils.ExtendedBitConverter.ToBytes(System.Int64,System.Nullable{System.Boolean})">
+            <summary>
+                Converts <see cref="T:System.Int64"/> to array of bytes.
+            </summary>
+            <param name="value">Value.</param>
+            <param name="asLittleEndian">Convert to little endian.</param>
+            <returns>Array of bytes.</returns>
+        </member>
+        <member name="M:BigMath.Utils.ExtendedBitConverter.ToBytes(System.Int64,System.Byte[],System.Int32,System.Nullable{System.Boolean})">
+            <summary>
+                Converts <see cref="T:System.Int64"/> to array of bytes.
+            </summary>
+            <param name="value">Value.</param>
+            <param name="buffer">Buffer at least 8 bytes.</param>
+            <param name="offset">The starting position within <paramref name="buffer"/>.</param>
+            <param name="asLittleEndian">Convert to little endian.</param>
+        </member>
+        <member name="M:BigMath.Utils.ExtendedBitConverter.ToInt64(System.Byte[],System.Int32,System.Nullable{System.Boolean})">
+            <summary>
+                Converts array of bytes to <see cref="T:System.Int64"/>.
+            </summary>
+            <param name="bytes">An array of bytes. </param>
+            <param name="offset">The starting position within <paramref name="bytes"/>.</param>
+            <param name="asLittleEndian">Convert from little endian.</param>
+            <returns><see cref="T:System.Int64"/> value.</returns>
+        </member>
+        <member name="M:BigMath.Utils.ExtendedBitConverter.ToBytes(System.UInt64,System.Nullable{System.Boolean})">
+            <summary>
+                Converts <see cref="T:System.UInt64"/> to array of bytes.
+            </summary>
+            <param name="value">Value.</param>
+            <param name="asLittleEndian">Convert to little endian.</param>
+            <returns>Array of bytes.</returns>
+        </member>
+        <member name="M:BigMath.Utils.ExtendedBitConverter.ToBytes(System.UInt64,System.Byte[],System.Int32,System.Nullable{System.Boolean})">
+            <summary>
+                Converts <see cref="T:System.UInt64"/> to array of bytes.
+            </summary>
+            <param name="value">Value.</param>
+            <param name="buffer">Buffer at least 8 bytes.</param>
+            <param name="offset">The starting position within <paramref name="buffer"/>.</param>
+            <param name="asLittleEndian">Convert to little endian.</param>
+        </member>
+        <member name="M:BigMath.Utils.ExtendedBitConverter.ToUInt64(System.Byte[],System.Int32,System.Nullable{System.Boolean})">
+            <summary>
+                Converts array of bytes to <see cref="T:System.UInt64"/>.
+            </summary>
+            <param name="bytes">An array of bytes.</param>
+            <param name="offset">The starting position within <paramref name="bytes"/>.</param>
+            <param name="asLittleEndian">Convert from little endian.</param>
+            <returns><see cref="T:System.UInt64"/> value.</returns>
+        </member>
+        <member name="M:BigMath.Utils.ExtendedBitConverter.ToBytes(BigMath.Int128,System.Byte[],System.Int32,System.Nullable{System.Boolean})">
+            <summary>
+                Converts an <see cref="T:BigMath.Int128"/> value to an array of bytes.
+            </summary>
+            <param name="value">Value.</param>
+            <param name="buffer">An array of bytes.</param>
+            <param name="offset">The starting position within <paramref name="buffer"/>.</param>
+            <param name="asLittleEndian">Convert from little endian.</param>
+        </member>
+        <member name="M:BigMath.Utils.ExtendedBitConverter.ToBytes(BigMath.Int128,System.Nullable{System.Boolean},System.Boolean)">
+            <summary>
+                Converts an <see cref="T:BigMath.Int128"/> value to a byte array.
+            </summary>
+            <param name="value">Value.</param>
+            <param name="asLittleEndian">Convert from little endian.</param>
+            <param name="trimZeros">Trim zero bytes from left or right, depending on endian.</param>
+            <returns>Array of bytes.</returns>
+        </member>
+        <member name="M:BigMath.Utils.ExtendedBitConverter.ToInt128(System.Byte[],System.Int32,System.Nullable{System.Boolean})">
+            <summary>
+                Converts array of bytes to <see cref="T:BigMath.Int128"/>.
+            </summary>
+            <param name="bytes">An array of bytes.</param>
+            <param name="offset">The starting position within <paramref name="bytes"/>.</param>
+            <param name="asLittleEndian">Convert from little endian.</param>
+            <returns><see cref="T:BigMath.Int128"/> value.</returns>
+        </member>
+        <member name="M:BigMath.Utils.ExtendedBitConverter.ToBytes(BigMath.Int256,System.Byte[],System.Int32,System.Nullable{System.Boolean})">
+            <summary>
+                Converts an <see cref="T:BigMath.Int256"/> value to an array of bytes.
+            </summary>
+            <param name="value">Value.</param>
+            <param name="buffer">An array of bytes.</param>
+            <param name="offset">The starting position within <paramref name="buffer"/>.</param>
+            <param name="asLittleEndian">Convert from little endian.</param>
+        </member>
+        <member name="M:BigMath.Utils.ExtendedBitConverter.ToBytes(BigMath.Int256,System.Nullable{System.Boolean},System.Boolean)">
+            <summary>
+                Converts an <see cref="T:BigMath.Int256"/> value to a byte array.
+            </summary>
+            <param name="value">Value.</param>
+            <param name="asLittleEndian">Convert from little endian.</param>
+            <param name="trimZeros">Trim zero bytes from left or right, depending on endian.</param>
+            <returns>Array of bytes.</returns>
+        </member>
+        <member name="M:BigMath.Utils.ExtendedBitConverter.ToInt256(System.Byte[],System.Int32,System.Nullable{System.Boolean})">
+            <summary>
+                Converts array of bytes to <see cref="T:BigMath.Int256"/>.
+            </summary>
+            <param name="bytes">An array of bytes.</param>
+            <param name="offset">The starting position within <paramref name="bytes"/>.</param>
+            <param name="asLittleEndian">Convert from little endian.</param>
+            <returns><see cref="T:BigMath.Int256"/> value.</returns>
+        </member>
+    </members>
+</doc>

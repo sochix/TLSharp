@@ -1,0 +1,49 @@
+C:\Users\Davide\source\repos\TLC\TLC\obj\Debug\TLC.csprojResolveAssemblyReference.cache
+C:\Users\Davide\source\repos\TLC\TLC\obj\Debug\TLC.csproj.CoreCompileInputs.cache
+C:\Users\Davide\source\repos\TLC\TLC\bin\Debug\TLC.exe.config
+C:\Users\Davide\source\repos\TLC\TLC\bin\Debug\TLC.exe
+C:\Users\Davide\source\repos\TLC\TLC\bin\Debug\TLC.pdb
+C:\Users\Davide\source\repos\TLC\TLC\bin\Debug\BigMath.dll
+C:\Users\Davide\source\repos\TLC\TLC\bin\Debug\Ionic.Zip.dll
+C:\Users\Davide\source\repos\TLC\TLC\bin\Debug\Ionic.ZLib.dll
+C:\Users\Davide\source\repos\TLC\TLC\bin\Debug\TeleSharp.TL.dll
+C:\Users\Davide\source\repos\TLC\TLC\bin\Debug\TLSharp.Core.dll
+C:\Users\Davide\source\repos\TLC\TLC\bin\Debug\Ionic.Zip.xml
+C:\Users\Davide\source\repos\TLC\TLC\obj\Debug\TLC.exe
+C:\Users\Davide\source\repos\TLC\TLC\obj\Debug\TLC.pdb
+E:\TLC\TLC\bin\Debug\TLC.exe.config
+E:\TLC\TLC\obj\Debug\TLC.exe
+E:\TLC\TLC\obj\Debug\TLC.pdb
+E:\TLC\TLC\bin\Debug\TLC.exe
+E:\TLC\TLC\bin\Debug\TLC.pdb
+E:\TLC\TLC\bin\Debug\BigMath.dll
+E:\TLC\TLC\bin\Debug\Ionic.Zip.dll
+E:\TLC\TLC\bin\Debug\Ionic.ZLib.dll
+E:\TLC\TLC\bin\Debug\TeleSharp.TL.dll
+E:\TLC\TLC\bin\Debug\TLSharp.Core.dll
+E:\TLC\TLC\bin\Debug\Ionic.Zip.xml
+E:\TLC\TLC\obj\Debug\TLC.csprojResolveAssemblyReference.cache
+E:\TLC - Copia\TLC\bin\Debug\TLC.exe.config
+E:\TLC - Copia\TLC\obj\Debug\TLC.exe
+E:\TLC - Copia\TLC\obj\Debug\TLC.pdb
+E:\TLC - Copia\TLC\bin\Debug\TLC.exe
+E:\TLC - Copia\TLC\bin\Debug\TLC.pdb
+E:\TLC - Copia\TLC\bin\Debug\BigMath.dll
+E:\TLC - Copia\TLC\bin\Debug\Ionic.Zip.dll
+E:\TLC - Copia\TLC\bin\Debug\Ionic.ZLib.dll
+E:\TLC - Copia\TLC\bin\Debug\TeleSharp.TL.dll
+E:\TLC - Copia\TLC\bin\Debug\TLSharp.Core.dll
+E:\TLC - Copia\TLC\bin\Debug\Ionic.Zip.xml
+E:\TLC - Copia\TLC\obj\Debug\TLC.csprojResolveAssemblyReference.cache
+G:\TLC - Copia\TLC\bin\Debug\TLC.exe.config
+G:\TLC - Copia\TLC\obj\Debug\TLC.exe
+G:\TLC - Copia\TLC\obj\Debug\TLC.pdb
+G:\TLC - Copia\TLC\bin\Debug\TLC.exe
+G:\TLC - Copia\TLC\bin\Debug\TLC.pdb
+G:\TLC - Copia\TLC\bin\Debug\BigMath.dll
+G:\TLC - Copia\TLC\bin\Debug\Ionic.Zip.dll
+G:\TLC - Copia\TLC\bin\Debug\Ionic.ZLib.dll
+G:\TLC - Copia\TLC\bin\Debug\TeleSharp.TL.dll
+G:\TLC - Copia\TLC\bin\Debug\TLSharp.Core.dll
+G:\TLC - Copia\TLC\bin\Debug\Ionic.Zip.xml
+G:\TLC - Copia\TLC\obj\Debug\TLC.csprojResolveAssemblyReference.cache
