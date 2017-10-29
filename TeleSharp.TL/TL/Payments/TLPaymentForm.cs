@@ -89,9 +89,10 @@ namespace TeleSharp.TL.Payments
             bw.Write(provider_id);
             StringUtil.Serialize(url, bw);
             if ((flags & 16) != 0)
+            {
                 StringUtil.Serialize(native_provider, bw);
-            if ((flags & 16) != 0)
                 ObjectUtils.SerializeObject(native_params, bw);
+            }
             if ((flags & 1) != 0)
                 ObjectUtils.SerializeObject(saved_info, bw);
             if ((flags & 2) != 0)

@@ -67,11 +67,11 @@ namespace TeleSharp.TL.Account
             ComputeFlags();
             bw.Write(flags);
             if ((flags & 1) != 0)
+            {
                 BytesUtil.Serialize(new_salt, bw);
-            if ((flags & 1) != 0)
                 BytesUtil.Serialize(new_password_hash, bw);
-            if ((flags & 1) != 0)
                 StringUtil.Serialize(hint, bw);
+            }
             if ((flags & 2) != 0)
                 StringUtil.Serialize(email, bw);
 
