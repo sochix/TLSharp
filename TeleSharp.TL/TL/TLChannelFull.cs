@@ -122,9 +122,10 @@ namespace TeleSharp.TL
             ObjectUtils.SerializeObject(exported_invite, bw);
             ObjectUtils.SerializeObject(bot_info, bw);
             if ((flags & 16) != 0)
+            {
                 bw.Write(migrated_from_chat_id.Value);
-            if ((flags & 16) != 0)
                 bw.Write(migrated_from_max_id.Value);
+            }
             if ((flags & 32) != 0)
                 bw.Write(pinned_msg_id.Value);
 

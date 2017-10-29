@@ -152,13 +152,15 @@ namespace TeleSharp.TL
             if ((flags & 16) != 0)
                 ObjectUtils.SerializeObject(photo, bw);
             if ((flags & 32) != 0)
+            {
                 StringUtil.Serialize(embed_url, bw);
-            if ((flags & 32) != 0)
                 StringUtil.Serialize(embed_type, bw);
+            }
             if ((flags & 64) != 0)
+            {
                 bw.Write(embed_width.Value);
-            if ((flags & 64) != 0)
                 bw.Write(embed_height.Value);
+            }
             if ((flags & 128) != 0)
                 bw.Write(duration.Value);
             if ((flags & 256) != 0)

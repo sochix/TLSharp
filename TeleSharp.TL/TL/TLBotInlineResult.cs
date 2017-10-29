@@ -118,13 +118,15 @@ namespace TeleSharp.TL
             if ((flags & 16) != 0)
                 StringUtil.Serialize(thumb_url, bw);
             if ((flags & 32) != 0)
+            {
                 StringUtil.Serialize(content_url, bw);
-            if ((flags & 32) != 0)
                 StringUtil.Serialize(content_type, bw);
+            }
             if ((flags & 64) != 0)
+            {
                 bw.Write(w.Value);
-            if ((flags & 64) != 0)
                 bw.Write(h.Value);
+            }
             if ((flags & 128) != 0)
                 bw.Write(duration.Value);
             ObjectUtils.SerializeObject(send_message, bw);
