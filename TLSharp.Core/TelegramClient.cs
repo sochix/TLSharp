@@ -95,6 +95,24 @@ namespace TLSharp.Core
             await ConnectAsync(true);
         }
 
+        private async Task RequestWithDcMigration(TLMethod request) 
+        {
+            var completed = false;
+            while(!completed)
+            {
+                try
+                {
+                    await _sender.Send(request);
+                    await _sender.Receive(request);
+                    completed = true;
+                }
+                catch(DataCenterMigrationException e)
+                {
+                    await ReconnectToDcAsync(e.DC);
+                }
+            }
+        }
+
         public bool IsUserAuthorized()
         {
             return _session.TLUser != null;
@@ -109,20 +127,9 @@ namespace TLSharp.Core
                 throw new InvalidOperationException("Not connected!");
 
             var authCheckPhoneRequest = new TLRequestCheckPhone() { phone_number = phoneNumber };
-            var completed = false;
-            while(!completed)
-            {
-                try
-                {
-                    await _sender.Send(authCheckPhoneRequest);
-                    await _sender.Receive(authCheckPhoneRequest);
-                    completed = true;
-                }
-                catch(PhoneMigrationException e)
-                {
-                    await ReconnectToDcAsync(e.DC);
-                }
-            }
+
+            await RequestWithDcMigration(authCheckPhoneRequest);
+
             return authCheckPhoneRequest.Response.phone_registered;
         }
 
@@ -131,25 +138,9 @@ namespace TLSharp.Core
             if (String.IsNullOrWhiteSpace(phoneNumber))
                 throw new ArgumentNullException(nameof(phoneNumber));
 
-            var completed = false;
+            var request = new TLRequestSendCode() { phone_number = phoneNumber, api_id = _apiId, api_hash = _apiHash };
 
-            TLRequestSendCode request = null;
-
-            while (!completed)
-            {
-                request = new TLRequestSendCode() { phone_number = phoneNumber, api_id = _apiId, api_hash = _apiHash };
-                try
-                {
-                    await _sender.Send(request);
-                    await _sender.Receive(request);
-
-                    completed = true;
-                }
-                catch (DataCenterMigrationException ex)
-                {
-                    await ReconnectToDcAsync(ex.DC);
-                }
-            }
+            await RequestWithDcMigration(request);
 
             return request.Response.phone_code_hash;
         }
@@ -167,32 +158,18 @@ namespace TLSharp.Core
 
             var request = new TLRequestSignIn() { phone_number = phoneNumber, phone_code_hash = phoneCodeHash, phone_code = code };
 
-            var completed = false;
-
-            while (!completed)
-            {
-                try
-                {
-                    await _sender.Send(request);
-                    await _sender.Receive(request);
-                    completed = true;
-                }
-                catch (PhoneMigrationException e)
-                {
-                    await ReconnectToDcAsync(e.DC);
-                }
-            }
+            await RequestWithDcMigration(request);
 
             OnUserAuthenticated(((TLUser)request.Response.user));
 
             return ((TLUser)request.Response.user);
         }
+        
         public async Task<TLPassword> GetPasswordSetting()
         {
             var request = new TLRequestGetPassword();
 
-            await _sender.Send(request);
-            await _sender.Receive(request);
+            await RequestWithDcMigration(request);
 
             return ((TLPassword)request.Response);
         }
@@ -207,8 +184,8 @@ namespace TLSharp.Core
             var password_hash = hashstring.ComputeHash(rv.ToArray());
 
             var request = new TLRequestCheckPassword() { password_hash = password_hash };
-            await _sender.Send(request);
-            await _sender.Receive(request);
+
+            await RequestWithDcMigration(request);
 
             OnUserAuthenticated(((TLUser)request.Response.user));
 
@@ -218,8 +195,8 @@ namespace TLSharp.Core
         public async Task<TLUser> SignUpAsync(string phoneNumber, string phoneCodeHash, string code, string firstName, string lastName)
         {
             var request = new TLRequestSignUp() { phone_number = phoneNumber, phone_code = code, phone_code_hash = phoneCodeHash, first_name = firstName, last_name = lastName };
-            await _sender.Send(request);
-            await _sender.Receive(request);
+            
+            await RequestWithDcMigration(request);
 
             OnUserAuthenticated(((TLUser)request.Response.user));
 
@@ -227,8 +204,7 @@ namespace TLSharp.Core
         }
         public async Task<T> SendRequestAsync<T>(TLMethod methodToExecute)
         {
-            await _sender.Send(methodToExecute);
-            await _sender.Receive(methodToExecute);
+            await RequestWithDcMigration(methodToExecute);
 
             var result = methodToExecute.GetType().GetProperty("Response").GetValue(methodToExecute);
 
