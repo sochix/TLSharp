@@ -18,10 +18,10 @@ namespace TeleSharp.TL
             }
         }
 
-        public long random_id { get; set; }
-        public int chat_id { get; set; }
-        public int date { get; set; }
-        public byte[] bytes { get; set; }
+        public long RandomId { get; set; }
+        public int ChatId { get; set; }
+        public int Date { get; set; }
+        public byte[] Bytes { get; set; }
 
 
         public void ComputeFlags()
@@ -31,20 +31,20 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            random_id = br.ReadInt64();
-            chat_id = br.ReadInt32();
-            date = br.ReadInt32();
-            bytes = BytesUtil.Deserialize(br);
+            RandomId = br.ReadInt64();
+            ChatId = br.ReadInt32();
+            Date = br.ReadInt32();
+            Bytes = BytesUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(random_id);
-            bw.Write(chat_id);
-            bw.Write(date);
-            BytesUtil.Serialize(bytes, bw);
+            bw.Write(RandomId);
+            bw.Write(ChatId);
+            bw.Write(Date);
+            BytesUtil.Serialize(Bytes, bw);
 
         }
     }

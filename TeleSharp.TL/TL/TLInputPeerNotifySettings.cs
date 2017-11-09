@@ -18,28 +18,28 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public bool show_previews { get; set; }
-        public bool silent { get; set; }
-        public int mute_until { get; set; }
-        public string sound { get; set; }
+        public int Flags { get; set; }
+        public bool ShowPreviews { get; set; }
+        public bool Silent { get; set; }
+        public int MuteUntil { get; set; }
+        public string Sound { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = show_previews ? (flags | 1) : (flags & ~1);
-            flags = silent ? (flags | 2) : (flags & ~2);
+            Flags = 0;
+            Flags = ShowPreviews ? (Flags | 1) : (Flags & ~1);
+            Flags = Silent ? (Flags | 2) : (Flags & ~2);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            show_previews = (flags & 1) != 0;
-            silent = (flags & 2) != 0;
-            mute_until = br.ReadInt32();
-            sound = StringUtil.Deserialize(br);
+            Flags = br.ReadInt32();
+            ShowPreviews = (Flags & 1) != 0;
+            Silent = (Flags & 2) != 0;
+            MuteUntil = br.ReadInt32();
+            Sound = StringUtil.Deserialize(br);
 
         }
 
@@ -47,11 +47,11 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
 
-            bw.Write(mute_until);
-            StringUtil.Serialize(sound, bw);
+            bw.Write(MuteUntil);
+            StringUtil.Serialize(Sound, bw);
 
         }
     }

@@ -36,7 +36,7 @@ namespace TeleSharp.TL.Account
             bw.Write(Constructor);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLAccountDaysTTL)ObjectUtils.DeserializeObject(br);
 

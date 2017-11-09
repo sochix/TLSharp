@@ -18,7 +18,7 @@ namespace TeleSharp.TL.Auth
             }
         }
 
-        public int dc_id { get; set; }
+        public int DcId { get; set; }
         public Auth.TLExportedAuthorization Response { get; set; }
 
 
@@ -29,17 +29,17 @@ namespace TeleSharp.TL.Auth
 
         public override void DeserializeBody(BinaryReader br)
         {
-            dc_id = br.ReadInt32();
+            DcId = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(dc_id);
+            bw.Write(DcId);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Auth.TLExportedAuthorization)ObjectUtils.DeserializeObject(br);
 

@@ -18,46 +18,46 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public bool pinned { get; set; }
-        public TLAbsPeer peer { get; set; }
-        public int top_message { get; set; }
-        public int read_inbox_max_id { get; set; }
-        public int read_outbox_max_id { get; set; }
-        public int unread_count { get; set; }
-        public TLAbsPeerNotifySettings notify_settings { get; set; }
-        public int? pts { get; set; }
-        public TLAbsDraftMessage draft { get; set; }
+        public int Flags { get; set; }
+        public bool Pinned { get; set; }
+        public TLAbsPeer Peer { get; set; }
+        public int TopMessage { get; set; }
+        public int ReadInboxMaxId { get; set; }
+        public int ReadOutboxMaxId { get; set; }
+        public int UnreadCount { get; set; }
+        public TLAbsPeerNotifySettings NotifySettings { get; set; }
+        public int? Pts { get; set; }
+        public TLAbsDraftMessage Draft { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = pinned ? (flags | 4) : (flags & ~4);
-            flags = pts != null ? (flags | 1) : (flags & ~1);
-            flags = draft != null ? (flags | 2) : (flags & ~2);
+            Flags = 0;
+            Flags = Pinned ? (Flags | 4) : (Flags & ~4);
+            Flags = Pts != null ? (Flags | 1) : (Flags & ~1);
+            Flags = Draft != null ? (Flags | 2) : (Flags & ~2);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            pinned = (flags & 4) != 0;
-            peer = (TLAbsPeer)ObjectUtils.DeserializeObject(br);
-            top_message = br.ReadInt32();
-            read_inbox_max_id = br.ReadInt32();
-            read_outbox_max_id = br.ReadInt32();
-            unread_count = br.ReadInt32();
-            notify_settings = (TLAbsPeerNotifySettings)ObjectUtils.DeserializeObject(br);
-            if ((flags & 1) != 0)
-                pts = br.ReadInt32();
+            Flags = br.ReadInt32();
+            Pinned = (Flags & 4) != 0;
+            Peer = (TLAbsPeer)ObjectUtils.DeserializeObject(br);
+            TopMessage = br.ReadInt32();
+            ReadInboxMaxId = br.ReadInt32();
+            ReadOutboxMaxId = br.ReadInt32();
+            UnreadCount = br.ReadInt32();
+            NotifySettings = (TLAbsPeerNotifySettings)ObjectUtils.DeserializeObject(br);
+            if ((Flags & 1) != 0)
+                Pts = br.ReadInt32();
             else
-                pts = null;
+                Pts = null;
 
-            if ((flags & 2) != 0)
-                draft = (TLAbsDraftMessage)ObjectUtils.DeserializeObject(br);
+            if ((Flags & 2) != 0)
+                Draft = (TLAbsDraftMessage)ObjectUtils.DeserializeObject(br);
             else
-                draft = null;
+                Draft = null;
 
 
         }
@@ -66,18 +66,18 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
-            ObjectUtils.SerializeObject(peer, bw);
-            bw.Write(top_message);
-            bw.Write(read_inbox_max_id);
-            bw.Write(read_outbox_max_id);
-            bw.Write(unread_count);
-            ObjectUtils.SerializeObject(notify_settings, bw);
-            if ((flags & 1) != 0)
-                bw.Write(pts.Value);
-            if ((flags & 2) != 0)
-                ObjectUtils.SerializeObject(draft, bw);
+            ObjectUtils.SerializeObject(Peer, bw);
+            bw.Write(TopMessage);
+            bw.Write(ReadInboxMaxId);
+            bw.Write(ReadOutboxMaxId);
+            bw.Write(UnreadCount);
+            ObjectUtils.SerializeObject(NotifySettings, bw);
+            if ((Flags & 1) != 0)
+                bw.Write(Pts.Value);
+            if ((Flags & 2) != 0)
+                ObjectUtils.SerializeObject(Draft, bw);
 
         }
     }

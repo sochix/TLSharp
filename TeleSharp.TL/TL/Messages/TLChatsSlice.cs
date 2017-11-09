@@ -18,8 +18,8 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public int count { get; set; }
-        public TLVector<TLAbsChat> chats { get; set; }
+        public int Count { get; set; }
+        public TLVector<TLAbsChat> Chats { get; set; }
 
 
         public void ComputeFlags()
@@ -29,16 +29,16 @@ namespace TeleSharp.TL.Messages
 
         public override void DeserializeBody(BinaryReader br)
         {
-            count = br.ReadInt32();
-            chats = (TLVector<TLAbsChat>)ObjectUtils.DeserializeVector<TLAbsChat>(br);
+            Count = br.ReadInt32();
+            Chats = (TLVector<TLAbsChat>)ObjectUtils.DeserializeVector<TLAbsChat>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(count);
-            ObjectUtils.SerializeObject(chats, bw);
+            bw.Write(Count);
+            ObjectUtils.SerializeObject(Chats, bw);
 
         }
     }

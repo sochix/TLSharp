@@ -18,7 +18,7 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public TLVector<int> id { get; set; }
+        public TLVector<int> Id { get; set; }
         public Messages.TLAffectedMessages Response { get; set; }
 
 
@@ -29,17 +29,17 @@ namespace TeleSharp.TL.Messages
 
         public override void DeserializeBody(BinaryReader br)
         {
-            id = (TLVector<int>)ObjectUtils.DeserializeVector<int>(br);
+            Id = (TLVector<int>)ObjectUtils.DeserializeVector<int>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(id, bw);
+            ObjectUtils.SerializeObject(Id, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Messages.TLAffectedMessages)ObjectUtils.DeserializeObject(br);
 

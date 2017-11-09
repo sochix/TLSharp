@@ -18,10 +18,10 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public int g { get; set; }
-        public byte[] p { get; set; }
-        public int version { get; set; }
-        public byte[] random { get; set; }
+        public int G { get; set; }
+        public byte[] P { get; set; }
+        public int Version { get; set; }
+        public byte[] Random { get; set; }
 
 
         public void ComputeFlags()
@@ -31,20 +31,20 @@ namespace TeleSharp.TL.Messages
 
         public override void DeserializeBody(BinaryReader br)
         {
-            g = br.ReadInt32();
-            p = BytesUtil.Deserialize(br);
-            version = br.ReadInt32();
-            random = BytesUtil.Deserialize(br);
+            G = br.ReadInt32();
+            P = BytesUtil.Deserialize(br);
+            Version = br.ReadInt32();
+            Random = BytesUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(g);
-            BytesUtil.Serialize(p, bw);
-            bw.Write(version);
-            BytesUtil.Serialize(random, bw);
+            bw.Write(G);
+            BytesUtil.Serialize(P, bw);
+            bw.Write(Version);
+            BytesUtil.Serialize(Random, bw);
 
         }
     }

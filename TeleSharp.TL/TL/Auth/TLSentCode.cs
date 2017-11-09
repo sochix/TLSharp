@@ -18,38 +18,38 @@ namespace TeleSharp.TL.Auth
             }
         }
 
-        public int flags { get; set; }
-        public bool phone_registered { get; set; }
-        public Auth.TLAbsSentCodeType type { get; set; }
-        public string phone_code_hash { get; set; }
-        public Auth.TLAbsCodeType next_type { get; set; }
-        public int? timeout { get; set; }
+        public int Flags { get; set; }
+        public bool PhoneRegistered { get; set; }
+        public Auth.TLAbsSentCodeType Type { get; set; }
+        public string PhoneCodeHash { get; set; }
+        public Auth.TLAbsCodeType NextType { get; set; }
+        public int? Timeout { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = phone_registered ? (flags | 1) : (flags & ~1);
-            flags = next_type != null ? (flags | 2) : (flags & ~2);
-            flags = timeout != null ? (flags | 4) : (flags & ~4);
+            Flags = 0;
+            Flags = PhoneRegistered ? (Flags | 1) : (Flags & ~1);
+            Flags = NextType != null ? (Flags | 2) : (Flags & ~2);
+            Flags = Timeout != null ? (Flags | 4) : (Flags & ~4);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            phone_registered = (flags & 1) != 0;
-            type = (Auth.TLAbsSentCodeType)ObjectUtils.DeserializeObject(br);
-            phone_code_hash = StringUtil.Deserialize(br);
-            if ((flags & 2) != 0)
-                next_type = (Auth.TLAbsCodeType)ObjectUtils.DeserializeObject(br);
+            Flags = br.ReadInt32();
+            PhoneRegistered = (Flags & 1) != 0;
+            Type = (Auth.TLAbsSentCodeType)ObjectUtils.DeserializeObject(br);
+            PhoneCodeHash = StringUtil.Deserialize(br);
+            if ((Flags & 2) != 0)
+                NextType = (Auth.TLAbsCodeType)ObjectUtils.DeserializeObject(br);
             else
-                next_type = null;
+                NextType = null;
 
-            if ((flags & 4) != 0)
-                timeout = br.ReadInt32();
+            if ((Flags & 4) != 0)
+                Timeout = br.ReadInt32();
             else
-                timeout = null;
+                Timeout = null;
 
 
         }
@@ -58,14 +58,14 @@ namespace TeleSharp.TL.Auth
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
-            ObjectUtils.SerializeObject(type, bw);
-            StringUtil.Serialize(phone_code_hash, bw);
-            if ((flags & 2) != 0)
-                ObjectUtils.SerializeObject(next_type, bw);
-            if ((flags & 4) != 0)
-                bw.Write(timeout.Value);
+            ObjectUtils.SerializeObject(Type, bw);
+            StringUtil.Serialize(PhoneCodeHash, bw);
+            if ((Flags & 2) != 0)
+                ObjectUtils.SerializeObject(NextType, bw);
+            if ((Flags & 4) != 0)
+                bw.Write(Timeout.Value);
 
         }
     }

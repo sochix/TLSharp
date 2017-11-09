@@ -18,11 +18,11 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLVector<TLAbsUpdate> updates { get; set; }
-        public TLVector<TLAbsUser> users { get; set; }
-        public TLVector<TLAbsChat> chats { get; set; }
-        public int date { get; set; }
-        public int seq { get; set; }
+        public TLVector<TLAbsUpdate> Updates { get; set; }
+        public TLVector<TLAbsUser> Users { get; set; }
+        public TLVector<TLAbsChat> Chats { get; set; }
+        public int Date { get; set; }
+        public int Seq { get; set; }
 
 
         public void ComputeFlags()
@@ -32,22 +32,22 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            updates = (TLVector<TLAbsUpdate>)ObjectUtils.DeserializeVector<TLAbsUpdate>(br);
-            users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
-            chats = (TLVector<TLAbsChat>)ObjectUtils.DeserializeVector<TLAbsChat>(br);
-            date = br.ReadInt32();
-            seq = br.ReadInt32();
+            Updates = (TLVector<TLAbsUpdate>)ObjectUtils.DeserializeVector<TLAbsUpdate>(br);
+            Users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
+            Chats = (TLVector<TLAbsChat>)ObjectUtils.DeserializeVector<TLAbsChat>(br);
+            Date = br.ReadInt32();
+            Seq = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(updates, bw);
-            ObjectUtils.SerializeObject(users, bw);
-            ObjectUtils.SerializeObject(chats, bw);
-            bw.Write(date);
-            bw.Write(seq);
+            ObjectUtils.SerializeObject(Updates, bw);
+            ObjectUtils.SerializeObject(Users, bw);
+            ObjectUtils.SerializeObject(Chats, bw);
+            bw.Write(Date);
+            bw.Write(Seq);
 
         }
     }

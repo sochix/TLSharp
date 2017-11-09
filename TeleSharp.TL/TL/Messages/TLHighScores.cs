@@ -18,8 +18,8 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public TLVector<TLHighScore> scores { get; set; }
-        public TLVector<TLAbsUser> users { get; set; }
+        public TLVector<TLHighScore> Scores { get; set; }
+        public TLVector<TLAbsUser> Users { get; set; }
 
 
         public void ComputeFlags()
@@ -29,16 +29,16 @@ namespace TeleSharp.TL.Messages
 
         public override void DeserializeBody(BinaryReader br)
         {
-            scores = (TLVector<TLHighScore>)ObjectUtils.DeserializeVector<TLHighScore>(br);
-            users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
+            Scores = (TLVector<TLHighScore>)ObjectUtils.DeserializeVector<TLHighScore>(br);
+            Users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(scores, bw);
-            ObjectUtils.SerializeObject(users, bw);
+            ObjectUtils.SerializeObject(Scores, bw);
+            ObjectUtils.SerializeObject(Users, bw);
 
         }
     }

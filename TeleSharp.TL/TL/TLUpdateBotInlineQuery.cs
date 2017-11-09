@@ -18,33 +18,33 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public long query_id { get; set; }
-        public int user_id { get; set; }
-        public string query { get; set; }
-        public TLAbsGeoPoint geo { get; set; }
-        public string offset { get; set; }
+        public int Flags { get; set; }
+        public long QueryId { get; set; }
+        public int UserId { get; set; }
+        public string Query { get; set; }
+        public TLAbsGeoPoint Geo { get; set; }
+        public string Offset { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = geo != null ? (flags | 1) : (flags & ~1);
+            Flags = 0;
+            Flags = Geo != null ? (Flags | 1) : (Flags & ~1);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            query_id = br.ReadInt64();
-            user_id = br.ReadInt32();
-            query = StringUtil.Deserialize(br);
-            if ((flags & 1) != 0)
-                geo = (TLAbsGeoPoint)ObjectUtils.DeserializeObject(br);
+            Flags = br.ReadInt32();
+            QueryId = br.ReadInt64();
+            UserId = br.ReadInt32();
+            Query = StringUtil.Deserialize(br);
+            if ((Flags & 1) != 0)
+                Geo = (TLAbsGeoPoint)ObjectUtils.DeserializeObject(br);
             else
-                geo = null;
+                Geo = null;
 
-            offset = StringUtil.Deserialize(br);
+            Offset = StringUtil.Deserialize(br);
 
         }
 
@@ -52,13 +52,13 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
-            bw.Write(query_id);
-            bw.Write(user_id);
-            StringUtil.Serialize(query, bw);
-            if ((flags & 1) != 0)
-                ObjectUtils.SerializeObject(geo, bw);
-            StringUtil.Serialize(offset, bw);
+            bw.Write(Flags);
+            bw.Write(QueryId);
+            bw.Write(UserId);
+            StringUtil.Serialize(Query, bw);
+            if ((Flags & 1) != 0)
+                ObjectUtils.SerializeObject(Geo, bw);
+            StringUtil.Serialize(Offset, bw);
 
         }
     }

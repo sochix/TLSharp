@@ -18,7 +18,7 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public int date { get; set; }
+        public int Date { get; set; }
 
 
         public void ComputeFlags()
@@ -28,14 +28,14 @@ namespace TeleSharp.TL.Messages
 
         public override void DeserializeBody(BinaryReader br)
         {
-            date = br.ReadInt32();
+            Date = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(date);
+            bw.Write(Date);
 
         }
     }

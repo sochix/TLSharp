@@ -18,9 +18,9 @@ namespace TeleSharp.TL.Phone
             }
         }
 
-        public TLInputPhoneCall peer { get; set; }
-        public int rating { get; set; }
-        public string comment { get; set; }
+        public TLInputPhoneCall Peer { get; set; }
+        public int Rating { get; set; }
+        public string Comment { get; set; }
         public TLAbsUpdates Response { get; set; }
 
 
@@ -31,21 +31,21 @@ namespace TeleSharp.TL.Phone
 
         public override void DeserializeBody(BinaryReader br)
         {
-            peer = (TLInputPhoneCall)ObjectUtils.DeserializeObject(br);
-            rating = br.ReadInt32();
-            comment = StringUtil.Deserialize(br);
+            Peer = (TLInputPhoneCall)ObjectUtils.DeserializeObject(br);
+            Rating = br.ReadInt32();
+            Comment = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(peer, bw);
-            bw.Write(rating);
-            StringUtil.Serialize(comment, bw);
+            ObjectUtils.SerializeObject(Peer, bw);
+            bw.Write(Rating);
+            StringUtil.Serialize(Comment, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLAbsUpdates)ObjectUtils.DeserializeObject(br);
 

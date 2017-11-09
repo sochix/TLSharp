@@ -18,12 +18,12 @@ namespace TeleSharp.TL
             }
         }
 
-        public int api_id { get; set; }
-        public string device_model { get; set; }
-        public string system_version { get; set; }
-        public string app_version { get; set; }
-        public string lang_code { get; set; }
-        public TLObject query { get; set; }
+        public int ApiId { get; set; }
+        public string DeviceModel { get; set; }
+        public string SystemVersion { get; set; }
+        public string AppVersion { get; set; }
+        public string LangCode { get; set; }
+        public TLObject Query { get; set; }
         public TLObject Response { get; set; }
 
 
@@ -34,27 +34,27 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            api_id = br.ReadInt32();
-            device_model = StringUtil.Deserialize(br);
-            system_version = StringUtil.Deserialize(br);
-            app_version = StringUtil.Deserialize(br);
-            lang_code = StringUtil.Deserialize(br);
-            query = (TLObject)ObjectUtils.DeserializeObject(br);
+            ApiId = br.ReadInt32();
+            DeviceModel = StringUtil.Deserialize(br);
+            SystemVersion = StringUtil.Deserialize(br);
+            AppVersion = StringUtil.Deserialize(br);
+            LangCode = StringUtil.Deserialize(br);
+            Query = (TLObject)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(api_id);
-            StringUtil.Serialize(device_model, bw);
-            StringUtil.Serialize(system_version, bw);
-            StringUtil.Serialize(app_version, bw);
-            StringUtil.Serialize(lang_code, bw);
-            ObjectUtils.SerializeObject(query, bw);
+            bw.Write(ApiId);
+            StringUtil.Serialize(DeviceModel, bw);
+            StringUtil.Serialize(SystemVersion, bw);
+            StringUtil.Serialize(AppVersion, bw);
+            StringUtil.Serialize(LangCode, bw);
+            ObjectUtils.SerializeObject(Query, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLObject)ObjectUtils.DeserializeObject(br);
 

@@ -18,25 +18,25 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public bool same_peer { get; set; }
-        public string text { get; set; }
-        public string query { get; set; }
+        public int Flags { get; set; }
+        public bool SamePeer { get; set; }
+        public string Text { get; set; }
+        public string Query { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = same_peer ? (flags | 1) : (flags & ~1);
+            Flags = 0;
+            Flags = SamePeer ? (Flags | 1) : (Flags & ~1);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            same_peer = (flags & 1) != 0;
-            text = StringUtil.Deserialize(br);
-            query = StringUtil.Deserialize(br);
+            Flags = br.ReadInt32();
+            SamePeer = (Flags & 1) != 0;
+            Text = StringUtil.Deserialize(br);
+            Query = StringUtil.Deserialize(br);
 
         }
 
@@ -44,10 +44,10 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
-            StringUtil.Serialize(text, bw);
-            StringUtil.Serialize(query, bw);
+            StringUtil.Serialize(Text, bw);
+            StringUtil.Serialize(Query, bw);
 
         }
     }

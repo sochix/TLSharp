@@ -18,11 +18,11 @@ namespace TeleSharp.TL.Account
             }
         }
 
-        public byte[] current_salt { get; set; }
-        public byte[] new_salt { get; set; }
-        public string hint { get; set; }
-        public bool has_recovery { get; set; }
-        public string email_unconfirmed_pattern { get; set; }
+        public byte[] CurrentSalt { get; set; }
+        public byte[] NewSalt { get; set; }
+        public string Hint { get; set; }
+        public bool HasRecovery { get; set; }
+        public string EmailUnconfirmedPattern { get; set; }
 
 
         public void ComputeFlags()
@@ -32,22 +32,22 @@ namespace TeleSharp.TL.Account
 
         public override void DeserializeBody(BinaryReader br)
         {
-            current_salt = BytesUtil.Deserialize(br);
-            new_salt = BytesUtil.Deserialize(br);
-            hint = StringUtil.Deserialize(br);
-            has_recovery = BoolUtil.Deserialize(br);
-            email_unconfirmed_pattern = StringUtil.Deserialize(br);
+            CurrentSalt = BytesUtil.Deserialize(br);
+            NewSalt = BytesUtil.Deserialize(br);
+            Hint = StringUtil.Deserialize(br);
+            HasRecovery = BoolUtil.Deserialize(br);
+            EmailUnconfirmedPattern = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            BytesUtil.Serialize(current_salt, bw);
-            BytesUtil.Serialize(new_salt, bw);
-            StringUtil.Serialize(hint, bw);
-            BoolUtil.Serialize(has_recovery, bw);
-            StringUtil.Serialize(email_unconfirmed_pattern, bw);
+            BytesUtil.Serialize(CurrentSalt, bw);
+            BytesUtil.Serialize(NewSalt, bw);
+            StringUtil.Serialize(Hint, bw);
+            BoolUtil.Serialize(HasRecovery, bw);
+            StringUtil.Serialize(EmailUnconfirmedPattern, bw);
 
         }
     }

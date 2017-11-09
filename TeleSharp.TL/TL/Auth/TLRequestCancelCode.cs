@@ -18,8 +18,8 @@ namespace TeleSharp.TL.Auth
             }
         }
 
-        public string phone_number { get; set; }
-        public string phone_code_hash { get; set; }
+        public string PhoneNumber { get; set; }
+        public string PhoneCodeHash { get; set; }
         public bool Response { get; set; }
 
 
@@ -30,19 +30,19 @@ namespace TeleSharp.TL.Auth
 
         public override void DeserializeBody(BinaryReader br)
         {
-            phone_number = StringUtil.Deserialize(br);
-            phone_code_hash = StringUtil.Deserialize(br);
+            PhoneNumber = StringUtil.Deserialize(br);
+            PhoneCodeHash = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            StringUtil.Serialize(phone_number, bw);
-            StringUtil.Serialize(phone_code_hash, bw);
+            StringUtil.Serialize(PhoneNumber, bw);
+            StringUtil.Serialize(PhoneCodeHash, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = BoolUtil.Deserialize(br);
 

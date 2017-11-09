@@ -18,28 +18,28 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public bool udp_p2p { get; set; }
-        public bool udp_reflector { get; set; }
-        public int min_layer { get; set; }
-        public int max_layer { get; set; }
+        public int Flags { get; set; }
+        public bool UdpP2p { get; set; }
+        public bool UdpReflector { get; set; }
+        public int MinLayer { get; set; }
+        public int MaxLayer { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = udp_p2p ? (flags | 1) : (flags & ~1);
-            flags = udp_reflector ? (flags | 2) : (flags & ~2);
+            Flags = 0;
+            Flags = UdpP2p ? (Flags | 1) : (Flags & ~1);
+            Flags = UdpReflector ? (Flags | 2) : (Flags & ~2);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            udp_p2p = (flags & 1) != 0;
-            udp_reflector = (flags & 2) != 0;
-            min_layer = br.ReadInt32();
-            max_layer = br.ReadInt32();
+            Flags = br.ReadInt32();
+            UdpP2p = (Flags & 1) != 0;
+            UdpReflector = (Flags & 2) != 0;
+            MinLayer = br.ReadInt32();
+            MaxLayer = br.ReadInt32();
 
         }
 
@@ -47,11 +47,11 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
 
-            bw.Write(min_layer);
-            bw.Write(max_layer);
+            bw.Write(MinLayer);
+            bw.Write(MaxLayer);
 
         }
     }

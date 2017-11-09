@@ -18,39 +18,39 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public bool need_rating { get; set; }
-        public bool need_debug { get; set; }
-        public long id { get; set; }
-        public TLAbsPhoneCallDiscardReason reason { get; set; }
-        public int? duration { get; set; }
+        public int Flags { get; set; }
+        public bool NeedRating { get; set; }
+        public bool NeedDebug { get; set; }
+        public long Id { get; set; }
+        public TLAbsPhoneCallDiscardReason Reason { get; set; }
+        public int? Duration { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = need_rating ? (flags | 4) : (flags & ~4);
-            flags = need_debug ? (flags | 8) : (flags & ~8);
-            flags = reason != null ? (flags | 1) : (flags & ~1);
-            flags = duration != null ? (flags | 2) : (flags & ~2);
+            Flags = 0;
+            Flags = NeedRating ? (Flags | 4) : (Flags & ~4);
+            Flags = NeedDebug ? (Flags | 8) : (Flags & ~8);
+            Flags = Reason != null ? (Flags | 1) : (Flags & ~1);
+            Flags = Duration != null ? (Flags | 2) : (Flags & ~2);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            need_rating = (flags & 4) != 0;
-            need_debug = (flags & 8) != 0;
-            id = br.ReadInt64();
-            if ((flags & 1) != 0)
-                reason = (TLAbsPhoneCallDiscardReason)ObjectUtils.DeserializeObject(br);
+            Flags = br.ReadInt32();
+            NeedRating = (Flags & 4) != 0;
+            NeedDebug = (Flags & 8) != 0;
+            Id = br.ReadInt64();
+            if ((Flags & 1) != 0)
+                Reason = (TLAbsPhoneCallDiscardReason)ObjectUtils.DeserializeObject(br);
             else
-                reason = null;
+                Reason = null;
 
-            if ((flags & 2) != 0)
-                duration = br.ReadInt32();
+            if ((Flags & 2) != 0)
+                Duration = br.ReadInt32();
             else
-                duration = null;
+                Duration = null;
 
 
         }
@@ -59,14 +59,14 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
 
-            bw.Write(id);
-            if ((flags & 1) != 0)
-                ObjectUtils.SerializeObject(reason, bw);
-            if ((flags & 2) != 0)
-                bw.Write(duration.Value);
+            bw.Write(Id);
+            if ((Flags & 1) != 0)
+                ObjectUtils.SerializeObject(Reason, bw);
+            if ((Flags & 2) != 0)
+                bw.Write(Duration.Value);
 
         }
     }

@@ -18,7 +18,7 @@ namespace TeleSharp.TL.Auth
             }
         }
 
-        public bool phone_registered { get; set; }
+        public bool PhoneRegistered { get; set; }
 
 
         public void ComputeFlags()
@@ -28,14 +28,14 @@ namespace TeleSharp.TL.Auth
 
         public override void DeserializeBody(BinaryReader br)
         {
-            phone_registered = BoolUtil.Deserialize(br);
+            PhoneRegistered = BoolUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            BoolUtil.Serialize(phone_registered, bw);
+            BoolUtil.Serialize(PhoneRegistered, bw);
 
         }
     }

@@ -18,7 +18,7 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public TLVector<TLAbsStickerSetCovered> sets { get; set; }
+        public TLVector<TLAbsStickerSetCovered> Sets { get; set; }
 
 
         public void ComputeFlags()
@@ -28,14 +28,14 @@ namespace TeleSharp.TL.Messages
 
         public override void DeserializeBody(BinaryReader br)
         {
-            sets = (TLVector<TLAbsStickerSetCovered>)ObjectUtils.DeserializeVector<TLAbsStickerSetCovered>(br);
+            Sets = (TLVector<TLAbsStickerSetCovered>)ObjectUtils.DeserializeVector<TLAbsStickerSetCovered>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(sets, bw);
+            ObjectUtils.SerializeObject(Sets, bw);
 
         }
     }

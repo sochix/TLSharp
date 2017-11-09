@@ -18,9 +18,9 @@ namespace TeleSharp.TL
             }
         }
 
-        public long photo_id { get; set; }
-        public TLAbsFileLocation photo_small { get; set; }
-        public TLAbsFileLocation photo_big { get; set; }
+        public long PhotoId { get; set; }
+        public TLAbsFileLocation PhotoSmall { get; set; }
+        public TLAbsFileLocation PhotoBig { get; set; }
 
 
         public void ComputeFlags()
@@ -30,18 +30,18 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            photo_id = br.ReadInt64();
-            photo_small = (TLAbsFileLocation)ObjectUtils.DeserializeObject(br);
-            photo_big = (TLAbsFileLocation)ObjectUtils.DeserializeObject(br);
+            PhotoId = br.ReadInt64();
+            PhotoSmall = (TLAbsFileLocation)ObjectUtils.DeserializeObject(br);
+            PhotoBig = (TLAbsFileLocation)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(photo_id);
-            ObjectUtils.SerializeObject(photo_small, bw);
-            ObjectUtils.SerializeObject(photo_big, bw);
+            bw.Write(PhotoId);
+            ObjectUtils.SerializeObject(PhotoSmall, bw);
+            ObjectUtils.SerializeObject(PhotoBig, bw);
 
         }
     }

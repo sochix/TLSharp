@@ -18,29 +18,29 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public bool resize { get; set; }
-        public bool single_use { get; set; }
-        public bool selective { get; set; }
-        public TLVector<TLKeyboardButtonRow> rows { get; set; }
+        public int Flags { get; set; }
+        public bool Resize { get; set; }
+        public bool SingleUse { get; set; }
+        public bool Selective { get; set; }
+        public TLVector<TLKeyboardButtonRow> Rows { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = resize ? (flags | 1) : (flags & ~1);
-            flags = single_use ? (flags | 2) : (flags & ~2);
-            flags = selective ? (flags | 4) : (flags & ~4);
+            Flags = 0;
+            Flags = Resize ? (Flags | 1) : (Flags & ~1);
+            Flags = SingleUse ? (Flags | 2) : (Flags & ~2);
+            Flags = Selective ? (Flags | 4) : (Flags & ~4);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            resize = (flags & 1) != 0;
-            single_use = (flags & 2) != 0;
-            selective = (flags & 4) != 0;
-            rows = (TLVector<TLKeyboardButtonRow>)ObjectUtils.DeserializeVector<TLKeyboardButtonRow>(br);
+            Flags = br.ReadInt32();
+            Resize = (Flags & 1) != 0;
+            SingleUse = (Flags & 2) != 0;
+            Selective = (Flags & 4) != 0;
+            Rows = (TLVector<TLKeyboardButtonRow>)ObjectUtils.DeserializeVector<TLKeyboardButtonRow>(br);
 
         }
 
@@ -48,11 +48,11 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
 
 
-            ObjectUtils.SerializeObject(rows, bw);
+            ObjectUtils.SerializeObject(Rows, bw);
 
         }
     }

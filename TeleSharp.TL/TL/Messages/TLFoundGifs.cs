@@ -18,8 +18,8 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public int next_offset { get; set; }
-        public TLVector<TLAbsFoundGif> results { get; set; }
+        public int NextOffset { get; set; }
+        public TLVector<TLAbsFoundGif> Results { get; set; }
 
 
         public void ComputeFlags()
@@ -29,16 +29,16 @@ namespace TeleSharp.TL.Messages
 
         public override void DeserializeBody(BinaryReader br)
         {
-            next_offset = br.ReadInt32();
-            results = (TLVector<TLAbsFoundGif>)ObjectUtils.DeserializeVector<TLAbsFoundGif>(br);
+            NextOffset = br.ReadInt32();
+            Results = (TLVector<TLAbsFoundGif>)ObjectUtils.DeserializeVector<TLAbsFoundGif>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(next_offset);
-            ObjectUtils.SerializeObject(results, bw);
+            bw.Write(NextOffset);
+            ObjectUtils.SerializeObject(Results, bw);
 
         }
     }

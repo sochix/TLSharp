@@ -18,24 +18,24 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public int flags { get; set; }
-        public bool revoke { get; set; }
-        public TLVector<int> id { get; set; }
+        public int Flags { get; set; }
+        public bool Revoke { get; set; }
+        public TLVector<int> Id { get; set; }
         public Messages.TLAffectedMessages Response { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = revoke ? (flags | 1) : (flags & ~1);
+            Flags = 0;
+            Flags = Revoke ? (Flags | 1) : (Flags & ~1);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            revoke = (flags & 1) != 0;
-            id = (TLVector<int>)ObjectUtils.DeserializeVector<int>(br);
+            Flags = br.ReadInt32();
+            Revoke = (Flags & 1) != 0;
+            Id = (TLVector<int>)ObjectUtils.DeserializeVector<int>(br);
 
         }
 
@@ -43,12 +43,12 @@ namespace TeleSharp.TL.Messages
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
-            ObjectUtils.SerializeObject(id, bw);
+            ObjectUtils.SerializeObject(Id, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Messages.TLAffectedMessages)ObjectUtils.DeserializeObject(br);
 

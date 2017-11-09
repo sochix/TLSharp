@@ -18,7 +18,7 @@ namespace TeleSharp.TL.Auth
             }
         }
 
-        public string pattern { get; set; }
+        public string Pattern { get; set; }
 
 
         public void ComputeFlags()
@@ -28,14 +28,14 @@ namespace TeleSharp.TL.Auth
 
         public override void DeserializeBody(BinaryReader br)
         {
-            pattern = StringUtil.Deserialize(br);
+            Pattern = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            StringUtil.Serialize(pattern, bw);
+            StringUtil.Serialize(Pattern, bw);
 
         }
     }

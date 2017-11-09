@@ -18,8 +18,8 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLAbsRichText text { get; set; }
-        public string email { get; set; }
+        public TLAbsRichText Text { get; set; }
+        public string Email { get; set; }
 
 
         public void ComputeFlags()
@@ -29,16 +29,16 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            text = (TLAbsRichText)ObjectUtils.DeserializeObject(br);
-            email = StringUtil.Deserialize(br);
+            Text = (TLAbsRichText)ObjectUtils.DeserializeObject(br);
+            Email = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(text, bw);
-            StringUtil.Serialize(email, bw);
+            ObjectUtils.SerializeObject(Text, bw);
+            StringUtil.Serialize(Email, bw);
 
         }
     }

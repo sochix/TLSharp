@@ -18,9 +18,9 @@ namespace TeleSharp.TL.Contacts
             }
         }
 
-        public int count { get; set; }
-        public TLVector<TLContactBlocked> blocked { get; set; }
-        public TLVector<TLAbsUser> users { get; set; }
+        public int Count { get; set; }
+        public TLVector<TLContactBlocked> Blocked { get; set; }
+        public TLVector<TLAbsUser> Users { get; set; }
 
 
         public void ComputeFlags()
@@ -30,18 +30,18 @@ namespace TeleSharp.TL.Contacts
 
         public override void DeserializeBody(BinaryReader br)
         {
-            count = br.ReadInt32();
-            blocked = (TLVector<TLContactBlocked>)ObjectUtils.DeserializeVector<TLContactBlocked>(br);
-            users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
+            Count = br.ReadInt32();
+            Blocked = (TLVector<TLContactBlocked>)ObjectUtils.DeserializeVector<TLContactBlocked>(br);
+            Users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(count);
-            ObjectUtils.SerializeObject(blocked, bw);
-            ObjectUtils.SerializeObject(users, bw);
+            bw.Write(Count);
+            ObjectUtils.SerializeObject(Blocked, bw);
+            ObjectUtils.SerializeObject(Users, bw);
 
         }
     }

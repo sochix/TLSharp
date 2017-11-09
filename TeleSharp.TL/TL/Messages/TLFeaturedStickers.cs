@@ -18,9 +18,9 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public int hash { get; set; }
-        public TLVector<TLAbsStickerSetCovered> sets { get; set; }
-        public TLVector<long> unread { get; set; }
+        public int Hash { get; set; }
+        public TLVector<TLAbsStickerSetCovered> Sets { get; set; }
+        public TLVector<long> Unread { get; set; }
 
 
         public void ComputeFlags()
@@ -30,18 +30,18 @@ namespace TeleSharp.TL.Messages
 
         public override void DeserializeBody(BinaryReader br)
         {
-            hash = br.ReadInt32();
-            sets = (TLVector<TLAbsStickerSetCovered>)ObjectUtils.DeserializeVector<TLAbsStickerSetCovered>(br);
-            unread = (TLVector<long>)ObjectUtils.DeserializeVector<long>(br);
+            Hash = br.ReadInt32();
+            Sets = (TLVector<TLAbsStickerSetCovered>)ObjectUtils.DeserializeVector<TLAbsStickerSetCovered>(br);
+            Unread = (TLVector<long>)ObjectUtils.DeserializeVector<long>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(hash);
-            ObjectUtils.SerializeObject(sets, bw);
-            ObjectUtils.SerializeObject(unread, bw);
+            bw.Write(Hash);
+            ObjectUtils.SerializeObject(Sets, bw);
+            ObjectUtils.SerializeObject(Unread, bw);
 
         }
     }

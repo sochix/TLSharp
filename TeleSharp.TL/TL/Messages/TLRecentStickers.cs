@@ -18,8 +18,8 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public int hash { get; set; }
-        public TLVector<TLAbsDocument> stickers { get; set; }
+        public int Hash { get; set; }
+        public TLVector<TLAbsDocument> Stickers { get; set; }
 
 
         public void ComputeFlags()
@@ -29,16 +29,16 @@ namespace TeleSharp.TL.Messages
 
         public override void DeserializeBody(BinaryReader br)
         {
-            hash = br.ReadInt32();
-            stickers = (TLVector<TLAbsDocument>)ObjectUtils.DeserializeVector<TLAbsDocument>(br);
+            Hash = br.ReadInt32();
+            Stickers = (TLVector<TLAbsDocument>)ObjectUtils.DeserializeVector<TLAbsDocument>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(hash);
-            ObjectUtils.SerializeObject(stickers, bw);
+            bw.Write(Hash);
+            ObjectUtils.SerializeObject(Stickers, bw);
 
         }
     }

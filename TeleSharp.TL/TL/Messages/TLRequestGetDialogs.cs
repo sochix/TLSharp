@@ -18,30 +18,30 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public int flags { get; set; }
-        public bool exclude_pinned { get; set; }
-        public int offset_date { get; set; }
-        public int offset_id { get; set; }
-        public TLAbsInputPeer offset_peer { get; set; }
-        public int limit { get; set; }
+        public int Flags { get; set; }
+        public bool ExcludePinned { get; set; }
+        public int OffsetDate { get; set; }
+        public int OffsetId { get; set; }
+        public TLAbsInputPeer OffsetPeer { get; set; }
+        public int Limit { get; set; }
         public Messages.TLAbsDialogs Response { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = exclude_pinned ? (flags | 1) : (flags & ~1);
+            Flags = 0;
+            Flags = ExcludePinned ? (Flags | 1) : (Flags & ~1);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            exclude_pinned = (flags & 1) != 0;
-            offset_date = br.ReadInt32();
-            offset_id = br.ReadInt32();
-            offset_peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
-            limit = br.ReadInt32();
+            Flags = br.ReadInt32();
+            ExcludePinned = (Flags & 1) != 0;
+            OffsetDate = br.ReadInt32();
+            OffsetId = br.ReadInt32();
+            OffsetPeer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
+            Limit = br.ReadInt32();
 
         }
 
@@ -49,15 +49,15 @@ namespace TeleSharp.TL.Messages
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
-            bw.Write(offset_date);
-            bw.Write(offset_id);
-            ObjectUtils.SerializeObject(offset_peer, bw);
-            bw.Write(limit);
+            bw.Write(OffsetDate);
+            bw.Write(OffsetId);
+            ObjectUtils.SerializeObject(OffsetPeer, bw);
+            bw.Write(Limit);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Messages.TLAbsDialogs)ObjectUtils.DeserializeObject(br);
 

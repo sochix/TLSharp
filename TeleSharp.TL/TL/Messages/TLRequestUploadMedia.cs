@@ -18,8 +18,8 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public TLAbsInputPeer peer { get; set; }
-        public TLAbsInputMedia media { get; set; }
+        public TLAbsInputPeer Peer { get; set; }
+        public TLAbsInputMedia Media { get; set; }
         public TLAbsMessageMedia Response { get; set; }
 
 
@@ -30,19 +30,19 @@ namespace TeleSharp.TL.Messages
 
         public override void DeserializeBody(BinaryReader br)
         {
-            peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
-            media = (TLAbsInputMedia)ObjectUtils.DeserializeObject(br);
+            Peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
+            Media = (TLAbsInputMedia)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(peer, bw);
-            ObjectUtils.SerializeObject(media, bw);
+            ObjectUtils.SerializeObject(Peer, bw);
+            ObjectUtils.SerializeObject(Media, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLAbsMessageMedia)ObjectUtils.DeserializeObject(br);
 

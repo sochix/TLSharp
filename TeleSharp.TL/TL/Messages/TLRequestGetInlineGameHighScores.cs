@@ -18,8 +18,8 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public TLInputBotInlineMessageID id { get; set; }
-        public TLAbsInputUser user_id { get; set; }
+        public TLInputBotInlineMessageID Id { get; set; }
+        public TLAbsInputUser UserId { get; set; }
         public Messages.TLHighScores Response { get; set; }
 
 
@@ -30,19 +30,19 @@ namespace TeleSharp.TL.Messages
 
         public override void DeserializeBody(BinaryReader br)
         {
-            id = (TLInputBotInlineMessageID)ObjectUtils.DeserializeObject(br);
-            user_id = (TLAbsInputUser)ObjectUtils.DeserializeObject(br);
+            Id = (TLInputBotInlineMessageID)ObjectUtils.DeserializeObject(br);
+            UserId = (TLAbsInputUser)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(id, bw);
-            ObjectUtils.SerializeObject(user_id, bw);
+            ObjectUtils.SerializeObject(Id, bw);
+            ObjectUtils.SerializeObject(UserId, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Messages.TLHighScores)ObjectUtils.DeserializeObject(br);
 

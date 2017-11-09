@@ -18,9 +18,9 @@ namespace TeleSharp.TL
             }
         }
 
-        public string id { get; set; }
-        public string short_name { get; set; }
-        public TLAbsInputBotInlineMessage send_message { get; set; }
+        public string Id { get; set; }
+        public string ShortName { get; set; }
+        public TLAbsInputBotInlineMessage SendMessage { get; set; }
 
 
         public void ComputeFlags()
@@ -30,18 +30,18 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            id = StringUtil.Deserialize(br);
-            short_name = StringUtil.Deserialize(br);
-            send_message = (TLAbsInputBotInlineMessage)ObjectUtils.DeserializeObject(br);
+            Id = StringUtil.Deserialize(br);
+            ShortName = StringUtil.Deserialize(br);
+            SendMessage = (TLAbsInputBotInlineMessage)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            StringUtil.Serialize(id, bw);
-            StringUtil.Serialize(short_name, bw);
-            ObjectUtils.SerializeObject(send_message, bw);
+            StringUtil.Serialize(Id, bw);
+            StringUtil.Serialize(ShortName, bw);
+            ObjectUtils.SerializeObject(SendMessage, bw);
 
         }
     }

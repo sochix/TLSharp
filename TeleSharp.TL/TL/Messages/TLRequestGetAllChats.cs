@@ -18,7 +18,7 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public TLVector<int> except_ids { get; set; }
+        public TLVector<int> ExceptIds { get; set; }
         public Messages.TLAbsChats Response { get; set; }
 
 
@@ -29,17 +29,17 @@ namespace TeleSharp.TL.Messages
 
         public override void DeserializeBody(BinaryReader br)
         {
-            except_ids = (TLVector<int>)ObjectUtils.DeserializeVector<int>(br);
+            ExceptIds = (TLVector<int>)ObjectUtils.DeserializeVector<int>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(except_ids, bw);
+            ObjectUtils.SerializeObject(ExceptIds, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Messages.TLAbsChats)ObjectUtils.DeserializeObject(br);
 

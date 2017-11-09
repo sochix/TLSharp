@@ -18,12 +18,12 @@ namespace TeleSharp.TL
             }
         }
 
-        public string street_line1 { get; set; }
-        public string street_line2 { get; set; }
-        public string city { get; set; }
-        public string state { get; set; }
-        public string country_iso2 { get; set; }
-        public string post_code { get; set; }
+        public string StreetLine1 { get; set; }
+        public string StreetLine2 { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string CountryIso2 { get; set; }
+        public string PostCode { get; set; }
 
 
         public void ComputeFlags()
@@ -33,24 +33,24 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            street_line1 = StringUtil.Deserialize(br);
-            street_line2 = StringUtil.Deserialize(br);
-            city = StringUtil.Deserialize(br);
-            state = StringUtil.Deserialize(br);
-            country_iso2 = StringUtil.Deserialize(br);
-            post_code = StringUtil.Deserialize(br);
+            StreetLine1 = StringUtil.Deserialize(br);
+            StreetLine2 = StringUtil.Deserialize(br);
+            City = StringUtil.Deserialize(br);
+            State = StringUtil.Deserialize(br);
+            CountryIso2 = StringUtil.Deserialize(br);
+            PostCode = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            StringUtil.Serialize(street_line1, bw);
-            StringUtil.Serialize(street_line2, bw);
-            StringUtil.Serialize(city, bw);
-            StringUtil.Serialize(state, bw);
-            StringUtil.Serialize(country_iso2, bw);
-            StringUtil.Serialize(post_code, bw);
+            StringUtil.Serialize(StreetLine1, bw);
+            StringUtil.Serialize(StreetLine2, bw);
+            StringUtil.Serialize(City, bw);
+            StringUtil.Serialize(State, bw);
+            StringUtil.Serialize(CountryIso2, bw);
+            StringUtil.Serialize(PostCode, bw);
 
         }
     }

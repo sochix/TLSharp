@@ -18,7 +18,7 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public string hash { get; set; }
+        public string Hash { get; set; }
         public TLAbsChatInvite Response { get; set; }
 
 
@@ -29,17 +29,17 @@ namespace TeleSharp.TL.Messages
 
         public override void DeserializeBody(BinaryReader br)
         {
-            hash = StringUtil.Deserialize(br);
+            Hash = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            StringUtil.Serialize(hash, bw);
+            StringUtil.Serialize(Hash, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLAbsChatInvite)ObjectUtils.DeserializeObject(br);
 

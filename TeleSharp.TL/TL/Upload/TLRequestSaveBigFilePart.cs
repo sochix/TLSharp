@@ -18,10 +18,10 @@ namespace TeleSharp.TL.Upload
             }
         }
 
-        public long file_id { get; set; }
-        public int file_part { get; set; }
-        public int file_total_parts { get; set; }
-        public byte[] bytes { get; set; }
+        public long FileId { get; set; }
+        public int FilePart { get; set; }
+        public int FileTotalParts { get; set; }
+        public byte[] Bytes { get; set; }
         public bool Response { get; set; }
 
 
@@ -32,23 +32,23 @@ namespace TeleSharp.TL.Upload
 
         public override void DeserializeBody(BinaryReader br)
         {
-            file_id = br.ReadInt64();
-            file_part = br.ReadInt32();
-            file_total_parts = br.ReadInt32();
-            bytes = BytesUtil.Deserialize(br);
+            FileId = br.ReadInt64();
+            FilePart = br.ReadInt32();
+            FileTotalParts = br.ReadInt32();
+            Bytes = BytesUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(file_id);
-            bw.Write(file_part);
-            bw.Write(file_total_parts);
-            BytesUtil.Serialize(bytes, bw);
+            bw.Write(FileId);
+            bw.Write(FilePart);
+            bw.Write(FileTotalParts);
+            BytesUtil.Serialize(Bytes, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = BoolUtil.Deserialize(br);
 

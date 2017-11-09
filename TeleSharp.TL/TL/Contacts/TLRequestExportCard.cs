@@ -36,7 +36,7 @@ namespace TeleSharp.TL.Contacts
             bw.Write(Constructor);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLVector<int>)ObjectUtils.DeserializeVector<int>(br);
 

@@ -18,7 +18,7 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLDataJSON data { get; set; }
+        public TLDataJSON Data { get; set; }
 
 
         public void ComputeFlags()
@@ -28,14 +28,14 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            data = (TLDataJSON)ObjectUtils.DeserializeObject(br);
+            Data = (TLDataJSON)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(data, bw);
+            ObjectUtils.SerializeObject(Data, bw);
 
         }
     }

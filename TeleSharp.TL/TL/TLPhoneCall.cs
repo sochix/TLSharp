@@ -18,17 +18,17 @@ namespace TeleSharp.TL
             }
         }
 
-        public long id { get; set; }
-        public long access_hash { get; set; }
-        public int date { get; set; }
-        public int admin_id { get; set; }
-        public int participant_id { get; set; }
-        public byte[] g_a_or_b { get; set; }
-        public long key_fingerprint { get; set; }
-        public TLPhoneCallProtocol protocol { get; set; }
-        public TLPhoneConnection connection { get; set; }
-        public TLVector<TLPhoneConnection> alternative_connections { get; set; }
-        public int start_date { get; set; }
+        public long Id { get; set; }
+        public long AccessHash { get; set; }
+        public int Date { get; set; }
+        public int AdminId { get; set; }
+        public int ParticipantId { get; set; }
+        public byte[] GAOrB { get; set; }
+        public long KeyFingerprint { get; set; }
+        public TLPhoneCallProtocol Protocol { get; set; }
+        public TLPhoneConnection Connection { get; set; }
+        public TLVector<TLPhoneConnection> AlternativeConnections { get; set; }
+        public int StartDate { get; set; }
 
 
         public void ComputeFlags()
@@ -38,34 +38,34 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            id = br.ReadInt64();
-            access_hash = br.ReadInt64();
-            date = br.ReadInt32();
-            admin_id = br.ReadInt32();
-            participant_id = br.ReadInt32();
-            g_a_or_b = BytesUtil.Deserialize(br);
-            key_fingerprint = br.ReadInt64();
-            protocol = (TLPhoneCallProtocol)ObjectUtils.DeserializeObject(br);
-            connection = (TLPhoneConnection)ObjectUtils.DeserializeObject(br);
-            alternative_connections = (TLVector<TLPhoneConnection>)ObjectUtils.DeserializeVector<TLPhoneConnection>(br);
-            start_date = br.ReadInt32();
+            Id = br.ReadInt64();
+            AccessHash = br.ReadInt64();
+            Date = br.ReadInt32();
+            AdminId = br.ReadInt32();
+            ParticipantId = br.ReadInt32();
+            GAOrB = BytesUtil.Deserialize(br);
+            KeyFingerprint = br.ReadInt64();
+            Protocol = (TLPhoneCallProtocol)ObjectUtils.DeserializeObject(br);
+            Connection = (TLPhoneConnection)ObjectUtils.DeserializeObject(br);
+            AlternativeConnections = (TLVector<TLPhoneConnection>)ObjectUtils.DeserializeVector<TLPhoneConnection>(br);
+            StartDate = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(id);
-            bw.Write(access_hash);
-            bw.Write(date);
-            bw.Write(admin_id);
-            bw.Write(participant_id);
-            BytesUtil.Serialize(g_a_or_b, bw);
-            bw.Write(key_fingerprint);
-            ObjectUtils.SerializeObject(protocol, bw);
-            ObjectUtils.SerializeObject(connection, bw);
-            ObjectUtils.SerializeObject(alternative_connections, bw);
-            bw.Write(start_date);
+            bw.Write(Id);
+            bw.Write(AccessHash);
+            bw.Write(Date);
+            bw.Write(AdminId);
+            bw.Write(ParticipantId);
+            BytesUtil.Serialize(GAOrB, bw);
+            bw.Write(KeyFingerprint);
+            ObjectUtils.SerializeObject(Protocol, bw);
+            ObjectUtils.SerializeObject(Connection, bw);
+            ObjectUtils.SerializeObject(AlternativeConnections, bw);
+            bw.Write(StartDate);
 
         }
     }

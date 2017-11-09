@@ -18,32 +18,32 @@ namespace TeleSharp.TL.Updates
             }
         }
 
-        public int flags { get; set; }
-        public int pts { get; set; }
-        public int? pts_total_limit { get; set; }
-        public int date { get; set; }
-        public int qts { get; set; }
+        public int Flags { get; set; }
+        public int Pts { get; set; }
+        public int? PtsTotalLimit { get; set; }
+        public int Date { get; set; }
+        public int Qts { get; set; }
         public Updates.TLAbsDifference Response { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = pts_total_limit != null ? (flags | 1) : (flags & ~1);
+            Flags = 0;
+            Flags = PtsTotalLimit != null ? (Flags | 1) : (Flags & ~1);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            pts = br.ReadInt32();
-            if ((flags & 1) != 0)
-                pts_total_limit = br.ReadInt32();
+            Flags = br.ReadInt32();
+            Pts = br.ReadInt32();
+            if ((Flags & 1) != 0)
+                PtsTotalLimit = br.ReadInt32();
             else
-                pts_total_limit = null;
+                PtsTotalLimit = null;
 
-            date = br.ReadInt32();
-            qts = br.ReadInt32();
+            Date = br.ReadInt32();
+            Qts = br.ReadInt32();
 
         }
 
@@ -51,15 +51,15 @@ namespace TeleSharp.TL.Updates
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
-            bw.Write(pts);
-            if ((flags & 1) != 0)
-                bw.Write(pts_total_limit.Value);
-            bw.Write(date);
-            bw.Write(qts);
+            bw.Write(Flags);
+            bw.Write(Pts);
+            if ((Flags & 1) != 0)
+                bw.Write(PtsTotalLimit.Value);
+            bw.Write(Date);
+            bw.Write(Qts);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Updates.TLAbsDifference)ObjectUtils.DeserializeObject(br);
 

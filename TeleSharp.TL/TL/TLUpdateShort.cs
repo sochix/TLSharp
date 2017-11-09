@@ -18,8 +18,8 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLAbsUpdate update { get; set; }
-        public int date { get; set; }
+        public TLAbsUpdate Update { get; set; }
+        public int Date { get; set; }
 
 
         public void ComputeFlags()
@@ -29,16 +29,16 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            update = (TLAbsUpdate)ObjectUtils.DeserializeObject(br);
-            date = br.ReadInt32();
+            Update = (TLAbsUpdate)ObjectUtils.DeserializeObject(br);
+            Date = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(update, bw);
-            bw.Write(date);
+            ObjectUtils.SerializeObject(Update, bw);
+            bw.Write(Date);
 
         }
     }

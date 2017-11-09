@@ -18,7 +18,7 @@ namespace TeleSharp.TL.Photos
             }
         }
 
-        public TLVector<TLAbsInputPhoto> id { get; set; }
+        public TLVector<TLAbsInputPhoto> Id { get; set; }
         public TLVector<long> Response { get; set; }
 
 
@@ -29,17 +29,17 @@ namespace TeleSharp.TL.Photos
 
         public override void DeserializeBody(BinaryReader br)
         {
-            id = (TLVector<TLAbsInputPhoto>)ObjectUtils.DeserializeVector<TLAbsInputPhoto>(br);
+            Id = (TLVector<TLAbsInputPhoto>)ObjectUtils.DeserializeVector<TLAbsInputPhoto>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(id, bw);
+            ObjectUtils.SerializeObject(Id, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLVector<long>)ObjectUtils.DeserializeVector<long>(br);
 

@@ -18,34 +18,34 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public int flags { get; set; }
-        public long query_id { get; set; }
-        public string error { get; set; }
-        public TLVector<TLShippingOption> shipping_options { get; set; }
+        public int Flags { get; set; }
+        public long QueryId { get; set; }
+        public string Error { get; set; }
+        public TLVector<TLShippingOption> ShippingOptions { get; set; }
         public bool Response { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = error != null ? (flags | 1) : (flags & ~1);
-            flags = shipping_options != null ? (flags | 2) : (flags & ~2);
+            Flags = 0;
+            Flags = Error != null ? (Flags | 1) : (Flags & ~1);
+            Flags = ShippingOptions != null ? (Flags | 2) : (Flags & ~2);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            query_id = br.ReadInt64();
-            if ((flags & 1) != 0)
-                error = StringUtil.Deserialize(br);
+            Flags = br.ReadInt32();
+            QueryId = br.ReadInt64();
+            if ((Flags & 1) != 0)
+                Error = StringUtil.Deserialize(br);
             else
-                error = null;
+                Error = null;
 
-            if ((flags & 2) != 0)
-                shipping_options = (TLVector<TLShippingOption>)ObjectUtils.DeserializeVector<TLShippingOption>(br);
+            if ((Flags & 2) != 0)
+                ShippingOptions = (TLVector<TLShippingOption>)ObjectUtils.DeserializeVector<TLShippingOption>(br);
             else
-                shipping_options = null;
+                ShippingOptions = null;
 
 
         }
@@ -54,15 +54,15 @@ namespace TeleSharp.TL.Messages
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
-            bw.Write(query_id);
-            if ((flags & 1) != 0)
-                StringUtil.Serialize(error, bw);
-            if ((flags & 2) != 0)
-                ObjectUtils.SerializeObject(shipping_options, bw);
+            bw.Write(Flags);
+            bw.Write(QueryId);
+            if ((Flags & 1) != 0)
+                StringUtil.Serialize(Error, bw);
+            if ((Flags & 2) != 0)
+                ObjectUtils.SerializeObject(ShippingOptions, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = BoolUtil.Deserialize(br);
 

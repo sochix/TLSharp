@@ -18,9 +18,9 @@ namespace TeleSharp.TL
             }
         }
 
-        public int user_id { get; set; }
-        public string description { get; set; }
-        public TLVector<TLBotCommand> commands { get; set; }
+        public int UserId { get; set; }
+        public string Description { get; set; }
+        public TLVector<TLBotCommand> Commands { get; set; }
 
 
         public void ComputeFlags()
@@ -30,18 +30,18 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            user_id = br.ReadInt32();
-            description = StringUtil.Deserialize(br);
-            commands = (TLVector<TLBotCommand>)ObjectUtils.DeserializeVector<TLBotCommand>(br);
+            UserId = br.ReadInt32();
+            Description = StringUtil.Deserialize(br);
+            Commands = (TLVector<TLBotCommand>)ObjectUtils.DeserializeVector<TLBotCommand>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(user_id);
-            StringUtil.Serialize(description, bw);
-            ObjectUtils.SerializeObject(commands, bw);
+            bw.Write(UserId);
+            StringUtil.Serialize(Description, bw);
+            ObjectUtils.SerializeObject(Commands, bw);
 
         }
     }

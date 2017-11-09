@@ -18,12 +18,12 @@ namespace TeleSharp.TL
             }
         }
 
-        public int id { get; set; }
-        public TLAbsChatParticipants participants { get; set; }
-        public TLAbsPhoto chat_photo { get; set; }
-        public TLAbsPeerNotifySettings notify_settings { get; set; }
-        public TLAbsExportedChatInvite exported_invite { get; set; }
-        public TLVector<TLBotInfo> bot_info { get; set; }
+        public int Id { get; set; }
+        public TLAbsChatParticipants Participants { get; set; }
+        public TLAbsPhoto ChatPhoto { get; set; }
+        public TLAbsPeerNotifySettings NotifySettings { get; set; }
+        public TLAbsExportedChatInvite ExportedInvite { get; set; }
+        public TLVector<TLBotInfo> BotInfo { get; set; }
 
 
         public void ComputeFlags()
@@ -33,24 +33,24 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            id = br.ReadInt32();
-            participants = (TLAbsChatParticipants)ObjectUtils.DeserializeObject(br);
-            chat_photo = (TLAbsPhoto)ObjectUtils.DeserializeObject(br);
-            notify_settings = (TLAbsPeerNotifySettings)ObjectUtils.DeserializeObject(br);
-            exported_invite = (TLAbsExportedChatInvite)ObjectUtils.DeserializeObject(br);
-            bot_info = (TLVector<TLBotInfo>)ObjectUtils.DeserializeVector<TLBotInfo>(br);
+            Id = br.ReadInt32();
+            Participants = (TLAbsChatParticipants)ObjectUtils.DeserializeObject(br);
+            ChatPhoto = (TLAbsPhoto)ObjectUtils.DeserializeObject(br);
+            NotifySettings = (TLAbsPeerNotifySettings)ObjectUtils.DeserializeObject(br);
+            ExportedInvite = (TLAbsExportedChatInvite)ObjectUtils.DeserializeObject(br);
+            BotInfo = (TLVector<TLBotInfo>)ObjectUtils.DeserializeVector<TLBotInfo>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(id);
-            ObjectUtils.SerializeObject(participants, bw);
-            ObjectUtils.SerializeObject(chat_photo, bw);
-            ObjectUtils.SerializeObject(notify_settings, bw);
-            ObjectUtils.SerializeObject(exported_invite, bw);
-            ObjectUtils.SerializeObject(bot_info, bw);
+            bw.Write(Id);
+            ObjectUtils.SerializeObject(Participants, bw);
+            ObjectUtils.SerializeObject(ChatPhoto, bw);
+            ObjectUtils.SerializeObject(NotifySettings, bw);
+            ObjectUtils.SerializeObject(ExportedInvite, bw);
+            ObjectUtils.SerializeObject(BotInfo, bw);
 
         }
     }

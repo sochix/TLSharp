@@ -18,8 +18,8 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public TLInputEncryptedChat peer { get; set; }
-        public bool typing { get; set; }
+        public TLInputEncryptedChat Peer { get; set; }
+        public bool Typing { get; set; }
         public bool Response { get; set; }
 
 
@@ -30,19 +30,19 @@ namespace TeleSharp.TL.Messages
 
         public override void DeserializeBody(BinaryReader br)
         {
-            peer = (TLInputEncryptedChat)ObjectUtils.DeserializeObject(br);
-            typing = BoolUtil.Deserialize(br);
+            Peer = (TLInputEncryptedChat)ObjectUtils.DeserializeObject(br);
+            Typing = BoolUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(peer, bw);
-            BoolUtil.Serialize(typing, bw);
+            ObjectUtils.SerializeObject(Peer, bw);
+            BoolUtil.Serialize(Typing, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = BoolUtil.Deserialize(br);
 

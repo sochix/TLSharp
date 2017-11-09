@@ -18,42 +18,42 @@ namespace TeleSharp.TL
             }
         }
 
-        public long hash { get; set; }
-        public int flags { get; set; }
-        public string device_model { get; set; }
-        public string platform { get; set; }
-        public string system_version { get; set; }
-        public int api_id { get; set; }
-        public string app_name { get; set; }
-        public string app_version { get; set; }
-        public int date_created { get; set; }
-        public int date_active { get; set; }
-        public string ip { get; set; }
-        public string country { get; set; }
-        public string region { get; set; }
+        public long Hash { get; set; }
+        public int Flags { get; set; }
+        public string DeviceModel { get; set; }
+        public string Platform { get; set; }
+        public string SystemVersion { get; set; }
+        public int ApiId { get; set; }
+        public string AppName { get; set; }
+        public string AppVersion { get; set; }
+        public int DateCreated { get; set; }
+        public int DateActive { get; set; }
+        public string Ip { get; set; }
+        public string Country { get; set; }
+        public string Region { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
+            Flags = 0;
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            hash = br.ReadInt64();
-            flags = br.ReadInt32();
-            device_model = StringUtil.Deserialize(br);
-            platform = StringUtil.Deserialize(br);
-            system_version = StringUtil.Deserialize(br);
-            api_id = br.ReadInt32();
-            app_name = StringUtil.Deserialize(br);
-            app_version = StringUtil.Deserialize(br);
-            date_created = br.ReadInt32();
-            date_active = br.ReadInt32();
-            ip = StringUtil.Deserialize(br);
-            country = StringUtil.Deserialize(br);
-            region = StringUtil.Deserialize(br);
+            Hash = br.ReadInt64();
+            Flags = br.ReadInt32();
+            DeviceModel = StringUtil.Deserialize(br);
+            Platform = StringUtil.Deserialize(br);
+            SystemVersion = StringUtil.Deserialize(br);
+            ApiId = br.ReadInt32();
+            AppName = StringUtil.Deserialize(br);
+            AppVersion = StringUtil.Deserialize(br);
+            DateCreated = br.ReadInt32();
+            DateActive = br.ReadInt32();
+            Ip = StringUtil.Deserialize(br);
+            Country = StringUtil.Deserialize(br);
+            Region = StringUtil.Deserialize(br);
 
         }
 
@@ -61,19 +61,19 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
-            bw.Write(hash);
-            StringUtil.Serialize(device_model, bw);
-            StringUtil.Serialize(platform, bw);
-            StringUtil.Serialize(system_version, bw);
-            bw.Write(api_id);
-            StringUtil.Serialize(app_name, bw);
-            StringUtil.Serialize(app_version, bw);
-            bw.Write(date_created);
-            bw.Write(date_active);
-            StringUtil.Serialize(ip, bw);
-            StringUtil.Serialize(country, bw);
-            StringUtil.Serialize(region, bw);
+            bw.Write(Flags);
+            bw.Write(Hash);
+            StringUtil.Serialize(DeviceModel, bw);
+            StringUtil.Serialize(Platform, bw);
+            StringUtil.Serialize(SystemVersion, bw);
+            bw.Write(ApiId);
+            StringUtil.Serialize(AppName, bw);
+            StringUtil.Serialize(AppVersion, bw);
+            bw.Write(DateCreated);
+            bw.Write(DateActive);
+            StringUtil.Serialize(Ip, bw);
+            StringUtil.Serialize(Country, bw);
+            StringUtil.Serialize(Region, bw);
 
         }
     }

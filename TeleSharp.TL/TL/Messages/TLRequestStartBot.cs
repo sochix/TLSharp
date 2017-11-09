@@ -18,10 +18,10 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public TLAbsInputUser bot { get; set; }
-        public TLAbsInputPeer peer { get; set; }
-        public long random_id { get; set; }
-        public string start_param { get; set; }
+        public TLAbsInputUser Bot { get; set; }
+        public TLAbsInputPeer Peer { get; set; }
+        public long RandomId { get; set; }
+        public string StartParam { get; set; }
         public TLAbsUpdates Response { get; set; }
 
 
@@ -32,23 +32,23 @@ namespace TeleSharp.TL.Messages
 
         public override void DeserializeBody(BinaryReader br)
         {
-            bot = (TLAbsInputUser)ObjectUtils.DeserializeObject(br);
-            peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
-            random_id = br.ReadInt64();
-            start_param = StringUtil.Deserialize(br);
+            Bot = (TLAbsInputUser)ObjectUtils.DeserializeObject(br);
+            Peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
+            RandomId = br.ReadInt64();
+            StartParam = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(bot, bw);
-            ObjectUtils.SerializeObject(peer, bw);
-            bw.Write(random_id);
-            StringUtil.Serialize(start_param, bw);
+            ObjectUtils.SerializeObject(Bot, bw);
+            ObjectUtils.SerializeObject(Peer, bw);
+            bw.Write(RandomId);
+            StringUtil.Serialize(StartParam, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLAbsUpdates)ObjectUtils.DeserializeObject(br);
 

@@ -18,7 +18,7 @@ namespace TeleSharp.TL.Contacts
             }
         }
 
-        public string username { get; set; }
+        public string Username { get; set; }
         public Contacts.TLResolvedPeer Response { get; set; }
 
 
@@ -29,17 +29,17 @@ namespace TeleSharp.TL.Contacts
 
         public override void DeserializeBody(BinaryReader br)
         {
-            username = StringUtil.Deserialize(br);
+            Username = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            StringUtil.Serialize(username, bw);
+            StringUtil.Serialize(Username, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Contacts.TLResolvedPeer)ObjectUtils.DeserializeObject(br);
 

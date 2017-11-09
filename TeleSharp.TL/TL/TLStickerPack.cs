@@ -18,8 +18,8 @@ namespace TeleSharp.TL
             }
         }
 
-        public string emoticon { get; set; }
-        public TLVector<long> documents { get; set; }
+        public string Emoticon { get; set; }
+        public TLVector<long> Documents { get; set; }
 
 
         public void ComputeFlags()
@@ -29,16 +29,16 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            emoticon = StringUtil.Deserialize(br);
-            documents = (TLVector<long>)ObjectUtils.DeserializeVector<long>(br);
+            Emoticon = StringUtil.Deserialize(br);
+            Documents = (TLVector<long>)ObjectUtils.DeserializeVector<long>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            StringUtil.Serialize(emoticon, bw);
-            ObjectUtils.SerializeObject(documents, bw);
+            StringUtil.Serialize(Emoticon, bw);
+            ObjectUtils.SerializeObject(Documents, bw);
 
         }
     }

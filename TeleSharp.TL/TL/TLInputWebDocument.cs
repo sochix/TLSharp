@@ -18,10 +18,10 @@ namespace TeleSharp.TL
             }
         }
 
-        public string url { get; set; }
-        public int size { get; set; }
-        public string mime_type { get; set; }
-        public TLVector<TLAbsDocumentAttribute> attributes { get; set; }
+        public string Url { get; set; }
+        public int Size { get; set; }
+        public string MimeType { get; set; }
+        public TLVector<TLAbsDocumentAttribute> Attributes { get; set; }
 
 
         public void ComputeFlags()
@@ -31,20 +31,20 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            url = StringUtil.Deserialize(br);
-            size = br.ReadInt32();
-            mime_type = StringUtil.Deserialize(br);
-            attributes = (TLVector<TLAbsDocumentAttribute>)ObjectUtils.DeserializeVector<TLAbsDocumentAttribute>(br);
+            Url = StringUtil.Deserialize(br);
+            Size = br.ReadInt32();
+            MimeType = StringUtil.Deserialize(br);
+            Attributes = (TLVector<TLAbsDocumentAttribute>)ObjectUtils.DeserializeVector<TLAbsDocumentAttribute>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            StringUtil.Serialize(url, bw);
-            bw.Write(size);
-            StringUtil.Serialize(mime_type, bw);
-            ObjectUtils.SerializeObject(attributes, bw);
+            StringUtil.Serialize(Url, bw);
+            bw.Write(Size);
+            StringUtil.Serialize(MimeType, bw);
+            ObjectUtils.SerializeObject(Attributes, bw);
 
         }
     }

@@ -18,9 +18,9 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public TLAbsChatFull full_chat { get; set; }
-        public TLVector<TLAbsChat> chats { get; set; }
-        public TLVector<TLAbsUser> users { get; set; }
+        public TLAbsChatFull FullChat { get; set; }
+        public TLVector<TLAbsChat> Chats { get; set; }
+        public TLVector<TLAbsUser> Users { get; set; }
 
 
         public void ComputeFlags()
@@ -30,18 +30,18 @@ namespace TeleSharp.TL.Messages
 
         public override void DeserializeBody(BinaryReader br)
         {
-            full_chat = (TLAbsChatFull)ObjectUtils.DeserializeObject(br);
-            chats = (TLVector<TLAbsChat>)ObjectUtils.DeserializeVector<TLAbsChat>(br);
-            users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
+            FullChat = (TLAbsChatFull)ObjectUtils.DeserializeObject(br);
+            Chats = (TLVector<TLAbsChat>)ObjectUtils.DeserializeVector<TLAbsChat>(br);
+            Users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(full_chat, bw);
-            ObjectUtils.SerializeObject(chats, bw);
-            ObjectUtils.SerializeObject(users, bw);
+            ObjectUtils.SerializeObject(FullChat, bw);
+            ObjectUtils.SerializeObject(Chats, bw);
+            ObjectUtils.SerializeObject(Users, bw);
 
         }
     }

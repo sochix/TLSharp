@@ -18,42 +18,42 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public bool channel { get; set; }
-        public bool broadcast { get; set; }
-        public bool @public { get; set; }
-        public bool megagroup { get; set; }
-        public string title { get; set; }
-        public TLAbsChatPhoto photo { get; set; }
-        public int participants_count { get; set; }
-        public TLVector<TLAbsUser> participants { get; set; }
+        public int Flags { get; set; }
+        public bool Channel { get; set; }
+        public bool Broadcast { get; set; }
+        public bool Public { get; set; }
+        public bool Megagroup { get; set; }
+        public string Title { get; set; }
+        public TLAbsChatPhoto Photo { get; set; }
+        public int ParticipantsCount { get; set; }
+        public TLVector<TLAbsUser> Participants { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = channel ? (flags | 1) : (flags & ~1);
-            flags = broadcast ? (flags | 2) : (flags & ~2);
-            flags = @public ? (flags | 4) : (flags & ~4);
-            flags = megagroup ? (flags | 8) : (flags & ~8);
-            flags = participants != null ? (flags | 16) : (flags & ~16);
+            Flags = 0;
+            Flags = Channel ? (Flags | 1) : (Flags & ~1);
+            Flags = Broadcast ? (Flags | 2) : (Flags & ~2);
+            Flags = Public ? (Flags | 4) : (Flags & ~4);
+            Flags = Megagroup ? (Flags | 8) : (Flags & ~8);
+            Flags = Participants != null ? (Flags | 16) : (Flags & ~16);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            channel = (flags & 1) != 0;
-            broadcast = (flags & 2) != 0;
-            @public = (flags & 4) != 0;
-            megagroup = (flags & 8) != 0;
-            title = StringUtil.Deserialize(br);
-            photo = (TLAbsChatPhoto)ObjectUtils.DeserializeObject(br);
-            participants_count = br.ReadInt32();
-            if ((flags & 16) != 0)
-                participants = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
+            Flags = br.ReadInt32();
+            Channel = (Flags & 1) != 0;
+            Broadcast = (Flags & 2) != 0;
+            Public = (Flags & 4) != 0;
+            Megagroup = (Flags & 8) != 0;
+            Title = StringUtil.Deserialize(br);
+            Photo = (TLAbsChatPhoto)ObjectUtils.DeserializeObject(br);
+            ParticipantsCount = br.ReadInt32();
+            if ((Flags & 16) != 0)
+                Participants = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
             else
-                participants = null;
+                Participants = null;
 
 
         }
@@ -62,16 +62,16 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
 
 
 
-            StringUtil.Serialize(title, bw);
-            ObjectUtils.SerializeObject(photo, bw);
-            bw.Write(participants_count);
-            if ((flags & 16) != 0)
-                ObjectUtils.SerializeObject(participants, bw);
+            StringUtil.Serialize(Title, bw);
+            ObjectUtils.SerializeObject(Photo, bw);
+            bw.Write(ParticipantsCount);
+            if ((Flags & 16) != 0)
+                ObjectUtils.SerializeObject(Participants, bw);
 
         }
     }

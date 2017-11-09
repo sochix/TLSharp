@@ -18,7 +18,7 @@ namespace TeleSharp.TL.Account
             }
         }
 
-        public int period { get; set; }
+        public int Period { get; set; }
         public bool Response { get; set; }
 
 
@@ -29,17 +29,17 @@ namespace TeleSharp.TL.Account
 
         public override void DeserializeBody(BinaryReader br)
         {
-            period = br.ReadInt32();
+            Period = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(period);
+            bw.Write(Period);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = BoolUtil.Deserialize(br);
 

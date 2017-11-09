@@ -18,12 +18,12 @@ namespace TeleSharp.TL
             }
         }
 
-        public string url { get; set; }
-        public long access_hash { get; set; }
-        public int size { get; set; }
-        public string mime_type { get; set; }
-        public TLVector<TLAbsDocumentAttribute> attributes { get; set; }
-        public int dc_id { get; set; }
+        public string Url { get; set; }
+        public long AccessHash { get; set; }
+        public int Size { get; set; }
+        public string MimeType { get; set; }
+        public TLVector<TLAbsDocumentAttribute> Attributes { get; set; }
+        public int DcId { get; set; }
 
 
         public void ComputeFlags()
@@ -33,24 +33,24 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            url = StringUtil.Deserialize(br);
-            access_hash = br.ReadInt64();
-            size = br.ReadInt32();
-            mime_type = StringUtil.Deserialize(br);
-            attributes = (TLVector<TLAbsDocumentAttribute>)ObjectUtils.DeserializeVector<TLAbsDocumentAttribute>(br);
-            dc_id = br.ReadInt32();
+            Url = StringUtil.Deserialize(br);
+            AccessHash = br.ReadInt64();
+            Size = br.ReadInt32();
+            MimeType = StringUtil.Deserialize(br);
+            Attributes = (TLVector<TLAbsDocumentAttribute>)ObjectUtils.DeserializeVector<TLAbsDocumentAttribute>(br);
+            DcId = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            StringUtil.Serialize(url, bw);
-            bw.Write(access_hash);
-            bw.Write(size);
-            StringUtil.Serialize(mime_type, bw);
-            ObjectUtils.SerializeObject(attributes, bw);
-            bw.Write(dc_id);
+            StringUtil.Serialize(Url, bw);
+            bw.Write(AccessHash);
+            bw.Write(Size);
+            StringUtil.Serialize(MimeType, bw);
+            ObjectUtils.SerializeObject(Attributes, bw);
+            bw.Write(DcId);
 
         }
     }

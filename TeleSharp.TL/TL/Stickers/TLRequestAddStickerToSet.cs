@@ -18,8 +18,8 @@ namespace TeleSharp.TL.Stickers
             }
         }
 
-        public TLAbsInputStickerSet stickerset { get; set; }
-        public TLInputStickerSetItem sticker { get; set; }
+        public TLAbsInputStickerSet Stickerset { get; set; }
+        public TLInputStickerSetItem Sticker { get; set; }
         public Messages.TLStickerSet Response { get; set; }
 
 
@@ -30,19 +30,19 @@ namespace TeleSharp.TL.Stickers
 
         public override void DeserializeBody(BinaryReader br)
         {
-            stickerset = (TLAbsInputStickerSet)ObjectUtils.DeserializeObject(br);
-            sticker = (TLInputStickerSetItem)ObjectUtils.DeserializeObject(br);
+            Stickerset = (TLAbsInputStickerSet)ObjectUtils.DeserializeObject(br);
+            Sticker = (TLInputStickerSetItem)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(stickerset, bw);
-            ObjectUtils.SerializeObject(sticker, bw);
+            ObjectUtils.SerializeObject(Stickerset, bw);
+            ObjectUtils.SerializeObject(Sticker, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Messages.TLStickerSet)ObjectUtils.DeserializeObject(br);
 

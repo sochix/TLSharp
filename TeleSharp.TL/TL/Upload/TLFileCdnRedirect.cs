@@ -18,10 +18,10 @@ namespace TeleSharp.TL.Upload
             }
         }
 
-        public int dc_id { get; set; }
-        public byte[] file_token { get; set; }
-        public byte[] encryption_key { get; set; }
-        public byte[] encryption_iv { get; set; }
+        public int DcId { get; set; }
+        public byte[] FileToken { get; set; }
+        public byte[] EncryptionKey { get; set; }
+        public byte[] EncryptionIv { get; set; }
 
 
         public void ComputeFlags()
@@ -31,20 +31,20 @@ namespace TeleSharp.TL.Upload
 
         public override void DeserializeBody(BinaryReader br)
         {
-            dc_id = br.ReadInt32();
-            file_token = BytesUtil.Deserialize(br);
-            encryption_key = BytesUtil.Deserialize(br);
-            encryption_iv = BytesUtil.Deserialize(br);
+            DcId = br.ReadInt32();
+            FileToken = BytesUtil.Deserialize(br);
+            EncryptionKey = BytesUtil.Deserialize(br);
+            EncryptionIv = BytesUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(dc_id);
-            BytesUtil.Serialize(file_token, bw);
-            BytesUtil.Serialize(encryption_key, bw);
-            BytesUtil.Serialize(encryption_iv, bw);
+            bw.Write(DcId);
+            BytesUtil.Serialize(FileToken, bw);
+            BytesUtil.Serialize(EncryptionKey, bw);
+            BytesUtil.Serialize(EncryptionIv, bw);
 
         }
     }

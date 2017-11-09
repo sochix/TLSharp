@@ -93,19 +93,19 @@ namespace TLSharp.Core.Utils
                 {
                     await client.SendRequestAsync<bool>(new TLRequestSaveBigFilePart
                     {
-                        file_id = file_id,
-                        file_part = partNumber,
-                        bytes = part,
-                        file_total_parts = partsCount
+                        FileId = file_id,
+                        FilePart = partNumber,
+                        Bytes = part,
+                        FileTotalParts = partsCount
                     });
                 }
                 else
                 {
                     await client.SendRequestAsync<bool>(new TLRequestSaveFilePart
                     {
-                        file_id = file_id,
-                        file_part = partNumber,
-                        bytes = part
+                        FileId = file_id,
+                        FilePart = partNumber,
+                        Bytes = part
                     });
                 }
                 partNumber++;
@@ -115,19 +115,19 @@ namespace TLSharp.Core.Utils
             {
                 return new TLInputFileBig
                 {
-                    id = file_id,
-                    name = name,
-                    parts = partsCount
+                    Id = file_id,
+                    Name = name,
+                    Parts = partsCount
                 };
             }
             else
             {
                 return new TLInputFile
                 {
-                    id = file_id,
-                    name = name,
-                    parts = partsCount,
-                    md5_checksum = GetFileHash(file)
+                    Id = file_id,
+                    Name = name,
+                    Parts = partsCount,
+                    Md5Checksum = GetFileHash(file)
                 };
             }
         }

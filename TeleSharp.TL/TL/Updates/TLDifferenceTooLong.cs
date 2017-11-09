@@ -18,7 +18,7 @@ namespace TeleSharp.TL.Updates
             }
         }
 
-        public int pts { get; set; }
+        public int Pts { get; set; }
 
 
         public void ComputeFlags()
@@ -28,14 +28,14 @@ namespace TeleSharp.TL.Updates
 
         public override void DeserializeBody(BinaryReader br)
         {
-            pts = br.ReadInt32();
+            Pts = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(pts);
+            bw.Write(Pts);
 
         }
     }

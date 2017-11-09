@@ -18,8 +18,8 @@ namespace TeleSharp.TL.Contacts
             }
         }
 
-        public string q { get; set; }
-        public int limit { get; set; }
+        public string Q { get; set; }
+        public int Limit { get; set; }
         public Contacts.TLFound Response { get; set; }
 
 
@@ -30,19 +30,19 @@ namespace TeleSharp.TL.Contacts
 
         public override void DeserializeBody(BinaryReader br)
         {
-            q = StringUtil.Deserialize(br);
-            limit = br.ReadInt32();
+            Q = StringUtil.Deserialize(br);
+            Limit = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            StringUtil.Serialize(q, bw);
-            bw.Write(limit);
+            StringUtil.Serialize(Q, bw);
+            bw.Write(Limit);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Contacts.TLFound)ObjectUtils.DeserializeObject(br);
 

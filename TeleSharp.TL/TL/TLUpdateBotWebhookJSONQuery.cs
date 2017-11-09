@@ -18,9 +18,9 @@ namespace TeleSharp.TL
             }
         }
 
-        public long query_id { get; set; }
-        public TLDataJSON data { get; set; }
-        public int timeout { get; set; }
+        public long QueryId { get; set; }
+        public TLDataJSON Data { get; set; }
+        public int Timeout { get; set; }
 
 
         public void ComputeFlags()
@@ -30,18 +30,18 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            query_id = br.ReadInt64();
-            data = (TLDataJSON)ObjectUtils.DeserializeObject(br);
-            timeout = br.ReadInt32();
+            QueryId = br.ReadInt64();
+            Data = (TLDataJSON)ObjectUtils.DeserializeObject(br);
+            Timeout = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(query_id);
-            ObjectUtils.SerializeObject(data, bw);
-            bw.Write(timeout);
+            bw.Write(QueryId);
+            ObjectUtils.SerializeObject(Data, bw);
+            bw.Write(Timeout);
 
         }
     }

@@ -18,7 +18,7 @@ namespace TeleSharp.TL.Auth
             }
         }
 
-        public int length { get; set; }
+        public int Length { get; set; }
 
 
         public void ComputeFlags()
@@ -28,14 +28,14 @@ namespace TeleSharp.TL.Auth
 
         public override void DeserializeBody(BinaryReader br)
         {
-            length = br.ReadInt32();
+            Length = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(length);
+            bw.Write(Length);
 
         }
     }

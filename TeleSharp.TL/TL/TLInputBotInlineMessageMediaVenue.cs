@@ -18,34 +18,34 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public TLAbsInputGeoPoint geo_point { get; set; }
-        public string title { get; set; }
-        public string address { get; set; }
-        public string provider { get; set; }
-        public string venue_id { get; set; }
-        public TLAbsReplyMarkup reply_markup { get; set; }
+        public int Flags { get; set; }
+        public TLAbsInputGeoPoint GeoPoint { get; set; }
+        public string Title { get; set; }
+        public string Address { get; set; }
+        public string Provider { get; set; }
+        public string VenueId { get; set; }
+        public TLAbsReplyMarkup ReplyMarkup { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = reply_markup != null ? (flags | 4) : (flags & ~4);
+            Flags = 0;
+            Flags = ReplyMarkup != null ? (Flags | 4) : (Flags & ~4);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            geo_point = (TLAbsInputGeoPoint)ObjectUtils.DeserializeObject(br);
-            title = StringUtil.Deserialize(br);
-            address = StringUtil.Deserialize(br);
-            provider = StringUtil.Deserialize(br);
-            venue_id = StringUtil.Deserialize(br);
-            if ((flags & 4) != 0)
-                reply_markup = (TLAbsReplyMarkup)ObjectUtils.DeserializeObject(br);
+            Flags = br.ReadInt32();
+            GeoPoint = (TLAbsInputGeoPoint)ObjectUtils.DeserializeObject(br);
+            Title = StringUtil.Deserialize(br);
+            Address = StringUtil.Deserialize(br);
+            Provider = StringUtil.Deserialize(br);
+            VenueId = StringUtil.Deserialize(br);
+            if ((Flags & 4) != 0)
+                ReplyMarkup = (TLAbsReplyMarkup)ObjectUtils.DeserializeObject(br);
             else
-                reply_markup = null;
+                ReplyMarkup = null;
 
 
         }
@@ -54,14 +54,14 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
-            ObjectUtils.SerializeObject(geo_point, bw);
-            StringUtil.Serialize(title, bw);
-            StringUtil.Serialize(address, bw);
-            StringUtil.Serialize(provider, bw);
-            StringUtil.Serialize(venue_id, bw);
-            if ((flags & 4) != 0)
-                ObjectUtils.SerializeObject(reply_markup, bw);
+            bw.Write(Flags);
+            ObjectUtils.SerializeObject(GeoPoint, bw);
+            StringUtil.Serialize(Title, bw);
+            StringUtil.Serialize(Address, bw);
+            StringUtil.Serialize(Provider, bw);
+            StringUtil.Serialize(VenueId, bw);
+            if ((Flags & 4) != 0)
+                ObjectUtils.SerializeObject(ReplyMarkup, bw);
 
         }
     }

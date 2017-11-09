@@ -18,10 +18,10 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public TLInputEncryptedChat peer { get; set; }
-        public long random_id { get; set; }
-        public byte[] data { get; set; }
-        public TLAbsInputEncryptedFile file { get; set; }
+        public TLInputEncryptedChat Peer { get; set; }
+        public long RandomId { get; set; }
+        public byte[] Data { get; set; }
+        public TLAbsInputEncryptedFile File { get; set; }
         public Messages.TLAbsSentEncryptedMessage Response { get; set; }
 
 
@@ -32,23 +32,23 @@ namespace TeleSharp.TL.Messages
 
         public override void DeserializeBody(BinaryReader br)
         {
-            peer = (TLInputEncryptedChat)ObjectUtils.DeserializeObject(br);
-            random_id = br.ReadInt64();
-            data = BytesUtil.Deserialize(br);
-            file = (TLAbsInputEncryptedFile)ObjectUtils.DeserializeObject(br);
+            Peer = (TLInputEncryptedChat)ObjectUtils.DeserializeObject(br);
+            RandomId = br.ReadInt64();
+            Data = BytesUtil.Deserialize(br);
+            File = (TLAbsInputEncryptedFile)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(peer, bw);
-            bw.Write(random_id);
-            BytesUtil.Serialize(data, bw);
-            ObjectUtils.SerializeObject(file, bw);
+            ObjectUtils.SerializeObject(Peer, bw);
+            bw.Write(RandomId);
+            BytesUtil.Serialize(Data, bw);
+            ObjectUtils.SerializeObject(File, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Messages.TLAbsSentEncryptedMessage)ObjectUtils.DeserializeObject(br);
 

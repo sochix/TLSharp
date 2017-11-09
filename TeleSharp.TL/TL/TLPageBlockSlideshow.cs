@@ -18,8 +18,8 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLVector<TLAbsPageBlock> items { get; set; }
-        public TLAbsRichText caption { get; set; }
+        public TLVector<TLAbsPageBlock> Items { get; set; }
+        public TLAbsRichText Caption { get; set; }
 
 
         public void ComputeFlags()
@@ -29,16 +29,16 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            items = (TLVector<TLAbsPageBlock>)ObjectUtils.DeserializeVector<TLAbsPageBlock>(br);
-            caption = (TLAbsRichText)ObjectUtils.DeserializeObject(br);
+            Items = (TLVector<TLAbsPageBlock>)ObjectUtils.DeserializeVector<TLAbsPageBlock>(br);
+            Caption = (TLAbsRichText)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(items, bw);
-            ObjectUtils.SerializeObject(caption, bw);
+            ObjectUtils.SerializeObject(Items, bw);
+            ObjectUtils.SerializeObject(Caption, bw);
 
         }
     }

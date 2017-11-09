@@ -18,13 +18,13 @@ namespace TeleSharp.TL
             }
         }
 
-        public string url { get; set; }
-        public long webpage_id { get; set; }
-        public long author_photo_id { get; set; }
-        public string author { get; set; }
-        public int date { get; set; }
-        public TLVector<TLAbsPageBlock> blocks { get; set; }
-        public TLAbsRichText caption { get; set; }
+        public string Url { get; set; }
+        public long WebpageId { get; set; }
+        public long AuthorPhotoId { get; set; }
+        public string Author { get; set; }
+        public int Date { get; set; }
+        public TLVector<TLAbsPageBlock> Blocks { get; set; }
+        public TLAbsRichText Caption { get; set; }
 
 
         public void ComputeFlags()
@@ -34,26 +34,26 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            url = StringUtil.Deserialize(br);
-            webpage_id = br.ReadInt64();
-            author_photo_id = br.ReadInt64();
-            author = StringUtil.Deserialize(br);
-            date = br.ReadInt32();
-            blocks = (TLVector<TLAbsPageBlock>)ObjectUtils.DeserializeVector<TLAbsPageBlock>(br);
-            caption = (TLAbsRichText)ObjectUtils.DeserializeObject(br);
+            Url = StringUtil.Deserialize(br);
+            WebpageId = br.ReadInt64();
+            AuthorPhotoId = br.ReadInt64();
+            Author = StringUtil.Deserialize(br);
+            Date = br.ReadInt32();
+            Blocks = (TLVector<TLAbsPageBlock>)ObjectUtils.DeserializeVector<TLAbsPageBlock>(br);
+            Caption = (TLAbsRichText)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            StringUtil.Serialize(url, bw);
-            bw.Write(webpage_id);
-            bw.Write(author_photo_id);
-            StringUtil.Serialize(author, bw);
-            bw.Write(date);
-            ObjectUtils.SerializeObject(blocks, bw);
-            ObjectUtils.SerializeObject(caption, bw);
+            StringUtil.Serialize(Url, bw);
+            bw.Write(WebpageId);
+            bw.Write(AuthorPhotoId);
+            StringUtil.Serialize(Author, bw);
+            bw.Write(Date);
+            ObjectUtils.SerializeObject(Blocks, bw);
+            ObjectUtils.SerializeObject(Caption, bw);
 
         }
     }

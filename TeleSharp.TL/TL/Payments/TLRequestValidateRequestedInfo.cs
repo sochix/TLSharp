@@ -18,26 +18,26 @@ namespace TeleSharp.TL.Payments
             }
         }
 
-        public int flags { get; set; }
-        public bool save { get; set; }
-        public int msg_id { get; set; }
-        public TLPaymentRequestedInfo info { get; set; }
+        public int Flags { get; set; }
+        public bool Save { get; set; }
+        public int MsgId { get; set; }
+        public TLPaymentRequestedInfo Info { get; set; }
         public Payments.TLValidatedRequestedInfo Response { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = save ? (flags | 1) : (flags & ~1);
+            Flags = 0;
+            Flags = Save ? (Flags | 1) : (Flags & ~1);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            save = (flags & 1) != 0;
-            msg_id = br.ReadInt32();
-            info = (TLPaymentRequestedInfo)ObjectUtils.DeserializeObject(br);
+            Flags = br.ReadInt32();
+            Save = (Flags & 1) != 0;
+            MsgId = br.ReadInt32();
+            Info = (TLPaymentRequestedInfo)ObjectUtils.DeserializeObject(br);
 
         }
 
@@ -45,13 +45,13 @@ namespace TeleSharp.TL.Payments
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
-            bw.Write(msg_id);
-            ObjectUtils.SerializeObject(info, bw);
+            bw.Write(MsgId);
+            ObjectUtils.SerializeObject(Info, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Payments.TLValidatedRequestedInfo)ObjectUtils.DeserializeObject(br);
 

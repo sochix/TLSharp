@@ -18,36 +18,36 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public int flags { get; set; }
-        public bool silent { get; set; }
-        public bool background { get; set; }
-        public bool with_my_score { get; set; }
-        public TLAbsInputPeer from_peer { get; set; }
-        public TLVector<int> id { get; set; }
-        public TLVector<long> random_id { get; set; }
-        public TLAbsInputPeer to_peer { get; set; }
+        public int Flags { get; set; }
+        public bool Silent { get; set; }
+        public bool Background { get; set; }
+        public bool WithMyScore { get; set; }
+        public TLAbsInputPeer FromPeer { get; set; }
+        public TLVector<int> Id { get; set; }
+        public TLVector<long> RandomId { get; set; }
+        public TLAbsInputPeer ToPeer { get; set; }
         public TLAbsUpdates Response { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = silent ? (flags | 32) : (flags & ~32);
-            flags = background ? (flags | 64) : (flags & ~64);
-            flags = with_my_score ? (flags | 256) : (flags & ~256);
+            Flags = 0;
+            Flags = Silent ? (Flags | 32) : (Flags & ~32);
+            Flags = Background ? (Flags | 64) : (Flags & ~64);
+            Flags = WithMyScore ? (Flags | 256) : (Flags & ~256);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            silent = (flags & 32) != 0;
-            background = (flags & 64) != 0;
-            with_my_score = (flags & 256) != 0;
-            from_peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
-            id = (TLVector<int>)ObjectUtils.DeserializeVector<int>(br);
-            random_id = (TLVector<long>)ObjectUtils.DeserializeVector<long>(br);
-            to_peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
+            Flags = br.ReadInt32();
+            Silent = (Flags & 32) != 0;
+            Background = (Flags & 64) != 0;
+            WithMyScore = (Flags & 256) != 0;
+            FromPeer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
+            Id = (TLVector<int>)ObjectUtils.DeserializeVector<int>(br);
+            RandomId = (TLVector<long>)ObjectUtils.DeserializeVector<long>(br);
+            ToPeer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
 
         }
 
@@ -55,17 +55,17 @@ namespace TeleSharp.TL.Messages
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
 
 
-            ObjectUtils.SerializeObject(from_peer, bw);
-            ObjectUtils.SerializeObject(id, bw);
-            ObjectUtils.SerializeObject(random_id, bw);
-            ObjectUtils.SerializeObject(to_peer, bw);
+            ObjectUtils.SerializeObject(FromPeer, bw);
+            ObjectUtils.SerializeObject(Id, bw);
+            ObjectUtils.SerializeObject(RandomId, bw);
+            ObjectUtils.SerializeObject(ToPeer, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLAbsUpdates)ObjectUtils.DeserializeObject(br);
 

@@ -18,84 +18,84 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public bool creator { get; set; }
-        public bool kicked { get; set; }
-        public bool left { get; set; }
-        public bool editor { get; set; }
-        public bool moderator { get; set; }
-        public bool broadcast { get; set; }
-        public bool verified { get; set; }
-        public bool megagroup { get; set; }
-        public bool restricted { get; set; }
-        public bool democracy { get; set; }
-        public bool signatures { get; set; }
-        public bool min { get; set; }
-        public int id { get; set; }
-        public long? access_hash { get; set; }
-        public string title { get; set; }
-        public string username { get; set; }
-        public TLAbsChatPhoto photo { get; set; }
-        public int date { get; set; }
-        public int version { get; set; }
-        public string restriction_reason { get; set; }
+        public int Flags { get; set; }
+        public bool Creator { get; set; }
+        public bool Kicked { get; set; }
+        public bool Left { get; set; }
+        public bool Editor { get; set; }
+        public bool Moderator { get; set; }
+        public bool Broadcast { get; set; }
+        public bool Verified { get; set; }
+        public bool Megagroup { get; set; }
+        public bool Restricted { get; set; }
+        public bool Democracy { get; set; }
+        public bool Signatures { get; set; }
+        public bool Min { get; set; }
+        public int Id { get; set; }
+        public long? AccessHash { get; set; }
+        public string Title { get; set; }
+        public string Username { get; set; }
+        public TLAbsChatPhoto Photo { get; set; }
+        public int Date { get; set; }
+        public int Version { get; set; }
+        public string RestrictionReason { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = creator ? (flags | 1) : (flags & ~1);
-            flags = kicked ? (flags | 2) : (flags & ~2);
-            flags = left ? (flags | 4) : (flags & ~4);
-            flags = editor ? (flags | 8) : (flags & ~8);
-            flags = moderator ? (flags | 16) : (flags & ~16);
-            flags = broadcast ? (flags | 32) : (flags & ~32);
-            flags = verified ? (flags | 128) : (flags & ~128);
-            flags = megagroup ? (flags | 256) : (flags & ~256);
-            flags = restricted ? (flags | 512) : (flags & ~512);
-            flags = democracy ? (flags | 1024) : (flags & ~1024);
-            flags = signatures ? (flags | 2048) : (flags & ~2048);
-            flags = min ? (flags | 4096) : (flags & ~4096);
-            flags = access_hash != null ? (flags | 8192) : (flags & ~8192);
-            flags = username != null ? (flags | 64) : (flags & ~64);
-            flags = restriction_reason != null ? (flags | 512) : (flags & ~512);
+            Flags = 0;
+            Flags = Creator ? (Flags | 1) : (Flags & ~1);
+            Flags = Kicked ? (Flags | 2) : (Flags & ~2);
+            Flags = Left ? (Flags | 4) : (Flags & ~4);
+            Flags = Editor ? (Flags | 8) : (Flags & ~8);
+            Flags = Moderator ? (Flags | 16) : (Flags & ~16);
+            Flags = Broadcast ? (Flags | 32) : (Flags & ~32);
+            Flags = Verified ? (Flags | 128) : (Flags & ~128);
+            Flags = Megagroup ? (Flags | 256) : (Flags & ~256);
+            Flags = Restricted ? (Flags | 512) : (Flags & ~512);
+            Flags = Democracy ? (Flags | 1024) : (Flags & ~1024);
+            Flags = Signatures ? (Flags | 2048) : (Flags & ~2048);
+            Flags = Min ? (Flags | 4096) : (Flags & ~4096);
+            Flags = AccessHash != null ? (Flags | 8192) : (Flags & ~8192);
+            Flags = Username != null ? (Flags | 64) : (Flags & ~64);
+            Flags = RestrictionReason != null ? (Flags | 512) : (Flags & ~512);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            creator = (flags & 1) != 0;
-            kicked = (flags & 2) != 0;
-            left = (flags & 4) != 0;
-            editor = (flags & 8) != 0;
-            moderator = (flags & 16) != 0;
-            broadcast = (flags & 32) != 0;
-            verified = (flags & 128) != 0;
-            megagroup = (flags & 256) != 0;
-            restricted = (flags & 512) != 0;
-            democracy = (flags & 1024) != 0;
-            signatures = (flags & 2048) != 0;
-            min = (flags & 4096) != 0;
-            id = br.ReadInt32();
-            if ((flags & 8192) != 0)
-                access_hash = br.ReadInt64();
+            Flags = br.ReadInt32();
+            Creator = (Flags & 1) != 0;
+            Kicked = (Flags & 2) != 0;
+            Left = (Flags & 4) != 0;
+            Editor = (Flags & 8) != 0;
+            Moderator = (Flags & 16) != 0;
+            Broadcast = (Flags & 32) != 0;
+            Verified = (Flags & 128) != 0;
+            Megagroup = (Flags & 256) != 0;
+            Restricted = (Flags & 512) != 0;
+            Democracy = (Flags & 1024) != 0;
+            Signatures = (Flags & 2048) != 0;
+            Min = (Flags & 4096) != 0;
+            Id = br.ReadInt32();
+            if ((Flags & 8192) != 0)
+                AccessHash = br.ReadInt64();
             else
-                access_hash = null;
+                AccessHash = null;
 
-            title = StringUtil.Deserialize(br);
-            if ((flags & 64) != 0)
-                username = StringUtil.Deserialize(br);
+            Title = StringUtil.Deserialize(br);
+            if ((Flags & 64) != 0)
+                Username = StringUtil.Deserialize(br);
             else
-                username = null;
+                Username = null;
 
-            photo = (TLAbsChatPhoto)ObjectUtils.DeserializeObject(br);
-            date = br.ReadInt32();
-            version = br.ReadInt32();
-            if ((flags & 512) != 0)
-                restriction_reason = StringUtil.Deserialize(br);
+            Photo = (TLAbsChatPhoto)ObjectUtils.DeserializeObject(br);
+            Date = br.ReadInt32();
+            Version = br.ReadInt32();
+            if ((Flags & 512) != 0)
+                RestrictionReason = StringUtil.Deserialize(br);
             else
-                restriction_reason = null;
+                RestrictionReason = null;
 
 
         }
@@ -104,7 +104,7 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
 
 
@@ -117,17 +117,17 @@ namespace TeleSharp.TL
 
 
 
-            bw.Write(id);
-            if ((flags & 8192) != 0)
-                bw.Write(access_hash.Value);
-            StringUtil.Serialize(title, bw);
-            if ((flags & 64) != 0)
-                StringUtil.Serialize(username, bw);
-            ObjectUtils.SerializeObject(photo, bw);
-            bw.Write(date);
-            bw.Write(version);
-            if ((flags & 512) != 0)
-                StringUtil.Serialize(restriction_reason, bw);
+            bw.Write(Id);
+            if ((Flags & 8192) != 0)
+                bw.Write(AccessHash.Value);
+            StringUtil.Serialize(Title, bw);
+            if ((Flags & 64) != 0)
+                StringUtil.Serialize(Username, bw);
+            ObjectUtils.SerializeObject(Photo, bw);
+            bw.Write(Date);
+            bw.Write(Version);
+            if ((Flags & 512) != 0)
+                StringUtil.Serialize(RestrictionReason, bw);
 
         }
     }

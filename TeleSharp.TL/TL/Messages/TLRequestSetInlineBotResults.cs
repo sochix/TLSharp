@@ -18,44 +18,44 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public int flags { get; set; }
-        public bool gallery { get; set; }
-        public bool @private { get; set; }
-        public long query_id { get; set; }
-        public TLVector<TLAbsInputBotInlineResult> results { get; set; }
-        public int cache_time { get; set; }
-        public string next_offset { get; set; }
-        public TLInlineBotSwitchPM switch_pm { get; set; }
+        public int Flags { get; set; }
+        public bool Gallery { get; set; }
+        public bool Private { get; set; }
+        public long QueryId { get; set; }
+        public TLVector<TLAbsInputBotInlineResult> Results { get; set; }
+        public int CacheTime { get; set; }
+        public string NextOffset { get; set; }
+        public TLInlineBotSwitchPM SwitchPm { get; set; }
         public bool Response { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = gallery ? (flags | 1) : (flags & ~1);
-            flags = @private ? (flags | 2) : (flags & ~2);
-            flags = next_offset != null ? (flags | 4) : (flags & ~4);
-            flags = switch_pm != null ? (flags | 8) : (flags & ~8);
+            Flags = 0;
+            Flags = Gallery ? (Flags | 1) : (Flags & ~1);
+            Flags = Private ? (Flags | 2) : (Flags & ~2);
+            Flags = NextOffset != null ? (Flags | 4) : (Flags & ~4);
+            Flags = SwitchPm != null ? (Flags | 8) : (Flags & ~8);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            gallery = (flags & 1) != 0;
-            @private = (flags & 2) != 0;
-            query_id = br.ReadInt64();
-            results = (TLVector<TLAbsInputBotInlineResult>)ObjectUtils.DeserializeVector<TLAbsInputBotInlineResult>(br);
-            cache_time = br.ReadInt32();
-            if ((flags & 4) != 0)
-                next_offset = StringUtil.Deserialize(br);
+            Flags = br.ReadInt32();
+            Gallery = (Flags & 1) != 0;
+            Private = (Flags & 2) != 0;
+            QueryId = br.ReadInt64();
+            Results = (TLVector<TLAbsInputBotInlineResult>)ObjectUtils.DeserializeVector<TLAbsInputBotInlineResult>(br);
+            CacheTime = br.ReadInt32();
+            if ((Flags & 4) != 0)
+                NextOffset = StringUtil.Deserialize(br);
             else
-                next_offset = null;
+                NextOffset = null;
 
-            if ((flags & 8) != 0)
-                switch_pm = (TLInlineBotSwitchPM)ObjectUtils.DeserializeObject(br);
+            if ((Flags & 8) != 0)
+                SwitchPm = (TLInlineBotSwitchPM)ObjectUtils.DeserializeObject(br);
             else
-                switch_pm = null;
+                SwitchPm = null;
 
 
         }
@@ -64,19 +64,19 @@ namespace TeleSharp.TL.Messages
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
 
-            bw.Write(query_id);
-            ObjectUtils.SerializeObject(results, bw);
-            bw.Write(cache_time);
-            if ((flags & 4) != 0)
-                StringUtil.Serialize(next_offset, bw);
-            if ((flags & 8) != 0)
-                ObjectUtils.SerializeObject(switch_pm, bw);
+            bw.Write(QueryId);
+            ObjectUtils.SerializeObject(Results, bw);
+            bw.Write(CacheTime);
+            if ((Flags & 4) != 0)
+                StringUtil.Serialize(NextOffset, bw);
+            if ((Flags & 8) != 0)
+                ObjectUtils.SerializeObject(SwitchPm, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = BoolUtil.Deserialize(br);
 

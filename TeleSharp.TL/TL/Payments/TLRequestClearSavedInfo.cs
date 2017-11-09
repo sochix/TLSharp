@@ -18,25 +18,25 @@ namespace TeleSharp.TL.Payments
             }
         }
 
-        public int flags { get; set; }
-        public bool credentials { get; set; }
-        public bool info { get; set; }
+        public int Flags { get; set; }
+        public bool Credentials { get; set; }
+        public bool Info { get; set; }
         public bool Response { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = credentials ? (flags | 1) : (flags & ~1);
-            flags = info ? (flags | 2) : (flags & ~2);
+            Flags = 0;
+            Flags = Credentials ? (Flags | 1) : (Flags & ~1);
+            Flags = Info ? (Flags | 2) : (Flags & ~2);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            credentials = (flags & 1) != 0;
-            info = (flags & 2) != 0;
+            Flags = br.ReadInt32();
+            Credentials = (Flags & 1) != 0;
+            Info = (Flags & 2) != 0;
 
         }
 
@@ -44,12 +44,12 @@ namespace TeleSharp.TL.Payments
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
 
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = BoolUtil.Deserialize(br);
 

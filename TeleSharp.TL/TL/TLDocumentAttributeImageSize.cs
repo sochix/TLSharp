@@ -18,8 +18,8 @@ namespace TeleSharp.TL
             }
         }
 
-        public int w { get; set; }
-        public int h { get; set; }
+        public int W { get; set; }
+        public int H { get; set; }
 
 
         public void ComputeFlags()
@@ -29,16 +29,16 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            w = br.ReadInt32();
-            h = br.ReadInt32();
+            W = br.ReadInt32();
+            H = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(w);
-            bw.Write(h);
+            bw.Write(W);
+            bw.Write(H);
 
         }
     }

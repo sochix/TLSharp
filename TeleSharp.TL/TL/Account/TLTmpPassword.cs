@@ -18,8 +18,8 @@ namespace TeleSharp.TL.Account
             }
         }
 
-        public byte[] tmp_password { get; set; }
-        public int valid_until { get; set; }
+        public byte[] TmpPassword { get; set; }
+        public int ValidUntil { get; set; }
 
 
         public void ComputeFlags()
@@ -29,16 +29,16 @@ namespace TeleSharp.TL.Account
 
         public override void DeserializeBody(BinaryReader br)
         {
-            tmp_password = BytesUtil.Deserialize(br);
-            valid_until = br.ReadInt32();
+            TmpPassword = BytesUtil.Deserialize(br);
+            ValidUntil = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            BytesUtil.Serialize(tmp_password, bw);
-            bw.Write(valid_until);
+            BytesUtil.Serialize(TmpPassword, bw);
+            bw.Write(ValidUntil);
 
         }
     }

@@ -18,33 +18,33 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public long call_id { get; set; }
-        public TLAbsPhoneCallDiscardReason reason { get; set; }
-        public int? duration { get; set; }
+        public int Flags { get; set; }
+        public long CallId { get; set; }
+        public TLAbsPhoneCallDiscardReason Reason { get; set; }
+        public int? Duration { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = reason != null ? (flags | 1) : (flags & ~1);
-            flags = duration != null ? (flags | 2) : (flags & ~2);
+            Flags = 0;
+            Flags = Reason != null ? (Flags | 1) : (Flags & ~1);
+            Flags = Duration != null ? (Flags | 2) : (Flags & ~2);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            call_id = br.ReadInt64();
-            if ((flags & 1) != 0)
-                reason = (TLAbsPhoneCallDiscardReason)ObjectUtils.DeserializeObject(br);
+            Flags = br.ReadInt32();
+            CallId = br.ReadInt64();
+            if ((Flags & 1) != 0)
+                Reason = (TLAbsPhoneCallDiscardReason)ObjectUtils.DeserializeObject(br);
             else
-                reason = null;
+                Reason = null;
 
-            if ((flags & 2) != 0)
-                duration = br.ReadInt32();
+            if ((Flags & 2) != 0)
+                Duration = br.ReadInt32();
             else
-                duration = null;
+                Duration = null;
 
 
         }
@@ -53,12 +53,12 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
-            bw.Write(call_id);
-            if ((flags & 1) != 0)
-                ObjectUtils.SerializeObject(reason, bw);
-            if ((flags & 2) != 0)
-                bw.Write(duration.Value);
+            bw.Write(Flags);
+            bw.Write(CallId);
+            if ((Flags & 1) != 0)
+                ObjectUtils.SerializeObject(Reason, bw);
+            if ((Flags & 2) != 0)
+                bw.Write(Duration.Value);
 
         }
     }

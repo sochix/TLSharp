@@ -18,54 +18,54 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public bool creator { get; set; }
-        public bool kicked { get; set; }
-        public bool left { get; set; }
-        public bool admins_enabled { get; set; }
-        public bool admin { get; set; }
-        public bool deactivated { get; set; }
-        public int id { get; set; }
-        public string title { get; set; }
-        public TLAbsChatPhoto photo { get; set; }
-        public int participants_count { get; set; }
-        public int date { get; set; }
-        public int version { get; set; }
-        public TLAbsInputChannel migrated_to { get; set; }
+        public int Flags { get; set; }
+        public bool Creator { get; set; }
+        public bool Kicked { get; set; }
+        public bool Left { get; set; }
+        public bool AdminsEnabled { get; set; }
+        public bool Admin { get; set; }
+        public bool Deactivated { get; set; }
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public TLAbsChatPhoto Photo { get; set; }
+        public int ParticipantsCount { get; set; }
+        public int Date { get; set; }
+        public int Version { get; set; }
+        public TLAbsInputChannel MigratedTo { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = creator ? (flags | 1) : (flags & ~1);
-            flags = kicked ? (flags | 2) : (flags & ~2);
-            flags = left ? (flags | 4) : (flags & ~4);
-            flags = admins_enabled ? (flags | 8) : (flags & ~8);
-            flags = admin ? (flags | 16) : (flags & ~16);
-            flags = deactivated ? (flags | 32) : (flags & ~32);
-            flags = migrated_to != null ? (flags | 64) : (flags & ~64);
+            Flags = 0;
+            Flags = Creator ? (Flags | 1) : (Flags & ~1);
+            Flags = Kicked ? (Flags | 2) : (Flags & ~2);
+            Flags = Left ? (Flags | 4) : (Flags & ~4);
+            Flags = AdminsEnabled ? (Flags | 8) : (Flags & ~8);
+            Flags = Admin ? (Flags | 16) : (Flags & ~16);
+            Flags = Deactivated ? (Flags | 32) : (Flags & ~32);
+            Flags = MigratedTo != null ? (Flags | 64) : (Flags & ~64);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            creator = (flags & 1) != 0;
-            kicked = (flags & 2) != 0;
-            left = (flags & 4) != 0;
-            admins_enabled = (flags & 8) != 0;
-            admin = (flags & 16) != 0;
-            deactivated = (flags & 32) != 0;
-            id = br.ReadInt32();
-            title = StringUtil.Deserialize(br);
-            photo = (TLAbsChatPhoto)ObjectUtils.DeserializeObject(br);
-            participants_count = br.ReadInt32();
-            date = br.ReadInt32();
-            version = br.ReadInt32();
-            if ((flags & 64) != 0)
-                migrated_to = (TLAbsInputChannel)ObjectUtils.DeserializeObject(br);
+            Flags = br.ReadInt32();
+            Creator = (Flags & 1) != 0;
+            Kicked = (Flags & 2) != 0;
+            Left = (Flags & 4) != 0;
+            AdminsEnabled = (Flags & 8) != 0;
+            Admin = (Flags & 16) != 0;
+            Deactivated = (Flags & 32) != 0;
+            Id = br.ReadInt32();
+            Title = StringUtil.Deserialize(br);
+            Photo = (TLAbsChatPhoto)ObjectUtils.DeserializeObject(br);
+            ParticipantsCount = br.ReadInt32();
+            Date = br.ReadInt32();
+            Version = br.ReadInt32();
+            if ((Flags & 64) != 0)
+                MigratedTo = (TLAbsInputChannel)ObjectUtils.DeserializeObject(br);
             else
-                migrated_to = null;
+                MigratedTo = null;
 
 
         }
@@ -74,21 +74,21 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
 
 
 
 
 
-            bw.Write(id);
-            StringUtil.Serialize(title, bw);
-            ObjectUtils.SerializeObject(photo, bw);
-            bw.Write(participants_count);
-            bw.Write(date);
-            bw.Write(version);
-            if ((flags & 64) != 0)
-                ObjectUtils.SerializeObject(migrated_to, bw);
+            bw.Write(Id);
+            StringUtil.Serialize(Title, bw);
+            ObjectUtils.SerializeObject(Photo, bw);
+            bw.Write(ParticipantsCount);
+            bw.Write(Date);
+            bw.Write(Version);
+            if ((Flags & 64) != 0)
+                ObjectUtils.SerializeObject(MigratedTo, bw);
 
         }
     }

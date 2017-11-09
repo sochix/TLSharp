@@ -18,8 +18,8 @@ namespace TeleSharp.TL
             }
         }
 
-        public int dc_id { get; set; }
-        public string public_key { get; set; }
+        public int DcId { get; set; }
+        public string PublicKey { get; set; }
 
 
         public void ComputeFlags()
@@ -29,16 +29,16 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            dc_id = br.ReadInt32();
-            public_key = StringUtil.Deserialize(br);
+            DcId = br.ReadInt32();
+            PublicKey = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(dc_id);
-            StringUtil.Serialize(public_key, bw);
+            bw.Write(DcId);
+            StringUtil.Serialize(PublicKey, bw);
 
         }
     }

@@ -18,48 +18,48 @@ namespace TeleSharp.TL.Payments
             }
         }
 
-        public int flags { get; set; }
-        public int date { get; set; }
-        public int bot_id { get; set; }
-        public TLInvoice invoice { get; set; }
-        public int provider_id { get; set; }
-        public TLPaymentRequestedInfo info { get; set; }
-        public TLShippingOption shipping { get; set; }
-        public string currency { get; set; }
-        public long total_amount { get; set; }
-        public string credentials_title { get; set; }
-        public TLVector<TLAbsUser> users { get; set; }
+        public int Flags { get; set; }
+        public int Date { get; set; }
+        public int BotId { get; set; }
+        public TLInvoice Invoice { get; set; }
+        public int ProviderId { get; set; }
+        public TLPaymentRequestedInfo Info { get; set; }
+        public TLShippingOption Shipping { get; set; }
+        public string Currency { get; set; }
+        public long TotalAmount { get; set; }
+        public string CredentialsTitle { get; set; }
+        public TLVector<TLAbsUser> Users { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = info != null ? (flags | 1) : (flags & ~1);
-            flags = shipping != null ? (flags | 2) : (flags & ~2);
+            Flags = 0;
+            Flags = Info != null ? (Flags | 1) : (Flags & ~1);
+            Flags = Shipping != null ? (Flags | 2) : (Flags & ~2);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            date = br.ReadInt32();
-            bot_id = br.ReadInt32();
-            invoice = (TLInvoice)ObjectUtils.DeserializeObject(br);
-            provider_id = br.ReadInt32();
-            if ((flags & 1) != 0)
-                info = (TLPaymentRequestedInfo)ObjectUtils.DeserializeObject(br);
+            Flags = br.ReadInt32();
+            Date = br.ReadInt32();
+            BotId = br.ReadInt32();
+            Invoice = (TLInvoice)ObjectUtils.DeserializeObject(br);
+            ProviderId = br.ReadInt32();
+            if ((Flags & 1) != 0)
+                Info = (TLPaymentRequestedInfo)ObjectUtils.DeserializeObject(br);
             else
-                info = null;
+                Info = null;
 
-            if ((flags & 2) != 0)
-                shipping = (TLShippingOption)ObjectUtils.DeserializeObject(br);
+            if ((Flags & 2) != 0)
+                Shipping = (TLShippingOption)ObjectUtils.DeserializeObject(br);
             else
-                shipping = null;
+                Shipping = null;
 
-            currency = StringUtil.Deserialize(br);
-            total_amount = br.ReadInt64();
-            credentials_title = StringUtil.Deserialize(br);
-            users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
+            Currency = StringUtil.Deserialize(br);
+            TotalAmount = br.ReadInt64();
+            CredentialsTitle = StringUtil.Deserialize(br);
+            Users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
 
         }
 
@@ -67,19 +67,19 @@ namespace TeleSharp.TL.Payments
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
-            bw.Write(date);
-            bw.Write(bot_id);
-            ObjectUtils.SerializeObject(invoice, bw);
-            bw.Write(provider_id);
-            if ((flags & 1) != 0)
-                ObjectUtils.SerializeObject(info, bw);
-            if ((flags & 2) != 0)
-                ObjectUtils.SerializeObject(shipping, bw);
-            StringUtil.Serialize(currency, bw);
-            bw.Write(total_amount);
-            StringUtil.Serialize(credentials_title, bw);
-            ObjectUtils.SerializeObject(users, bw);
+            bw.Write(Flags);
+            bw.Write(Date);
+            bw.Write(BotId);
+            ObjectUtils.SerializeObject(Invoice, bw);
+            bw.Write(ProviderId);
+            if ((Flags & 1) != 0)
+                ObjectUtils.SerializeObject(Info, bw);
+            if ((Flags & 2) != 0)
+                ObjectUtils.SerializeObject(Shipping, bw);
+            StringUtil.Serialize(Currency, bw);
+            bw.Write(TotalAmount);
+            StringUtil.Serialize(CredentialsTitle, bw);
+            ObjectUtils.SerializeObject(Users, bw);
 
         }
     }

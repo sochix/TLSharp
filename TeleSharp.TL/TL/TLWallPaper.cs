@@ -18,10 +18,10 @@ namespace TeleSharp.TL
             }
         }
 
-        public int id { get; set; }
-        public string title { get; set; }
-        public TLVector<TLAbsPhotoSize> sizes { get; set; }
-        public int color { get; set; }
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public TLVector<TLAbsPhotoSize> Sizes { get; set; }
+        public int Color { get; set; }
 
 
         public void ComputeFlags()
@@ -31,20 +31,20 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            id = br.ReadInt32();
-            title = StringUtil.Deserialize(br);
-            sizes = (TLVector<TLAbsPhotoSize>)ObjectUtils.DeserializeVector<TLAbsPhotoSize>(br);
-            color = br.ReadInt32();
+            Id = br.ReadInt32();
+            Title = StringUtil.Deserialize(br);
+            Sizes = (TLVector<TLAbsPhotoSize>)ObjectUtils.DeserializeVector<TLAbsPhotoSize>(br);
+            Color = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(id);
-            StringUtil.Serialize(title, bw);
-            ObjectUtils.SerializeObject(sizes, bw);
-            bw.Write(color);
+            bw.Write(Id);
+            StringUtil.Serialize(Title, bw);
+            ObjectUtils.SerializeObject(Sizes, bw);
+            bw.Write(Color);
 
         }
     }

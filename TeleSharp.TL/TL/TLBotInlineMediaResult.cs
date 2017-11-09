@@ -18,52 +18,52 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public string id { get; set; }
-        public string type { get; set; }
-        public TLAbsPhoto photo { get; set; }
-        public TLAbsDocument document { get; set; }
-        public string title { get; set; }
-        public string description { get; set; }
-        public TLAbsBotInlineMessage send_message { get; set; }
+        public int Flags { get; set; }
+        public string Id { get; set; }
+        public string Type { get; set; }
+        public TLAbsPhoto Photo { get; set; }
+        public TLAbsDocument Document { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public TLAbsBotInlineMessage SendMessage { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = photo != null ? (flags | 1) : (flags & ~1);
-            flags = document != null ? (flags | 2) : (flags & ~2);
-            flags = title != null ? (flags | 4) : (flags & ~4);
-            flags = description != null ? (flags | 8) : (flags & ~8);
+            Flags = 0;
+            Flags = Photo != null ? (Flags | 1) : (Flags & ~1);
+            Flags = Document != null ? (Flags | 2) : (Flags & ~2);
+            Flags = Title != null ? (Flags | 4) : (Flags & ~4);
+            Flags = Description != null ? (Flags | 8) : (Flags & ~8);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            id = StringUtil.Deserialize(br);
-            type = StringUtil.Deserialize(br);
-            if ((flags & 1) != 0)
-                photo = (TLAbsPhoto)ObjectUtils.DeserializeObject(br);
+            Flags = br.ReadInt32();
+            Id = StringUtil.Deserialize(br);
+            Type = StringUtil.Deserialize(br);
+            if ((Flags & 1) != 0)
+                Photo = (TLAbsPhoto)ObjectUtils.DeserializeObject(br);
             else
-                photo = null;
+                Photo = null;
 
-            if ((flags & 2) != 0)
-                document = (TLAbsDocument)ObjectUtils.DeserializeObject(br);
+            if ((Flags & 2) != 0)
+                Document = (TLAbsDocument)ObjectUtils.DeserializeObject(br);
             else
-                document = null;
+                Document = null;
 
-            if ((flags & 4) != 0)
-                title = StringUtil.Deserialize(br);
+            if ((Flags & 4) != 0)
+                Title = StringUtil.Deserialize(br);
             else
-                title = null;
+                Title = null;
 
-            if ((flags & 8) != 0)
-                description = StringUtil.Deserialize(br);
+            if ((Flags & 8) != 0)
+                Description = StringUtil.Deserialize(br);
             else
-                description = null;
+                Description = null;
 
-            send_message = (TLAbsBotInlineMessage)ObjectUtils.DeserializeObject(br);
+            SendMessage = (TLAbsBotInlineMessage)ObjectUtils.DeserializeObject(br);
 
         }
 
@@ -71,18 +71,18 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
-            StringUtil.Serialize(id, bw);
-            StringUtil.Serialize(type, bw);
-            if ((flags & 1) != 0)
-                ObjectUtils.SerializeObject(photo, bw);
-            if ((flags & 2) != 0)
-                ObjectUtils.SerializeObject(document, bw);
-            if ((flags & 4) != 0)
-                StringUtil.Serialize(title, bw);
-            if ((flags & 8) != 0)
-                StringUtil.Serialize(description, bw);
-            ObjectUtils.SerializeObject(send_message, bw);
+            bw.Write(Flags);
+            StringUtil.Serialize(Id, bw);
+            StringUtil.Serialize(Type, bw);
+            if ((Flags & 1) != 0)
+                ObjectUtils.SerializeObject(Photo, bw);
+            if ((Flags & 2) != 0)
+                ObjectUtils.SerializeObject(Document, bw);
+            if ((Flags & 4) != 0)
+                StringUtil.Serialize(Title, bw);
+            if ((Flags & 8) != 0)
+                StringUtil.Serialize(Description, bw);
+            ObjectUtils.SerializeObject(SendMessage, bw);
 
         }
     }

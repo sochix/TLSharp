@@ -18,55 +18,55 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public bool @out { get; set; }
-        public bool mentioned { get; set; }
-        public bool media_unread { get; set; }
-        public bool silent { get; set; }
-        public bool post { get; set; }
-        public int id { get; set; }
-        public int? from_id { get; set; }
-        public TLAbsPeer to_id { get; set; }
-        public int? reply_to_msg_id { get; set; }
-        public int date { get; set; }
-        public TLAbsMessageAction action { get; set; }
+        public int Flags { get; set; }
+        public bool Out { get; set; }
+        public bool Mentioned { get; set; }
+        public bool MediaUnread { get; set; }
+        public bool Silent { get; set; }
+        public bool Post { get; set; }
+        public int Id { get; set; }
+        public int? FromId { get; set; }
+        public TLAbsPeer ToId { get; set; }
+        public int? ReplyToMsgId { get; set; }
+        public int Date { get; set; }
+        public TLAbsMessageAction Action { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = @out ? (flags | 2) : (flags & ~2);
-            flags = mentioned ? (flags | 16) : (flags & ~16);
-            flags = media_unread ? (flags | 32) : (flags & ~32);
-            flags = silent ? (flags | 8192) : (flags & ~8192);
-            flags = post ? (flags | 16384) : (flags & ~16384);
-            flags = from_id != null ? (flags | 256) : (flags & ~256);
-            flags = reply_to_msg_id != null ? (flags | 8) : (flags & ~8);
+            Flags = 0;
+            Flags = Out ? (Flags | 2) : (Flags & ~2);
+            Flags = Mentioned ? (Flags | 16) : (Flags & ~16);
+            Flags = MediaUnread ? (Flags | 32) : (Flags & ~32);
+            Flags = Silent ? (Flags | 8192) : (Flags & ~8192);
+            Flags = Post ? (Flags | 16384) : (Flags & ~16384);
+            Flags = FromId != null ? (Flags | 256) : (Flags & ~256);
+            Flags = ReplyToMsgId != null ? (Flags | 8) : (Flags & ~8);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            @out = (flags & 2) != 0;
-            mentioned = (flags & 16) != 0;
-            media_unread = (flags & 32) != 0;
-            silent = (flags & 8192) != 0;
-            post = (flags & 16384) != 0;
-            id = br.ReadInt32();
-            if ((flags & 256) != 0)
-                from_id = br.ReadInt32();
+            Flags = br.ReadInt32();
+            Out = (Flags & 2) != 0;
+            Mentioned = (Flags & 16) != 0;
+            MediaUnread = (Flags & 32) != 0;
+            Silent = (Flags & 8192) != 0;
+            Post = (Flags & 16384) != 0;
+            Id = br.ReadInt32();
+            if ((Flags & 256) != 0)
+                FromId = br.ReadInt32();
             else
-                from_id = null;
+                FromId = null;
 
-            to_id = (TLAbsPeer)ObjectUtils.DeserializeObject(br);
-            if ((flags & 8) != 0)
-                reply_to_msg_id = br.ReadInt32();
+            ToId = (TLAbsPeer)ObjectUtils.DeserializeObject(br);
+            if ((Flags & 8) != 0)
+                ReplyToMsgId = br.ReadInt32();
             else
-                reply_to_msg_id = null;
+                ReplyToMsgId = null;
 
-            date = br.ReadInt32();
-            action = (TLAbsMessageAction)ObjectUtils.DeserializeObject(br);
+            Date = br.ReadInt32();
+            Action = (TLAbsMessageAction)ObjectUtils.DeserializeObject(br);
 
         }
 
@@ -74,20 +74,20 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
 
 
 
 
-            bw.Write(id);
-            if ((flags & 256) != 0)
-                bw.Write(from_id.Value);
-            ObjectUtils.SerializeObject(to_id, bw);
-            if ((flags & 8) != 0)
-                bw.Write(reply_to_msg_id.Value);
-            bw.Write(date);
-            ObjectUtils.SerializeObject(action, bw);
+            bw.Write(Id);
+            if ((Flags & 256) != 0)
+                bw.Write(FromId.Value);
+            ObjectUtils.SerializeObject(ToId, bw);
+            if ((Flags & 8) != 0)
+                bw.Write(ReplyToMsgId.Value);
+            bw.Write(Date);
+            ObjectUtils.SerializeObject(Action, bw);
 
         }
     }

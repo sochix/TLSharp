@@ -18,9 +18,9 @@ namespace TeleSharp.TL.Channels
             }
         }
 
-        public int count { get; set; }
-        public TLVector<TLAbsChannelParticipant> participants { get; set; }
-        public TLVector<TLAbsUser> users { get; set; }
+        public int Count { get; set; }
+        public TLVector<TLAbsChannelParticipant> Participants { get; set; }
+        public TLVector<TLAbsUser> Users { get; set; }
 
 
         public void ComputeFlags()
@@ -30,18 +30,18 @@ namespace TeleSharp.TL.Channels
 
         public override void DeserializeBody(BinaryReader br)
         {
-            count = br.ReadInt32();
-            participants = (TLVector<TLAbsChannelParticipant>)ObjectUtils.DeserializeVector<TLAbsChannelParticipant>(br);
-            users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
+            Count = br.ReadInt32();
+            Participants = (TLVector<TLAbsChannelParticipant>)ObjectUtils.DeserializeVector<TLAbsChannelParticipant>(br);
+            Users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(count);
-            ObjectUtils.SerializeObject(participants, bw);
-            ObjectUtils.SerializeObject(users, bw);
+            bw.Write(Count);
+            ObjectUtils.SerializeObject(Participants, bw);
+            ObjectUtils.SerializeObject(Users, bw);
 
         }
     }

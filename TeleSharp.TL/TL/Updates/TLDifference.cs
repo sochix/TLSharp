@@ -18,12 +18,12 @@ namespace TeleSharp.TL.Updates
             }
         }
 
-        public TLVector<TLAbsMessage> new_messages { get; set; }
-        public TLVector<TLAbsEncryptedMessage> new_encrypted_messages { get; set; }
-        public TLVector<TLAbsUpdate> other_updates { get; set; }
-        public TLVector<TLAbsChat> chats { get; set; }
-        public TLVector<TLAbsUser> users { get; set; }
-        public Updates.TLState state { get; set; }
+        public TLVector<TLAbsMessage> NewMessages { get; set; }
+        public TLVector<TLAbsEncryptedMessage> NewEncryptedMessages { get; set; }
+        public TLVector<TLAbsUpdate> OtherUpdates { get; set; }
+        public TLVector<TLAbsChat> Chats { get; set; }
+        public TLVector<TLAbsUser> Users { get; set; }
+        public Updates.TLState State { get; set; }
 
 
         public void ComputeFlags()
@@ -33,24 +33,24 @@ namespace TeleSharp.TL.Updates
 
         public override void DeserializeBody(BinaryReader br)
         {
-            new_messages = (TLVector<TLAbsMessage>)ObjectUtils.DeserializeVector<TLAbsMessage>(br);
-            new_encrypted_messages = (TLVector<TLAbsEncryptedMessage>)ObjectUtils.DeserializeVector<TLAbsEncryptedMessage>(br);
-            other_updates = (TLVector<TLAbsUpdate>)ObjectUtils.DeserializeVector<TLAbsUpdate>(br);
-            chats = (TLVector<TLAbsChat>)ObjectUtils.DeserializeVector<TLAbsChat>(br);
-            users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
-            state = (Updates.TLState)ObjectUtils.DeserializeObject(br);
+            NewMessages = (TLVector<TLAbsMessage>)ObjectUtils.DeserializeVector<TLAbsMessage>(br);
+            NewEncryptedMessages = (TLVector<TLAbsEncryptedMessage>)ObjectUtils.DeserializeVector<TLAbsEncryptedMessage>(br);
+            OtherUpdates = (TLVector<TLAbsUpdate>)ObjectUtils.DeserializeVector<TLAbsUpdate>(br);
+            Chats = (TLVector<TLAbsChat>)ObjectUtils.DeserializeVector<TLAbsChat>(br);
+            Users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
+            State = (Updates.TLState)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(new_messages, bw);
-            ObjectUtils.SerializeObject(new_encrypted_messages, bw);
-            ObjectUtils.SerializeObject(other_updates, bw);
-            ObjectUtils.SerializeObject(chats, bw);
-            ObjectUtils.SerializeObject(users, bw);
-            ObjectUtils.SerializeObject(state, bw);
+            ObjectUtils.SerializeObject(NewMessages, bw);
+            ObjectUtils.SerializeObject(NewEncryptedMessages, bw);
+            ObjectUtils.SerializeObject(OtherUpdates, bw);
+            ObjectUtils.SerializeObject(Chats, bw);
+            ObjectUtils.SerializeObject(Users, bw);
+            ObjectUtils.SerializeObject(State, bw);
 
         }
     }
