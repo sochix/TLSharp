@@ -76,7 +76,7 @@ namespace TLSharp.Core
             await _sender.Send(invokewithLayer);
             await _sender.Receive(invokewithLayer);
 
-            dcOptions = ((TLConfig)invokewithLayer.Response).dc_options.lists;
+            dcOptions = ((TLConfig)invokewithLayer.Response).dc_options.ToList();
 
             return true;
         }
