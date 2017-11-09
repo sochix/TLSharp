@@ -86,6 +86,13 @@ namespace TLSharp.Core
             if (dcOptions == null || !dcOptions.Any())
                 throw new InvalidOperationException($"Can't reconnect. Establish initial connection first.");
 
+            TLExportedAuthorization exported = null;
+            if (_session.TLUser != null)
+            {
+                TLRequestExportAuthorization exportAuthorization = new TLRequestExportAuthorization() { DcId = dcId };
+                exported = await SendRequestAsync<TLExportedAuthorization>(exportAuthorization);
+            }
+
             var dc = dcOptions.First(d => d.Id == dcId);
 
             _transport = new TcpTransport(dc.IpAddress, dc.Port, _handler);
@@ -93,6 +100,13 @@ namespace TLSharp.Core
             _session.Port = dc.Port;
 
             await ConnectAsync(true);
+
+            if (_session.TLUser != null)
+            {
+                TLRequestImportAuthorization importAuthorization = new TLRequestImportAuthorization() { Id = exported.Id, Bytes = exported.Bytes };
+                var imported = await SendRequestAsync<TLAuthorization>(importAuthorization);
+                OnUserAuthenticated(((TLUser)imported.User));
+            }
         }
 
         private async Task RequestWithDcMigration(TLMethod request) 
