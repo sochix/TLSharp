@@ -1,20 +1,14 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-1063525281)]
+    [TLObject(-1864508399)]
     public class TLMessage : TLAbsMessage
     {
         public override int Constructor
         {
             get
             {
-                return -1063525281;
+                return -1864508399;
             }
         }
 
@@ -37,6 +31,7 @@ namespace TeleSharp.TL
         public TLVector<TLAbsMessageEntity> entities { get; set; }
         public int? views { get; set; }
         public int? edit_date { get; set; }
+        public string post_author { get; set; }
 
 
         public void ComputeFlags()
@@ -56,6 +51,7 @@ namespace TeleSharp.TL
             flags = entities != null ? (flags | 128) : (flags & ~128);
             flags = views != null ? (flags | 1024) : (flags & ~1024);
             flags = edit_date != null ? (flags | 32768) : (flags & ~32768);
+            flags = post_author != null ? (flags | 65536) : (flags & ~65536);
 
         }
 
@@ -116,6 +112,11 @@ namespace TeleSharp.TL
             else
                 edit_date = null;
 
+            if ((flags & 65536) != 0)
+                post_author = StringUtil.Deserialize(br);
+            else
+                post_author = null;
+
 
         }
 
@@ -151,6 +152,8 @@ namespace TeleSharp.TL
                 bw.Write(views.Value);
             if ((flags & 32768) != 0)
                 bw.Write(edit_date.Value);
+            if ((flags & 65536) != 0)
+                StringUtil.Serialize(post_author, bw);
 
         }
     }

@@ -1,20 +1,14 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
 namespace TeleSharp.TL.Updates
 {
-    [TLObject(1091431943)]
+    [TLObject(1788705589)]
     public class TLChannelDifferenceTooLong : TLAbsChannelDifference
     {
         public override int Constructor
         {
             get
             {
-                return 1091431943;
+                return 1788705589;
             }
         }
 
@@ -26,6 +20,7 @@ namespace TeleSharp.TL.Updates
         public int read_inbox_max_id { get; set; }
         public int read_outbox_max_id { get; set; }
         public int unread_count { get; set; }
+        public int unread_mentions_count { get; set; }
         public TLVector<TLAbsMessage> messages { get; set; }
         public TLVector<TLAbsChat> chats { get; set; }
         public TLVector<TLAbsUser> users { get; set; }
@@ -53,6 +48,7 @@ namespace TeleSharp.TL.Updates
             read_inbox_max_id = br.ReadInt32();
             read_outbox_max_id = br.ReadInt32();
             unread_count = br.ReadInt32();
+            unread_mentions_count = br.ReadInt32();
             messages = (TLVector<TLAbsMessage>)ObjectUtils.DeserializeVector<TLAbsMessage>(br);
             chats = (TLVector<TLAbsChat>)ObjectUtils.DeserializeVector<TLAbsChat>(br);
             users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
@@ -72,6 +68,7 @@ namespace TeleSharp.TL.Updates
             bw.Write(read_inbox_max_id);
             bw.Write(read_outbox_max_id);
             bw.Write(unread_count);
+            bw.Write(unread_mentions_count);
             ObjectUtils.SerializeObject(messages, bw);
             ObjectUtils.SerializeObject(chats, bw);
             ObjectUtils.SerializeObject(users, bw);

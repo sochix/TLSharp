@@ -1,29 +1,21 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-1588737454)]
+    [TLObject(213142300)]
     public class TLChannel : TLAbsChat
     {
         public override int Constructor
         {
             get
             {
-                return -1588737454;
+                return 213142300;
             }
         }
 
         public int flags { get; set; }
         public bool creator { get; set; }
-        public bool kicked { get; set; }
         public bool left { get; set; }
         public bool editor { get; set; }
-        public bool moderator { get; set; }
         public bool broadcast { get; set; }
         public bool verified { get; set; }
         public bool megagroup { get; set; }
@@ -39,16 +31,16 @@ namespace TeleSharp.TL
         public int date { get; set; }
         public int version { get; set; }
         public string restriction_reason { get; set; }
+        public TLChannelAdminRights admin_rights { get; set; }
+        public TLChannelBannedRights banned_rights { get; set; }
 
 
         public void ComputeFlags()
         {
             flags = 0;
             flags = creator ? (flags | 1) : (flags & ~1);
-            flags = kicked ? (flags | 2) : (flags & ~2);
             flags = left ? (flags | 4) : (flags & ~4);
             flags = editor ? (flags | 8) : (flags & ~8);
-            flags = moderator ? (flags | 16) : (flags & ~16);
             flags = broadcast ? (flags | 32) : (flags & ~32);
             flags = verified ? (flags | 128) : (flags & ~128);
             flags = megagroup ? (flags | 256) : (flags & ~256);
@@ -59,6 +51,8 @@ namespace TeleSharp.TL
             flags = access_hash != null ? (flags | 8192) : (flags & ~8192);
             flags = username != null ? (flags | 64) : (flags & ~64);
             flags = restriction_reason != null ? (flags | 512) : (flags & ~512);
+            flags = admin_rights != null ? (flags | 16384) : (flags & ~16384);
+            flags = banned_rights != null ? (flags | 32768) : (flags & ~32768);
 
         }
 
@@ -66,10 +60,8 @@ namespace TeleSharp.TL
         {
             flags = br.ReadInt32();
             creator = (flags & 1) != 0;
-            kicked = (flags & 2) != 0;
             left = (flags & 4) != 0;
             editor = (flags & 8) != 0;
-            moderator = (flags & 16) != 0;
             broadcast = (flags & 32) != 0;
             verified = (flags & 128) != 0;
             megagroup = (flags & 256) != 0;
@@ -97,6 +89,16 @@ namespace TeleSharp.TL
             else
                 restriction_reason = null;
 
+            if ((flags & 16384) != 0)
+                admin_rights = (TLChannelAdminRights)ObjectUtils.DeserializeObject(br);
+            else
+                admin_rights = null;
+
+            if ((flags & 32768) != 0)
+                banned_rights = (TLChannelBannedRights)ObjectUtils.DeserializeObject(br);
+            else
+                banned_rights = null;
+
 
         }
 
@@ -105,8 +107,6 @@ namespace TeleSharp.TL
             bw.Write(Constructor);
             ComputeFlags();
             bw.Write(flags);
-
-
 
 
 
@@ -128,6 +128,10 @@ namespace TeleSharp.TL
             bw.Write(version);
             if ((flags & 512) != 0)
                 StringUtil.Serialize(restriction_reason, bw);
+            if ((flags & 16384) != 0)
+                ObjectUtils.SerializeObject(admin_rights, bw);
+            if ((flags & 32768) != 0)
+                ObjectUtils.SerializeObject(banned_rights, bw);
 
         }
     }

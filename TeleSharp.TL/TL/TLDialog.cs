@@ -1,20 +1,14 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(1728035348)]
+    [TLObject(-455150117)]
     public class TLDialog : TLObject
     {
         public override int Constructor
         {
             get
             {
-                return 1728035348;
+                return -455150117;
             }
         }
 
@@ -25,6 +19,7 @@ namespace TeleSharp.TL
         public int read_inbox_max_id { get; set; }
         public int read_outbox_max_id { get; set; }
         public int unread_count { get; set; }
+        public int unread_mentions_count { get; set; }
         public TLAbsPeerNotifySettings notify_settings { get; set; }
         public int? pts { get; set; }
         public TLAbsDraftMessage draft { get; set; }
@@ -48,6 +43,7 @@ namespace TeleSharp.TL
             read_inbox_max_id = br.ReadInt32();
             read_outbox_max_id = br.ReadInt32();
             unread_count = br.ReadInt32();
+            unread_mentions_count = br.ReadInt32();
             notify_settings = (TLAbsPeerNotifySettings)ObjectUtils.DeserializeObject(br);
             if ((flags & 1) != 0)
                 pts = br.ReadInt32();
@@ -73,6 +69,7 @@ namespace TeleSharp.TL
             bw.Write(read_inbox_max_id);
             bw.Write(read_outbox_max_id);
             bw.Write(unread_count);
+            bw.Write(unread_mentions_count);
             ObjectUtils.SerializeObject(notify_settings, bw);
             if ((flags & 1) != 0)
                 bw.Write(pts.Value);

@@ -1,26 +1,20 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
 namespace TeleSharp.TL.Channels
 {
-    [TLObject(-344583728)]
+    [TLObject(548962836)]
     public class TLRequestEditAdmin : TLMethod
     {
         public override int Constructor
         {
             get
             {
-                return -344583728;
+                return 548962836;
             }
         }
 
         public TLAbsInputChannel channel { get; set; }
         public TLAbsInputUser user_id { get; set; }
-        public TLAbsChannelParticipantRole role { get; set; }
+        public TLChannelAdminRights admin_rights { get; set; }
         public TLAbsUpdates Response { get; set; }
 
 
@@ -33,7 +27,7 @@ namespace TeleSharp.TL.Channels
         {
             channel = (TLAbsInputChannel)ObjectUtils.DeserializeObject(br);
             user_id = (TLAbsInputUser)ObjectUtils.DeserializeObject(br);
-            role = (TLAbsChannelParticipantRole)ObjectUtils.DeserializeObject(br);
+            admin_rights = (TLChannelAdminRights)ObjectUtils.DeserializeObject(br);
 
         }
 
@@ -42,7 +36,7 @@ namespace TeleSharp.TL.Channels
             bw.Write(Constructor);
             ObjectUtils.SerializeObject(channel, bw);
             ObjectUtils.SerializeObject(user_id, bw);
-            ObjectUtils.SerializeObject(role, bw);
+            ObjectUtils.SerializeObject(admin_rights, bw);
 
         }
         public override void deserializeResponse(BinaryReader br)

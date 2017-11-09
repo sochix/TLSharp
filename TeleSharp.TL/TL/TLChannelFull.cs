@@ -1,31 +1,27 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-1009430225)]
+    [TLObject(401891279)]
     public class TLChannelFull : TLAbsChatFull
     {
         public override int Constructor
         {
             get
             {
-                return -1009430225;
+                return 401891279;
             }
         }
 
         public int flags { get; set; }
         public bool can_view_participants { get; set; }
         public bool can_set_username { get; set; }
+        public bool can_set_stickers { get; set; }
         public int id { get; set; }
         public string about { get; set; }
         public int? participants_count { get; set; }
         public int? admins_count { get; set; }
         public int? kicked_count { get; set; }
+        public int? banned_count { get; set; }
         public int read_inbox_max_id { get; set; }
         public int read_outbox_max_id { get; set; }
         public int unread_count { get; set; }
@@ -36,6 +32,7 @@ namespace TeleSharp.TL
         public int? migrated_from_chat_id { get; set; }
         public int? migrated_from_max_id { get; set; }
         public int? pinned_msg_id { get; set; }
+        public TLStickerSet stickerset { get; set; }
 
 
         public void ComputeFlags()
@@ -43,12 +40,15 @@ namespace TeleSharp.TL
             flags = 0;
             flags = can_view_participants ? (flags | 8) : (flags & ~8);
             flags = can_set_username ? (flags | 64) : (flags & ~64);
+            flags = can_set_stickers ? (flags | 128) : (flags & ~128);
             flags = participants_count != null ? (flags | 1) : (flags & ~1);
             flags = admins_count != null ? (flags | 2) : (flags & ~2);
             flags = kicked_count != null ? (flags | 4) : (flags & ~4);
+            flags = banned_count != null ? (flags | 4) : (flags & ~4);
             flags = migrated_from_chat_id != null ? (flags | 16) : (flags & ~16);
             flags = migrated_from_max_id != null ? (flags | 16) : (flags & ~16);
             flags = pinned_msg_id != null ? (flags | 32) : (flags & ~32);
+            flags = stickerset != null ? (flags | 256) : (flags & ~256);
 
         }
 
@@ -57,6 +57,7 @@ namespace TeleSharp.TL
             flags = br.ReadInt32();
             can_view_participants = (flags & 8) != 0;
             can_set_username = (flags & 64) != 0;
+            can_set_stickers = (flags & 128) != 0;
             id = br.ReadInt32();
             about = StringUtil.Deserialize(br);
             if ((flags & 1) != 0)
@@ -73,6 +74,11 @@ namespace TeleSharp.TL
                 kicked_count = br.ReadInt32();
             else
                 kicked_count = null;
+
+            if ((flags & 4) != 0)
+                banned_count = br.ReadInt32();
+            else
+                banned_count = null;
 
             read_inbox_max_id = br.ReadInt32();
             read_outbox_max_id = br.ReadInt32();
@@ -96,6 +102,11 @@ namespace TeleSharp.TL
             else
                 pinned_msg_id = null;
 
+            if ((flags & 256) != 0)
+                stickerset = (TLStickerSet)ObjectUtils.DeserializeObject(br);
+            else
+                stickerset = null;
+
 
         }
 
@@ -106,6 +117,7 @@ namespace TeleSharp.TL
             bw.Write(flags);
 
 
+
             bw.Write(id);
             StringUtil.Serialize(about, bw);
             if ((flags & 1) != 0)
@@ -114,6 +126,8 @@ namespace TeleSharp.TL
                 bw.Write(admins_count.Value);
             if ((flags & 4) != 0)
                 bw.Write(kicked_count.Value);
+            if ((flags & 4) != 0)
+                bw.Write(banned_count.Value);
             bw.Write(read_inbox_max_id);
             bw.Write(read_outbox_max_id);
             bw.Write(unread_count);
@@ -127,6 +141,8 @@ namespace TeleSharp.TL
                 bw.Write(migrated_from_max_id.Value);
             if ((flags & 32) != 0)
                 bw.Write(pinned_msg_id.Value);
+            if ((flags & 256) != 0)
+                ObjectUtils.SerializeObject(stickerset, bw);
 
         }
     }

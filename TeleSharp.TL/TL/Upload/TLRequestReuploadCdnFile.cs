@@ -1,26 +1,20 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
 namespace TeleSharp.TL.Upload
 {
-    [TLObject(779755552)]
+    [TLObject(452533257)]
     public class TLRequestReuploadCdnFile : TLMethod
     {
         public override int Constructor
         {
             get
             {
-                return 779755552;
+                return 452533257;
             }
         }
 
         public byte[] file_token { get; set; }
         public byte[] request_token { get; set; }
-        public bool Response { get; set; }
+        public TLVector<TLCdnFileHash> Response { get; set; }
 
 
         public void ComputeFlags()
@@ -44,7 +38,7 @@ namespace TeleSharp.TL.Upload
         }
         public override void deserializeResponse(BinaryReader br)
         {
-            Response = BoolUtil.Deserialize(br);
+            Response = (TLVector<TLCdnFileHash>)ObjectUtils.DeserializeVector<TLCdnFileHash>(br);
 
         }
     }

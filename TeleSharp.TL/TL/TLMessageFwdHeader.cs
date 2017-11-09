@@ -1,20 +1,14 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-947462709)]
+    [TLObject(-85986132)]
     public class TLMessageFwdHeader : TLObject
     {
         public override int Constructor
         {
             get
             {
-                return -947462709;
+                return -85986132;
             }
         }
 
@@ -23,6 +17,7 @@ namespace TeleSharp.TL
         public int date { get; set; }
         public int? channel_id { get; set; }
         public int? channel_post { get; set; }
+        public string post_author { get; set; }
 
 
         public void ComputeFlags()
@@ -31,6 +26,7 @@ namespace TeleSharp.TL
             flags = from_id != null ? (flags | 1) : (flags & ~1);
             flags = channel_id != null ? (flags | 2) : (flags & ~2);
             flags = channel_post != null ? (flags | 4) : (flags & ~4);
+            flags = post_author != null ? (flags | 8) : (flags & ~8);
 
         }
 
@@ -53,6 +49,11 @@ namespace TeleSharp.TL
             else
                 channel_post = null;
 
+            if ((flags & 8) != 0)
+                post_author = StringUtil.Deserialize(br);
+            else
+                post_author = null;
+
 
         }
 
@@ -68,6 +69,8 @@ namespace TeleSharp.TL
                 bw.Write(channel_id.Value);
             if ((flags & 4) != 0)
                 bw.Write(channel_post.Value);
+            if ((flags & 8) != 0)
+                StringUtil.Serialize(post_author, bw);
 
         }
     }

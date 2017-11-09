@@ -198,7 +198,7 @@ Don't panic. You can call any method with help of `SendRequestAsync` function. F
 **Where you can find a list of requests and its params?**
 
 The only way is [Telegram API docs](https://core.telegram.org/methods). Yes, it's outdated. But there is no other source.
-Latest scheme in JSON format you can find [here](https://gist.github.com/aarani/b22b7cda024973dff68e1672794b0298)
+Latest scheme in JSON format you can find [here](https://gist.github.com/aarani/702232928ef06cbd7cefacfbc73b71c8)
 
 # Contributing
 
@@ -218,7 +218,7 @@ Contributing is highly appreciated! Donations required <a href="https://www.payp
 # FAQ
 
 #### What API layer is supported?
-The latest one - 66. Thanks to Afshin Arani for his TLGenerator
+The latest one - 71. Thanks to Afshin Arani for his TLGenerator
 
 #### I get a xxxMigrationException or a MIGRATE_X error!
 

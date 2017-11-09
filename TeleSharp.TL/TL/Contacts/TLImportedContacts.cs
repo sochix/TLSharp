@@ -1,24 +1,19 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
 namespace TeleSharp.TL.Contacts
 {
-    [TLObject(-1387117803)]
+    [TLObject(2010127419)]
     public class TLImportedContacts : TLObject
     {
         public override int Constructor
         {
             get
             {
-                return -1387117803;
+                return 2010127419;
             }
         }
 
         public TLVector<TLImportedContact> imported { get; set; }
+        public TLVector<TLPopularContact> popular_invites { get; set; }
         public TLVector<long> retry_contacts { get; set; }
         public TLVector<TLAbsUser> users { get; set; }
 
@@ -31,6 +26,7 @@ namespace TeleSharp.TL.Contacts
         public override void DeserializeBody(BinaryReader br)
         {
             imported = (TLVector<TLImportedContact>)ObjectUtils.DeserializeVector<TLImportedContact>(br);
+            popular_invites = (TLVector<TLPopularContact>)ObjectUtils.DeserializeVector<TLPopularContact>(br);
             retry_contacts = (TLVector<long>)ObjectUtils.DeserializeVector<long>(br);
             users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
 
@@ -40,6 +36,7 @@ namespace TeleSharp.TL.Contacts
         {
             bw.Write(Constructor);
             ObjectUtils.SerializeObject(imported, bw);
+            ObjectUtils.SerializeObject(popular_invites, bw);
             ObjectUtils.SerializeObject(retry_contacts, bw);
             ObjectUtils.SerializeObject(users, bw);
 

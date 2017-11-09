@@ -1,24 +1,18 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
 namespace TeleSharp.TL.Contacts
 {
-    [TLObject(583445000)]
+    [TLObject(-1071414113)]
     public class TLRequestGetContacts : TLMethod
     {
         public override int Constructor
         {
             get
             {
-                return 583445000;
+                return -1071414113;
             }
         }
 
-        public string hash { get; set; }
+        public int hash { get; set; }
         public Contacts.TLAbsContacts Response { get; set; }
 
 
@@ -29,14 +23,14 @@ namespace TeleSharp.TL.Contacts
 
         public override void DeserializeBody(BinaryReader br)
         {
-            hash = StringUtil.Deserialize(br);
+            hash = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            StringUtil.Serialize(hash, bw);
+            bw.Write(hash);
 
         }
         public override void deserializeResponse(BinaryReader br)

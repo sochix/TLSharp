@@ -1,20 +1,14 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-882895228)]
+    [TLObject(-1913424220)]
     public class TLConfig : TLObject
     {
         public override int Constructor
         {
             get
             {
-                return -882895228;
+                return -1913424220;
             }
         }
 
@@ -41,6 +35,7 @@ namespace TeleSharp.TL
         public int edit_time_limit { get; set; }
         public int rating_e_decay { get; set; }
         public int stickers_recent_limit { get; set; }
+        public int stickers_faved_limit { get; set; }
         public int? tmp_sessions { get; set; }
         public int pinned_dialogs_count_max { get; set; }
         public int call_receive_timeout_ms { get; set; }
@@ -48,6 +43,8 @@ namespace TeleSharp.TL
         public int call_connect_timeout_ms { get; set; }
         public int call_packet_timeout_ms { get; set; }
         public string me_url_prefix { get; set; }
+        public string suggested_lang_code { get; set; }
+        public int? lang_pack_version { get; set; }
         public TLVector<TLDisabledFeature> disabled_features { get; set; }
 
 
@@ -56,6 +53,8 @@ namespace TeleSharp.TL
             flags = 0;
             flags = phonecalls_enabled ? (flags | 2) : (flags & ~2);
             flags = tmp_sessions != null ? (flags | 1) : (flags & ~1);
+            flags = suggested_lang_code != null ? (flags | 4) : (flags & ~4);
+            flags = lang_pack_version != null ? (flags | 4) : (flags & ~4);
 
         }
 
@@ -84,6 +83,7 @@ namespace TeleSharp.TL
             edit_time_limit = br.ReadInt32();
             rating_e_decay = br.ReadInt32();
             stickers_recent_limit = br.ReadInt32();
+            stickers_faved_limit = br.ReadInt32();
             if ((flags & 1) != 0)
                 tmp_sessions = br.ReadInt32();
             else
@@ -95,6 +95,16 @@ namespace TeleSharp.TL
             call_connect_timeout_ms = br.ReadInt32();
             call_packet_timeout_ms = br.ReadInt32();
             me_url_prefix = StringUtil.Deserialize(br);
+            if ((flags & 4) != 0)
+                suggested_lang_code = StringUtil.Deserialize(br);
+            else
+                suggested_lang_code = null;
+
+            if ((flags & 4) != 0)
+                lang_pack_version = br.ReadInt32();
+            else
+                lang_pack_version = null;
+
             disabled_features = (TLVector<TLDisabledFeature>)ObjectUtils.DeserializeVector<TLDisabledFeature>(br);
 
         }
@@ -126,6 +136,7 @@ namespace TeleSharp.TL
             bw.Write(edit_time_limit);
             bw.Write(rating_e_decay);
             bw.Write(stickers_recent_limit);
+            bw.Write(stickers_faved_limit);
             if ((flags & 1) != 0)
                 bw.Write(tmp_sessions.Value);
             bw.Write(pinned_dialogs_count_max);
@@ -134,6 +145,10 @@ namespace TeleSharp.TL
             bw.Write(call_connect_timeout_ms);
             bw.Write(call_packet_timeout_ms);
             StringUtil.Serialize(me_url_prefix, bw);
+            if ((flags & 4) != 0)
+                StringUtil.Serialize(suggested_lang_code, bw);
+            if ((flags & 4) != 0)
+                bw.Write(lang_pack_version.Value);
             ObjectUtils.SerializeObject(disabled_features, bw);
 
         }
