@@ -1,10 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
 namespace TeleSharp.TL
 {
     [TLObject(98092748)]
@@ -23,6 +17,7 @@ namespace TeleSharp.TL
         public bool media_only { get; set; }
         public bool tcpo_only { get; set; }
         public bool cdn { get; set; }
+        public bool @static { get; set; }
         public int id { get; set; }
         public string ip_address { get; set; }
         public int port { get; set; }
@@ -35,6 +30,7 @@ namespace TeleSharp.TL
             flags = media_only ? (flags | 2) : (flags & ~2);
             flags = tcpo_only ? (flags | 4) : (flags & ~4);
             flags = cdn ? (flags | 8) : (flags & ~8);
+            flags = @static ? (flags | 16) : (flags & ~16);
 
         }
 
@@ -45,6 +41,7 @@ namespace TeleSharp.TL
             media_only = (flags & 2) != 0;
             tcpo_only = (flags & 4) != 0;
             cdn = (flags & 8) != 0;
+            @static = (flags & 16) != 0;
             id = br.ReadInt32();
             ip_address = StringUtil.Deserialize(br);
             port = br.ReadInt32();
@@ -56,6 +53,7 @@ namespace TeleSharp.TL
             bw.Write(Constructor);
             ComputeFlags();
             bw.Write(flags);
+
 
 
 

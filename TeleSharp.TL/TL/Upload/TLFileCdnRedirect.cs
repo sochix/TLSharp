@@ -1,20 +1,14 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
 namespace TeleSharp.TL.Upload
 {
-    [TLObject(352864346)]
+    [TLObject(-363659686)]
     public class TLFileCdnRedirect : TLAbsFile
     {
         public override int Constructor
         {
             get
             {
-                return 352864346;
+                return -363659686;
             }
         }
 
@@ -22,6 +16,7 @@ namespace TeleSharp.TL.Upload
         public byte[] file_token { get; set; }
         public byte[] encryption_key { get; set; }
         public byte[] encryption_iv { get; set; }
+        public TLVector<TLCdnFileHash> cdn_file_hashes { get; set; }
 
 
         public void ComputeFlags()
@@ -35,6 +30,7 @@ namespace TeleSharp.TL.Upload
             file_token = BytesUtil.Deserialize(br);
             encryption_key = BytesUtil.Deserialize(br);
             encryption_iv = BytesUtil.Deserialize(br);
+            cdn_file_hashes = (TLVector<TLCdnFileHash>)ObjectUtils.DeserializeVector<TLCdnFileHash>(br);
 
         }
 
@@ -45,6 +41,7 @@ namespace TeleSharp.TL.Upload
             BytesUtil.Serialize(file_token, bw);
             BytesUtil.Serialize(encryption_key, bw);
             BytesUtil.Serialize(encryption_iv, bw);
+            ObjectUtils.SerializeObject(cdn_file_hashes, bw);
 
         }
     }

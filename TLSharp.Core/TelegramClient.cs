@@ -72,7 +72,7 @@ namespace TLSharp.Core
                 query = config,
                 system_version = "Win 10.0"
             };
-            var invokewithLayer = new TLRequestInvokeWithLayer() { layer = 66, query = request };
+            var invokewithLayer = new TLRequestInvokeWithLayer() { layer = 71, query = request };
             await _sender.Send(invokewithLayer);
             await _sender.Receive(invokewithLayer);
 
@@ -216,7 +216,7 @@ namespace TLSharp.Core
             if (!IsUserAuthorized())
                 throw new InvalidOperationException("Authorize user first!");
 
-            var req = new TLRequestGetContacts() { hash = "" };
+            var req = new TLRequestGetContacts() { hash = 0 };
 
             return await SendRequestAsync<TLContacts>(req);
         }

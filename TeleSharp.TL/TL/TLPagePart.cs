@@ -1,26 +1,20 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-1913754556)]
+    [TLObject(-1908433218)]
     public class TLPagePart : TLAbsPage
     {
         public override int Constructor
         {
             get
             {
-                return -1913754556;
+                return -1908433218;
             }
         }
 
         public TLVector<TLAbsPageBlock> blocks { get; set; }
         public TLVector<TLAbsPhoto> photos { get; set; }
-        public TLVector<TLAbsDocument> videos { get; set; }
+        public TLVector<TLAbsDocument> documents { get; set; }
 
 
         public void ComputeFlags()
@@ -32,7 +26,7 @@ namespace TeleSharp.TL
         {
             blocks = (TLVector<TLAbsPageBlock>)ObjectUtils.DeserializeVector<TLAbsPageBlock>(br);
             photos = (TLVector<TLAbsPhoto>)ObjectUtils.DeserializeVector<TLAbsPhoto>(br);
-            videos = (TLVector<TLAbsDocument>)ObjectUtils.DeserializeVector<TLAbsDocument>(br);
+            documents = (TLVector<TLAbsDocument>)ObjectUtils.DeserializeVector<TLAbsDocument>(br);
 
         }
 
@@ -41,7 +35,7 @@ namespace TeleSharp.TL
             bw.Write(Constructor);
             ObjectUtils.SerializeObject(blocks, bw);
             ObjectUtils.SerializeObject(photos, bw);
-            ObjectUtils.SerializeObject(videos, bw);
+            ObjectUtils.SerializeObject(documents, bw);
 
         }
     }

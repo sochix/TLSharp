@@ -1,20 +1,14 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-2059962289)]
+    [TLObject(681420594)]
     public class TLChannelForbidden : TLAbsChat
     {
         public override int Constructor
         {
             get
             {
-                return -2059962289;
+                return 681420594;
             }
         }
 
@@ -24,6 +18,7 @@ namespace TeleSharp.TL
         public int id { get; set; }
         public long access_hash { get; set; }
         public string title { get; set; }
+        public int? until_date { get; set; }
 
 
         public void ComputeFlags()
@@ -31,6 +26,7 @@ namespace TeleSharp.TL
             flags = 0;
             flags = broadcast ? (flags | 32) : (flags & ~32);
             flags = megagroup ? (flags | 256) : (flags & ~256);
+            flags = until_date != null ? (flags | 65536) : (flags & ~65536);
 
         }
 
@@ -42,6 +38,11 @@ namespace TeleSharp.TL
             id = br.ReadInt32();
             access_hash = br.ReadInt64();
             title = StringUtil.Deserialize(br);
+            if ((flags & 65536) != 0)
+                until_date = br.ReadInt32();
+            else
+                until_date = null;
+
 
         }
 
@@ -55,6 +56,8 @@ namespace TeleSharp.TL
             bw.Write(id);
             bw.Write(access_hash);
             StringUtil.Serialize(title, bw);
+            if ((flags & 65536) != 0)
+                bw.Write(until_date.Value);
 
         }
     }
