@@ -18,7 +18,7 @@ namespace TeleSharp.TL.Upload
             }
         }
 
-        public byte[] bytes { get; set; }
+        public byte[] Bytes { get; set; }
 
 
         public void ComputeFlags()
@@ -28,14 +28,14 @@ namespace TeleSharp.TL.Upload
 
         public override void DeserializeBody(BinaryReader br)
         {
-            bytes = BytesUtil.Deserialize(br);
+            Bytes = BytesUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            BytesUtil.Serialize(bytes, bw);
+            BytesUtil.Serialize(Bytes, bw);
 
         }
     }

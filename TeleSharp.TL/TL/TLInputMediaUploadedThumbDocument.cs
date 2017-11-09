@@ -18,34 +18,34 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public TLAbsInputFile file { get; set; }
-        public TLAbsInputFile thumb { get; set; }
-        public string mime_type { get; set; }
-        public TLVector<TLAbsDocumentAttribute> attributes { get; set; }
-        public string caption { get; set; }
-        public TLVector<TLAbsInputDocument> stickers { get; set; }
+        public int Flags { get; set; }
+        public TLAbsInputFile File { get; set; }
+        public TLAbsInputFile Thumb { get; set; }
+        public string MimeType { get; set; }
+        public TLVector<TLAbsDocumentAttribute> Attributes { get; set; }
+        public string Caption { get; set; }
+        public TLVector<TLAbsInputDocument> Stickers { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = stickers != null ? (flags | 1) : (flags & ~1);
+            Flags = 0;
+            Flags = Stickers != null ? (Flags | 1) : (Flags & ~1);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            file = (TLAbsInputFile)ObjectUtils.DeserializeObject(br);
-            thumb = (TLAbsInputFile)ObjectUtils.DeserializeObject(br);
-            mime_type = StringUtil.Deserialize(br);
-            attributes = (TLVector<TLAbsDocumentAttribute>)ObjectUtils.DeserializeVector<TLAbsDocumentAttribute>(br);
-            caption = StringUtil.Deserialize(br);
-            if ((flags & 1) != 0)
-                stickers = (TLVector<TLAbsInputDocument>)ObjectUtils.DeserializeVector<TLAbsInputDocument>(br);
+            Flags = br.ReadInt32();
+            File = (TLAbsInputFile)ObjectUtils.DeserializeObject(br);
+            Thumb = (TLAbsInputFile)ObjectUtils.DeserializeObject(br);
+            MimeType = StringUtil.Deserialize(br);
+            Attributes = (TLVector<TLAbsDocumentAttribute>)ObjectUtils.DeserializeVector<TLAbsDocumentAttribute>(br);
+            Caption = StringUtil.Deserialize(br);
+            if ((Flags & 1) != 0)
+                Stickers = (TLVector<TLAbsInputDocument>)ObjectUtils.DeserializeVector<TLAbsInputDocument>(br);
             else
-                stickers = null;
+                Stickers = null;
 
 
         }
@@ -54,14 +54,14 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
-            ObjectUtils.SerializeObject(file, bw);
-            ObjectUtils.SerializeObject(thumb, bw);
-            StringUtil.Serialize(mime_type, bw);
-            ObjectUtils.SerializeObject(attributes, bw);
-            StringUtil.Serialize(caption, bw);
-            if ((flags & 1) != 0)
-                ObjectUtils.SerializeObject(stickers, bw);
+            bw.Write(Flags);
+            ObjectUtils.SerializeObject(File, bw);
+            ObjectUtils.SerializeObject(Thumb, bw);
+            StringUtil.Serialize(MimeType, bw);
+            ObjectUtils.SerializeObject(Attributes, bw);
+            StringUtil.Serialize(Caption, bw);
+            if ((Flags & 1) != 0)
+                ObjectUtils.SerializeObject(Stickers, bw);
 
         }
     }

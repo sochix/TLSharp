@@ -18,7 +18,7 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public int max_qts { get; set; }
+        public int MaxQts { get; set; }
         public TLVector<long> Response { get; set; }
 
 
@@ -29,17 +29,17 @@ namespace TeleSharp.TL.Messages
 
         public override void DeserializeBody(BinaryReader br)
         {
-            max_qts = br.ReadInt32();
+            MaxQts = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(max_qts);
+            bw.Write(MaxQts);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLVector<long>)ObjectUtils.DeserializeVector<long>(br);
 

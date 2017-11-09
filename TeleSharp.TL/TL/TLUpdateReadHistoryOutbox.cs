@@ -18,10 +18,10 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLAbsPeer peer { get; set; }
-        public int max_id { get; set; }
-        public int pts { get; set; }
-        public int pts_count { get; set; }
+        public TLAbsPeer Peer { get; set; }
+        public int MaxId { get; set; }
+        public int Pts { get; set; }
+        public int PtsCount { get; set; }
 
 
         public void ComputeFlags()
@@ -31,20 +31,20 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            peer = (TLAbsPeer)ObjectUtils.DeserializeObject(br);
-            max_id = br.ReadInt32();
-            pts = br.ReadInt32();
-            pts_count = br.ReadInt32();
+            Peer = (TLAbsPeer)ObjectUtils.DeserializeObject(br);
+            MaxId = br.ReadInt32();
+            Pts = br.ReadInt32();
+            PtsCount = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(peer, bw);
-            bw.Write(max_id);
-            bw.Write(pts);
-            bw.Write(pts_count);
+            ObjectUtils.SerializeObject(Peer, bw);
+            bw.Write(MaxId);
+            bw.Write(Pts);
+            bw.Write(PtsCount);
 
         }
     }

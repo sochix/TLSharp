@@ -18,26 +18,26 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public int channel_id { get; set; }
-        public int? pts { get; set; }
+        public int Flags { get; set; }
+        public int ChannelId { get; set; }
+        public int? Pts { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = pts != null ? (flags | 1) : (flags & ~1);
+            Flags = 0;
+            Flags = Pts != null ? (Flags | 1) : (Flags & ~1);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            channel_id = br.ReadInt32();
-            if ((flags & 1) != 0)
-                pts = br.ReadInt32();
+            Flags = br.ReadInt32();
+            ChannelId = br.ReadInt32();
+            if ((Flags & 1) != 0)
+                Pts = br.ReadInt32();
             else
-                pts = null;
+                Pts = null;
 
 
         }
@@ -46,10 +46,10 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
-            bw.Write(channel_id);
-            if ((flags & 1) != 0)
-                bw.Write(pts.Value);
+            bw.Write(Flags);
+            bw.Write(ChannelId);
+            if ((Flags & 1) != 0)
+                bw.Write(Pts.Value);
 
         }
     }

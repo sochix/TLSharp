@@ -18,7 +18,7 @@ namespace TeleSharp.TL
             }
         }
 
-        public int was_online { get; set; }
+        public int WasOnline { get; set; }
 
 
         public void ComputeFlags()
@@ -28,14 +28,14 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            was_online = br.ReadInt32();
+            WasOnline = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(was_online);
+            bw.Write(WasOnline);
 
         }
     }

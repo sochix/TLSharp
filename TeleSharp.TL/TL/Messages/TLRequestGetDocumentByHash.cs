@@ -18,9 +18,9 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public byte[] sha256 { get; set; }
-        public int size { get; set; }
-        public string mime_type { get; set; }
+        public byte[] Sha256 { get; set; }
+        public int Size { get; set; }
+        public string MimeType { get; set; }
         public TLAbsDocument Response { get; set; }
 
 
@@ -31,21 +31,21 @@ namespace TeleSharp.TL.Messages
 
         public override void DeserializeBody(BinaryReader br)
         {
-            sha256 = BytesUtil.Deserialize(br);
-            size = br.ReadInt32();
-            mime_type = StringUtil.Deserialize(br);
+            Sha256 = BytesUtil.Deserialize(br);
+            Size = br.ReadInt32();
+            MimeType = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            BytesUtil.Serialize(sha256, bw);
-            bw.Write(size);
-            StringUtil.Serialize(mime_type, bw);
+            BytesUtil.Serialize(Sha256, bw);
+            bw.Write(Size);
+            StringUtil.Serialize(MimeType, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLAbsDocument)ObjectUtils.DeserializeObject(br);
 

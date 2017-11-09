@@ -18,40 +18,40 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public bool test { get; set; }
-        public bool name_requested { get; set; }
-        public bool phone_requested { get; set; }
-        public bool email_requested { get; set; }
-        public bool shipping_address_requested { get; set; }
-        public bool flexible { get; set; }
-        public string currency { get; set; }
-        public TLVector<TLLabeledPrice> prices { get; set; }
+        public int Flags { get; set; }
+        public bool Test { get; set; }
+        public bool NameRequested { get; set; }
+        public bool PhoneRequested { get; set; }
+        public bool EmailRequested { get; set; }
+        public bool ShippingAddressRequested { get; set; }
+        public bool Flexible { get; set; }
+        public string Currency { get; set; }
+        public TLVector<TLLabeledPrice> Prices { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = test ? (flags | 1) : (flags & ~1);
-            flags = name_requested ? (flags | 2) : (flags & ~2);
-            flags = phone_requested ? (flags | 4) : (flags & ~4);
-            flags = email_requested ? (flags | 8) : (flags & ~8);
-            flags = shipping_address_requested ? (flags | 16) : (flags & ~16);
-            flags = flexible ? (flags | 32) : (flags & ~32);
+            Flags = 0;
+            Flags = Test ? (Flags | 1) : (Flags & ~1);
+            Flags = NameRequested ? (Flags | 2) : (Flags & ~2);
+            Flags = PhoneRequested ? (Flags | 4) : (Flags & ~4);
+            Flags = EmailRequested ? (Flags | 8) : (Flags & ~8);
+            Flags = ShippingAddressRequested ? (Flags | 16) : (Flags & ~16);
+            Flags = Flexible ? (Flags | 32) : (Flags & ~32);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            test = (flags & 1) != 0;
-            name_requested = (flags & 2) != 0;
-            phone_requested = (flags & 4) != 0;
-            email_requested = (flags & 8) != 0;
-            shipping_address_requested = (flags & 16) != 0;
-            flexible = (flags & 32) != 0;
-            currency = StringUtil.Deserialize(br);
-            prices = (TLVector<TLLabeledPrice>)ObjectUtils.DeserializeVector<TLLabeledPrice>(br);
+            Flags = br.ReadInt32();
+            Test = (Flags & 1) != 0;
+            NameRequested = (Flags & 2) != 0;
+            PhoneRequested = (Flags & 4) != 0;
+            EmailRequested = (Flags & 8) != 0;
+            ShippingAddressRequested = (Flags & 16) != 0;
+            Flexible = (Flags & 32) != 0;
+            Currency = StringUtil.Deserialize(br);
+            Prices = (TLVector<TLLabeledPrice>)ObjectUtils.DeserializeVector<TLLabeledPrice>(br);
 
         }
 
@@ -59,15 +59,15 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
 
 
 
 
 
-            StringUtil.Serialize(currency, bw);
-            ObjectUtils.SerializeObject(prices, bw);
+            StringUtil.Serialize(Currency, bw);
+            ObjectUtils.SerializeObject(Prices, bw);
 
         }
     }

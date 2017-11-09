@@ -18,26 +18,26 @@ namespace TeleSharp.TL.Channels
             }
         }
 
-        public int flags { get; set; }
-        public bool silent { get; set; }
-        public TLAbsInputChannel channel { get; set; }
-        public int id { get; set; }
+        public int Flags { get; set; }
+        public bool Silent { get; set; }
+        public TLAbsInputChannel Channel { get; set; }
+        public int Id { get; set; }
         public TLAbsUpdates Response { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = silent ? (flags | 1) : (flags & ~1);
+            Flags = 0;
+            Flags = Silent ? (Flags | 1) : (Flags & ~1);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            silent = (flags & 1) != 0;
-            channel = (TLAbsInputChannel)ObjectUtils.DeserializeObject(br);
-            id = br.ReadInt32();
+            Flags = br.ReadInt32();
+            Silent = (Flags & 1) != 0;
+            Channel = (TLAbsInputChannel)ObjectUtils.DeserializeObject(br);
+            Id = br.ReadInt32();
 
         }
 
@@ -45,13 +45,13 @@ namespace TeleSharp.TL.Channels
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
-            ObjectUtils.SerializeObject(channel, bw);
-            bw.Write(id);
+            ObjectUtils.SerializeObject(Channel, bw);
+            bw.Write(Id);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLAbsUpdates)ObjectUtils.DeserializeObject(br);
 

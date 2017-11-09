@@ -18,24 +18,24 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public bool single_use { get; set; }
-        public bool selective { get; set; }
+        public int Flags { get; set; }
+        public bool SingleUse { get; set; }
+        public bool Selective { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = single_use ? (flags | 2) : (flags & ~2);
-            flags = selective ? (flags | 4) : (flags & ~4);
+            Flags = 0;
+            Flags = SingleUse ? (Flags | 2) : (Flags & ~2);
+            Flags = Selective ? (Flags | 4) : (Flags & ~4);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            single_use = (flags & 2) != 0;
-            selective = (flags & 4) != 0;
+            Flags = br.ReadInt32();
+            SingleUse = (Flags & 2) != 0;
+            Selective = (Flags & 4) != 0;
 
         }
 
@@ -43,7 +43,7 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
 
 

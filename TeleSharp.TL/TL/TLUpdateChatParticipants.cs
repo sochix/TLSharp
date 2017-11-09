@@ -18,7 +18,7 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLAbsChatParticipants participants { get; set; }
+        public TLAbsChatParticipants Participants { get; set; }
 
 
         public void ComputeFlags()
@@ -28,14 +28,14 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            participants = (TLAbsChatParticipants)ObjectUtils.DeserializeObject(br);
+            Participants = (TLAbsChatParticipants)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(participants, bw);
+            ObjectUtils.SerializeObject(Participants, bw);
 
         }
     }

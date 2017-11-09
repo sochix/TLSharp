@@ -18,24 +18,24 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public int flags { get; set; }
-        public bool pinned { get; set; }
-        public TLAbsInputPeer peer { get; set; }
+        public int Flags { get; set; }
+        public bool Pinned { get; set; }
+        public TLAbsInputPeer Peer { get; set; }
         public bool Response { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = pinned ? (flags | 1) : (flags & ~1);
+            Flags = 0;
+            Flags = Pinned ? (Flags | 1) : (Flags & ~1);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            pinned = (flags & 1) != 0;
-            peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
+            Flags = br.ReadInt32();
+            Pinned = (Flags & 1) != 0;
+            Peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
 
         }
 
@@ -43,12 +43,12 @@ namespace TeleSharp.TL.Messages
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
-            ObjectUtils.SerializeObject(peer, bw);
+            ObjectUtils.SerializeObject(Peer, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = BoolUtil.Deserialize(br);
 

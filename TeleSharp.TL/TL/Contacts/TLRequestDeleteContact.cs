@@ -18,7 +18,7 @@ namespace TeleSharp.TL.Contacts
             }
         }
 
-        public TLAbsInputUser id { get; set; }
+        public TLAbsInputUser Id { get; set; }
         public Contacts.TLLink Response { get; set; }
 
 
@@ -29,17 +29,17 @@ namespace TeleSharp.TL.Contacts
 
         public override void DeserializeBody(BinaryReader br)
         {
-            id = (TLAbsInputUser)ObjectUtils.DeserializeObject(br);
+            Id = (TLAbsInputUser)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(id, bw);
+            ObjectUtils.SerializeObject(Id, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Contacts.TLLink)ObjectUtils.DeserializeObject(br);
 

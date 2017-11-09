@@ -18,7 +18,7 @@ namespace TeleSharp.TL
             }
         }
 
-        public int progress { get; set; }
+        public int Progress { get; set; }
 
 
         public void ComputeFlags()
@@ -28,14 +28,14 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            progress = br.ReadInt32();
+            Progress = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(progress);
+            bw.Write(Progress);
 
         }
     }

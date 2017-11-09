@@ -18,8 +18,8 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLStickerSet @set { get; set; }
-        public TLVector<TLAbsDocument> covers { get; set; }
+        public TLStickerSet Set { get; set; }
+        public TLVector<TLAbsDocument> Covers { get; set; }
 
 
         public void ComputeFlags()
@@ -29,16 +29,16 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            @set = (TLStickerSet)ObjectUtils.DeserializeObject(br);
-            covers = (TLVector<TLAbsDocument>)ObjectUtils.DeserializeVector<TLAbsDocument>(br);
+            Set = (TLStickerSet)ObjectUtils.DeserializeObject(br);
+            Covers = (TLVector<TLAbsDocument>)ObjectUtils.DeserializeVector<TLAbsDocument>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(@set, bw);
-            ObjectUtils.SerializeObject(covers, bw);
+            ObjectUtils.SerializeObject(Set, bw);
+            ObjectUtils.SerializeObject(Covers, bw);
 
         }
     }

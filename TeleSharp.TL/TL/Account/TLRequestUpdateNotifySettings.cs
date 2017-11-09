@@ -18,8 +18,8 @@ namespace TeleSharp.TL.Account
             }
         }
 
-        public TLAbsInputNotifyPeer peer { get; set; }
-        public TLInputPeerNotifySettings settings { get; set; }
+        public TLAbsInputNotifyPeer Peer { get; set; }
+        public TLInputPeerNotifySettings Settings { get; set; }
         public bool Response { get; set; }
 
 
@@ -30,19 +30,19 @@ namespace TeleSharp.TL.Account
 
         public override void DeserializeBody(BinaryReader br)
         {
-            peer = (TLAbsInputNotifyPeer)ObjectUtils.DeserializeObject(br);
-            settings = (TLInputPeerNotifySettings)ObjectUtils.DeserializeObject(br);
+            Peer = (TLAbsInputNotifyPeer)ObjectUtils.DeserializeObject(br);
+            Settings = (TLInputPeerNotifySettings)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(peer, bw);
-            ObjectUtils.SerializeObject(settings, bw);
+            ObjectUtils.SerializeObject(Peer, bw);
+            ObjectUtils.SerializeObject(Settings, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = BoolUtil.Deserialize(br);
 

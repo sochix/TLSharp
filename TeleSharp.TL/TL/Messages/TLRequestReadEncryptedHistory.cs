@@ -18,8 +18,8 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public TLInputEncryptedChat peer { get; set; }
-        public int max_date { get; set; }
+        public TLInputEncryptedChat Peer { get; set; }
+        public int MaxDate { get; set; }
         public bool Response { get; set; }
 
 
@@ -30,19 +30,19 @@ namespace TeleSharp.TL.Messages
 
         public override void DeserializeBody(BinaryReader br)
         {
-            peer = (TLInputEncryptedChat)ObjectUtils.DeserializeObject(br);
-            max_date = br.ReadInt32();
+            Peer = (TLInputEncryptedChat)ObjectUtils.DeserializeObject(br);
+            MaxDate = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(peer, bw);
-            bw.Write(max_date);
+            ObjectUtils.SerializeObject(Peer, bw);
+            bw.Write(MaxDate);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = BoolUtil.Deserialize(br);
 

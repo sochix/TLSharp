@@ -18,48 +18,48 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public bool shipping_address_requested { get; set; }
-        public bool test { get; set; }
-        public string title { get; set; }
-        public string description { get; set; }
-        public TLWebDocument photo { get; set; }
-        public int? receipt_msg_id { get; set; }
-        public string currency { get; set; }
-        public long total_amount { get; set; }
-        public string start_param { get; set; }
+        public int Flags { get; set; }
+        public bool ShippingAddressRequested { get; set; }
+        public bool Test { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public TLWebDocument Photo { get; set; }
+        public int? ReceiptMsgId { get; set; }
+        public string Currency { get; set; }
+        public long TotalAmount { get; set; }
+        public string StartParam { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = shipping_address_requested ? (flags | 2) : (flags & ~2);
-            flags = test ? (flags | 8) : (flags & ~8);
-            flags = photo != null ? (flags | 1) : (flags & ~1);
-            flags = receipt_msg_id != null ? (flags | 4) : (flags & ~4);
+            Flags = 0;
+            Flags = ShippingAddressRequested ? (Flags | 2) : (Flags & ~2);
+            Flags = Test ? (Flags | 8) : (Flags & ~8);
+            Flags = Photo != null ? (Flags | 1) : (Flags & ~1);
+            Flags = ReceiptMsgId != null ? (Flags | 4) : (Flags & ~4);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            shipping_address_requested = (flags & 2) != 0;
-            test = (flags & 8) != 0;
-            title = StringUtil.Deserialize(br);
-            description = StringUtil.Deserialize(br);
-            if ((flags & 1) != 0)
-                photo = (TLWebDocument)ObjectUtils.DeserializeObject(br);
+            Flags = br.ReadInt32();
+            ShippingAddressRequested = (Flags & 2) != 0;
+            Test = (Flags & 8) != 0;
+            Title = StringUtil.Deserialize(br);
+            Description = StringUtil.Deserialize(br);
+            if ((Flags & 1) != 0)
+                Photo = (TLWebDocument)ObjectUtils.DeserializeObject(br);
             else
-                photo = null;
+                Photo = null;
 
-            if ((flags & 4) != 0)
-                receipt_msg_id = br.ReadInt32();
+            if ((Flags & 4) != 0)
+                ReceiptMsgId = br.ReadInt32();
             else
-                receipt_msg_id = null;
+                ReceiptMsgId = null;
 
-            currency = StringUtil.Deserialize(br);
-            total_amount = br.ReadInt64();
-            start_param = StringUtil.Deserialize(br);
+            Currency = StringUtil.Deserialize(br);
+            TotalAmount = br.ReadInt64();
+            StartParam = StringUtil.Deserialize(br);
 
         }
 
@@ -67,18 +67,18 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
 
-            StringUtil.Serialize(title, bw);
-            StringUtil.Serialize(description, bw);
-            if ((flags & 1) != 0)
-                ObjectUtils.SerializeObject(photo, bw);
-            if ((flags & 4) != 0)
-                bw.Write(receipt_msg_id.Value);
-            StringUtil.Serialize(currency, bw);
-            bw.Write(total_amount);
-            StringUtil.Serialize(start_param, bw);
+            StringUtil.Serialize(Title, bw);
+            StringUtil.Serialize(Description, bw);
+            if ((Flags & 1) != 0)
+                ObjectUtils.SerializeObject(Photo, bw);
+            if ((Flags & 4) != 0)
+                bw.Write(ReceiptMsgId.Value);
+            StringUtil.Serialize(Currency, bw);
+            bw.Write(TotalAmount);
+            StringUtil.Serialize(StartParam, bw);
 
         }
     }

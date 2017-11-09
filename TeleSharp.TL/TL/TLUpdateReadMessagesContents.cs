@@ -18,9 +18,9 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLVector<int> messages { get; set; }
-        public int pts { get; set; }
-        public int pts_count { get; set; }
+        public TLVector<int> Messages { get; set; }
+        public int Pts { get; set; }
+        public int PtsCount { get; set; }
 
 
         public void ComputeFlags()
@@ -30,18 +30,18 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            messages = (TLVector<int>)ObjectUtils.DeserializeVector<int>(br);
-            pts = br.ReadInt32();
-            pts_count = br.ReadInt32();
+            Messages = (TLVector<int>)ObjectUtils.DeserializeVector<int>(br);
+            Pts = br.ReadInt32();
+            PtsCount = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(messages, bw);
-            bw.Write(pts);
-            bw.Write(pts_count);
+            ObjectUtils.SerializeObject(Messages, bw);
+            bw.Write(Pts);
+            bw.Write(PtsCount);
 
         }
     }

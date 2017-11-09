@@ -18,28 +18,28 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public TLAbsInputFile file { get; set; }
-        public string caption { get; set; }
-        public TLVector<TLAbsInputDocument> stickers { get; set; }
+        public int Flags { get; set; }
+        public TLAbsInputFile File { get; set; }
+        public string Caption { get; set; }
+        public TLVector<TLAbsInputDocument> Stickers { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = stickers != null ? (flags | 1) : (flags & ~1);
+            Flags = 0;
+            Flags = Stickers != null ? (Flags | 1) : (Flags & ~1);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            file = (TLAbsInputFile)ObjectUtils.DeserializeObject(br);
-            caption = StringUtil.Deserialize(br);
-            if ((flags & 1) != 0)
-                stickers = (TLVector<TLAbsInputDocument>)ObjectUtils.DeserializeVector<TLAbsInputDocument>(br);
+            Flags = br.ReadInt32();
+            File = (TLAbsInputFile)ObjectUtils.DeserializeObject(br);
+            Caption = StringUtil.Deserialize(br);
+            if ((Flags & 1) != 0)
+                Stickers = (TLVector<TLAbsInputDocument>)ObjectUtils.DeserializeVector<TLAbsInputDocument>(br);
             else
-                stickers = null;
+                Stickers = null;
 
 
         }
@@ -48,11 +48,11 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
-            ObjectUtils.SerializeObject(file, bw);
-            StringUtil.Serialize(caption, bw);
-            if ((flags & 1) != 0)
-                ObjectUtils.SerializeObject(stickers, bw);
+            bw.Write(Flags);
+            ObjectUtils.SerializeObject(File, bw);
+            StringUtil.Serialize(Caption, bw);
+            if ((Flags & 1) != 0)
+                ObjectUtils.SerializeObject(Stickers, bw);
 
         }
     }

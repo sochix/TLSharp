@@ -18,11 +18,11 @@ namespace TeleSharp.TL
             }
         }
 
-        public string type { get; set; }
-        public TLAbsFileLocation location { get; set; }
-        public int w { get; set; }
-        public int h { get; set; }
-        public byte[] bytes { get; set; }
+        public string Type { get; set; }
+        public TLAbsFileLocation Location { get; set; }
+        public int W { get; set; }
+        public int H { get; set; }
+        public byte[] Bytes { get; set; }
 
 
         public void ComputeFlags()
@@ -32,22 +32,22 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            type = StringUtil.Deserialize(br);
-            location = (TLAbsFileLocation)ObjectUtils.DeserializeObject(br);
-            w = br.ReadInt32();
-            h = br.ReadInt32();
-            bytes = BytesUtil.Deserialize(br);
+            Type = StringUtil.Deserialize(br);
+            Location = (TLAbsFileLocation)ObjectUtils.DeserializeObject(br);
+            W = br.ReadInt32();
+            H = br.ReadInt32();
+            Bytes = BytesUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            StringUtil.Serialize(type, bw);
-            ObjectUtils.SerializeObject(location, bw);
-            bw.Write(w);
-            bw.Write(h);
-            BytesUtil.Serialize(bytes, bw);
+            StringUtil.Serialize(Type, bw);
+            ObjectUtils.SerializeObject(Location, bw);
+            bw.Write(W);
+            bw.Write(H);
+            BytesUtil.Serialize(Bytes, bw);
 
         }
     }

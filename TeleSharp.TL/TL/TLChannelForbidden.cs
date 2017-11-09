@@ -18,30 +18,30 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public bool broadcast { get; set; }
-        public bool megagroup { get; set; }
-        public int id { get; set; }
-        public long access_hash { get; set; }
-        public string title { get; set; }
+        public int Flags { get; set; }
+        public bool Broadcast { get; set; }
+        public bool Megagroup { get; set; }
+        public int Id { get; set; }
+        public long AccessHash { get; set; }
+        public string Title { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = broadcast ? (flags | 32) : (flags & ~32);
-            flags = megagroup ? (flags | 256) : (flags & ~256);
+            Flags = 0;
+            Flags = Broadcast ? (Flags | 32) : (Flags & ~32);
+            Flags = Megagroup ? (Flags | 256) : (Flags & ~256);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            broadcast = (flags & 32) != 0;
-            megagroup = (flags & 256) != 0;
-            id = br.ReadInt32();
-            access_hash = br.ReadInt64();
-            title = StringUtil.Deserialize(br);
+            Flags = br.ReadInt32();
+            Broadcast = (Flags & 32) != 0;
+            Megagroup = (Flags & 256) != 0;
+            Id = br.ReadInt32();
+            AccessHash = br.ReadInt64();
+            Title = StringUtil.Deserialize(br);
 
         }
 
@@ -49,12 +49,12 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
 
-            bw.Write(id);
-            bw.Write(access_hash);
-            StringUtil.Serialize(title, bw);
+            bw.Write(Id);
+            bw.Write(AccessHash);
+            StringUtil.Serialize(Title, bw);
 
         }
     }

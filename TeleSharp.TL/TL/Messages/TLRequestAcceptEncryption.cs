@@ -18,9 +18,9 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public TLInputEncryptedChat peer { get; set; }
-        public byte[] g_b { get; set; }
-        public long key_fingerprint { get; set; }
+        public TLInputEncryptedChat Peer { get; set; }
+        public byte[] GB { get; set; }
+        public long KeyFingerprint { get; set; }
         public TLAbsEncryptedChat Response { get; set; }
 
 
@@ -31,21 +31,21 @@ namespace TeleSharp.TL.Messages
 
         public override void DeserializeBody(BinaryReader br)
         {
-            peer = (TLInputEncryptedChat)ObjectUtils.DeserializeObject(br);
-            g_b = BytesUtil.Deserialize(br);
-            key_fingerprint = br.ReadInt64();
+            Peer = (TLInputEncryptedChat)ObjectUtils.DeserializeObject(br);
+            GB = BytesUtil.Deserialize(br);
+            KeyFingerprint = br.ReadInt64();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(peer, bw);
-            BytesUtil.Serialize(g_b, bw);
-            bw.Write(key_fingerprint);
+            ObjectUtils.SerializeObject(Peer, bw);
+            BytesUtil.Serialize(GB, bw);
+            bw.Write(KeyFingerprint);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLAbsEncryptedChat)ObjectUtils.DeserializeObject(br);
 

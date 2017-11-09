@@ -18,10 +18,10 @@ namespace TeleSharp.TL
             }
         }
 
-        public string id { get; set; }
-        public string type { get; set; }
-        public TLAbsInputPhoto photo { get; set; }
-        public TLAbsInputBotInlineMessage send_message { get; set; }
+        public string Id { get; set; }
+        public string Type { get; set; }
+        public TLAbsInputPhoto Photo { get; set; }
+        public TLAbsInputBotInlineMessage SendMessage { get; set; }
 
 
         public void ComputeFlags()
@@ -31,20 +31,20 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            id = StringUtil.Deserialize(br);
-            type = StringUtil.Deserialize(br);
-            photo = (TLAbsInputPhoto)ObjectUtils.DeserializeObject(br);
-            send_message = (TLAbsInputBotInlineMessage)ObjectUtils.DeserializeObject(br);
+            Id = StringUtil.Deserialize(br);
+            Type = StringUtil.Deserialize(br);
+            Photo = (TLAbsInputPhoto)ObjectUtils.DeserializeObject(br);
+            SendMessage = (TLAbsInputBotInlineMessage)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            StringUtil.Serialize(id, bw);
-            StringUtil.Serialize(type, bw);
-            ObjectUtils.SerializeObject(photo, bw);
-            ObjectUtils.SerializeObject(send_message, bw);
+            StringUtil.Serialize(Id, bw);
+            StringUtil.Serialize(Type, bw);
+            ObjectUtils.SerializeObject(Photo, bw);
+            ObjectUtils.SerializeObject(SendMessage, bw);
 
         }
     }

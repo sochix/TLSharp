@@ -35,7 +35,7 @@ namespace /* NAMESPACE */
 			bw.Write(Constructor);
             /* SERIALIZE */
         }
-		public override void deserializeResponse(BinaryReader br)
+		public override void DeserializeResponse(BinaryReader br)
 		{
 			/* DESERIALIZEResp */
 		}

@@ -18,7 +18,7 @@ namespace TeleSharp.TL.Payments
             }
         }
 
-        public TLAbsUpdates updates { get; set; }
+        public TLAbsUpdates Updates { get; set; }
 
 
         public void ComputeFlags()
@@ -28,14 +28,14 @@ namespace TeleSharp.TL.Payments
 
         public override void DeserializeBody(BinaryReader br)
         {
-            updates = (TLAbsUpdates)ObjectUtils.DeserializeObject(br);
+            Updates = (TLAbsUpdates)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(updates, bw);
+            ObjectUtils.SerializeObject(Updates, bw);
 
         }
     }

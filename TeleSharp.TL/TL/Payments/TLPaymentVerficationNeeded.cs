@@ -18,7 +18,7 @@ namespace TeleSharp.TL.Payments
             }
         }
 
-        public string url { get; set; }
+        public string Url { get; set; }
 
 
         public void ComputeFlags()
@@ -28,14 +28,14 @@ namespace TeleSharp.TL.Payments
 
         public override void DeserializeBody(BinaryReader br)
         {
-            url = StringUtil.Deserialize(br);
+            Url = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            StringUtil.Serialize(url, bw);
+            StringUtil.Serialize(Url, bw);
 
         }
     }

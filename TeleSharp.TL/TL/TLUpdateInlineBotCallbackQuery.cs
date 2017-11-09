@@ -18,39 +18,39 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public long query_id { get; set; }
-        public int user_id { get; set; }
-        public TLInputBotInlineMessageID msg_id { get; set; }
-        public long chat_instance { get; set; }
-        public byte[] data { get; set; }
-        public string game_short_name { get; set; }
+        public int Flags { get; set; }
+        public long QueryId { get; set; }
+        public int UserId { get; set; }
+        public TLInputBotInlineMessageID MsgId { get; set; }
+        public long ChatInstance { get; set; }
+        public byte[] Data { get; set; }
+        public string GameShortName { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = data != null ? (flags | 1) : (flags & ~1);
-            flags = game_short_name != null ? (flags | 2) : (flags & ~2);
+            Flags = 0;
+            Flags = Data != null ? (Flags | 1) : (Flags & ~1);
+            Flags = GameShortName != null ? (Flags | 2) : (Flags & ~2);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            query_id = br.ReadInt64();
-            user_id = br.ReadInt32();
-            msg_id = (TLInputBotInlineMessageID)ObjectUtils.DeserializeObject(br);
-            chat_instance = br.ReadInt64();
-            if ((flags & 1) != 0)
-                data = BytesUtil.Deserialize(br);
+            Flags = br.ReadInt32();
+            QueryId = br.ReadInt64();
+            UserId = br.ReadInt32();
+            MsgId = (TLInputBotInlineMessageID)ObjectUtils.DeserializeObject(br);
+            ChatInstance = br.ReadInt64();
+            if ((Flags & 1) != 0)
+                Data = BytesUtil.Deserialize(br);
             else
-                data = null;
+                Data = null;
 
-            if ((flags & 2) != 0)
-                game_short_name = StringUtil.Deserialize(br);
+            if ((Flags & 2) != 0)
+                GameShortName = StringUtil.Deserialize(br);
             else
-                game_short_name = null;
+                GameShortName = null;
 
 
         }
@@ -59,15 +59,15 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
-            bw.Write(query_id);
-            bw.Write(user_id);
-            ObjectUtils.SerializeObject(msg_id, bw);
-            bw.Write(chat_instance);
-            if ((flags & 1) != 0)
-                BytesUtil.Serialize(data, bw);
-            if ((flags & 2) != 0)
-                StringUtil.Serialize(game_short_name, bw);
+            bw.Write(Flags);
+            bw.Write(QueryId);
+            bw.Write(UserId);
+            ObjectUtils.SerializeObject(MsgId, bw);
+            bw.Write(ChatInstance);
+            if ((Flags & 1) != 0)
+                BytesUtil.Serialize(Data, bw);
+            if ((Flags & 2) != 0)
+                StringUtil.Serialize(GameShortName, bw);
 
         }
     }

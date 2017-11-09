@@ -18,8 +18,8 @@ namespace TeleSharp.TL
             }
         }
 
-        public int user_id { get; set; }
-        public bool blocked { get; set; }
+        public int UserId { get; set; }
+        public bool Blocked { get; set; }
 
 
         public void ComputeFlags()
@@ -29,16 +29,16 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            user_id = br.ReadInt32();
-            blocked = BoolUtil.Deserialize(br);
+            UserId = br.ReadInt32();
+            Blocked = BoolUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(user_id);
-            BoolUtil.Serialize(blocked, bw);
+            bw.Write(UserId);
+            BoolUtil.Serialize(Blocked, bw);
 
         }
     }

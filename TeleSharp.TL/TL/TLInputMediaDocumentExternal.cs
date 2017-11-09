@@ -18,8 +18,8 @@ namespace TeleSharp.TL
             }
         }
 
-        public string url { get; set; }
-        public string caption { get; set; }
+        public string Url { get; set; }
+        public string Caption { get; set; }
 
 
         public void ComputeFlags()
@@ -29,16 +29,16 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            url = StringUtil.Deserialize(br);
-            caption = StringUtil.Deserialize(br);
+            Url = StringUtil.Deserialize(br);
+            Caption = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            StringUtil.Serialize(url, bw);
-            StringUtil.Serialize(caption, bw);
+            StringUtil.Serialize(Url, bw);
+            StringUtil.Serialize(Caption, bw);
 
         }
     }

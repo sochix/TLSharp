@@ -18,10 +18,10 @@ namespace TeleSharp.TL.Phone
             }
         }
 
-        public TLInputPhoneCall peer { get; set; }
-        public byte[] g_a { get; set; }
-        public long key_fingerprint { get; set; }
-        public TLPhoneCallProtocol protocol { get; set; }
+        public TLInputPhoneCall Peer { get; set; }
+        public byte[] GA { get; set; }
+        public long KeyFingerprint { get; set; }
+        public TLPhoneCallProtocol Protocol { get; set; }
         public Phone.TLPhoneCall Response { get; set; }
 
 
@@ -32,23 +32,23 @@ namespace TeleSharp.TL.Phone
 
         public override void DeserializeBody(BinaryReader br)
         {
-            peer = (TLInputPhoneCall)ObjectUtils.DeserializeObject(br);
-            g_a = BytesUtil.Deserialize(br);
-            key_fingerprint = br.ReadInt64();
-            protocol = (TLPhoneCallProtocol)ObjectUtils.DeserializeObject(br);
+            Peer = (TLInputPhoneCall)ObjectUtils.DeserializeObject(br);
+            GA = BytesUtil.Deserialize(br);
+            KeyFingerprint = br.ReadInt64();
+            Protocol = (TLPhoneCallProtocol)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(peer, bw);
-            BytesUtil.Serialize(g_a, bw);
-            bw.Write(key_fingerprint);
-            ObjectUtils.SerializeObject(protocol, bw);
+            ObjectUtils.SerializeObject(Peer, bw);
+            BytesUtil.Serialize(GA, bw);
+            bw.Write(KeyFingerprint);
+            ObjectUtils.SerializeObject(Protocol, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Phone.TLPhoneCall)ObjectUtils.DeserializeObject(br);
 

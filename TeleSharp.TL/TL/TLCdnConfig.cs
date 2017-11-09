@@ -18,7 +18,7 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLVector<TLCdnPublicKey> public_keys { get; set; }
+        public TLVector<TLCdnPublicKey> PublicKeys { get; set; }
 
 
         public void ComputeFlags()
@@ -28,14 +28,14 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            public_keys = (TLVector<TLCdnPublicKey>)ObjectUtils.DeserializeVector<TLCdnPublicKey>(br);
+            PublicKeys = (TLVector<TLCdnPublicKey>)ObjectUtils.DeserializeVector<TLCdnPublicKey>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(public_keys, bw);
+            ObjectUtils.SerializeObject(PublicKeys, bw);
 
         }
     }

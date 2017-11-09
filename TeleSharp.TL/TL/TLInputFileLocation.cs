@@ -18,9 +18,9 @@ namespace TeleSharp.TL
             }
         }
 
-        public long volume_id { get; set; }
-        public int local_id { get; set; }
-        public long secret { get; set; }
+        public long VolumeId { get; set; }
+        public int LocalId { get; set; }
+        public long Secret { get; set; }
 
 
         public void ComputeFlags()
@@ -30,18 +30,18 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            volume_id = br.ReadInt64();
-            local_id = br.ReadInt32();
-            secret = br.ReadInt64();
+            VolumeId = br.ReadInt64();
+            LocalId = br.ReadInt32();
+            Secret = br.ReadInt64();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(volume_id);
-            bw.Write(local_id);
-            bw.Write(secret);
+            bw.Write(VolumeId);
+            bw.Write(LocalId);
+            bw.Write(Secret);
 
         }
     }

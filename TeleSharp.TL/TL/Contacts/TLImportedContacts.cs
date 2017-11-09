@@ -18,9 +18,9 @@ namespace TeleSharp.TL.Contacts
             }
         }
 
-        public TLVector<TLImportedContact> imported { get; set; }
-        public TLVector<long> retry_contacts { get; set; }
-        public TLVector<TLAbsUser> users { get; set; }
+        public TLVector<TLImportedContact> Imported { get; set; }
+        public TLVector<long> RetryContacts { get; set; }
+        public TLVector<TLAbsUser> Users { get; set; }
 
 
         public void ComputeFlags()
@@ -30,18 +30,18 @@ namespace TeleSharp.TL.Contacts
 
         public override void DeserializeBody(BinaryReader br)
         {
-            imported = (TLVector<TLImportedContact>)ObjectUtils.DeserializeVector<TLImportedContact>(br);
-            retry_contacts = (TLVector<long>)ObjectUtils.DeserializeVector<long>(br);
-            users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
+            Imported = (TLVector<TLImportedContact>)ObjectUtils.DeserializeVector<TLImportedContact>(br);
+            RetryContacts = (TLVector<long>)ObjectUtils.DeserializeVector<long>(br);
+            Users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(imported, bw);
-            ObjectUtils.SerializeObject(retry_contacts, bw);
-            ObjectUtils.SerializeObject(users, bw);
+            ObjectUtils.SerializeObject(Imported, bw);
+            ObjectUtils.SerializeObject(RetryContacts, bw);
+            ObjectUtils.SerializeObject(Users, bw);
 
         }
     }

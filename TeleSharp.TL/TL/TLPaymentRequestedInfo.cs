@@ -18,45 +18,45 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public string name { get; set; }
-        public string phone { get; set; }
-        public string email { get; set; }
-        public TLPostAddress shipping_address { get; set; }
+        public int Flags { get; set; }
+        public string Name { get; set; }
+        public string Phone { get; set; }
+        public string Email { get; set; }
+        public TLPostAddress ShippingAddress { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = name != null ? (flags | 1) : (flags & ~1);
-            flags = phone != null ? (flags | 2) : (flags & ~2);
-            flags = email != null ? (flags | 4) : (flags & ~4);
-            flags = shipping_address != null ? (flags | 8) : (flags & ~8);
+            Flags = 0;
+            Flags = Name != null ? (Flags | 1) : (Flags & ~1);
+            Flags = Phone != null ? (Flags | 2) : (Flags & ~2);
+            Flags = Email != null ? (Flags | 4) : (Flags & ~4);
+            Flags = ShippingAddress != null ? (Flags | 8) : (Flags & ~8);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            if ((flags & 1) != 0)
-                name = StringUtil.Deserialize(br);
+            Flags = br.ReadInt32();
+            if ((Flags & 1) != 0)
+                Name = StringUtil.Deserialize(br);
             else
-                name = null;
+                Name = null;
 
-            if ((flags & 2) != 0)
-                phone = StringUtil.Deserialize(br);
+            if ((Flags & 2) != 0)
+                Phone = StringUtil.Deserialize(br);
             else
-                phone = null;
+                Phone = null;
 
-            if ((flags & 4) != 0)
-                email = StringUtil.Deserialize(br);
+            if ((Flags & 4) != 0)
+                Email = StringUtil.Deserialize(br);
             else
-                email = null;
+                Email = null;
 
-            if ((flags & 8) != 0)
-                shipping_address = (TLPostAddress)ObjectUtils.DeserializeObject(br);
+            if ((Flags & 8) != 0)
+                ShippingAddress = (TLPostAddress)ObjectUtils.DeserializeObject(br);
             else
-                shipping_address = null;
+                ShippingAddress = null;
 
 
         }
@@ -65,15 +65,15 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
-            if ((flags & 1) != 0)
-                StringUtil.Serialize(name, bw);
-            if ((flags & 2) != 0)
-                StringUtil.Serialize(phone, bw);
-            if ((flags & 4) != 0)
-                StringUtil.Serialize(email, bw);
-            if ((flags & 8) != 0)
-                ObjectUtils.SerializeObject(shipping_address, bw);
+            bw.Write(Flags);
+            if ((Flags & 1) != 0)
+                StringUtil.Serialize(Name, bw);
+            if ((Flags & 2) != 0)
+                StringUtil.Serialize(Phone, bw);
+            if ((Flags & 4) != 0)
+                StringUtil.Serialize(Email, bw);
+            if ((Flags & 8) != 0)
+                ObjectUtils.SerializeObject(ShippingAddress, bw);
 
         }
     }

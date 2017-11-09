@@ -18,103 +18,103 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public bool @out { get; set; }
-        public bool mentioned { get; set; }
-        public bool media_unread { get; set; }
-        public bool silent { get; set; }
-        public bool post { get; set; }
-        public int id { get; set; }
-        public int? from_id { get; set; }
-        public TLAbsPeer to_id { get; set; }
-        public TLMessageFwdHeader fwd_from { get; set; }
-        public int? via_bot_id { get; set; }
-        public int? reply_to_msg_id { get; set; }
-        public int date { get; set; }
-        public string message { get; set; }
-        public TLAbsMessageMedia media { get; set; }
-        public TLAbsReplyMarkup reply_markup { get; set; }
-        public TLVector<TLAbsMessageEntity> entities { get; set; }
-        public int? views { get; set; }
-        public int? edit_date { get; set; }
+        public int Flags { get; set; }
+        public bool Out { get; set; }
+        public bool Mentioned { get; set; }
+        public bool MediaUnread { get; set; }
+        public bool Silent { get; set; }
+        public bool Post { get; set; }
+        public int Id { get; set; }
+        public int? FromId { get; set; }
+        public TLAbsPeer ToId { get; set; }
+        public TLMessageFwdHeader FwdFrom { get; set; }
+        public int? ViaBotId { get; set; }
+        public int? ReplyToMsgId { get; set; }
+        public int Date { get; set; }
+        public string Message { get; set; }
+        public TLAbsMessageMedia Media { get; set; }
+        public TLAbsReplyMarkup ReplyMarkup { get; set; }
+        public TLVector<TLAbsMessageEntity> Entities { get; set; }
+        public int? Views { get; set; }
+        public int? EditDate { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = @out ? (flags | 2) : (flags & ~2);
-            flags = mentioned ? (flags | 16) : (flags & ~16);
-            flags = media_unread ? (flags | 32) : (flags & ~32);
-            flags = silent ? (flags | 8192) : (flags & ~8192);
-            flags = post ? (flags | 16384) : (flags & ~16384);
-            flags = from_id != null ? (flags | 256) : (flags & ~256);
-            flags = fwd_from != null ? (flags | 4) : (flags & ~4);
-            flags = via_bot_id != null ? (flags | 2048) : (flags & ~2048);
-            flags = reply_to_msg_id != null ? (flags | 8) : (flags & ~8);
-            flags = media != null ? (flags | 512) : (flags & ~512);
-            flags = reply_markup != null ? (flags | 64) : (flags & ~64);
-            flags = entities != null ? (flags | 128) : (flags & ~128);
-            flags = views != null ? (flags | 1024) : (flags & ~1024);
-            flags = edit_date != null ? (flags | 32768) : (flags & ~32768);
+            Flags = 0;
+            Flags = Out ? (Flags | 2) : (Flags & ~2);
+            Flags = Mentioned ? (Flags | 16) : (Flags & ~16);
+            Flags = MediaUnread ? (Flags | 32) : (Flags & ~32);
+            Flags = Silent ? (Flags | 8192) : (Flags & ~8192);
+            Flags = Post ? (Flags | 16384) : (Flags & ~16384);
+            Flags = FromId != null ? (Flags | 256) : (Flags & ~256);
+            Flags = FwdFrom != null ? (Flags | 4) : (Flags & ~4);
+            Flags = ViaBotId != null ? (Flags | 2048) : (Flags & ~2048);
+            Flags = ReplyToMsgId != null ? (Flags | 8) : (Flags & ~8);
+            Flags = Media != null ? (Flags | 512) : (Flags & ~512);
+            Flags = ReplyMarkup != null ? (Flags | 64) : (Flags & ~64);
+            Flags = Entities != null ? (Flags | 128) : (Flags & ~128);
+            Flags = Views != null ? (Flags | 1024) : (Flags & ~1024);
+            Flags = EditDate != null ? (Flags | 32768) : (Flags & ~32768);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            @out = (flags & 2) != 0;
-            mentioned = (flags & 16) != 0;
-            media_unread = (flags & 32) != 0;
-            silent = (flags & 8192) != 0;
-            post = (flags & 16384) != 0;
-            id = br.ReadInt32();
-            if ((flags & 256) != 0)
-                from_id = br.ReadInt32();
+            Flags = br.ReadInt32();
+            Out = (Flags & 2) != 0;
+            Mentioned = (Flags & 16) != 0;
+            MediaUnread = (Flags & 32) != 0;
+            Silent = (Flags & 8192) != 0;
+            Post = (Flags & 16384) != 0;
+            Id = br.ReadInt32();
+            if ((Flags & 256) != 0)
+                FromId = br.ReadInt32();
             else
-                from_id = null;
+                FromId = null;
 
-            to_id = (TLAbsPeer)ObjectUtils.DeserializeObject(br);
-            if ((flags & 4) != 0)
-                fwd_from = (TLMessageFwdHeader)ObjectUtils.DeserializeObject(br);
+            ToId = (TLAbsPeer)ObjectUtils.DeserializeObject(br);
+            if ((Flags & 4) != 0)
+                FwdFrom = (TLMessageFwdHeader)ObjectUtils.DeserializeObject(br);
             else
-                fwd_from = null;
+                FwdFrom = null;
 
-            if ((flags & 2048) != 0)
-                via_bot_id = br.ReadInt32();
+            if ((Flags & 2048) != 0)
+                ViaBotId = br.ReadInt32();
             else
-                via_bot_id = null;
+                ViaBotId = null;
 
-            if ((flags & 8) != 0)
-                reply_to_msg_id = br.ReadInt32();
+            if ((Flags & 8) != 0)
+                ReplyToMsgId = br.ReadInt32();
             else
-                reply_to_msg_id = null;
+                ReplyToMsgId = null;
 
-            date = br.ReadInt32();
-            message = StringUtil.Deserialize(br);
-            if ((flags & 512) != 0)
-                media = (TLAbsMessageMedia)ObjectUtils.DeserializeObject(br);
+            Date = br.ReadInt32();
+            Message = StringUtil.Deserialize(br);
+            if ((Flags & 512) != 0)
+                Media = (TLAbsMessageMedia)ObjectUtils.DeserializeObject(br);
             else
-                media = null;
+                Media = null;
 
-            if ((flags & 64) != 0)
-                reply_markup = (TLAbsReplyMarkup)ObjectUtils.DeserializeObject(br);
+            if ((Flags & 64) != 0)
+                ReplyMarkup = (TLAbsReplyMarkup)ObjectUtils.DeserializeObject(br);
             else
-                reply_markup = null;
+                ReplyMarkup = null;
 
-            if ((flags & 128) != 0)
-                entities = (TLVector<TLAbsMessageEntity>)ObjectUtils.DeserializeVector<TLAbsMessageEntity>(br);
+            if ((Flags & 128) != 0)
+                Entities = (TLVector<TLAbsMessageEntity>)ObjectUtils.DeserializeVector<TLAbsMessageEntity>(br);
             else
-                entities = null;
+                Entities = null;
 
-            if ((flags & 1024) != 0)
-                views = br.ReadInt32();
+            if ((Flags & 1024) != 0)
+                Views = br.ReadInt32();
             else
-                views = null;
+                Views = null;
 
-            if ((flags & 32768) != 0)
-                edit_date = br.ReadInt32();
+            if ((Flags & 32768) != 0)
+                EditDate = br.ReadInt32();
             else
-                edit_date = null;
+                EditDate = null;
 
 
         }
@@ -123,34 +123,34 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
 
 
 
 
-            bw.Write(id);
-            if ((flags & 256) != 0)
-                bw.Write(from_id.Value);
-            ObjectUtils.SerializeObject(to_id, bw);
-            if ((flags & 4) != 0)
-                ObjectUtils.SerializeObject(fwd_from, bw);
-            if ((flags & 2048) != 0)
-                bw.Write(via_bot_id.Value);
-            if ((flags & 8) != 0)
-                bw.Write(reply_to_msg_id.Value);
-            bw.Write(date);
-            StringUtil.Serialize(message, bw);
-            if ((flags & 512) != 0)
-                ObjectUtils.SerializeObject(media, bw);
-            if ((flags & 64) != 0)
-                ObjectUtils.SerializeObject(reply_markup, bw);
-            if ((flags & 128) != 0)
-                ObjectUtils.SerializeObject(entities, bw);
-            if ((flags & 1024) != 0)
-                bw.Write(views.Value);
-            if ((flags & 32768) != 0)
-                bw.Write(edit_date.Value);
+            bw.Write(Id);
+            if ((Flags & 256) != 0)
+                bw.Write(FromId.Value);
+            ObjectUtils.SerializeObject(ToId, bw);
+            if ((Flags & 4) != 0)
+                ObjectUtils.SerializeObject(FwdFrom, bw);
+            if ((Flags & 2048) != 0)
+                bw.Write(ViaBotId.Value);
+            if ((Flags & 8) != 0)
+                bw.Write(ReplyToMsgId.Value);
+            bw.Write(Date);
+            StringUtil.Serialize(Message, bw);
+            if ((Flags & 512) != 0)
+                ObjectUtils.SerializeObject(Media, bw);
+            if ((Flags & 64) != 0)
+                ObjectUtils.SerializeObject(ReplyMarkup, bw);
+            if ((Flags & 128) != 0)
+                ObjectUtils.SerializeObject(Entities, bw);
+            if ((Flags & 1024) != 0)
+                bw.Write(Views.Value);
+            if ((Flags & 32768) != 0)
+                bw.Write(EditDate.Value);
 
         }
     }

@@ -10,8 +10,8 @@ namespace TeleSharp.TL
 {
     public abstract class TLMethod : TLObject
     {
-        
-        public abstract void deserializeResponse(BinaryReader stream);
+
+        public abstract void DeserializeResponse(BinaryReader stream);
         #region MTPROTO
         public long MessageId { get; set; }
         public int Sequence { get; set; }

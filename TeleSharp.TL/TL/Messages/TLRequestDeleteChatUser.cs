@@ -18,8 +18,8 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public int chat_id { get; set; }
-        public TLAbsInputUser user_id { get; set; }
+        public int ChatId { get; set; }
+        public TLAbsInputUser UserId { get; set; }
         public TLAbsUpdates Response { get; set; }
 
 
@@ -30,19 +30,19 @@ namespace TeleSharp.TL.Messages
 
         public override void DeserializeBody(BinaryReader br)
         {
-            chat_id = br.ReadInt32();
-            user_id = (TLAbsInputUser)ObjectUtils.DeserializeObject(br);
+            ChatId = br.ReadInt32();
+            UserId = (TLAbsInputUser)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(chat_id);
-            ObjectUtils.SerializeObject(user_id, bw);
+            bw.Write(ChatId);
+            ObjectUtils.SerializeObject(UserId, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLAbsUpdates)ObjectUtils.DeserializeObject(br);
 

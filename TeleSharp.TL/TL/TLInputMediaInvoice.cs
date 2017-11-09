@@ -18,37 +18,37 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public string title { get; set; }
-        public string description { get; set; }
-        public TLInputWebDocument photo { get; set; }
-        public TLInvoice invoice { get; set; }
-        public byte[] payload { get; set; }
-        public string provider { get; set; }
-        public string start_param { get; set; }
+        public int Flags { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public TLInputWebDocument Photo { get; set; }
+        public TLInvoice Invoice { get; set; }
+        public byte[] Payload { get; set; }
+        public string Provider { get; set; }
+        public string StartParam { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = photo != null ? (flags | 1) : (flags & ~1);
+            Flags = 0;
+            Flags = Photo != null ? (Flags | 1) : (Flags & ~1);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            title = StringUtil.Deserialize(br);
-            description = StringUtil.Deserialize(br);
-            if ((flags & 1) != 0)
-                photo = (TLInputWebDocument)ObjectUtils.DeserializeObject(br);
+            Flags = br.ReadInt32();
+            Title = StringUtil.Deserialize(br);
+            Description = StringUtil.Deserialize(br);
+            if ((Flags & 1) != 0)
+                Photo = (TLInputWebDocument)ObjectUtils.DeserializeObject(br);
             else
-                photo = null;
+                Photo = null;
 
-            invoice = (TLInvoice)ObjectUtils.DeserializeObject(br);
-            payload = BytesUtil.Deserialize(br);
-            provider = StringUtil.Deserialize(br);
-            start_param = StringUtil.Deserialize(br);
+            Invoice = (TLInvoice)ObjectUtils.DeserializeObject(br);
+            Payload = BytesUtil.Deserialize(br);
+            Provider = StringUtil.Deserialize(br);
+            StartParam = StringUtil.Deserialize(br);
 
         }
 
@@ -56,15 +56,15 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
-            StringUtil.Serialize(title, bw);
-            StringUtil.Serialize(description, bw);
-            if ((flags & 1) != 0)
-                ObjectUtils.SerializeObject(photo, bw);
-            ObjectUtils.SerializeObject(invoice, bw);
-            BytesUtil.Serialize(payload, bw);
-            StringUtil.Serialize(provider, bw);
-            StringUtil.Serialize(start_param, bw);
+            bw.Write(Flags);
+            StringUtil.Serialize(Title, bw);
+            StringUtil.Serialize(Description, bw);
+            if ((Flags & 1) != 0)
+                ObjectUtils.SerializeObject(Photo, bw);
+            ObjectUtils.SerializeObject(Invoice, bw);
+            BytesUtil.Serialize(Payload, bw);
+            StringUtil.Serialize(Provider, bw);
+            StringUtil.Serialize(StartParam, bw);
 
         }
     }

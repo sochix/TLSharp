@@ -18,7 +18,7 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLVector<TLAbsKeyboardButton> buttons { get; set; }
+        public TLVector<TLAbsKeyboardButton> Buttons { get; set; }
 
 
         public void ComputeFlags()
@@ -28,14 +28,14 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            buttons = (TLVector<TLAbsKeyboardButton>)ObjectUtils.DeserializeVector<TLAbsKeyboardButton>(br);
+            Buttons = (TLVector<TLAbsKeyboardButton>)ObjectUtils.DeserializeVector<TLAbsKeyboardButton>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(buttons, bw);
+            ObjectUtils.SerializeObject(Buttons, bw);
 
         }
     }

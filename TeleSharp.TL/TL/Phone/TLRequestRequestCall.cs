@@ -18,10 +18,10 @@ namespace TeleSharp.TL.Phone
             }
         }
 
-        public TLAbsInputUser user_id { get; set; }
-        public int random_id { get; set; }
-        public byte[] g_a_hash { get; set; }
-        public TLPhoneCallProtocol protocol { get; set; }
+        public TLAbsInputUser UserId { get; set; }
+        public int RandomId { get; set; }
+        public byte[] GAHash { get; set; }
+        public TLPhoneCallProtocol Protocol { get; set; }
         public Phone.TLPhoneCall Response { get; set; }
 
 
@@ -32,23 +32,23 @@ namespace TeleSharp.TL.Phone
 
         public override void DeserializeBody(BinaryReader br)
         {
-            user_id = (TLAbsInputUser)ObjectUtils.DeserializeObject(br);
-            random_id = br.ReadInt32();
-            g_a_hash = BytesUtil.Deserialize(br);
-            protocol = (TLPhoneCallProtocol)ObjectUtils.DeserializeObject(br);
+            UserId = (TLAbsInputUser)ObjectUtils.DeserializeObject(br);
+            RandomId = br.ReadInt32();
+            GAHash = BytesUtil.Deserialize(br);
+            Protocol = (TLPhoneCallProtocol)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(user_id, bw);
-            bw.Write(random_id);
-            BytesUtil.Serialize(g_a_hash, bw);
-            ObjectUtils.SerializeObject(protocol, bw);
+            ObjectUtils.SerializeObject(UserId, bw);
+            bw.Write(RandomId);
+            BytesUtil.Serialize(GAHash, bw);
+            ObjectUtils.SerializeObject(Protocol, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Phone.TLPhoneCall)ObjectUtils.DeserializeObject(br);
 

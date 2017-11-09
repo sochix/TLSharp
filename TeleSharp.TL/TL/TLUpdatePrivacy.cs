@@ -18,8 +18,8 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLAbsPrivacyKey key { get; set; }
-        public TLVector<TLAbsPrivacyRule> rules { get; set; }
+        public TLAbsPrivacyKey Key { get; set; }
+        public TLVector<TLAbsPrivacyRule> Rules { get; set; }
 
 
         public void ComputeFlags()
@@ -29,16 +29,16 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            key = (TLAbsPrivacyKey)ObjectUtils.DeserializeObject(br);
-            rules = (TLVector<TLAbsPrivacyRule>)ObjectUtils.DeserializeVector<TLAbsPrivacyRule>(br);
+            Key = (TLAbsPrivacyKey)ObjectUtils.DeserializeObject(br);
+            Rules = (TLVector<TLAbsPrivacyRule>)ObjectUtils.DeserializeVector<TLAbsPrivacyRule>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(key, bw);
-            ObjectUtils.SerializeObject(rules, bw);
+            ObjectUtils.SerializeObject(Key, bw);
+            ObjectUtils.SerializeObject(Rules, bw);
 
         }
     }

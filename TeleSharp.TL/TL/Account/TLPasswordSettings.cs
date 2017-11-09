@@ -18,7 +18,7 @@ namespace TeleSharp.TL.Account
             }
         }
 
-        public string email { get; set; }
+        public string Email { get; set; }
 
 
         public void ComputeFlags()
@@ -28,14 +28,14 @@ namespace TeleSharp.TL.Account
 
         public override void DeserializeBody(BinaryReader br)
         {
-            email = StringUtil.Deserialize(br);
+            Email = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            StringUtil.Serialize(email, bw);
+            StringUtil.Serialize(Email, bw);
 
         }
     }

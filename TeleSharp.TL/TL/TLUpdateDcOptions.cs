@@ -18,7 +18,7 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLVector<TLDcOption> dc_options { get; set; }
+        public TLVector<TLDcOption> DcOptions { get; set; }
 
 
         public void ComputeFlags()
@@ -28,14 +28,14 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            dc_options = (TLVector<TLDcOption>)ObjectUtils.DeserializeVector<TLDcOption>(br);
+            DcOptions = (TLVector<TLDcOption>)ObjectUtils.DeserializeVector<TLDcOption>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(dc_options, bw);
+            ObjectUtils.SerializeObject(DcOptions, bw);
 
         }
     }

@@ -18,8 +18,8 @@ namespace TeleSharp.TL
             }
         }
 
-        public string currency { get; set; }
-        public long total_amount { get; set; }
+        public string Currency { get; set; }
+        public long TotalAmount { get; set; }
 
 
         public void ComputeFlags()
@@ -29,16 +29,16 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            currency = StringUtil.Deserialize(br);
-            total_amount = br.ReadInt64();
+            Currency = StringUtil.Deserialize(br);
+            TotalAmount = br.ReadInt64();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            StringUtil.Serialize(currency, bw);
-            bw.Write(total_amount);
+            StringUtil.Serialize(Currency, bw);
+            bw.Write(TotalAmount);
 
         }
     }

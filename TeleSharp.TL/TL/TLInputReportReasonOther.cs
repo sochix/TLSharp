@@ -18,7 +18,7 @@ namespace TeleSharp.TL
             }
         }
 
-        public string text { get; set; }
+        public string Text { get; set; }
 
 
         public void ComputeFlags()
@@ -28,14 +28,14 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            text = StringUtil.Deserialize(br);
+            Text = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            StringUtil.Serialize(text, bw);
+            StringUtil.Serialize(Text, bw);
 
         }
     }

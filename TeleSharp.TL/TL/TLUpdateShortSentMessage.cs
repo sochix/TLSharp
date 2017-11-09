@@ -18,42 +18,42 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public bool @out { get; set; }
-        public int id { get; set; }
-        public int pts { get; set; }
-        public int pts_count { get; set; }
-        public int date { get; set; }
-        public TLAbsMessageMedia media { get; set; }
-        public TLVector<TLAbsMessageEntity> entities { get; set; }
+        public int Flags { get; set; }
+        public bool Out { get; set; }
+        public int Id { get; set; }
+        public int Pts { get; set; }
+        public int PtsCount { get; set; }
+        public int Date { get; set; }
+        public TLAbsMessageMedia Media { get; set; }
+        public TLVector<TLAbsMessageEntity> Entities { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = @out ? (flags | 2) : (flags & ~2);
-            flags = media != null ? (flags | 512) : (flags & ~512);
-            flags = entities != null ? (flags | 128) : (flags & ~128);
+            Flags = 0;
+            Flags = Out ? (Flags | 2) : (Flags & ~2);
+            Flags = Media != null ? (Flags | 512) : (Flags & ~512);
+            Flags = Entities != null ? (Flags | 128) : (Flags & ~128);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            @out = (flags & 2) != 0;
-            id = br.ReadInt32();
-            pts = br.ReadInt32();
-            pts_count = br.ReadInt32();
-            date = br.ReadInt32();
-            if ((flags & 512) != 0)
-                media = (TLAbsMessageMedia)ObjectUtils.DeserializeObject(br);
+            Flags = br.ReadInt32();
+            Out = (Flags & 2) != 0;
+            Id = br.ReadInt32();
+            Pts = br.ReadInt32();
+            PtsCount = br.ReadInt32();
+            Date = br.ReadInt32();
+            if ((Flags & 512) != 0)
+                Media = (TLAbsMessageMedia)ObjectUtils.DeserializeObject(br);
             else
-                media = null;
+                Media = null;
 
-            if ((flags & 128) != 0)
-                entities = (TLVector<TLAbsMessageEntity>)ObjectUtils.DeserializeVector<TLAbsMessageEntity>(br);
+            if ((Flags & 128) != 0)
+                Entities = (TLVector<TLAbsMessageEntity>)ObjectUtils.DeserializeVector<TLAbsMessageEntity>(br);
             else
-                entities = null;
+                Entities = null;
 
 
         }
@@ -62,16 +62,16 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
-            bw.Write(id);
-            bw.Write(pts);
-            bw.Write(pts_count);
-            bw.Write(date);
-            if ((flags & 512) != 0)
-                ObjectUtils.SerializeObject(media, bw);
-            if ((flags & 128) != 0)
-                ObjectUtils.SerializeObject(entities, bw);
+            bw.Write(Id);
+            bw.Write(Pts);
+            bw.Write(PtsCount);
+            bw.Write(Date);
+            if ((Flags & 512) != 0)
+                ObjectUtils.SerializeObject(Media, bw);
+            if ((Flags & 128) != 0)
+                ObjectUtils.SerializeObject(Entities, bw);
 
         }
     }

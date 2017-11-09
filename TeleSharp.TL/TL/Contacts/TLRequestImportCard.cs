@@ -18,7 +18,7 @@ namespace TeleSharp.TL.Contacts
             }
         }
 
-        public TLVector<int> export_card { get; set; }
+        public TLVector<int> ExportCard { get; set; }
         public TLAbsUser Response { get; set; }
 
 
@@ -29,17 +29,17 @@ namespace TeleSharp.TL.Contacts
 
         public override void DeserializeBody(BinaryReader br)
         {
-            export_card = (TLVector<int>)ObjectUtils.DeserializeVector<int>(br);
+            ExportCard = (TLVector<int>)ObjectUtils.DeserializeVector<int>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(export_card, bw);
+            ObjectUtils.SerializeObject(ExportCard, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLAbsUser)ObjectUtils.DeserializeObject(br);
 

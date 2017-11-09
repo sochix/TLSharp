@@ -18,8 +18,8 @@ namespace TeleSharp.TL
             }
         }
 
-        public bool ordered { get; set; }
-        public TLVector<TLAbsRichText> items { get; set; }
+        public bool Ordered { get; set; }
+        public TLVector<TLAbsRichText> Items { get; set; }
 
 
         public void ComputeFlags()
@@ -29,16 +29,16 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            ordered = BoolUtil.Deserialize(br);
-            items = (TLVector<TLAbsRichText>)ObjectUtils.DeserializeVector<TLAbsRichText>(br);
+            Ordered = BoolUtil.Deserialize(br);
+            Items = (TLVector<TLAbsRichText>)ObjectUtils.DeserializeVector<TLAbsRichText>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            BoolUtil.Serialize(ordered, bw);
-            ObjectUtils.SerializeObject(items, bw);
+            BoolUtil.Serialize(Ordered, bw);
+            ObjectUtils.SerializeObject(Items, bw);
 
         }
     }

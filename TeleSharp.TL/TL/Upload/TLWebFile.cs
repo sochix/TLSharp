@@ -18,11 +18,11 @@ namespace TeleSharp.TL.Upload
             }
         }
 
-        public int size { get; set; }
-        public string mime_type { get; set; }
-        public Storage.TLAbsFileType file_type { get; set; }
-        public int mtime { get; set; }
-        public byte[] bytes { get; set; }
+        public int Size { get; set; }
+        public string MimeType { get; set; }
+        public Storage.TLAbsFileType FileType { get; set; }
+        public int Mtime { get; set; }
+        public byte[] Bytes { get; set; }
 
 
         public void ComputeFlags()
@@ -32,22 +32,22 @@ namespace TeleSharp.TL.Upload
 
         public override void DeserializeBody(BinaryReader br)
         {
-            size = br.ReadInt32();
-            mime_type = StringUtil.Deserialize(br);
-            file_type = (Storage.TLAbsFileType)ObjectUtils.DeserializeObject(br);
-            mtime = br.ReadInt32();
-            bytes = BytesUtil.Deserialize(br);
+            Size = br.ReadInt32();
+            MimeType = StringUtil.Deserialize(br);
+            FileType = (Storage.TLAbsFileType)ObjectUtils.DeserializeObject(br);
+            Mtime = br.ReadInt32();
+            Bytes = BytesUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(size);
-            StringUtil.Serialize(mime_type, bw);
-            ObjectUtils.SerializeObject(file_type, bw);
-            bw.Write(mtime);
-            BytesUtil.Serialize(bytes, bw);
+            bw.Write(Size);
+            StringUtil.Serialize(MimeType, bw);
+            ObjectUtils.SerializeObject(FileType, bw);
+            bw.Write(Mtime);
+            BytesUtil.Serialize(Bytes, bw);
 
         }
     }

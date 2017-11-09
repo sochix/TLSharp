@@ -18,7 +18,7 @@ namespace TeleSharp.TL.Auth
             }
         }
 
-        public string email_pattern { get; set; }
+        public string EmailPattern { get; set; }
 
 
         public void ComputeFlags()
@@ -28,14 +28,14 @@ namespace TeleSharp.TL.Auth
 
         public override void DeserializeBody(BinaryReader br)
         {
-            email_pattern = StringUtil.Deserialize(br);
+            EmailPattern = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            StringUtil.Serialize(email_pattern, bw);
+            StringUtil.Serialize(EmailPattern, bw);
 
         }
     }

@@ -18,8 +18,8 @@ namespace TeleSharp.TL
             }
         }
 
-        public string id { get; set; }
-        public string provider_charge_id { get; set; }
+        public string Id { get; set; }
+        public string ProviderChargeId { get; set; }
 
 
         public void ComputeFlags()
@@ -29,16 +29,16 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            id = StringUtil.Deserialize(br);
-            provider_charge_id = StringUtil.Deserialize(br);
+            Id = StringUtil.Deserialize(br);
+            ProviderChargeId = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            StringUtil.Serialize(id, bw);
-            StringUtil.Serialize(provider_charge_id, bw);
+            StringUtil.Serialize(Id, bw);
+            StringUtil.Serialize(ProviderChargeId, bw);
 
         }
     }

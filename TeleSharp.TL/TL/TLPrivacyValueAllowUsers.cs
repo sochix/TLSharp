@@ -18,7 +18,7 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLVector<int> users { get; set; }
+        public TLVector<int> Users { get; set; }
 
 
         public void ComputeFlags()
@@ -28,14 +28,14 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            users = (TLVector<int>)ObjectUtils.DeserializeVector<int>(br);
+            Users = (TLVector<int>)ObjectUtils.DeserializeVector<int>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(users, bw);
+            ObjectUtils.SerializeObject(Users, bw);
 
         }
     }

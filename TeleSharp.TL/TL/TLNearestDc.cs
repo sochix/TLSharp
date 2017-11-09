@@ -18,9 +18,9 @@ namespace TeleSharp.TL
             }
         }
 
-        public string country { get; set; }
-        public int this_dc { get; set; }
-        public int nearest_dc { get; set; }
+        public string Country { get; set; }
+        public int ThisDc { get; set; }
+        public int NearestDc { get; set; }
 
 
         public void ComputeFlags()
@@ -30,18 +30,18 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            country = StringUtil.Deserialize(br);
-            this_dc = br.ReadInt32();
-            nearest_dc = br.ReadInt32();
+            Country = StringUtil.Deserialize(br);
+            ThisDc = br.ReadInt32();
+            NearestDc = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            StringUtil.Serialize(country, bw);
-            bw.Write(this_dc);
-            bw.Write(nearest_dc);
+            StringUtil.Serialize(Country, bw);
+            bw.Write(ThisDc);
+            bw.Write(NearestDc);
 
         }
     }

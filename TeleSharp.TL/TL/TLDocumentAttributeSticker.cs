@@ -18,31 +18,31 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public bool mask { get; set; }
-        public string alt { get; set; }
-        public TLAbsInputStickerSet stickerset { get; set; }
-        public TLMaskCoords mask_coords { get; set; }
+        public int Flags { get; set; }
+        public bool Mask { get; set; }
+        public string Alt { get; set; }
+        public TLAbsInputStickerSet Stickerset { get; set; }
+        public TLMaskCoords MaskCoords { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = mask ? (flags | 2) : (flags & ~2);
-            flags = mask_coords != null ? (flags | 1) : (flags & ~1);
+            Flags = 0;
+            Flags = Mask ? (Flags | 2) : (Flags & ~2);
+            Flags = MaskCoords != null ? (Flags | 1) : (Flags & ~1);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            mask = (flags & 2) != 0;
-            alt = StringUtil.Deserialize(br);
-            stickerset = (TLAbsInputStickerSet)ObjectUtils.DeserializeObject(br);
-            if ((flags & 1) != 0)
-                mask_coords = (TLMaskCoords)ObjectUtils.DeserializeObject(br);
+            Flags = br.ReadInt32();
+            Mask = (Flags & 2) != 0;
+            Alt = StringUtil.Deserialize(br);
+            Stickerset = (TLAbsInputStickerSet)ObjectUtils.DeserializeObject(br);
+            if ((Flags & 1) != 0)
+                MaskCoords = (TLMaskCoords)ObjectUtils.DeserializeObject(br);
             else
-                mask_coords = null;
+                MaskCoords = null;
 
 
         }
@@ -51,12 +51,12 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
-            StringUtil.Serialize(alt, bw);
-            ObjectUtils.SerializeObject(stickerset, bw);
-            if ((flags & 1) != 0)
-                ObjectUtils.SerializeObject(mask_coords, bw);
+            StringUtil.Serialize(Alt, bw);
+            ObjectUtils.SerializeObject(Stickerset, bw);
+            if ((Flags & 1) != 0)
+                ObjectUtils.SerializeObject(MaskCoords, bw);
 
         }
     }

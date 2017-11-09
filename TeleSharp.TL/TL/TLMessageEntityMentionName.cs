@@ -18,9 +18,9 @@ namespace TeleSharp.TL
             }
         }
 
-        public int offset { get; set; }
-        public int length { get; set; }
-        public int user_id { get; set; }
+        public int Offset { get; set; }
+        public int Length { get; set; }
+        public int UserId { get; set; }
 
 
         public void ComputeFlags()
@@ -30,18 +30,18 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            offset = br.ReadInt32();
-            length = br.ReadInt32();
-            user_id = br.ReadInt32();
+            Offset = br.ReadInt32();
+            Length = br.ReadInt32();
+            UserId = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(offset);
-            bw.Write(length);
-            bw.Write(user_id);
+            bw.Write(Offset);
+            bw.Write(Length);
+            bw.Write(UserId);
 
         }
     }

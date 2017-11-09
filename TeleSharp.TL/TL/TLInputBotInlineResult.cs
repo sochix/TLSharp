@@ -18,87 +18,87 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public string id { get; set; }
-        public string type { get; set; }
-        public string title { get; set; }
-        public string description { get; set; }
-        public string url { get; set; }
-        public string thumb_url { get; set; }
-        public string content_url { get; set; }
-        public string content_type { get; set; }
-        public int? w { get; set; }
-        public int? h { get; set; }
-        public int? duration { get; set; }
-        public TLAbsInputBotInlineMessage send_message { get; set; }
+        public int Flags { get; set; }
+        public string Id { get; set; }
+        public string Type { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string Url { get; set; }
+        public string ThumbUrl { get; set; }
+        public string ContentUrl { get; set; }
+        public string ContentType { get; set; }
+        public int? W { get; set; }
+        public int? H { get; set; }
+        public int? Duration { get; set; }
+        public TLAbsInputBotInlineMessage SendMessage { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = title != null ? (flags | 2) : (flags & ~2);
-            flags = description != null ? (flags | 4) : (flags & ~4);
-            flags = url != null ? (flags | 8) : (flags & ~8);
-            flags = thumb_url != null ? (flags | 16) : (flags & ~16);
-            flags = content_url != null ? (flags | 32) : (flags & ~32);
-            flags = content_type != null ? (flags | 32) : (flags & ~32);
-            flags = w != null ? (flags | 64) : (flags & ~64);
-            flags = h != null ? (flags | 64) : (flags & ~64);
-            flags = duration != null ? (flags | 128) : (flags & ~128);
+            Flags = 0;
+            Flags = Title != null ? (Flags | 2) : (Flags & ~2);
+            Flags = Description != null ? (Flags | 4) : (Flags & ~4);
+            Flags = Url != null ? (Flags | 8) : (Flags & ~8);
+            Flags = ThumbUrl != null ? (Flags | 16) : (Flags & ~16);
+            Flags = ContentUrl != null ? (Flags | 32) : (Flags & ~32);
+            Flags = ContentType != null ? (Flags | 32) : (Flags & ~32);
+            Flags = W != null ? (Flags | 64) : (Flags & ~64);
+            Flags = H != null ? (Flags | 64) : (Flags & ~64);
+            Flags = Duration != null ? (Flags | 128) : (Flags & ~128);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            id = StringUtil.Deserialize(br);
-            type = StringUtil.Deserialize(br);
-            if ((flags & 2) != 0)
-                title = StringUtil.Deserialize(br);
+            Flags = br.ReadInt32();
+            Id = StringUtil.Deserialize(br);
+            Type = StringUtil.Deserialize(br);
+            if ((Flags & 2) != 0)
+                Title = StringUtil.Deserialize(br);
             else
-                title = null;
+                Title = null;
 
-            if ((flags & 4) != 0)
-                description = StringUtil.Deserialize(br);
+            if ((Flags & 4) != 0)
+                Description = StringUtil.Deserialize(br);
             else
-                description = null;
+                Description = null;
 
-            if ((flags & 8) != 0)
-                url = StringUtil.Deserialize(br);
+            if ((Flags & 8) != 0)
+                Url = StringUtil.Deserialize(br);
             else
-                url = null;
+                Url = null;
 
-            if ((flags & 16) != 0)
-                thumb_url = StringUtil.Deserialize(br);
+            if ((Flags & 16) != 0)
+                ThumbUrl = StringUtil.Deserialize(br);
             else
-                thumb_url = null;
+                ThumbUrl = null;
 
-            if ((flags & 32) != 0)
-                content_url = StringUtil.Deserialize(br);
+            if ((Flags & 32) != 0)
+                ContentUrl = StringUtil.Deserialize(br);
             else
-                content_url = null;
+                ContentUrl = null;
 
-            if ((flags & 32) != 0)
-                content_type = StringUtil.Deserialize(br);
+            if ((Flags & 32) != 0)
+                ContentType = StringUtil.Deserialize(br);
             else
-                content_type = null;
+                ContentType = null;
 
-            if ((flags & 64) != 0)
-                w = br.ReadInt32();
+            if ((Flags & 64) != 0)
+                W = br.ReadInt32();
             else
-                w = null;
+                W = null;
 
-            if ((flags & 64) != 0)
-                h = br.ReadInt32();
+            if ((Flags & 64) != 0)
+                H = br.ReadInt32();
             else
-                h = null;
+                H = null;
 
-            if ((flags & 128) != 0)
-                duration = br.ReadInt32();
+            if ((Flags & 128) != 0)
+                Duration = br.ReadInt32();
             else
-                duration = null;
+                Duration = null;
 
-            send_message = (TLAbsInputBotInlineMessage)ObjectUtils.DeserializeObject(br);
+            SendMessage = (TLAbsInputBotInlineMessage)ObjectUtils.DeserializeObject(br);
 
         }
 
@@ -106,28 +106,28 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
-            StringUtil.Serialize(id, bw);
-            StringUtil.Serialize(type, bw);
-            if ((flags & 2) != 0)
-                StringUtil.Serialize(title, bw);
-            if ((flags & 4) != 0)
-                StringUtil.Serialize(description, bw);
-            if ((flags & 8) != 0)
-                StringUtil.Serialize(url, bw);
-            if ((flags & 16) != 0)
-                StringUtil.Serialize(thumb_url, bw);
-            if ((flags & 32) != 0)
-                StringUtil.Serialize(content_url, bw);
-            if ((flags & 32) != 0)
-                StringUtil.Serialize(content_type, bw);
-            if ((flags & 64) != 0)
-                bw.Write(w.Value);
-            if ((flags & 64) != 0)
-                bw.Write(h.Value);
-            if ((flags & 128) != 0)
-                bw.Write(duration.Value);
-            ObjectUtils.SerializeObject(send_message, bw);
+            bw.Write(Flags);
+            StringUtil.Serialize(Id, bw);
+            StringUtil.Serialize(Type, bw);
+            if ((Flags & 2) != 0)
+                StringUtil.Serialize(Title, bw);
+            if ((Flags & 4) != 0)
+                StringUtil.Serialize(Description, bw);
+            if ((Flags & 8) != 0)
+                StringUtil.Serialize(Url, bw);
+            if ((Flags & 16) != 0)
+                StringUtil.Serialize(ThumbUrl, bw);
+            if ((Flags & 32) != 0)
+                StringUtil.Serialize(ContentUrl, bw);
+            if ((Flags & 32) != 0)
+                StringUtil.Serialize(ContentType, bw);
+            if ((Flags & 64) != 0)
+                bw.Write(W.Value);
+            if ((Flags & 64) != 0)
+                bw.Write(H.Value);
+            if ((Flags & 128) != 0)
+                bw.Write(Duration.Value);
+            ObjectUtils.SerializeObject(SendMessage, bw);
 
         }
     }

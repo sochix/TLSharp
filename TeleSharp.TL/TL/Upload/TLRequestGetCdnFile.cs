@@ -18,9 +18,9 @@ namespace TeleSharp.TL.Upload
             }
         }
 
-        public byte[] file_token { get; set; }
-        public int offset { get; set; }
-        public int limit { get; set; }
+        public byte[] FileToken { get; set; }
+        public int Offset { get; set; }
+        public int Limit { get; set; }
         public Upload.TLAbsCdnFile Response { get; set; }
 
 
@@ -31,21 +31,21 @@ namespace TeleSharp.TL.Upload
 
         public override void DeserializeBody(BinaryReader br)
         {
-            file_token = BytesUtil.Deserialize(br);
-            offset = br.ReadInt32();
-            limit = br.ReadInt32();
+            FileToken = BytesUtil.Deserialize(br);
+            Offset = br.ReadInt32();
+            Limit = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            BytesUtil.Serialize(file_token, bw);
-            bw.Write(offset);
-            bw.Write(limit);
+            BytesUtil.Serialize(FileToken, bw);
+            bw.Write(Offset);
+            bw.Write(Limit);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Upload.TLAbsCdnFile)ObjectUtils.DeserializeObject(br);
 

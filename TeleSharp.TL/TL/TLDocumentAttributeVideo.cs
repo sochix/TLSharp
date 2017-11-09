@@ -18,27 +18,27 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public bool round_message { get; set; }
-        public int duration { get; set; }
-        public int w { get; set; }
-        public int h { get; set; }
+        public int Flags { get; set; }
+        public bool RoundMessage { get; set; }
+        public int Duration { get; set; }
+        public int W { get; set; }
+        public int H { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = round_message ? (flags | 1) : (flags & ~1);
+            Flags = 0;
+            Flags = RoundMessage ? (Flags | 1) : (Flags & ~1);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            round_message = (flags & 1) != 0;
-            duration = br.ReadInt32();
-            w = br.ReadInt32();
-            h = br.ReadInt32();
+            Flags = br.ReadInt32();
+            RoundMessage = (Flags & 1) != 0;
+            Duration = br.ReadInt32();
+            W = br.ReadInt32();
+            H = br.ReadInt32();
 
         }
 
@@ -46,11 +46,11 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
-            bw.Write(duration);
-            bw.Write(w);
-            bw.Write(h);
+            bw.Write(Duration);
+            bw.Write(W);
+            bw.Write(H);
 
         }
     }

@@ -18,9 +18,9 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLVector<TLAbsPageBlock> blocks { get; set; }
-        public TLVector<TLAbsPhoto> photos { get; set; }
-        public TLVector<TLAbsDocument> videos { get; set; }
+        public TLVector<TLAbsPageBlock> Blocks { get; set; }
+        public TLVector<TLAbsPhoto> Photos { get; set; }
+        public TLVector<TLAbsDocument> Videos { get; set; }
 
 
         public void ComputeFlags()
@@ -30,18 +30,18 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            blocks = (TLVector<TLAbsPageBlock>)ObjectUtils.DeserializeVector<TLAbsPageBlock>(br);
-            photos = (TLVector<TLAbsPhoto>)ObjectUtils.DeserializeVector<TLAbsPhoto>(br);
-            videos = (TLVector<TLAbsDocument>)ObjectUtils.DeserializeVector<TLAbsDocument>(br);
+            Blocks = (TLVector<TLAbsPageBlock>)ObjectUtils.DeserializeVector<TLAbsPageBlock>(br);
+            Photos = (TLVector<TLAbsPhoto>)ObjectUtils.DeserializeVector<TLAbsPhoto>(br);
+            Videos = (TLVector<TLAbsDocument>)ObjectUtils.DeserializeVector<TLAbsDocument>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(blocks, bw);
-            ObjectUtils.SerializeObject(photos, bw);
-            ObjectUtils.SerializeObject(videos, bw);
+            ObjectUtils.SerializeObject(Blocks, bw);
+            ObjectUtils.SerializeObject(Photos, bw);
+            ObjectUtils.SerializeObject(Videos, bw);
 
         }
     }

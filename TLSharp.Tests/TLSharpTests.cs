@@ -171,18 +171,18 @@ namespace TLSharp.Tests
 
             var result = await client.GetContactsAsync();
 
-            var user = result.users.lists
+            var user = result.Users.lists
                 .OfType<TLUser>()
-                .FirstOrDefault(x => x.phone == normalizedNumber);
+                .FirstOrDefault(x => x.Phone == normalizedNumber);
 
             if (user == null)
             {
                 throw new System.Exception("Number was not found in Contacts List of user: " + NumberToSendMessage);
             }
 
-            await client.SendTypingAsync(new TLInputPeerUser() { user_id = user.id });
+            await client.SendTypingAsync(new TLInputPeerUser() { UserId = user.Id });
             Thread.Sleep(3000);
-            await client.SendMessageAsync(new TLInputPeerUser() { user_id = user.id }, "TEST");
+            await client.SendMessageAsync(new TLInputPeerUser() { UserId = user.Id }, "TEST");
         }
 
         public virtual async Task SendMessageToChannelTest()
@@ -192,11 +192,11 @@ namespace TLSharp.Tests
             await client.ConnectAsync();
 
             var dialogs = (TLDialogs) await client.GetUserDialogsAsync();
-            var chat = dialogs.chats.lists
+            var chat = dialogs.Chats.lists
                 .OfType<TLChannel>()
-                .FirstOrDefault(c => c.title == "TestGroup");
+                .FirstOrDefault(c => c.Title == "TestGroup");
 
-            await client.SendMessageAsync(new TLInputPeerChannel() { channel_id = chat.id, access_hash = chat.access_hash.Value }, "TEST MSG");
+            await client.SendMessageAsync(new TLInputPeerChannel() { ChannelId = chat.Id, AccessHash = chat.AccessHash.Value }, "TEST MSG");
         }
 
         public virtual async Task SendPhotoToContactTest()
@@ -207,12 +207,12 @@ namespace TLSharp.Tests
 
             var result = await client.GetContactsAsync();
 
-            var user = result.users.lists
+            var user = result.Users.lists
                 .OfType<TLUser>()
-                .FirstOrDefault(x => x.phone == NumberToSendMessage);
+                .FirstOrDefault(x => x.Phone == NumberToSendMessage);
 
             var fileResult = (TLInputFile)await client.UploadFile("cat.jpg", new StreamReader("data/cat.jpg"));
-            await client.SendUploadedPhoto(new TLInputPeerUser() { user_id = user.id }, fileResult, "kitty");
+            await client.SendUploadedPhoto(new TLInputPeerUser() { UserId = user.Id }, fileResult, "kitty");
         }
 
         public virtual async Task SendBigFileToContactTest()
@@ -223,14 +223,14 @@ namespace TLSharp.Tests
 
             var result = await client.GetContactsAsync();
 
-            var user = result.users.lists
+            var user = result.Users.lists
                 .OfType<TLUser>()
-                .FirstOrDefault(x => x.phone == NumberToSendMessage);
+                .FirstOrDefault(x => x.Phone == NumberToSendMessage);
 
             var fileResult = (TLInputFileBig)await client.UploadFile("some.zip", new StreamReader("<some big file path>"));
 
             await client.SendUploadedDocument(
-                new TLInputPeerUser() { user_id = user.id },
+                new TLInputPeerUser() { UserId = user.Id },
                 fileResult,
                 "some zips",
                 "application/zip",
@@ -245,31 +245,31 @@ namespace TLSharp.Tests
 
             var result = await client.GetContactsAsync();
 
-            var user = result.users.lists
+            var user = result.Users.lists
                 .OfType<TLUser>()
-                .FirstOrDefault(x => x.phone == NumberToSendMessage);
+                .FirstOrDefault(x => x.Phone == NumberToSendMessage);
 
-            var inputPeer = new TLInputPeerUser() { user_id = user.id };
-            var res = await client.SendRequestAsync<TLMessagesSlice>(new TLRequestGetHistory() { peer = inputPeer });
-            var document = res.messages.lists
+            var inputPeer = new TLInputPeerUser() { UserId = user.Id };
+            var res = await client.SendRequestAsync<TLMessagesSlice>(new TLRequestGetHistory() { Peer = inputPeer });
+            var document = res.Messages.lists
                 .OfType<TLMessage>()
-                .Where(m => m.media != null)
-                .Select(m => m.media)
+                .Where(m => m.Media != null)
+                .Select(m => m.Media)
                 .OfType<TLMessageMediaDocument>()
-                .Select(md => md.document)
+                .Select(md => md.Document)
                 .OfType<TLDocument>()
                 .First();
 
             var resFile = await client.GetFile(
                 new TLInputDocumentFileLocation()
                 {
-                    access_hash = document.access_hash,
-                    id = document.id,
-                    version = document.version
+                    AccessHash = document.AccessHash,
+                    Id = document.Id,
+                    Version = document.Version
                 },
-                document.size);
+                document.Size);
             
-            Assert.IsTrue(resFile.bytes.Length > 0);
+            Assert.IsTrue(resFile.Bytes.Length > 0);
         }
 
         public virtual async Task DownloadFileFromWrongLocationTest()
@@ -280,23 +280,23 @@ namespace TLSharp.Tests
 
             var result = await client.GetContactsAsync();
 
-            var user = result.users.lists
+            var user = result.Users.lists
                 .OfType<TLUser>()
-                .FirstOrDefault(x => x.id == 5880094);
+                .FirstOrDefault(x => x.Id == 5880094);
     
-            var photo = ((TLUserProfilePhoto)user.photo);
-            var photoLocation = (TLFileLocation) photo.photo_big;
+            var photo = ((TLUserProfilePhoto)user.Photo);
+            var photoLocation = (TLFileLocation) photo.PhotoBig;
 
             var resFile = await client.GetFile(new TLInputFileLocation()
             {
-                local_id = photoLocation.local_id,
-                secret = photoLocation.secret,
-                volume_id = photoLocation.volume_id
+                LocalId = photoLocation.LocalId,
+                Secret = photoLocation.Secret,
+                VolumeId = photoLocation.VolumeId
             }, 1024);
 
             var res = await client.GetUserDialogsAsync(); 
 
-            Assert.IsTrue(resFile.bytes.Length > 0);
+            Assert.IsTrue(resFile.Bytes.Length > 0);
         }
 
         public virtual async Task SignUpNewUser()
@@ -352,19 +352,19 @@ namespace TLSharp.Tests
 
             var result = await client.SearchUserAsync(UserNameToSendMessage);
 
-            var user = result.users.lists
+            var user = result.Users.lists
                 .Where(x => x.GetType() == typeof(TLUser))
                 .OfType<TLUser>()
-                .FirstOrDefault(x => x.username == UserNameToSendMessage.TrimStart('@'));
+                .FirstOrDefault(x => x.Username == UserNameToSendMessage.TrimStart('@'));
 
             if (user == null)
             {
                 var contacts = await client.GetContactsAsync();
 
-                user = contacts.users.lists
+                user = contacts.Users.lists
                     .Where(x => x.GetType() == typeof(TLUser))
                     .OfType<TLUser>()
-                    .FirstOrDefault(x => x.username == UserNameToSendMessage.TrimStart('@'));
+                    .FirstOrDefault(x => x.Username == UserNameToSendMessage.TrimStart('@'));
             }
 
             if (user == null)
@@ -372,9 +372,9 @@ namespace TLSharp.Tests
                 throw new System.Exception("Username was not found: " + UserNameToSendMessage);
             }
 
-            await client.SendTypingAsync(new TLInputPeerUser() { user_id = user.id });
+            await client.SendTypingAsync(new TLInputPeerUser() { UserId = user.Id });
             Thread.Sleep(3000);
-            await client.SendMessageAsync(new TLInputPeerUser() { user_id = user.id }, "TEST");
+            await client.SendMessageAsync(new TLInputPeerUser() { UserId = user.Id }, "TEST");
         }
     }
 }

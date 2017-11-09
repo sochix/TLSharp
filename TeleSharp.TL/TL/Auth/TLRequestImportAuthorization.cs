@@ -18,8 +18,8 @@ namespace TeleSharp.TL.Auth
             }
         }
 
-        public int id { get; set; }
-        public byte[] bytes { get; set; }
+        public int Id { get; set; }
+        public byte[] Bytes { get; set; }
         public Auth.TLAuthorization Response { get; set; }
 
 
@@ -30,19 +30,19 @@ namespace TeleSharp.TL.Auth
 
         public override void DeserializeBody(BinaryReader br)
         {
-            id = br.ReadInt32();
-            bytes = BytesUtil.Deserialize(br);
+            Id = br.ReadInt32();
+            Bytes = BytesUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(id);
-            BytesUtil.Serialize(bytes, bw);
+            bw.Write(Id);
+            BytesUtil.Serialize(Bytes, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Auth.TLAuthorization)ObjectUtils.DeserializeObject(br);
 

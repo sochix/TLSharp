@@ -18,8 +18,8 @@ namespace TeleSharp.TL
             }
         }
 
-        public long photo_id { get; set; }
-        public TLAbsRichText caption { get; set; }
+        public long PhotoId { get; set; }
+        public TLAbsRichText Caption { get; set; }
 
 
         public void ComputeFlags()
@@ -29,16 +29,16 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            photo_id = br.ReadInt64();
-            caption = (TLAbsRichText)ObjectUtils.DeserializeObject(br);
+            PhotoId = br.ReadInt64();
+            Caption = (TLAbsRichText)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(photo_id);
-            ObjectUtils.SerializeObject(caption, bw);
+            bw.Write(PhotoId);
+            ObjectUtils.SerializeObject(Caption, bw);
 
         }
     }

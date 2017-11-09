@@ -18,9 +18,9 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public TLAbsInputPeer peer { get; set; }
-        public TLVector<int> id { get; set; }
-        public bool increment { get; set; }
+        public TLAbsInputPeer Peer { get; set; }
+        public TLVector<int> Id { get; set; }
+        public bool Increment { get; set; }
         public TLVector<int> Response { get; set; }
 
 
@@ -31,21 +31,21 @@ namespace TeleSharp.TL.Messages
 
         public override void DeserializeBody(BinaryReader br)
         {
-            peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
-            id = (TLVector<int>)ObjectUtils.DeserializeVector<int>(br);
-            increment = BoolUtil.Deserialize(br);
+            Peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
+            Id = (TLVector<int>)ObjectUtils.DeserializeVector<int>(br);
+            Increment = BoolUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(peer, bw);
-            ObjectUtils.SerializeObject(id, bw);
-            BoolUtil.Serialize(increment, bw);
+            ObjectUtils.SerializeObject(Peer, bw);
+            ObjectUtils.SerializeObject(Id, bw);
+            BoolUtil.Serialize(Increment, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLVector<int>)ObjectUtils.DeserializeVector<int>(br);
 

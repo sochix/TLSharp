@@ -18,9 +18,9 @@ namespace TeleSharp.TL.Contacts
             }
         }
 
-        public TLAbsContactLink my_link { get; set; }
-        public TLAbsContactLink foreign_link { get; set; }
-        public TLAbsUser user { get; set; }
+        public TLAbsContactLink MyLink { get; set; }
+        public TLAbsContactLink ForeignLink { get; set; }
+        public TLAbsUser User { get; set; }
 
 
         public void ComputeFlags()
@@ -30,18 +30,18 @@ namespace TeleSharp.TL.Contacts
 
         public override void DeserializeBody(BinaryReader br)
         {
-            my_link = (TLAbsContactLink)ObjectUtils.DeserializeObject(br);
-            foreign_link = (TLAbsContactLink)ObjectUtils.DeserializeObject(br);
-            user = (TLAbsUser)ObjectUtils.DeserializeObject(br);
+            MyLink = (TLAbsContactLink)ObjectUtils.DeserializeObject(br);
+            ForeignLink = (TLAbsContactLink)ObjectUtils.DeserializeObject(br);
+            User = (TLAbsUser)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(my_link, bw);
-            ObjectUtils.SerializeObject(foreign_link, bw);
-            ObjectUtils.SerializeObject(user, bw);
+            ObjectUtils.SerializeObject(MyLink, bw);
+            ObjectUtils.SerializeObject(ForeignLink, bw);
+            ObjectUtils.SerializeObject(User, bw);
 
         }
     }

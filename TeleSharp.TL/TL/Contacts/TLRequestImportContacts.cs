@@ -18,8 +18,8 @@ namespace TeleSharp.TL.Contacts
             }
         }
 
-        public TLVector<TLInputPhoneContact> contacts { get; set; }
-        public bool replace { get; set; }
+        public TLVector<TLInputPhoneContact> Contacts { get; set; }
+        public bool Replace { get; set; }
         public Contacts.TLImportedContacts Response { get; set; }
 
 
@@ -30,19 +30,19 @@ namespace TeleSharp.TL.Contacts
 
         public override void DeserializeBody(BinaryReader br)
         {
-            contacts = (TLVector<TLInputPhoneContact>)ObjectUtils.DeserializeVector<TLInputPhoneContact>(br);
-            replace = BoolUtil.Deserialize(br);
+            Contacts = (TLVector<TLInputPhoneContact>)ObjectUtils.DeserializeVector<TLInputPhoneContact>(br);
+            Replace = BoolUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(contacts, bw);
-            BoolUtil.Serialize(replace, bw);
+            ObjectUtils.SerializeObject(Contacts, bw);
+            BoolUtil.Serialize(Replace, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Contacts.TLImportedContacts)ObjectUtils.DeserializeObject(br);
 

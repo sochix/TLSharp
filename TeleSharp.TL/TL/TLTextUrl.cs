@@ -18,9 +18,9 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLAbsRichText text { get; set; }
-        public string url { get; set; }
-        public long webpage_id { get; set; }
+        public TLAbsRichText Text { get; set; }
+        public string Url { get; set; }
+        public long WebpageId { get; set; }
 
 
         public void ComputeFlags()
@@ -30,18 +30,18 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            text = (TLAbsRichText)ObjectUtils.DeserializeObject(br);
-            url = StringUtil.Deserialize(br);
-            webpage_id = br.ReadInt64();
+            Text = (TLAbsRichText)ObjectUtils.DeserializeObject(br);
+            Url = StringUtil.Deserialize(br);
+            WebpageId = br.ReadInt64();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(text, bw);
-            StringUtil.Serialize(url, bw);
-            bw.Write(webpage_id);
+            ObjectUtils.SerializeObject(Text, bw);
+            StringUtil.Serialize(Url, bw);
+            bw.Write(WebpageId);
 
         }
     }

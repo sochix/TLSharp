@@ -36,7 +36,7 @@ namespace TeleSharp.TL.Channels
             bw.Write(Constructor);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Messages.TLAbsChats)ObjectUtils.DeserializeObject(br);
 

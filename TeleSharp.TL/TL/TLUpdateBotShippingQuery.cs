@@ -18,10 +18,10 @@ namespace TeleSharp.TL
             }
         }
 
-        public long query_id { get; set; }
-        public int user_id { get; set; }
-        public byte[] payload { get; set; }
-        public TLPostAddress shipping_address { get; set; }
+        public long QueryId { get; set; }
+        public int UserId { get; set; }
+        public byte[] Payload { get; set; }
+        public TLPostAddress ShippingAddress { get; set; }
 
 
         public void ComputeFlags()
@@ -31,20 +31,20 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            query_id = br.ReadInt64();
-            user_id = br.ReadInt32();
-            payload = BytesUtil.Deserialize(br);
-            shipping_address = (TLPostAddress)ObjectUtils.DeserializeObject(br);
+            QueryId = br.ReadInt64();
+            UserId = br.ReadInt32();
+            Payload = BytesUtil.Deserialize(br);
+            ShippingAddress = (TLPostAddress)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(query_id);
-            bw.Write(user_id);
-            BytesUtil.Serialize(payload, bw);
-            ObjectUtils.SerializeObject(shipping_address, bw);
+            bw.Write(QueryId);
+            bw.Write(UserId);
+            BytesUtil.Serialize(Payload, bw);
+            ObjectUtils.SerializeObject(ShippingAddress, bw);
 
         }
     }

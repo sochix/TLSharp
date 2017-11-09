@@ -18,10 +18,10 @@ namespace TeleSharp.TL
             }
         }
 
-        public double time { get; set; }
-        public string type { get; set; }
-        public long peer { get; set; }
-        public string data { get; set; }
+        public double Time { get; set; }
+        public string Type { get; set; }
+        public long Peer { get; set; }
+        public string Data { get; set; }
 
 
         public void ComputeFlags()
@@ -31,20 +31,20 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            time = br.ReadDouble();
-            type = StringUtil.Deserialize(br);
-            peer = br.ReadInt64();
-            data = StringUtil.Deserialize(br);
+            Time = br.ReadDouble();
+            Type = StringUtil.Deserialize(br);
+            Peer = br.ReadInt64();
+            Data = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(time);
-            StringUtil.Serialize(type, bw);
-            bw.Write(peer);
-            StringUtil.Serialize(data, bw);
+            bw.Write(Time);
+            StringUtil.Serialize(Type, bw);
+            bw.Write(Peer);
+            StringUtil.Serialize(Data, bw);
 
         }
     }

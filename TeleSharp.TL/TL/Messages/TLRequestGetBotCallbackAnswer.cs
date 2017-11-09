@@ -18,32 +18,32 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public int flags { get; set; }
-        public bool game { get; set; }
-        public TLAbsInputPeer peer { get; set; }
-        public int msg_id { get; set; }
-        public byte[] data { get; set; }
+        public int Flags { get; set; }
+        public bool Game { get; set; }
+        public TLAbsInputPeer Peer { get; set; }
+        public int MsgId { get; set; }
+        public byte[] Data { get; set; }
         public Messages.TLBotCallbackAnswer Response { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = game ? (flags | 2) : (flags & ~2);
-            flags = data != null ? (flags | 1) : (flags & ~1);
+            Flags = 0;
+            Flags = Game ? (Flags | 2) : (Flags & ~2);
+            Flags = Data != null ? (Flags | 1) : (Flags & ~1);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            game = (flags & 2) != 0;
-            peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
-            msg_id = br.ReadInt32();
-            if ((flags & 1) != 0)
-                data = BytesUtil.Deserialize(br);
+            Flags = br.ReadInt32();
+            Game = (Flags & 2) != 0;
+            Peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
+            MsgId = br.ReadInt32();
+            if ((Flags & 1) != 0)
+                Data = BytesUtil.Deserialize(br);
             else
-                data = null;
+                Data = null;
 
 
         }
@@ -52,15 +52,15 @@ namespace TeleSharp.TL.Messages
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
-            ObjectUtils.SerializeObject(peer, bw);
-            bw.Write(msg_id);
-            if ((flags & 1) != 0)
-                BytesUtil.Serialize(data, bw);
+            ObjectUtils.SerializeObject(Peer, bw);
+            bw.Write(MsgId);
+            if ((Flags & 1) != 0)
+                BytesUtil.Serialize(Data, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Messages.TLBotCallbackAnswer)ObjectUtils.DeserializeObject(br);
 

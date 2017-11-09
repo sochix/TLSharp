@@ -18,10 +18,10 @@ namespace TeleSharp.TL
             }
         }
 
-        public long id { get; set; }
-        public int parts { get; set; }
-        public string md5_checksum { get; set; }
-        public int key_fingerprint { get; set; }
+        public long Id { get; set; }
+        public int Parts { get; set; }
+        public string Md5Checksum { get; set; }
+        public int KeyFingerprint { get; set; }
 
 
         public void ComputeFlags()
@@ -31,20 +31,20 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            id = br.ReadInt64();
-            parts = br.ReadInt32();
-            md5_checksum = StringUtil.Deserialize(br);
-            key_fingerprint = br.ReadInt32();
+            Id = br.ReadInt64();
+            Parts = br.ReadInt32();
+            Md5Checksum = StringUtil.Deserialize(br);
+            KeyFingerprint = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(id);
-            bw.Write(parts);
-            StringUtil.Serialize(md5_checksum, bw);
-            bw.Write(key_fingerprint);
+            bw.Write(Id);
+            bw.Write(Parts);
+            StringUtil.Serialize(Md5Checksum, bw);
+            bw.Write(KeyFingerprint);
 
         }
     }

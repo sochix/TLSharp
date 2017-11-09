@@ -18,8 +18,8 @@ namespace TeleSharp.TL.Channels
             }
         }
 
-        public TLAbsInputChannel channel { get; set; }
-        public int id { get; set; }
+        public TLAbsInputChannel Channel { get; set; }
+        public int Id { get; set; }
         public TLExportedMessageLink Response { get; set; }
 
 
@@ -30,19 +30,19 @@ namespace TeleSharp.TL.Channels
 
         public override void DeserializeBody(BinaryReader br)
         {
-            channel = (TLAbsInputChannel)ObjectUtils.DeserializeObject(br);
-            id = br.ReadInt32();
+            Channel = (TLAbsInputChannel)ObjectUtils.DeserializeObject(br);
+            Id = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(channel, bw);
-            bw.Write(id);
+            ObjectUtils.SerializeObject(Channel, bw);
+            bw.Write(Id);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLExportedMessageLink)ObjectUtils.DeserializeObject(br);
 

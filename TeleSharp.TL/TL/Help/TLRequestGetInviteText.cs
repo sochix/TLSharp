@@ -36,7 +36,7 @@ namespace TeleSharp.TL.Help
             bw.Write(Constructor);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Help.TLInviteText)ObjectUtils.DeserializeObject(br);
 

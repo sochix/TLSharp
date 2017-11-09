@@ -18,8 +18,8 @@ namespace TeleSharp.TL.Phone
             }
         }
 
-        public TLAbsPhoneCall phone_call { get; set; }
-        public TLVector<TLAbsUser> users { get; set; }
+        public TLAbsPhoneCall PhoneCall { get; set; }
+        public TLVector<TLAbsUser> Users { get; set; }
 
 
         public void ComputeFlags()
@@ -29,16 +29,16 @@ namespace TeleSharp.TL.Phone
 
         public override void DeserializeBody(BinaryReader br)
         {
-            phone_call = (TLAbsPhoneCall)ObjectUtils.DeserializeObject(br);
-            users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
+            PhoneCall = (TLAbsPhoneCall)ObjectUtils.DeserializeObject(br);
+            Users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(phone_call, bw);
-            ObjectUtils.SerializeObject(users, bw);
+            ObjectUtils.SerializeObject(PhoneCall, bw);
+            ObjectUtils.SerializeObject(Users, bw);
 
         }
     }

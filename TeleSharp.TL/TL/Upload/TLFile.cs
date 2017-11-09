@@ -18,9 +18,9 @@ namespace TeleSharp.TL.Upload
             }
         }
 
-        public Storage.TLAbsFileType type { get; set; }
-        public int mtime { get; set; }
-        public byte[] bytes { get; set; }
+        public Storage.TLAbsFileType Type { get; set; }
+        public int Mtime { get; set; }
+        public byte[] Bytes { get; set; }
 
 
         public void ComputeFlags()
@@ -30,18 +30,18 @@ namespace TeleSharp.TL.Upload
 
         public override void DeserializeBody(BinaryReader br)
         {
-            type = (Storage.TLAbsFileType)ObjectUtils.DeserializeObject(br);
-            mtime = br.ReadInt32();
-            bytes = BytesUtil.Deserialize(br);
+            Type = (Storage.TLAbsFileType)ObjectUtils.DeserializeObject(br);
+            Mtime = br.ReadInt32();
+            Bytes = BytesUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(type, bw);
-            bw.Write(mtime);
-            BytesUtil.Serialize(bytes, bw);
+            ObjectUtils.SerializeObject(Type, bw);
+            bw.Write(Mtime);
+            BytesUtil.Serialize(Bytes, bw);
 
         }
     }

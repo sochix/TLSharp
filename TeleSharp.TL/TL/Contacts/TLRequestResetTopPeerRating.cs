@@ -18,8 +18,8 @@ namespace TeleSharp.TL.Contacts
             }
         }
 
-        public TLAbsTopPeerCategory category { get; set; }
-        public TLAbsInputPeer peer { get; set; }
+        public TLAbsTopPeerCategory Category { get; set; }
+        public TLAbsInputPeer Peer { get; set; }
         public bool Response { get; set; }
 
 
@@ -30,19 +30,19 @@ namespace TeleSharp.TL.Contacts
 
         public override void DeserializeBody(BinaryReader br)
         {
-            category = (TLAbsTopPeerCategory)ObjectUtils.DeserializeObject(br);
-            peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
+            Category = (TLAbsTopPeerCategory)ObjectUtils.DeserializeObject(br);
+            Peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(category, bw);
-            ObjectUtils.SerializeObject(peer, bw);
+            ObjectUtils.SerializeObject(Category, bw);
+            ObjectUtils.SerializeObject(Peer, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = BoolUtil.Deserialize(br);
 

@@ -18,9 +18,9 @@ namespace TeleSharp.TL
             }
         }
 
-        public int user_id { get; set; }
-        public int inviter_id { get; set; }
-        public int date { get; set; }
+        public int UserId { get; set; }
+        public int InviterId { get; set; }
+        public int Date { get; set; }
 
 
         public void ComputeFlags()
@@ -30,18 +30,18 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            user_id = br.ReadInt32();
-            inviter_id = br.ReadInt32();
-            date = br.ReadInt32();
+            UserId = br.ReadInt32();
+            InviterId = br.ReadInt32();
+            Date = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(user_id);
-            bw.Write(inviter_id);
-            bw.Write(date);
+            bw.Write(UserId);
+            bw.Write(InviterId);
+            bw.Write(Date);
 
         }
     }

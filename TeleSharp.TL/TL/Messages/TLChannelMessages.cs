@@ -18,28 +18,28 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public int flags { get; set; }
-        public int pts { get; set; }
-        public int count { get; set; }
-        public TLVector<TLAbsMessage> messages { get; set; }
-        public TLVector<TLAbsChat> chats { get; set; }
-        public TLVector<TLAbsUser> users { get; set; }
+        public int Flags { get; set; }
+        public int Pts { get; set; }
+        public int Count { get; set; }
+        public TLVector<TLAbsMessage> Messages { get; set; }
+        public TLVector<TLAbsChat> Chats { get; set; }
+        public TLVector<TLAbsUser> Users { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
+            Flags = 0;
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            pts = br.ReadInt32();
-            count = br.ReadInt32();
-            messages = (TLVector<TLAbsMessage>)ObjectUtils.DeserializeVector<TLAbsMessage>(br);
-            chats = (TLVector<TLAbsChat>)ObjectUtils.DeserializeVector<TLAbsChat>(br);
-            users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
+            Flags = br.ReadInt32();
+            Pts = br.ReadInt32();
+            Count = br.ReadInt32();
+            Messages = (TLVector<TLAbsMessage>)ObjectUtils.DeserializeVector<TLAbsMessage>(br);
+            Chats = (TLVector<TLAbsChat>)ObjectUtils.DeserializeVector<TLAbsChat>(br);
+            Users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
 
         }
 
@@ -47,12 +47,12 @@ namespace TeleSharp.TL.Messages
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
-            bw.Write(pts);
-            bw.Write(count);
-            ObjectUtils.SerializeObject(messages, bw);
-            ObjectUtils.SerializeObject(chats, bw);
-            ObjectUtils.SerializeObject(users, bw);
+            bw.Write(Flags);
+            bw.Write(Pts);
+            bw.Write(Count);
+            ObjectUtils.SerializeObject(Messages, bw);
+            ObjectUtils.SerializeObject(Chats, bw);
+            ObjectUtils.SerializeObject(Users, bw);
 
         }
     }

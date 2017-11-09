@@ -18,26 +18,26 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public TLAbsInputGeoPoint geo_point { get; set; }
-        public TLAbsReplyMarkup reply_markup { get; set; }
+        public int Flags { get; set; }
+        public TLAbsInputGeoPoint GeoPoint { get; set; }
+        public TLAbsReplyMarkup ReplyMarkup { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = reply_markup != null ? (flags | 4) : (flags & ~4);
+            Flags = 0;
+            Flags = ReplyMarkup != null ? (Flags | 4) : (Flags & ~4);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            geo_point = (TLAbsInputGeoPoint)ObjectUtils.DeserializeObject(br);
-            if ((flags & 4) != 0)
-                reply_markup = (TLAbsReplyMarkup)ObjectUtils.DeserializeObject(br);
+            Flags = br.ReadInt32();
+            GeoPoint = (TLAbsInputGeoPoint)ObjectUtils.DeserializeObject(br);
+            if ((Flags & 4) != 0)
+                ReplyMarkup = (TLAbsReplyMarkup)ObjectUtils.DeserializeObject(br);
             else
-                reply_markup = null;
+                ReplyMarkup = null;
 
 
         }
@@ -46,10 +46,10 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
-            ObjectUtils.SerializeObject(geo_point, bw);
-            if ((flags & 4) != 0)
-                ObjectUtils.SerializeObject(reply_markup, bw);
+            bw.Write(Flags);
+            ObjectUtils.SerializeObject(GeoPoint, bw);
+            if ((Flags & 4) != 0)
+                ObjectUtils.SerializeObject(ReplyMarkup, bw);
 
         }
     }

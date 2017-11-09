@@ -18,8 +18,8 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLAbsRichText author { get; set; }
-        public int published_date { get; set; }
+        public TLAbsRichText Author { get; set; }
+        public int PublishedDate { get; set; }
 
 
         public void ComputeFlags()
@@ -29,16 +29,16 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            author = (TLAbsRichText)ObjectUtils.DeserializeObject(br);
-            published_date = br.ReadInt32();
+            Author = (TLAbsRichText)ObjectUtils.DeserializeObject(br);
+            PublishedDate = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(author, bw);
-            bw.Write(published_date);
+            ObjectUtils.SerializeObject(Author, bw);
+            bw.Write(PublishedDate);
 
         }
     }

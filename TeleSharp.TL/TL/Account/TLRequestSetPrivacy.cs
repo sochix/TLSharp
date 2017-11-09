@@ -18,8 +18,8 @@ namespace TeleSharp.TL.Account
             }
         }
 
-        public TLAbsInputPrivacyKey key { get; set; }
-        public TLVector<TLAbsInputPrivacyRule> rules { get; set; }
+        public TLAbsInputPrivacyKey Key { get; set; }
+        public TLVector<TLAbsInputPrivacyRule> Rules { get; set; }
         public Account.TLPrivacyRules Response { get; set; }
 
 
@@ -30,19 +30,19 @@ namespace TeleSharp.TL.Account
 
         public override void DeserializeBody(BinaryReader br)
         {
-            key = (TLAbsInputPrivacyKey)ObjectUtils.DeserializeObject(br);
-            rules = (TLVector<TLAbsInputPrivacyRule>)ObjectUtils.DeserializeVector<TLAbsInputPrivacyRule>(br);
+            Key = (TLAbsInputPrivacyKey)ObjectUtils.DeserializeObject(br);
+            Rules = (TLVector<TLAbsInputPrivacyRule>)ObjectUtils.DeserializeVector<TLAbsInputPrivacyRule>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(key, bw);
-            ObjectUtils.SerializeObject(rules, bw);
+            ObjectUtils.SerializeObject(Key, bw);
+            ObjectUtils.SerializeObject(Rules, bw);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Account.TLPrivacyRules)ObjectUtils.DeserializeObject(br);
 

@@ -18,7 +18,7 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLAbsGeoPoint geo { get; set; }
+        public TLAbsGeoPoint Geo { get; set; }
 
 
         public void ComputeFlags()
@@ -28,14 +28,14 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            geo = (TLAbsGeoPoint)ObjectUtils.DeserializeObject(br);
+            Geo = (TLAbsGeoPoint)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(geo, bw);
+            ObjectUtils.SerializeObject(Geo, bw);
 
         }
     }

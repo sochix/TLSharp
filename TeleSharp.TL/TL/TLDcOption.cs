@@ -18,36 +18,36 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public bool ipv6 { get; set; }
-        public bool media_only { get; set; }
-        public bool tcpo_only { get; set; }
-        public bool cdn { get; set; }
-        public int id { get; set; }
-        public string ip_address { get; set; }
-        public int port { get; set; }
+        public int Flags { get; set; }
+        public bool Ipv6 { get; set; }
+        public bool MediaOnly { get; set; }
+        public bool TcpoOnly { get; set; }
+        public bool Cdn { get; set; }
+        public int Id { get; set; }
+        public string IpAddress { get; set; }
+        public int Port { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = ipv6 ? (flags | 1) : (flags & ~1);
-            flags = media_only ? (flags | 2) : (flags & ~2);
-            flags = tcpo_only ? (flags | 4) : (flags & ~4);
-            flags = cdn ? (flags | 8) : (flags & ~8);
+            Flags = 0;
+            Flags = Ipv6 ? (Flags | 1) : (Flags & ~1);
+            Flags = MediaOnly ? (Flags | 2) : (Flags & ~2);
+            Flags = TcpoOnly ? (Flags | 4) : (Flags & ~4);
+            Flags = Cdn ? (Flags | 8) : (Flags & ~8);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            ipv6 = (flags & 1) != 0;
-            media_only = (flags & 2) != 0;
-            tcpo_only = (flags & 4) != 0;
-            cdn = (flags & 8) != 0;
-            id = br.ReadInt32();
-            ip_address = StringUtil.Deserialize(br);
-            port = br.ReadInt32();
+            Flags = br.ReadInt32();
+            Ipv6 = (Flags & 1) != 0;
+            MediaOnly = (Flags & 2) != 0;
+            TcpoOnly = (Flags & 4) != 0;
+            Cdn = (Flags & 8) != 0;
+            Id = br.ReadInt32();
+            IpAddress = StringUtil.Deserialize(br);
+            Port = br.ReadInt32();
 
         }
 
@@ -55,14 +55,14 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
 
 
 
-            bw.Write(id);
-            StringUtil.Serialize(ip_address, bw);
-            bw.Write(port);
+            bw.Write(Id);
+            StringUtil.Serialize(IpAddress, bw);
+            bw.Write(Port);
 
         }
     }

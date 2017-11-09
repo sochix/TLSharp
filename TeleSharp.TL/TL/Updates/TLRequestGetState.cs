@@ -36,7 +36,7 @@ namespace TeleSharp.TL.Updates
             bw.Write(Constructor);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Updates.TLState)ObjectUtils.DeserializeObject(br);
 

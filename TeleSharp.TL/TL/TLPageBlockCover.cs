@@ -18,7 +18,7 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLAbsPageBlock cover { get; set; }
+        public TLAbsPageBlock Cover { get; set; }
 
 
         public void ComputeFlags()
@@ -28,14 +28,14 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            cover = (TLAbsPageBlock)ObjectUtils.DeserializeObject(br);
+            Cover = (TLAbsPageBlock)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(cover, bw);
+            ObjectUtils.SerializeObject(Cover, bw);
 
         }
     }

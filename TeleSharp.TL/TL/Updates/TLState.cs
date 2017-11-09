@@ -18,11 +18,11 @@ namespace TeleSharp.TL.Updates
             }
         }
 
-        public int pts { get; set; }
-        public int qts { get; set; }
-        public int date { get; set; }
-        public int seq { get; set; }
-        public int unread_count { get; set; }
+        public int Pts { get; set; }
+        public int Qts { get; set; }
+        public int Date { get; set; }
+        public int Seq { get; set; }
+        public int UnreadCount { get; set; }
 
 
         public void ComputeFlags()
@@ -32,22 +32,22 @@ namespace TeleSharp.TL.Updates
 
         public override void DeserializeBody(BinaryReader br)
         {
-            pts = br.ReadInt32();
-            qts = br.ReadInt32();
-            date = br.ReadInt32();
-            seq = br.ReadInt32();
-            unread_count = br.ReadInt32();
+            Pts = br.ReadInt32();
+            Qts = br.ReadInt32();
+            Date = br.ReadInt32();
+            Seq = br.ReadInt32();
+            UnreadCount = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(pts);
-            bw.Write(qts);
-            bw.Write(date);
-            bw.Write(seq);
-            bw.Write(unread_count);
+            bw.Write(Pts);
+            bw.Write(Qts);
+            bw.Write(Date);
+            bw.Write(Seq);
+            bw.Write(UnreadCount);
 
         }
     }

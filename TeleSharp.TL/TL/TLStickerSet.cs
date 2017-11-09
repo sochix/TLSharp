@@ -18,42 +18,42 @@ namespace TeleSharp.TL
             }
         }
 
-        public int flags { get; set; }
-        public bool installed { get; set; }
-        public bool archived { get; set; }
-        public bool official { get; set; }
-        public bool masks { get; set; }
-        public long id { get; set; }
-        public long access_hash { get; set; }
-        public string title { get; set; }
-        public string short_name { get; set; }
-        public int count { get; set; }
-        public int hash { get; set; }
+        public int Flags { get; set; }
+        public bool Installed { get; set; }
+        public bool Archived { get; set; }
+        public bool Official { get; set; }
+        public bool Masks { get; set; }
+        public long Id { get; set; }
+        public long AccessHash { get; set; }
+        public string Title { get; set; }
+        public string ShortName { get; set; }
+        public int Count { get; set; }
+        public int Hash { get; set; }
 
 
         public void ComputeFlags()
         {
-            flags = 0;
-            flags = installed ? (flags | 1) : (flags & ~1);
-            flags = archived ? (flags | 2) : (flags & ~2);
-            flags = official ? (flags | 4) : (flags & ~4);
-            flags = masks ? (flags | 8) : (flags & ~8);
+            Flags = 0;
+            Flags = Installed ? (Flags | 1) : (Flags & ~1);
+            Flags = Archived ? (Flags | 2) : (Flags & ~2);
+            Flags = Official ? (Flags | 4) : (Flags & ~4);
+            Flags = Masks ? (Flags | 8) : (Flags & ~8);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            flags = br.ReadInt32();
-            installed = (flags & 1) != 0;
-            archived = (flags & 2) != 0;
-            official = (flags & 4) != 0;
-            masks = (flags & 8) != 0;
-            id = br.ReadInt64();
-            access_hash = br.ReadInt64();
-            title = StringUtil.Deserialize(br);
-            short_name = StringUtil.Deserialize(br);
-            count = br.ReadInt32();
-            hash = br.ReadInt32();
+            Flags = br.ReadInt32();
+            Installed = (Flags & 1) != 0;
+            Archived = (Flags & 2) != 0;
+            Official = (Flags & 4) != 0;
+            Masks = (Flags & 8) != 0;
+            Id = br.ReadInt64();
+            AccessHash = br.ReadInt64();
+            Title = StringUtil.Deserialize(br);
+            ShortName = StringUtil.Deserialize(br);
+            Count = br.ReadInt32();
+            Hash = br.ReadInt32();
 
         }
 
@@ -61,17 +61,17 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             ComputeFlags();
-            bw.Write(flags);
+            bw.Write(Flags);
 
 
 
 
-            bw.Write(id);
-            bw.Write(access_hash);
-            StringUtil.Serialize(title, bw);
-            StringUtil.Serialize(short_name, bw);
-            bw.Write(count);
-            bw.Write(hash);
+            bw.Write(Id);
+            bw.Write(AccessHash);
+            StringUtil.Serialize(Title, bw);
+            StringUtil.Serialize(ShortName, bw);
+            bw.Write(Count);
+            bw.Write(Hash);
 
         }
     }

@@ -18,8 +18,8 @@ namespace TeleSharp.TL
             }
         }
 
-        public double @long { get; set; }
-        public double lat { get; set; }
+        public double Long { get; set; }
+        public double Lat { get; set; }
 
 
         public void ComputeFlags()
@@ -29,16 +29,16 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            @long = br.ReadDouble();
-            lat = br.ReadDouble();
+            Long = br.ReadDouble();
+            Lat = br.ReadDouble();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(@long);
-            bw.Write(lat);
+            bw.Write(Long);
+            bw.Write(Lat);
 
         }
     }

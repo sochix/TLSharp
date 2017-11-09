@@ -18,8 +18,8 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public string url { get; set; }
-        public int hash { get; set; }
+        public string Url { get; set; }
+        public int Hash { get; set; }
         public TLAbsWebPage Response { get; set; }
 
 
@@ -30,19 +30,19 @@ namespace TeleSharp.TL.Messages
 
         public override void DeserializeBody(BinaryReader br)
         {
-            url = StringUtil.Deserialize(br);
-            hash = br.ReadInt32();
+            Url = StringUtil.Deserialize(br);
+            Hash = br.ReadInt32();
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            StringUtil.Serialize(url, bw);
-            bw.Write(hash);
+            StringUtil.Serialize(Url, bw);
+            bw.Write(Hash);
 
         }
-        public override void deserializeResponse(BinaryReader br)
+        public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLAbsWebPage)ObjectUtils.DeserializeObject(br);
 

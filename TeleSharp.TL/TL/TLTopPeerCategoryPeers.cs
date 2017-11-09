@@ -18,9 +18,9 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLAbsTopPeerCategory category { get; set; }
-        public int count { get; set; }
-        public TLVector<TLTopPeer> peers { get; set; }
+        public TLAbsTopPeerCategory Category { get; set; }
+        public int Count { get; set; }
+        public TLVector<TLTopPeer> Peers { get; set; }
 
 
         public void ComputeFlags()
@@ -30,18 +30,18 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            category = (TLAbsTopPeerCategory)ObjectUtils.DeserializeObject(br);
-            count = br.ReadInt32();
-            peers = (TLVector<TLTopPeer>)ObjectUtils.DeserializeVector<TLTopPeer>(br);
+            Category = (TLAbsTopPeerCategory)ObjectUtils.DeserializeObject(br);
+            Count = br.ReadInt32();
+            Peers = (TLVector<TLTopPeer>)ObjectUtils.DeserializeVector<TLTopPeer>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ObjectUtils.SerializeObject(category, bw);
-            bw.Write(count);
-            ObjectUtils.SerializeObject(peers, bw);
+            ObjectUtils.SerializeObject(Category, bw);
+            bw.Write(Count);
+            ObjectUtils.SerializeObject(Peers, bw);
 
         }
     }
