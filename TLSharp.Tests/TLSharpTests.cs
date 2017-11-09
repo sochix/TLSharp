@@ -171,7 +171,7 @@ namespace TLSharp.Tests
 
             var result = await client.GetContactsAsync();
 
-            var user = result.Users.lists
+            var user = result.Users
                 .OfType<TLUser>()
                 .FirstOrDefault(x => x.Phone == normalizedNumber);
 
@@ -192,7 +192,7 @@ namespace TLSharp.Tests
             await client.ConnectAsync();
 
             var dialogs = (TLDialogs) await client.GetUserDialogsAsync();
-            var chat = dialogs.Chats.lists
+            var chat = dialogs.Chats
                 .OfType<TLChannel>()
                 .FirstOrDefault(c => c.Title == "TestGroup");
 
@@ -207,7 +207,7 @@ namespace TLSharp.Tests
 
             var result = await client.GetContactsAsync();
 
-            var user = result.Users.lists
+            var user = result.Users
                 .OfType<TLUser>()
                 .FirstOrDefault(x => x.Phone == NumberToSendMessage);
 
@@ -223,7 +223,7 @@ namespace TLSharp.Tests
 
             var result = await client.GetContactsAsync();
 
-            var user = result.Users.lists
+            var user = result.Users
                 .OfType<TLUser>()
                 .FirstOrDefault(x => x.Phone == NumberToSendMessage);
 
@@ -245,13 +245,13 @@ namespace TLSharp.Tests
 
             var result = await client.GetContactsAsync();
 
-            var user = result.Users.lists
+            var user = result.Users
                 .OfType<TLUser>()
                 .FirstOrDefault(x => x.Phone == NumberToSendMessage);
 
             var inputPeer = new TLInputPeerUser() { UserId = user.Id };
             var res = await client.SendRequestAsync<TLMessagesSlice>(new TLRequestGetHistory() { Peer = inputPeer });
-            var document = res.Messages.lists
+            var document = res.Messages
                 .OfType<TLMessage>()
                 .Where(m => m.Media != null)
                 .Select(m => m.Media)
@@ -280,7 +280,7 @@ namespace TLSharp.Tests
 
             var result = await client.GetContactsAsync();
 
-            var user = result.Users.lists
+            var user = result.Users
                 .OfType<TLUser>()
                 .FirstOrDefault(x => x.Id == 5880094);
     
@@ -352,7 +352,7 @@ namespace TLSharp.Tests
 
             var result = await client.SearchUserAsync(UserNameToSendMessage);
 
-            var user = result.Users.lists
+            var user = result.Users
                 .Where(x => x.GetType() == typeof(TLUser))
                 .OfType<TLUser>()
                 .FirstOrDefault(x => x.Username == UserNameToSendMessage.TrimStart('@'));
@@ -361,7 +361,7 @@ namespace TLSharp.Tests
             {
                 var contacts = await client.GetContactsAsync();
 
-                user = contacts.Users.lists
+                user = contacts.Users
                     .Where(x => x.GetType() == typeof(TLUser))
                     .OfType<TLUser>()
                     .FirstOrDefault(x => x.Username == UserNameToSendMessage.TrimStart('@'));
