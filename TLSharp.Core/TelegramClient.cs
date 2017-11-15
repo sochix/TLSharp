@@ -300,41 +300,12 @@ namespace TLSharp.Core
         public async Task<TLFile> GetFile(TLAbsInputFileLocation location, int filePartSize, int offset = 0)
         {
             TLFile result = null;
-            try
+            result = await SendRequestAsync<TLFile>(new TLRequestGetFile()
             {
-                result = await SendRequestAsync<TLFile>(new TLRequestGetFile()
-                {
-                    Location = location,
-                    Limit = filePartSize,
-                    Offset = offset
-                });
-            }
-            catch (FileMigrationException ex)
-            {
-                var exportedAuth = await SendRequestAsync<TLExportedAuthorization>(new TLRequestExportAuthorization() { DcId = ex.DC });
-
-                var authKey = _session.AuthKey;
-                var timeOffset = _session.TimeOffset;
-                var serverAddress = _session.ServerAddress;
-                var serverPort = _session.Port;
-
-                await ReconnectToDcAsync(ex.DC);
-                var auth = await SendRequestAsync<TLAuthorization>(new TLRequestImportAuthorization
-                {
-                    Bytes = exportedAuth.Bytes,
-                    Id = exportedAuth.Id
-                });
-                result = await GetFile(location, filePartSize, offset);
-
-                _session.AuthKey = authKey;
-                _session.TimeOffset = timeOffset;
-                _transport = new TcpTransport(serverAddress, serverPort);
-                _session.ServerAddress = serverAddress;
-                _session.Port = serverPort;
-                await ConnectAsync();
-
-            }
-
+                Location = location,
+                Limit = filePartSize,
+                Offset = offset
+            });
             return result;
         }
 
