@@ -86,6 +86,13 @@ namespace TLSharp.Core
             if (dcOptions == null || !dcOptions.Any())
                 throw new InvalidOperationException($"Can't reconnect. Establish initial connection first.");
 
+            TLExportedAuthorization exported = null;
+            if (_session.TLUser != null)
+            {
+                TLRequestExportAuthorization exportAuthorization = new TLRequestExportAuthorization() { DcId = dcId };
+                exported = await SendRequestAsync<TLExportedAuthorization>(exportAuthorization);
+            }
+
             var dc = dcOptions.First(d => d.Id == dcId);
 
             _transport = new TcpTransport(dc.IpAddress, dc.Port, _handler);
@@ -93,6 +100,13 @@ namespace TLSharp.Core
             _session.Port = dc.Port;
 
             await ConnectAsync(true);
+
+            if (_session.TLUser != null)
+            {
+                TLRequestImportAuthorization importAuthorization = new TLRequestImportAuthorization() { Id = exported.Id, Bytes = exported.Bytes };
+                var imported = await SendRequestAsync<TLAuthorization>(importAuthorization);
+                OnUserAuthenticated(((TLUser)imported.User));
+            }
         }
 
         private async Task RequestWithDcMigration(TLMethod request) 
@@ -286,41 +300,12 @@ namespace TLSharp.Core
         public async Task<TLFile> GetFile(TLAbsInputFileLocation location, int filePartSize, int offset = 0)
         {
             TLFile result = null;
-            try
+            result = await SendRequestAsync<TLFile>(new TLRequestGetFile()
             {
-                result = await SendRequestAsync<TLFile>(new TLRequestGetFile()
-                {
-                    Location = location,
-                    Limit = filePartSize,
-                    Offset = offset
-                });
-            }
-            catch (FileMigrationException ex)
-            {
-                var exportedAuth = await SendRequestAsync<TLExportedAuthorization>(new TLRequestExportAuthorization() { DcId = ex.DC });
-
-                var authKey = _session.AuthKey;
-                var timeOffset = _session.TimeOffset;
-                var serverAddress = _session.ServerAddress;
-                var serverPort = _session.Port;
-
-                await ReconnectToDcAsync(ex.DC);
-                var auth = await SendRequestAsync<TLAuthorization>(new TLRequestImportAuthorization
-                {
-                    Bytes = exportedAuth.Bytes,
-                    Id = exportedAuth.Id
-                });
-                result = await GetFile(location, filePartSize, offset);
-
-                _session.AuthKey = authKey;
-                _session.TimeOffset = timeOffset;
-                _transport = new TcpTransport(serverAddress, serverPort);
-                _session.ServerAddress = serverAddress;
-                _session.Port = serverPort;
-                await ConnectAsync();
-
-            }
-
+                Location = location,
+                Limit = filePartSize,
+                Offset = offset
+            });
             return result;
         }
 
