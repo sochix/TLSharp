@@ -348,6 +348,14 @@ namespace TLSharp.Core
             return await SendRequestAsync<TLFound>(r);
         }
 
+        public TLUser SelfUser
+        {
+            get
+            {
+                return _session.TLUser;
+            }
+        }
+
         private void OnUserAuthenticated(TLUser TLUser)
         {
             _session.TLUser = TLUser;
