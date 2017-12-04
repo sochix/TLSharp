@@ -251,6 +251,20 @@ namespace TLSharp.Core
                    });
         }
 
+        public async Task<TLAbsUpdates> ForwardMessageAsync(TLAbsInputPeer target, int messageId)
+        {
+            if (!IsUserAuthorized())
+                throw new InvalidOperationException("Authorize user first!");
+
+            return await SendRequestAsync<TLAbsUpdates>(
+                new TLRequestForwardMessage()
+                {
+                    Peer = target,
+                    Id = messageId,
+                    RandomId = Helpers.GenerateRandomLong()
+                });
+        }
+
         public async Task<Boolean> SendTypingAsync(TLAbsInputPeer peer)
         {
             var req = new TLRequestSetTyping()
