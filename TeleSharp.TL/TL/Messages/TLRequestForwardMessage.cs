@@ -19,6 +19,7 @@ namespace TeleSharp.TL.Messages
         }
 
         public TLAbsInputPeer Peer { get; set; }
+        public TLAbsInputPeer PeerTo { get; set; }
         public int Id { get; set; }
         public long RandomId { get; set; }
         public TLAbsUpdates Response { get; set; }

@@ -109,10 +109,10 @@ namespace TLSharp.Core
             }
         }
 
-        private async Task RequestWithDcMigration(TLMethod request) 
+        private async Task RequestWithDcMigration(TLMethod request)
         {
             var completed = false;
-            while(!completed)
+            while (!completed)
             {
                 try
                 {
@@ -120,7 +120,7 @@ namespace TLSharp.Core
                     await _sender.Receive(request);
                     completed = true;
                 }
-                catch(DataCenterMigrationException e)
+                catch (DataCenterMigrationException e)
                 {
                     await ReconnectToDcAsync(e.DC);
                     // prepare the request for another try
@@ -171,7 +171,7 @@ namespace TLSharp.Core
 
             if (String.IsNullOrWhiteSpace(code))
                 throw new ArgumentNullException(nameof(code));
-            
+
             var request = new TLRequestSignIn() { PhoneNumber = phoneNumber, PhoneCodeHash = phoneCodeHash, PhoneCode = code };
 
             await RequestWithDcMigration(request);
@@ -180,7 +180,7 @@ namespace TLSharp.Core
 
             return ((TLUser)request.Response.User);
         }
-        
+
         public async Task<TLPassword> GetPasswordSetting()
         {
             var request = new TLRequestGetPassword();
@@ -211,7 +211,7 @@ namespace TLSharp.Core
         public async Task<TLUser> SignUpAsync(string phoneNumber, string phoneCodeHash, string code, string firstName, string lastName)
         {
             var request = new TLRequestSignUp() { PhoneNumber = phoneNumber, PhoneCode = code, PhoneCodeHash = phoneCodeHash, FirstName = firstName, LastName = lastName };
-            
+
             await RequestWithDcMigration(request);
 
             OnUserAuthenticated(((TLUser)request.Response.User));
@@ -251,7 +251,7 @@ namespace TLSharp.Core
                    });
         }
 
-        public async Task<TLAbsUpdates> ForwardMessageAsync(TLAbsInputPeer target, int messageId)
+        public async Task<TLAbsUpdates> ForwardMessageAsync(TLAbsInputPeer peerfrom, TLAbsInputPeer peerto, int messageId)
         {
             if (!IsUserAuthorized())
                 throw new InvalidOperationException("Authorize user first!");
@@ -259,8 +259,10 @@ namespace TLSharp.Core
             return await SendRequestAsync<TLAbsUpdates>(
                 new TLRequestForwardMessage()
                 {
-                    Peer = target,
+                    //MessageId = _session.GetNewMessageId(),
                     Id = messageId,
+                    Peer = peerfrom,
+                    PeerTo = peerto,
                     RandomId = Helpers.GenerateRandomLong()
                 });
         }
