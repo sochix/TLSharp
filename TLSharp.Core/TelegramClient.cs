@@ -251,7 +251,30 @@ namespace TLSharp.Core
                    });
         }
 
-        public async Task<TLAbsUpdates> ForwardMessageAsync(TLAbsInputPeer peerfrom, TLAbsInputPeer peerto, int messageId)
+        public async Task<TLAbsUpdates> ForwardMessageAsync(TLAbsInputPeer peer, TLAbsInputPeer peerto, int messageId)
+        {
+            if (!IsUserAuthorized())
+                throw new InvalidOperationException("Authorize user first!");
+
+            var rand = new Random();
+
+            var a = new TLVector<long>();
+            a.Add(rand.Next());
+            var b = new TLVector<int>();
+            b.Add(messageId);
+            var aa = new TLRequestForwardMessages();
+            aa.FromPeer = peer;
+            aa.ToPeer = peerto;
+            aa.RandomId = a;
+            aa.MessageId = messageId;
+            aa.Id = b;
+            aa.Silent = true;
+            aa.WithMyScore = true;
+
+            return await SendRequestAsync<TLUpdates>(aa);
+        }
+
+        public async Task<TLAbsUpdates> ForwardMessageAsync(TLAbsInputPeer peerfrom, int messageId)
         {
             if (!IsUserAuthorized())
                 throw new InvalidOperationException("Authorize user first!");
@@ -262,7 +285,6 @@ namespace TLSharp.Core
                     //MessageId = _session.GetNewMessageId(),
                     Id = messageId,
                     Peer = peerfrom,
-                    PeerTo = peerto,
                     RandomId = Helpers.GenerateRandomLong()
                 });
         }
