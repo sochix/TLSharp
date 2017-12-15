@@ -274,7 +274,22 @@ namespace TLSharp.Core
             return await SendRequestAsync<TLUpdates>(aa);
         }
 
-        public async Task<TLAbsUpdates> ForwardMessageAsync(TLAbsInputPeer peerfrom, int messageId)
+        public async Task<TLAbsUpdates> ForwardMessagesAsync(TLAbsInputPeer peerfrom, TLAbsInputPeer peerto, TLVector<int> messagesId)
+        {
+            if (!IsUserAuthorized())
+                throw new InvalidOperationException("Authorize user first!");
+
+            return await SendRequestAsync<TLAbsUpdates>(
+                new TLRequestForwardMessages()
+                {
+                    Id = messagesId,
+                    ToPeer = peerto,
+                    FromPeer = peerfrom,
+                    RandomId = new TLVector<long>() { Helpers.GenerateRandomLong() }
+                });
+        }
+
+        public async Task<TLAbsUpdates> ForwardMessageAsync(TLAbsInputPeer peer, int messageId)
         {
             if (!IsUserAuthorized())
                 throw new InvalidOperationException("Authorize user first!");
@@ -282,9 +297,8 @@ namespace TLSharp.Core
             return await SendRequestAsync<TLAbsUpdates>(
                 new TLRequestForwardMessage()
                 {
-                    //MessageId = _session.GetNewMessageId(),
                     Id = messageId,
-                    Peer = peerfrom,
+                    Peer = peer,
                     RandomId = Helpers.GenerateRandomLong()
                 });
         }
@@ -364,6 +378,22 @@ namespace TLSharp.Core
                 Peer = peer,
                 AddOffset = offset,
                 MaxId = max_id,
+                Limit = limit
+            };
+            return await SendRequestAsync<TLAbsMessages>(req);
+        }
+
+        public async Task<TLAbsMessages> GetHistoryAsync(TLAbsInputPeer peer, int offset, int max_id, int min_id, int limit)
+        {
+            if (!IsUserAuthorized())
+                throw new InvalidOperationException("Authorize user first!");
+
+            var req = new TLRequestGetHistory()
+            {
+                Peer = peer,
+                AddOffset = offset,
+                MaxId = max_id,
+                MinId = min_id,
                 Limit = limit
             };
             return await SendRequestAsync<TLAbsMessages>(req);
