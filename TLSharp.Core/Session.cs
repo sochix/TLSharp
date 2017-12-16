@@ -73,7 +73,7 @@ namespace TLSharp.Core
 
         private ISessionStore _store;
 
-        private Session(ISessionStore store)
+        public Session(ISessionStore store)
         {
             random = new Random();
             _store = store;
