@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(1632839530)]
@@ -18,20 +13,18 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLAbsFileLocation PhotoSmall { get; set; }
         public TLAbsFileLocation PhotoBig { get; set; }
 
+        public TLAbsFileLocation PhotoSmall { get; set; }
 
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             PhotoSmall = (TLAbsFileLocation)ObjectUtils.DeserializeObject(br);
             PhotoBig = (TLAbsFileLocation)ObjectUtils.DeserializeObject(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -39,7 +32,6 @@ namespace TeleSharp.TL
             bw.Write(Constructor);
             ObjectUtils.SerializeObject(PhotoSmall, bw);
             ObjectUtils.SerializeObject(PhotoBig, bw);
-
         }
     }
 }

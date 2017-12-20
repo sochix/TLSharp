@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(740433629)]
@@ -19,14 +14,15 @@ namespace TeleSharp.TL.Messages
         }
 
         public int G { get; set; }
+
         public byte[] P { get; set; }
-        public int Version { get; set; }
+
         public byte[] Random { get; set; }
 
+        public int Version { get; set; }
 
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -35,7 +31,6 @@ namespace TeleSharp.TL.Messages
             P = BytesUtil.Deserialize(br);
             Version = br.ReadInt32();
             Random = BytesUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -45,7 +40,6 @@ namespace TeleSharp.TL.Messages
             BytesUtil.Serialize(P, bw);
             bw.Write(Version);
             BytesUtil.Serialize(Random, bw);
-
         }
     }
 }

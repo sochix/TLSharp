@@ -1,34 +1,30 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
-    [TLObject(1661770481)]
+    [TLObject(792191537)]
     public class TLInputMediaUploadedPhoto : TLAbsInputMedia
     {
+        public string Caption { get; set; }
+
         public override int Constructor
         {
             get
             {
-                return 1661770481;
+                return 792191537;
             }
         }
 
-        public int Flags { get; set; }
         public TLAbsInputFile File { get; set; }
-        public string Caption { get; set; }
+
+        public int Flags { get; set; }
+
         public TLVector<TLAbsInputDocument> Stickers { get; set; }
 
+        public int? TtlSeconds { get; set; }
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Stickers != null ? (Flags | 1) : (Flags & ~1);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -41,19 +37,22 @@ namespace TeleSharp.TL
             else
                 Stickers = null;
 
-
+            if ((Flags & 2) != 0)
+                TtlSeconds = br.ReadInt32();
+            else
+                TtlSeconds = null;
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
             ObjectUtils.SerializeObject(File, bw);
             StringUtil.Serialize(Caption, bw);
             if ((Flags & 1) != 0)
                 ObjectUtils.SerializeObject(Stickers, bw);
-
+            if ((Flags & 2) != 0)
+                bw.Write(TtlSeconds.Value);
         }
     }
 }

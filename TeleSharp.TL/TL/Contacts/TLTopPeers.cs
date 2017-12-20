@@ -1,15 +1,14 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Contacts
 {
     [TLObject(1891070632)]
     public class TLTopPeers : TLAbsTopPeers
     {
+        public TLVector<TLTopPeerCategoryPeers> Categories { get; set; }
+
+        public TLVector<TLAbsChat> Chats { get; set; }
+
         public override int Constructor
         {
             get
@@ -18,14 +17,10 @@ namespace TeleSharp.TL.Contacts
             }
         }
 
-        public TLVector<TLTopPeerCategoryPeers> Categories { get; set; }
-        public TLVector<TLAbsChat> Chats { get; set; }
         public TLVector<TLAbsUser> Users { get; set; }
-
 
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -33,7 +28,6 @@ namespace TeleSharp.TL.Contacts
             Categories = (TLVector<TLTopPeerCategoryPeers>)ObjectUtils.DeserializeVector<TLTopPeerCategoryPeers>(br);
             Chats = (TLVector<TLAbsChat>)ObjectUtils.DeserializeVector<TLAbsChat>(br);
             Users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -42,7 +36,6 @@ namespace TeleSharp.TL.Contacts
             ObjectUtils.SerializeObject(Categories, bw);
             ObjectUtils.SerializeObject(Chats, bw);
             ObjectUtils.SerializeObject(Users, bw);
-
         }
     }
 }

@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Payments
 {
     [TLObject(730364339)]
@@ -18,20 +13,20 @@ namespace TeleSharp.TL.Payments
             }
         }
 
-        public int Flags { get; set; }
-        public int MsgId { get; set; }
-        public string RequestedInfoId { get; set; }
-        public string ShippingOptionId { get; set; }
         public TLAbsInputPaymentCredentials Credentials { get; set; }
+
+        public int Flags { get; set; }
+
+        public int MsgId { get; set; }
+
+        public string RequestedInfoId { get; set; }
+
         public Payments.TLAbsPaymentResult Response { get; set; }
 
+        public string ShippingOptionId { get; set; }
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = RequestedInfoId != null ? (Flags | 1) : (Flags & ~1);
-            Flags = ShippingOptionId != null ? (Flags | 2) : (Flags & ~2);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -49,13 +44,16 @@ namespace TeleSharp.TL.Payments
                 ShippingOptionId = null;
 
             Credentials = (TLAbsInputPaymentCredentials)ObjectUtils.DeserializeObject(br);
+        }
 
+        public override void DeserializeResponse(BinaryReader br)
+        {
+            Response = (Payments.TLAbsPaymentResult)ObjectUtils.DeserializeObject(br);
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
             bw.Write(MsgId);
             if ((Flags & 1) != 0)
@@ -63,12 +61,6 @@ namespace TeleSharp.TL.Payments
             if ((Flags & 2) != 0)
                 StringUtil.Serialize(ShippingOptionId, bw);
             ObjectUtils.SerializeObject(Credentials, bw);
-
-        }
-        public override void DeserializeResponse(BinaryReader br)
-        {
-            Response = (Payments.TLAbsPaymentResult)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

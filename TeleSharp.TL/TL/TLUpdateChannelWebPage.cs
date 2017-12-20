@@ -1,15 +1,12 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(1081547008)]
     public class TLUpdateChannelWebPage : TLAbsUpdate
     {
+        public int ChannelId { get; set; }
+
         public override int Constructor
         {
             get
@@ -18,15 +15,14 @@ namespace TeleSharp.TL
             }
         }
 
-        public int ChannelId { get; set; }
-        public TLAbsWebPage Webpage { get; set; }
         public int Pts { get; set; }
+
         public int PtsCount { get; set; }
 
+        public TLAbsWebPage Webpage { get; set; }
 
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -35,7 +31,6 @@ namespace TeleSharp.TL
             Webpage = (TLAbsWebPage)ObjectUtils.DeserializeObject(br);
             Pts = br.ReadInt32();
             PtsCount = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -45,7 +40,6 @@ namespace TeleSharp.TL
             ObjectUtils.SerializeObject(Webpage, bw);
             bw.Write(Pts);
             bw.Write(PtsCount);
-
         }
     }
 }

@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-523384512)]
@@ -18,15 +13,16 @@ namespace TeleSharp.TL
             }
         }
 
-        public long QueryId { get; set; }
-        public int UserId { get; set; }
         public byte[] Payload { get; set; }
+
+        public long QueryId { get; set; }
+
         public TLPostAddress ShippingAddress { get; set; }
 
+        public int UserId { get; set; }
 
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -35,7 +31,6 @@ namespace TeleSharp.TL
             UserId = br.ReadInt32();
             Payload = BytesUtil.Deserialize(br);
             ShippingAddress = (TLPostAddress)ObjectUtils.DeserializeObject(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -45,7 +40,6 @@ namespace TeleSharp.TL
             bw.Write(UserId);
             BytesUtil.Serialize(Payload, bw);
             ObjectUtils.SerializeObject(ShippingAddress, bw);
-
         }
     }
 }

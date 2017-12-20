@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(372165663)]
@@ -18,17 +13,20 @@ namespace TeleSharp.TL
             }
         }
 
-        public string Url { get; set; }
-        public string ThumbUrl { get; set; }
-        public string ContentUrl { get; set; }
         public string ContentType { get; set; }
-        public int W { get; set; }
+
+        public string ContentUrl { get; set; }
+
         public int H { get; set; }
 
+        public string ThumbUrl { get; set; }
+
+        public string Url { get; set; }
+
+        public int W { get; set; }
 
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -39,7 +37,6 @@ namespace TeleSharp.TL
             ContentType = StringUtil.Deserialize(br);
             W = br.ReadInt32();
             H = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -51,7 +48,6 @@ namespace TeleSharp.TL
             StringUtil.Serialize(ContentType, bw);
             bw.Write(W);
             bw.Write(H);
-
         }
     }
 }

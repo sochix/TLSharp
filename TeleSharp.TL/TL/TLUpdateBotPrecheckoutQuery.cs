@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(1563376297)]
@@ -18,22 +13,24 @@ namespace TeleSharp.TL
             }
         }
 
-        public int Flags { get; set; }
-        public long QueryId { get; set; }
-        public int UserId { get; set; }
-        public byte[] Payload { get; set; }
-        public TLPaymentRequestedInfo Info { get; set; }
-        public string ShippingOptionId { get; set; }
         public string Currency { get; set; }
+
+        public int Flags { get; set; }
+
+        public TLPaymentRequestedInfo Info { get; set; }
+
+        public byte[] Payload { get; set; }
+
+        public long QueryId { get; set; }
+
+        public string ShippingOptionId { get; set; }
+
         public long TotalAmount { get; set; }
 
+        public int UserId { get; set; }
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Info != null ? (Flags | 1) : (Flags & ~1);
-            Flags = ShippingOptionId != null ? (Flags | 2) : (Flags & ~2);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -54,13 +51,11 @@ namespace TeleSharp.TL
 
             Currency = StringUtil.Deserialize(br);
             TotalAmount = br.ReadInt64();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
             bw.Write(QueryId);
             bw.Write(UserId);
@@ -71,7 +66,6 @@ namespace TeleSharp.TL
                 StringUtil.Serialize(ShippingOptionId, bw);
             StringUtil.Serialize(Currency, bw);
             bw.Write(TotalAmount);
-
         }
     }
 }

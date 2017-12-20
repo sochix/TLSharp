@@ -1,15 +1,18 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(253890367)]
     public class TLUserFull : TLObject
     {
+        public string About { get; set; }
+
+        public bool Blocked { get; set; }
+
+        public TLBotInfo BotInfo { get; set; }
+
+        public int CommonChatsCount { get; set; }
+
         public override int Constructor
         {
             get
@@ -19,28 +22,21 @@ namespace TeleSharp.TL
         }
 
         public int Flags { get; set; }
-        public bool Blocked { get; set; }
-        public bool PhoneCallsAvailable { get; set; }
-        public bool PhoneCallsPrivate { get; set; }
-        public TLAbsUser User { get; set; }
-        public string About { get; set; }
-        public Contacts.TLLink Link { get; set; }
-        public TLAbsPhoto ProfilePhoto { get; set; }
-        public TLAbsPeerNotifySettings NotifySettings { get; set; }
-        public TLBotInfo BotInfo { get; set; }
-        public int CommonChatsCount { get; set; }
 
+        public Contacts.TLLink Link { get; set; }
+
+        public TLAbsPeerNotifySettings NotifySettings { get; set; }
+
+        public bool PhoneCallsAvailable { get; set; }
+
+        public bool PhoneCallsPrivate { get; set; }
+
+        public TLAbsPhoto ProfilePhoto { get; set; }
+
+        public TLAbsUser User { get; set; }
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Blocked ? (Flags | 1) : (Flags & ~1);
-            Flags = PhoneCallsAvailable ? (Flags | 16) : (Flags & ~16);
-            Flags = PhoneCallsPrivate ? (Flags | 32) : (Flags & ~32);
-            Flags = About != null ? (Flags | 2) : (Flags & ~2);
-            Flags = ProfilePhoto != null ? (Flags | 4) : (Flags & ~4);
-            Flags = BotInfo != null ? (Flags | 8) : (Flags & ~8);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -68,13 +64,11 @@ namespace TeleSharp.TL
                 BotInfo = null;
 
             CommonChatsCount = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
 
 
@@ -89,7 +83,6 @@ namespace TeleSharp.TL
             if ((Flags & 8) != 0)
                 ObjectUtils.SerializeObject(BotInfo, bw);
             bw.Write(CommonChatsCount);
-
         }
     }
 }

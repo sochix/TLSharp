@@ -1,15 +1,18 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1660057)]
     public class TLPhoneCall : TLAbsPhoneCall
     {
+        public long AccessHash { get; set; }
+
+        public int AdminId { get; set; }
+
+        public TLVector<TLPhoneConnection> AlternativeConnections { get; set; }
+
+        public TLPhoneConnection Connection { get; set; }
+
         public override int Constructor
         {
             get
@@ -18,22 +21,22 @@ namespace TeleSharp.TL
             }
         }
 
-        public long Id { get; set; }
-        public long AccessHash { get; set; }
         public int Date { get; set; }
-        public int AdminId { get; set; }
-        public int ParticipantId { get; set; }
-        public byte[] GAOrB { get; set; }
-        public long KeyFingerprint { get; set; }
-        public TLPhoneCallProtocol Protocol { get; set; }
-        public TLPhoneConnection Connection { get; set; }
-        public TLVector<TLPhoneConnection> AlternativeConnections { get; set; }
-        public int StartDate { get; set; }
 
+        public byte[] GAOrB { get; set; }
+
+        public long Id { get; set; }
+
+        public long KeyFingerprint { get; set; }
+
+        public int ParticipantId { get; set; }
+
+        public TLPhoneCallProtocol Protocol { get; set; }
+
+        public int StartDate { get; set; }
 
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -49,7 +52,6 @@ namespace TeleSharp.TL
             Connection = (TLPhoneConnection)ObjectUtils.DeserializeObject(br);
             AlternativeConnections = (TLVector<TLPhoneConnection>)ObjectUtils.DeserializeVector<TLPhoneConnection>(br);
             StartDate = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -66,7 +68,6 @@ namespace TeleSharp.TL
             ObjectUtils.SerializeObject(Connection, bw);
             ObjectUtils.SerializeObject(AlternativeConnections, bw);
             bw.Write(StartDate);
-
         }
     }
 }

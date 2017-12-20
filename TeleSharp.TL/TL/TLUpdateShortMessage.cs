@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1857044719)]
@@ -18,35 +13,38 @@ namespace TeleSharp.TL
             }
         }
 
-        public int Flags { get; set; }
-        public bool Out { get; set; }
-        public bool Mentioned { get; set; }
-        public bool MediaUnread { get; set; }
-        public bool Silent { get; set; }
-        public int Id { get; set; }
-        public int UserId { get; set; }
-        public string Message { get; set; }
-        public int Pts { get; set; }
-        public int PtsCount { get; set; }
         public int Date { get; set; }
-        public TLMessageFwdHeader FwdFrom { get; set; }
-        public int? ViaBotId { get; set; }
-        public int? ReplyToMsgId { get; set; }
+
         public TLVector<TLAbsMessageEntity> Entities { get; set; }
 
+        public int Flags { get; set; }
+
+        public TLMessageFwdHeader FwdFrom { get; set; }
+
+        public int Id { get; set; }
+
+        public bool MediaUnread { get; set; }
+
+        public bool Mentioned { get; set; }
+
+        public string Message { get; set; }
+
+        public bool Out { get; set; }
+
+        public int Pts { get; set; }
+
+        public int PtsCount { get; set; }
+
+        public int? ReplyToMsgId { get; set; }
+
+        public bool Silent { get; set; }
+
+        public int UserId { get; set; }
+
+        public int? ViaBotId { get; set; }
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Out ? (Flags | 2) : (Flags & ~2);
-            Flags = Mentioned ? (Flags | 16) : (Flags & ~16);
-            Flags = MediaUnread ? (Flags | 32) : (Flags & ~32);
-            Flags = Silent ? (Flags | 8192) : (Flags & ~8192);
-            Flags = FwdFrom != null ? (Flags | 4) : (Flags & ~4);
-            Flags = ViaBotId != null ? (Flags | 2048) : (Flags & ~2048);
-            Flags = ReplyToMsgId != null ? (Flags | 8) : (Flags & ~8);
-            Flags = Entities != null ? (Flags | 128) : (Flags & ~128);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -81,14 +79,11 @@ namespace TeleSharp.TL
                 Entities = (TLVector<TLAbsMessageEntity>)ObjectUtils.DeserializeVector<TLAbsMessageEntity>(br);
             else
                 Entities = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
 
 
@@ -108,7 +103,6 @@ namespace TeleSharp.TL
                 bw.Write(ReplyToMsgId.Value);
             if ((Flags & 128) != 0)
                 ObjectUtils.SerializeObject(Entities, bw);
-
         }
     }
 }

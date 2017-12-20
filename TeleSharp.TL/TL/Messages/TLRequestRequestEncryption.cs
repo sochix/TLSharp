@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(-162681021)]
@@ -18,15 +13,16 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public TLAbsInputUser UserId { get; set; }
-        public int RandomId { get; set; }
         public byte[] GA { get; set; }
+
+        public int RandomId { get; set; }
+
         public TLAbsEncryptedChat Response { get; set; }
 
+        public TLAbsInputUser UserId { get; set; }
 
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -34,7 +30,11 @@ namespace TeleSharp.TL.Messages
             UserId = (TLAbsInputUser)ObjectUtils.DeserializeObject(br);
             RandomId = br.ReadInt32();
             GA = BytesUtil.Deserialize(br);
+        }
 
+        public override void DeserializeResponse(BinaryReader br)
+        {
+            Response = (TLAbsEncryptedChat)ObjectUtils.DeserializeObject(br);
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -43,12 +43,6 @@ namespace TeleSharp.TL.Messages
             ObjectUtils.SerializeObject(UserId, bw);
             bw.Write(RandomId);
             BytesUtil.Serialize(GA, bw);
-
-        }
-        public override void DeserializeResponse(BinaryReader br)
-        {
-            Response = (TLAbsEncryptedChat)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

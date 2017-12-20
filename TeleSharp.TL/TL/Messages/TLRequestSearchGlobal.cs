@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(-1640190800)]
@@ -18,17 +13,20 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public string Q { get; set; }
-        public int OffsetDate { get; set; }
-        public TLAbsInputPeer OffsetPeer { get; set; }
-        public int OffsetId { get; set; }
         public int Limit { get; set; }
-        public Messages.TLAbsMessages Response { get; set; }
 
+        public int OffsetDate { get; set; }
+
+        public int OffsetId { get; set; }
+
+        public TLAbsInputPeer OffsetPeer { get; set; }
+
+        public string Q { get; set; }
+
+        public Messages.TLAbsMessages Response { get; set; }
 
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -38,7 +36,11 @@ namespace TeleSharp.TL.Messages
             OffsetPeer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
             OffsetId = br.ReadInt32();
             Limit = br.ReadInt32();
+        }
 
+        public override void DeserializeResponse(BinaryReader br)
+        {
+            Response = (Messages.TLAbsMessages)ObjectUtils.DeserializeObject(br);
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -49,12 +51,6 @@ namespace TeleSharp.TL.Messages
             ObjectUtils.SerializeObject(OffsetPeer, bw);
             bw.Write(OffsetId);
             bw.Write(Limit);
-
-        }
-        public override void DeserializeResponse(BinaryReader br)
-        {
-            Response = (Messages.TLAbsMessages)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

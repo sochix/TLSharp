@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1791935732)]
@@ -18,15 +13,16 @@ namespace TeleSharp.TL
             }
         }
 
-        public int UserId { get; set; }
         public int Date { get; set; }
+
         public TLAbsUserProfilePhoto Photo { get; set; }
+
         public bool Previous { get; set; }
 
+        public int UserId { get; set; }
 
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -35,7 +31,6 @@ namespace TeleSharp.TL
             Date = br.ReadInt32();
             Photo = (TLAbsUserProfilePhoto)ObjectUtils.DeserializeObject(br);
             Previous = BoolUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -45,7 +40,6 @@ namespace TeleSharp.TL
             bw.Write(Date);
             ObjectUtils.SerializeObject(Photo, bw);
             BoolUtil.Serialize(Previous, bw);
-
         }
     }
 }

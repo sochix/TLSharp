@@ -1,15 +1,12 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1431327288)]
     public class TLInputBotInlineMessageMediaVenue : TLAbsInputBotInlineMessage
     {
+        public string Address { get; set; }
+
         public override int Constructor
         {
             get
@@ -19,19 +16,19 @@ namespace TeleSharp.TL
         }
 
         public int Flags { get; set; }
+
         public TLAbsInputGeoPoint GeoPoint { get; set; }
-        public string Title { get; set; }
-        public string Address { get; set; }
+
         public string Provider { get; set; }
-        public string VenueId { get; set; }
+
         public TLAbsReplyMarkup ReplyMarkup { get; set; }
 
+        public string Title { get; set; }
+
+        public string VenueId { get; set; }
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = ReplyMarkup != null ? (Flags | 4) : (Flags & ~4);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -46,14 +43,11 @@ namespace TeleSharp.TL
                 ReplyMarkup = (TLAbsReplyMarkup)ObjectUtils.DeserializeObject(br);
             else
                 ReplyMarkup = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
             ObjectUtils.SerializeObject(GeoPoint, bw);
             StringUtil.Serialize(Title, bw);
@@ -62,7 +56,6 @@ namespace TeleSharp.TL
             StringUtil.Serialize(VenueId, bw);
             if ((Flags & 4) != 0)
                 ObjectUtils.SerializeObject(ReplyMarkup, bw);
-
         }
     }
 }

@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Account
 {
     [TLObject(2081952796)]
@@ -19,15 +14,17 @@ namespace TeleSharp.TL.Account
         }
 
         public byte[] CurrentSalt { get; set; }
-        public byte[] NewSalt { get; set; }
-        public string Hint { get; set; }
-        public bool HasRecovery { get; set; }
+
         public string EmailUnconfirmedPattern { get; set; }
 
+        public bool HasRecovery { get; set; }
+
+        public string Hint { get; set; }
+
+        public byte[] NewSalt { get; set; }
 
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -37,7 +34,6 @@ namespace TeleSharp.TL.Account
             Hint = StringUtil.Deserialize(br);
             HasRecovery = BoolUtil.Deserialize(br);
             EmailUnconfirmedPattern = StringUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -48,7 +44,6 @@ namespace TeleSharp.TL.Account
             StringUtil.Serialize(Hint, bw);
             BoolUtil.Serialize(HasRecovery, bw);
             StringUtil.Serialize(EmailUnconfirmedPattern, bw);
-
         }
     }
 }

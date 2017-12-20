@@ -1,55 +1,62 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
-    [TLObject(-1009430225)]
+    [TLObject(401891279)]
     public class TLChannelFull : TLAbsChatFull
     {
+        public string About { get; set; }
+
+        public int? AdminsCount { get; set; }
+
+        public int? BannedCount { get; set; }
+
+        public TLVector<TLBotInfo> BotInfo { get; set; }
+
+        public bool CanSetStickers { get; set; }
+
+        public bool CanSetUsername { get; set; }
+
+        public bool CanViewParticipants { get; set; }
+
+        public TLAbsPhoto ChatPhoto { get; set; }
+
         public override int Constructor
         {
             get
             {
-                return -1009430225;
+                return 401891279;
             }
         }
 
-        public int Flags { get; set; }
-        public bool CanViewParticipants { get; set; }
-        public bool CanSetUsername { get; set; }
-        public int Id { get; set; }
-        public string About { get; set; }
-        public int? ParticipantsCount { get; set; }
-        public int? AdminsCount { get; set; }
-        public int? KickedCount { get; set; }
-        public int ReadInboxMaxId { get; set; }
-        public int ReadOutboxMaxId { get; set; }
-        public int UnreadCount { get; set; }
-        public TLAbsPhoto ChatPhoto { get; set; }
-        public TLAbsPeerNotifySettings NotifySettings { get; set; }
         public TLAbsExportedChatInvite ExportedInvite { get; set; }
-        public TLVector<TLBotInfo> BotInfo { get; set; }
+
+        public int Flags { get; set; }
+
+        public int Id { get; set; }
+
+        public int? KickedCount { get; set; }
+
         public int? MigratedFromChatId { get; set; }
+
         public int? MigratedFromMaxId { get; set; }
+
+        public TLAbsPeerNotifySettings NotifySettings { get; set; }
+
+        public int? ParticipantsCount { get; set; }
+
         public int? PinnedMsgId { get; set; }
 
+        public int ReadInboxMaxId { get; set; }
+
+        public int ReadOutboxMaxId { get; set; }
+
+        public TLStickerSet Stickerset { get; set; }
+
+        public int UnreadCount { get; set; }
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = CanViewParticipants ? (Flags | 8) : (Flags & ~8);
-            Flags = CanSetUsername ? (Flags | 64) : (Flags & ~64);
-            Flags = ParticipantsCount != null ? (Flags | 1) : (Flags & ~1);
-            Flags = AdminsCount != null ? (Flags | 2) : (Flags & ~2);
-            Flags = KickedCount != null ? (Flags | 4) : (Flags & ~4);
-            Flags = MigratedFromChatId != null ? (Flags | 16) : (Flags & ~16);
-            Flags = MigratedFromMaxId != null ? (Flags | 16) : (Flags & ~16);
-            Flags = PinnedMsgId != null ? (Flags | 32) : (Flags & ~32);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -57,6 +64,7 @@ namespace TeleSharp.TL
             Flags = br.ReadInt32();
             CanViewParticipants = (Flags & 8) != 0;
             CanSetUsername = (Flags & 64) != 0;
+            CanSetStickers = (Flags & 128) != 0;
             Id = br.ReadInt32();
             About = StringUtil.Deserialize(br);
             if ((Flags & 1) != 0)
@@ -73,6 +81,11 @@ namespace TeleSharp.TL
                 KickedCount = br.ReadInt32();
             else
                 KickedCount = null;
+
+            if ((Flags & 4) != 0)
+                BannedCount = br.ReadInt32();
+            else
+                BannedCount = null;
 
             ReadInboxMaxId = br.ReadInt32();
             ReadOutboxMaxId = br.ReadInt32();
@@ -96,14 +109,17 @@ namespace TeleSharp.TL
             else
                 PinnedMsgId = null;
 
-
+            if ((Flags & 256) != 0)
+                Stickerset = (TLStickerSet)ObjectUtils.DeserializeObject(br);
+            else
+                Stickerset = null;
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
+
 
 
             bw.Write(Id);
@@ -114,6 +130,8 @@ namespace TeleSharp.TL
                 bw.Write(AdminsCount.Value);
             if ((Flags & 4) != 0)
                 bw.Write(KickedCount.Value);
+            if ((Flags & 4) != 0)
+                bw.Write(BannedCount.Value);
             bw.Write(ReadInboxMaxId);
             bw.Write(ReadOutboxMaxId);
             bw.Write(UnreadCount);
@@ -127,7 +145,8 @@ namespace TeleSharp.TL
                 bw.Write(MigratedFromMaxId.Value);
             if ((Flags & 32) != 0)
                 bw.Write(PinnedMsgId.Value);
-
+            if ((Flags & 256) != 0)
+                ObjectUtils.SerializeObject(Stickerset, bw);
         }
     }
 }

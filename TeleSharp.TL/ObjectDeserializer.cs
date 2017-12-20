@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-using TeleSharp.TL;
 namespace TeleSharp.TL
 {
     public class ObjectUtils
@@ -36,16 +31,18 @@ namespace TeleSharp.TL
             }
             else throw new NotImplementedException("Weird Type : " + t.Namespace + " | " + t.Name);
         }
-        public static void SerializeObject(object obj, BinaryWriter writer)
-        {
-            ((TLObject)obj).SerializeBody(writer);
-        }
+
         public static TLVector<T> DeserializeVector<T>(BinaryReader reader)
         {
             if (reader.ReadInt32() != 481674261) throw new InvalidDataException("Bad Constructor");
             TLVector<T> t = new TLVector<T>();
             t.DeserializeBody(reader);
             return t;
+        }
+
+        public static void SerializeObject(object obj, BinaryWriter writer)
+        {
+            ((TLObject)obj).SerializeBody(writer);
         }
     }
 }
