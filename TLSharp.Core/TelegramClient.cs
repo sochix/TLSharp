@@ -232,7 +232,7 @@ namespace TLSharp.Core
             if (!IsUserAuthorized())
                 throw new InvalidOperationException("Authorize user first!");
 
-            var req = new TLRequestGetContacts() { Hash = "" };
+            var req = new TLRequestGetContacts() { Hash = 0 };
 
             return await SendRequestAsync<TLContacts>(req);
         }
