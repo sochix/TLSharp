@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Auth
 {
     [TLObject(453408308)]
@@ -18,17 +13,20 @@ namespace TeleSharp.TL.Auth
             }
         }
 
-        public string PhoneNumber { get; set; }
-        public string PhoneCodeHash { get; set; }
-        public string PhoneCode { get; set; }
         public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public Auth.TLAuthorization Response { get; set; }
 
+        public string LastName { get; set; }
+
+        public string PhoneCode { get; set; }
+
+        public string PhoneCodeHash { get; set; }
+
+        public string PhoneNumber { get; set; }
+
+        public Auth.TLAuthorization Response { get; set; }
 
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -38,7 +36,11 @@ namespace TeleSharp.TL.Auth
             PhoneCode = StringUtil.Deserialize(br);
             FirstName = StringUtil.Deserialize(br);
             LastName = StringUtil.Deserialize(br);
+        }
 
+        public override void DeserializeResponse(BinaryReader br)
+        {
+            Response = (Auth.TLAuthorization)ObjectUtils.DeserializeObject(br);
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -49,12 +51,6 @@ namespace TeleSharp.TL.Auth
             StringUtil.Serialize(PhoneCode, bw);
             StringUtil.Serialize(FirstName, bw);
             StringUtil.Serialize(LastName, bw);
-
-        }
-        public override void DeserializeResponse(BinaryReader br)
-        {
-            Response = (Auth.TLAuthorization)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

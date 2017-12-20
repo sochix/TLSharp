@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Auth
 {
     [TLObject(1577067778)]
@@ -19,20 +14,19 @@ namespace TeleSharp.TL.Auth
         }
 
         public int Flags { get; set; }
-        public bool PhoneRegistered { get; set; }
-        public Auth.TLAbsSentCodeType Type { get; set; }
-        public string PhoneCodeHash { get; set; }
+
         public Auth.TLAbsCodeType NextType { get; set; }
+
+        public string PhoneCodeHash { get; set; }
+
+        public bool PhoneRegistered { get; set; }
+
         public int? Timeout { get; set; }
 
+        public Auth.TLAbsSentCodeType Type { get; set; }
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = PhoneRegistered ? (Flags | 1) : (Flags & ~1);
-            Flags = NextType != null ? (Flags | 2) : (Flags & ~2);
-            Flags = Timeout != null ? (Flags | 4) : (Flags & ~4);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -50,14 +44,11 @@ namespace TeleSharp.TL.Auth
                 Timeout = br.ReadInt32();
             else
                 Timeout = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
 
             ObjectUtils.SerializeObject(Type, bw);
@@ -66,7 +57,6 @@ namespace TeleSharp.TL.Auth
                 ObjectUtils.SerializeObject(NextType, bw);
             if ((Flags & 4) != 0)
                 bw.Write(Timeout.Value);
-
         }
     }
 }

@@ -1,42 +1,44 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Updates
 {
-    [TLObject(1091431943)]
+    [TLObject(1788705589)]
     public class TLChannelDifferenceTooLong : TLAbsChannelDifference
     {
+        public TLVector<TLAbsChat> Chats { get; set; }
+
         public override int Constructor
         {
             get
             {
-                return 1091431943;
+                return 1788705589;
             }
         }
 
-        public int Flags { get; set; }
         public bool Final { get; set; }
-        public int Pts { get; set; }
-        public int? Timeout { get; set; }
-        public int TopMessage { get; set; }
-        public int ReadInboxMaxId { get; set; }
-        public int ReadOutboxMaxId { get; set; }
-        public int UnreadCount { get; set; }
-        public TLVector<TLAbsMessage> Messages { get; set; }
-        public TLVector<TLAbsChat> Chats { get; set; }
-        public TLVector<TLAbsUser> Users { get; set; }
 
+        public int Flags { get; set; }
+
+        public TLVector<TLAbsMessage> Messages { get; set; }
+
+        public int Pts { get; set; }
+
+        public int ReadInboxMaxId { get; set; }
+
+        public int ReadOutboxMaxId { get; set; }
+
+        public int? Timeout { get; set; }
+
+        public int TopMessage { get; set; }
+
+        public int UnreadCount { get; set; }
+
+        public int UnreadMentionsCount { get; set; }
+
+        public TLVector<TLAbsUser> Users { get; set; }
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Final ? (Flags | 1) : (Flags & ~1);
-            Flags = Timeout != null ? (Flags | 2) : (Flags & ~2);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -53,16 +55,15 @@ namespace TeleSharp.TL.Updates
             ReadInboxMaxId = br.ReadInt32();
             ReadOutboxMaxId = br.ReadInt32();
             UnreadCount = br.ReadInt32();
+            UnreadMentionsCount = br.ReadInt32();
             Messages = (TLVector<TLAbsMessage>)ObjectUtils.DeserializeVector<TLAbsMessage>(br);
             Chats = (TLVector<TLAbsChat>)ObjectUtils.DeserializeVector<TLAbsChat>(br);
             Users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
 
             bw.Write(Pts);
@@ -72,10 +73,10 @@ namespace TeleSharp.TL.Updates
             bw.Write(ReadInboxMaxId);
             bw.Write(ReadOutboxMaxId);
             bw.Write(UnreadCount);
+            bw.Write(UnreadMentionsCount);
             ObjectUtils.SerializeObject(Messages, bw);
             ObjectUtils.SerializeObject(Chats, bw);
             ObjectUtils.SerializeObject(Users, bw);
-
         }
     }
 }

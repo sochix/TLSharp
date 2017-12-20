@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(163765653)]
@@ -18,19 +13,18 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public int Flags { get; set; }
-        public bool Success { get; set; }
-        public long QueryId { get; set; }
         public string Error { get; set; }
+
+        public int Flags { get; set; }
+
+        public long QueryId { get; set; }
+
         public bool Response { get; set; }
 
+        public bool Success { get; set; }
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Success ? (Flags | 2) : (Flags & ~2);
-            Flags = Error != null ? (Flags | 1) : (Flags & ~1);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -42,25 +36,21 @@ namespace TeleSharp.TL.Messages
                 Error = StringUtil.Deserialize(br);
             else
                 Error = null;
+        }
 
-
+        public override void DeserializeResponse(BinaryReader br)
+        {
+            Response = BoolUtil.Deserialize(br);
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
 
             bw.Write(QueryId);
             if ((Flags & 1) != 0)
                 StringUtil.Serialize(Error, bw);
-
-        }
-        public override void DeserializeResponse(BinaryReader br)
-        {
-            Response = BoolUtil.Deserialize(br);
-
         }
     }
 }

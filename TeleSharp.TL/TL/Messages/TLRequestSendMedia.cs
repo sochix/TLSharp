@@ -1,15 +1,14 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(-923703407)]
     public class TLRequestSendMedia : TLMethod
     {
+        public bool Background { get; set; }
+
+        public bool ClearDraft { get; set; }
+
         public override int Constructor
         {
             get
@@ -19,26 +18,23 @@ namespace TeleSharp.TL.Messages
         }
 
         public int Flags { get; set; }
-        public bool Silent { get; set; }
-        public bool Background { get; set; }
-        public bool ClearDraft { get; set; }
-        public TLAbsInputPeer Peer { get; set; }
-        public int? ReplyToMsgId { get; set; }
+
         public TLAbsInputMedia Media { get; set; }
+
+        public TLAbsInputPeer Peer { get; set; }
+
         public long RandomId { get; set; }
+
         public TLAbsReplyMarkup ReplyMarkup { get; set; }
+
+        public int? ReplyToMsgId { get; set; }
+
         public TLAbsUpdates Response { get; set; }
 
+        public bool Silent { get; set; }
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Silent ? (Flags | 32) : (Flags & ~32);
-            Flags = Background ? (Flags | 64) : (Flags & ~64);
-            Flags = ClearDraft ? (Flags | 128) : (Flags & ~128);
-            Flags = ReplyToMsgId != null ? (Flags | 1) : (Flags & ~1);
-            Flags = ReplyMarkup != null ? (Flags | 4) : (Flags & ~4);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -59,14 +55,16 @@ namespace TeleSharp.TL.Messages
                 ReplyMarkup = (TLAbsReplyMarkup)ObjectUtils.DeserializeObject(br);
             else
                 ReplyMarkup = null;
+        }
 
-
+        public override void DeserializeResponse(BinaryReader br)
+        {
+            Response = (TLAbsUpdates)ObjectUtils.DeserializeObject(br);
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
 
 
@@ -78,12 +76,6 @@ namespace TeleSharp.TL.Messages
             bw.Write(RandomId);
             if ((Flags & 4) != 0)
                 ObjectUtils.SerializeObject(ReplyMarkup, bw);
-
-        }
-        public override void DeserializeResponse(BinaryReader br)
-        {
-            Response = (TLAbsUpdates)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

@@ -1,62 +1,60 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
-    [TLObject(-1063525281)]
+    [TLObject(-1864508399)]
     public class TLMessage : TLAbsMessage
     {
         public override int Constructor
         {
             get
             {
-                return -1063525281;
+                return -1864508399;
             }
         }
 
-        public int Flags { get; set; }
-        public bool Out { get; set; }
-        public bool Mentioned { get; set; }
-        public bool MediaUnread { get; set; }
-        public bool Silent { get; set; }
-        public bool Post { get; set; }
-        public int Id { get; set; }
-        public int? FromId { get; set; }
-        public TLAbsPeer ToId { get; set; }
-        public TLMessageFwdHeader FwdFrom { get; set; }
-        public int? ViaBotId { get; set; }
-        public int? ReplyToMsgId { get; set; }
         public int Date { get; set; }
-        public string Message { get; set; }
-        public TLAbsMessageMedia Media { get; set; }
-        public TLAbsReplyMarkup ReplyMarkup { get; set; }
-        public TLVector<TLAbsMessageEntity> Entities { get; set; }
-        public int? Views { get; set; }
+
         public int? EditDate { get; set; }
 
+        public TLVector<TLAbsMessageEntity> Entities { get; set; }
+
+        public int Flags { get; set; }
+
+        public int? FromId { get; set; }
+
+        public TLMessageFwdHeader FwdFrom { get; set; }
+
+        public int Id { get; set; }
+
+        public TLAbsMessageMedia Media { get; set; }
+
+        public bool MediaUnread { get; set; }
+
+        public bool Mentioned { get; set; }
+
+        public string Message { get; set; }
+
+        public bool Out { get; set; }
+
+        public bool Post { get; set; }
+
+        public string PostAuthor { get; set; }
+
+        public TLAbsReplyMarkup ReplyMarkup { get; set; }
+
+        public int? ReplyToMsgId { get; set; }
+
+        public bool Silent { get; set; }
+
+        public TLAbsPeer ToId { get; set; }
+
+        public int? ViaBotId { get; set; }
+
+        public int? Views { get; set; }
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Out ? (Flags | 2) : (Flags & ~2);
-            Flags = Mentioned ? (Flags | 16) : (Flags & ~16);
-            Flags = MediaUnread ? (Flags | 32) : (Flags & ~32);
-            Flags = Silent ? (Flags | 8192) : (Flags & ~8192);
-            Flags = Post ? (Flags | 16384) : (Flags & ~16384);
-            Flags = FromId != null ? (Flags | 256) : (Flags & ~256);
-            Flags = FwdFrom != null ? (Flags | 4) : (Flags & ~4);
-            Flags = ViaBotId != null ? (Flags | 2048) : (Flags & ~2048);
-            Flags = ReplyToMsgId != null ? (Flags | 8) : (Flags & ~8);
-            Flags = Media != null ? (Flags | 512) : (Flags & ~512);
-            Flags = ReplyMarkup != null ? (Flags | 64) : (Flags & ~64);
-            Flags = Entities != null ? (Flags | 128) : (Flags & ~128);
-            Flags = Views != null ? (Flags | 1024) : (Flags & ~1024);
-            Flags = EditDate != null ? (Flags | 32768) : (Flags & ~32768);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -116,13 +114,15 @@ namespace TeleSharp.TL
             else
                 EditDate = null;
 
-
+            if ((Flags & 65536) != 0)
+                PostAuthor = StringUtil.Deserialize(br);
+            else
+                PostAuthor = null;
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
 
 
@@ -151,7 +151,8 @@ namespace TeleSharp.TL
                 bw.Write(Views.Value);
             if ((Flags & 32768) != 0)
                 bw.Write(EditDate.Value);
-
+            if ((Flags & 65536) != 0)
+                StringUtil.Serialize(PostAuthor, bw);
         }
     }
 }

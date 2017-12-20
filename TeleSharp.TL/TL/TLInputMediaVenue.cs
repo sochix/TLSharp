@@ -1,15 +1,12 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(673687578)]
     public class TLInputMediaVenue : TLAbsInputMedia
     {
+        public string Address { get; set; }
+
         public override int Constructor
         {
             get
@@ -19,15 +16,15 @@ namespace TeleSharp.TL
         }
 
         public TLAbsInputGeoPoint GeoPoint { get; set; }
-        public string Title { get; set; }
-        public string Address { get; set; }
-        public string Provider { get; set; }
-        public string VenueId { get; set; }
 
+        public string Provider { get; set; }
+
+        public string Title { get; set; }
+
+        public string VenueId { get; set; }
 
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -37,7 +34,6 @@ namespace TeleSharp.TL
             Address = StringUtil.Deserialize(br);
             Provider = StringUtil.Deserialize(br);
             VenueId = StringUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -48,7 +44,6 @@ namespace TeleSharp.TL
             StringUtil.Serialize(Address, bw);
             StringUtil.Serialize(Provider, bw);
             StringUtil.Serialize(VenueId, bw);
-
         }
     }
 }

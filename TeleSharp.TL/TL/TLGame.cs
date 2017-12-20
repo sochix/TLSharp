@@ -1,15 +1,12 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1107729093)]
     public class TLGame : TLObject
     {
+        public long AccessHash { get; set; }
+
         public override int Constructor
         {
             get
@@ -18,21 +15,22 @@ namespace TeleSharp.TL
             }
         }
 
-        public int Flags { get; set; }
-        public long Id { get; set; }
-        public long AccessHash { get; set; }
-        public string ShortName { get; set; }
-        public string Title { get; set; }
         public string Description { get; set; }
-        public TLAbsPhoto Photo { get; set; }
+
         public TLAbsDocument Document { get; set; }
 
+        public int Flags { get; set; }
+
+        public long Id { get; set; }
+
+        public TLAbsPhoto Photo { get; set; }
+
+        public string ShortName { get; set; }
+
+        public string Title { get; set; }
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Document != null ? (Flags | 1) : (Flags & ~1);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -48,14 +46,11 @@ namespace TeleSharp.TL
                 Document = (TLAbsDocument)ObjectUtils.DeserializeObject(br);
             else
                 Document = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
             bw.Write(Id);
             bw.Write(AccessHash);
@@ -65,7 +60,6 @@ namespace TeleSharp.TL
             ObjectUtils.SerializeObject(Photo, bw);
             if ((Flags & 1) != 0)
                 ObjectUtils.SerializeObject(Document, bw);
-
         }
     }
 }

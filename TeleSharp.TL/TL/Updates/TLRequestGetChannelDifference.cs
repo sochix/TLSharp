@@ -1,15 +1,12 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Updates
 {
     [TLObject(51854712)]
     public class TLRequestGetChannelDifference : TLMethod
     {
+        public TLAbsInputChannel Channel { get; set; }
+
         public override int Constructor
         {
             get
@@ -18,20 +15,20 @@ namespace TeleSharp.TL.Updates
             }
         }
 
-        public int Flags { get; set; }
-        public bool Force { get; set; }
-        public TLAbsInputChannel Channel { get; set; }
         public TLAbsChannelMessagesFilter Filter { get; set; }
-        public int Pts { get; set; }
-        public int Limit { get; set; }
-        public Updates.TLAbsChannelDifference Response { get; set; }
 
+        public int Flags { get; set; }
+
+        public bool Force { get; set; }
+
+        public int Limit { get; set; }
+
+        public int Pts { get; set; }
+
+        public Updates.TLAbsChannelDifference Response { get; set; }
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Force ? (Flags | 1) : (Flags & ~1);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -42,25 +39,22 @@ namespace TeleSharp.TL.Updates
             Filter = (TLAbsChannelMessagesFilter)ObjectUtils.DeserializeObject(br);
             Pts = br.ReadInt32();
             Limit = br.ReadInt32();
+        }
 
+        public override void DeserializeResponse(BinaryReader br)
+        {
+            Response = (Updates.TLAbsChannelDifference)ObjectUtils.DeserializeObject(br);
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
 
             ObjectUtils.SerializeObject(Channel, bw);
             ObjectUtils.SerializeObject(Filter, bw);
             bw.Write(Pts);
             bw.Write(Limit);
-
-        }
-        public override void DeserializeResponse(BinaryReader br)
-        {
-            Response = (Updates.TLAbsChannelDifference)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

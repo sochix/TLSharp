@@ -1,15 +1,14 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(462375633)]
     public class TLPhoneCallWaiting : TLAbsPhoneCall
     {
+        public long AccessHash { get; set; }
+
+        public int AdminId { get; set; }
+
         public override int Constructor
         {
             get
@@ -18,21 +17,20 @@ namespace TeleSharp.TL
             }
         }
 
-        public int Flags { get; set; }
-        public long Id { get; set; }
-        public long AccessHash { get; set; }
         public int Date { get; set; }
-        public int AdminId { get; set; }
-        public int ParticipantId { get; set; }
-        public TLPhoneCallProtocol Protocol { get; set; }
-        public int? ReceiveDate { get; set; }
 
+        public int Flags { get; set; }
+
+        public long Id { get; set; }
+
+        public int ParticipantId { get; set; }
+
+        public TLPhoneCallProtocol Protocol { get; set; }
+
+        public int? ReceiveDate { get; set; }
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = ReceiveDate != null ? (Flags | 1) : (Flags & ~1);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -48,14 +46,11 @@ namespace TeleSharp.TL
                 ReceiveDate = br.ReadInt32();
             else
                 ReceiveDate = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
             bw.Write(Id);
             bw.Write(AccessHash);
@@ -65,7 +60,6 @@ namespace TeleSharp.TL
             ObjectUtils.SerializeObject(Protocol, bw);
             if ((Flags & 1) != 0)
                 bw.Write(ReceiveDate.Value);
-
         }
     }
 }

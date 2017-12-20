@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(1690108678)]
@@ -19,14 +14,15 @@ namespace TeleSharp.TL
         }
 
         public long Id { get; set; }
-        public int Parts { get; set; }
-        public string Md5Checksum { get; set; }
+
         public int KeyFingerprint { get; set; }
 
+        public string Md5Checksum { get; set; }
+
+        public int Parts { get; set; }
 
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -35,7 +31,6 @@ namespace TeleSharp.TL
             Parts = br.ReadInt32();
             Md5Checksum = StringUtil.Deserialize(br);
             KeyFingerprint = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -45,7 +40,6 @@ namespace TeleSharp.TL
             bw.Write(Parts);
             StringUtil.Serialize(Md5Checksum, bw);
             bw.Write(KeyFingerprint);
-
         }
     }
 }

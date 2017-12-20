@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1655957568)]
@@ -19,15 +14,17 @@ namespace TeleSharp.TL
         }
 
         public long Id { get; set; }
+
         public string Ip { get; set; }
+
         public string Ipv6 { get; set; }
-        public int Port { get; set; }
+
         public byte[] PeerTag { get; set; }
 
+        public int Port { get; set; }
 
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -37,7 +34,6 @@ namespace TeleSharp.TL
             Ipv6 = StringUtil.Deserialize(br);
             Port = br.ReadInt32();
             PeerTag = BytesUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -48,7 +44,6 @@ namespace TeleSharp.TL
             StringUtil.Serialize(Ipv6, bw);
             bw.Write(Port);
             BytesUtil.Serialize(PeerTag, bw);
-
         }
     }
 }

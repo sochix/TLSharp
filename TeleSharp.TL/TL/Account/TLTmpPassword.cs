@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Account
 {
     [TLObject(-614138572)]
@@ -19,19 +14,17 @@ namespace TeleSharp.TL.Account
         }
 
         public byte[] TmpPassword { get; set; }
-        public int ValidUntil { get; set; }
 
+        public int ValidUntil { get; set; }
 
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             TmpPassword = BytesUtil.Deserialize(br);
             ValidUntil = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -39,7 +32,6 @@ namespace TeleSharp.TL.Account
             bw.Write(Constructor);
             BytesUtil.Serialize(TmpPassword, bw);
             bw.Write(ValidUntil);
-
         }
     }
 }

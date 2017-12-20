@@ -1,15 +1,12 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-75283823)]
     public class TLTopPeerCategoryPeers : TLObject
     {
+        public TLAbsTopPeerCategory Category { get; set; }
+
         public override int Constructor
         {
             get
@@ -18,14 +15,12 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLAbsTopPeerCategory Category { get; set; }
         public int Count { get; set; }
-        public TLVector<TLTopPeer> Peers { get; set; }
 
+        public TLVector<TLTopPeer> Peers { get; set; }
 
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -33,7 +28,6 @@ namespace TeleSharp.TL
             Category = (TLAbsTopPeerCategory)ObjectUtils.DeserializeObject(br);
             Count = br.ReadInt32();
             Peers = (TLVector<TLTopPeer>)ObjectUtils.DeserializeVector<TLTopPeer>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -42,7 +36,6 @@ namespace TeleSharp.TL
             ObjectUtils.SerializeObject(Category, bw);
             bw.Write(Count);
             ObjectUtils.SerializeObject(Peers, bw);
-
         }
     }
 }

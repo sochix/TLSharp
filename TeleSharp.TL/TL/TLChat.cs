@@ -1,15 +1,14 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-652419756)]
     public class TLChat : TLAbsChat
     {
+        public bool Admin { get; set; }
+
+        public bool AdminsEnabled { get; set; }
+
         public override int Constructor
         {
             get
@@ -18,33 +17,32 @@ namespace TeleSharp.TL
             }
         }
 
-        public int Flags { get; set; }
         public bool Creator { get; set; }
-        public bool Kicked { get; set; }
-        public bool Left { get; set; }
-        public bool AdminsEnabled { get; set; }
-        public bool Admin { get; set; }
-        public bool Deactivated { get; set; }
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public TLAbsChatPhoto Photo { get; set; }
-        public int ParticipantsCount { get; set; }
+
         public int Date { get; set; }
-        public int Version { get; set; }
+
+        public bool Deactivated { get; set; }
+
+        public int Flags { get; set; }
+
+        public int Id { get; set; }
+
+        public bool Kicked { get; set; }
+
+        public bool Left { get; set; }
+
         public TLAbsInputChannel MigratedTo { get; set; }
 
+        public int ParticipantsCount { get; set; }
+
+        public TLAbsChatPhoto Photo { get; set; }
+
+        public string Title { get; set; }
+
+        public int Version { get; set; }
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Creator ? (Flags | 1) : (Flags & ~1);
-            Flags = Kicked ? (Flags | 2) : (Flags & ~2);
-            Flags = Left ? (Flags | 4) : (Flags & ~4);
-            Flags = AdminsEnabled ? (Flags | 8) : (Flags & ~8);
-            Flags = Admin ? (Flags | 16) : (Flags & ~16);
-            Flags = Deactivated ? (Flags | 32) : (Flags & ~32);
-            Flags = MigratedTo != null ? (Flags | 64) : (Flags & ~64);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -66,14 +64,11 @@ namespace TeleSharp.TL
                 MigratedTo = (TLAbsInputChannel)ObjectUtils.DeserializeObject(br);
             else
                 MigratedTo = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
 
 
@@ -89,7 +84,6 @@ namespace TeleSharp.TL
             bw.Write(Version);
             if ((Flags & 64) != 0)
                 ObjectUtils.SerializeObject(MigratedTo, bw);
-
         }
     }
 }

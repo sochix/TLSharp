@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1937807902)]
@@ -18,20 +13,18 @@ namespace TeleSharp.TL
             }
         }
 
-        public int Flags { get; set; }
-        public bool NoWebpage { get; set; }
-        public string Message { get; set; }
         public TLVector<TLAbsMessageEntity> Entities { get; set; }
-        public TLAbsReplyMarkup ReplyMarkup { get; set; }
 
+        public int Flags { get; set; }
+
+        public string Message { get; set; }
+
+        public bool NoWebpage { get; set; }
+
+        public TLAbsReplyMarkup ReplyMarkup { get; set; }
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = NoWebpage ? (Flags | 1) : (Flags & ~1);
-            Flags = Entities != null ? (Flags | 2) : (Flags & ~2);
-            Flags = ReplyMarkup != null ? (Flags | 4) : (Flags & ~4);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -48,14 +41,11 @@ namespace TeleSharp.TL
                 ReplyMarkup = (TLAbsReplyMarkup)ObjectUtils.DeserializeObject(br);
             else
                 ReplyMarkup = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
 
             StringUtil.Serialize(Message, bw);
@@ -63,7 +53,6 @@ namespace TeleSharp.TL
                 ObjectUtils.SerializeObject(Entities, bw);
             if ((Flags & 4) != 0)
                 ObjectUtils.SerializeObject(ReplyMarkup, bw);
-
         }
     }
 }

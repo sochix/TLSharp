@@ -1,15 +1,24 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(773059779)]
     public class TLUser : TLAbsUser
     {
+        public long? AccessHash { get; set; }
+
+        public bool Bot { get; set; }
+
+        public bool BotChatHistory { get; set; }
+
+        public int? BotInfoVersion { get; set; }
+
+        public bool BotInlineGeo { get; set; }
+
+        public string BotInlinePlaceholder { get; set; }
+
+        public bool BotNochats { get; set; }
+
         public override int Constructor
         {
             get
@@ -18,58 +27,42 @@ namespace TeleSharp.TL
             }
         }
 
-        public int Flags { get; set; }
-        public bool Self { get; set; }
         public bool Contact { get; set; }
-        public bool MutualContact { get; set; }
+
         public bool Deleted { get; set; }
-        public bool Bot { get; set; }
-        public bool BotChatHistory { get; set; }
-        public bool BotNochats { get; set; }
-        public bool Verified { get; set; }
-        public bool Restricted { get; set; }
-        public bool Min { get; set; }
-        public bool BotInlineGeo { get; set; }
-        public int Id { get; set; }
-        public long? AccessHash { get; set; }
+
         public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Username { get; set; }
-        public string Phone { get; set; }
-        public TLAbsUserProfilePhoto Photo { get; set; }
-        public TLAbsUserStatus Status { get; set; }
-        public int? BotInfoVersion { get; set; }
-        public string RestrictionReason { get; set; }
-        public string BotInlinePlaceholder { get; set; }
+
+        public int Flags { get; set; }
+
+        public int Id { get; set; }
+
         public string LangCode { get; set; }
 
+        public string LastName { get; set; }
+
+        public bool Min { get; set; }
+
+        public bool MutualContact { get; set; }
+
+        public string Phone { get; set; }
+
+        public TLAbsUserProfilePhoto Photo { get; set; }
+
+        public bool Restricted { get; set; }
+
+        public string RestrictionReason { get; set; }
+
+        public bool Self { get; set; }
+
+        public TLAbsUserStatus Status { get; set; }
+
+        public string Username { get; set; }
+
+        public bool Verified { get; set; }
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Self ? (Flags | 1024) : (Flags & ~1024);
-            Flags = Contact ? (Flags | 2048) : (Flags & ~2048);
-            Flags = MutualContact ? (Flags | 4096) : (Flags & ~4096);
-            Flags = Deleted ? (Flags | 8192) : (Flags & ~8192);
-            Flags = Bot ? (Flags | 16384) : (Flags & ~16384);
-            Flags = BotChatHistory ? (Flags | 32768) : (Flags & ~32768);
-            Flags = BotNochats ? (Flags | 65536) : (Flags & ~65536);
-            Flags = Verified ? (Flags | 131072) : (Flags & ~131072);
-            Flags = Restricted ? (Flags | 262144) : (Flags & ~262144);
-            Flags = Min ? (Flags | 1048576) : (Flags & ~1048576);
-            Flags = BotInlineGeo ? (Flags | 2097152) : (Flags & ~2097152);
-            Flags = AccessHash != null ? (Flags | 1) : (Flags & ~1);
-            Flags = FirstName != null ? (Flags | 2) : (Flags & ~2);
-            Flags = LastName != null ? (Flags | 4) : (Flags & ~4);
-            Flags = Username != null ? (Flags | 8) : (Flags & ~8);
-            Flags = Phone != null ? (Flags | 16) : (Flags & ~16);
-            Flags = Photo != null ? (Flags | 32) : (Flags & ~32);
-            Flags = Status != null ? (Flags | 64) : (Flags & ~64);
-            Flags = BotInfoVersion != null ? (Flags | 16384) : (Flags & ~16384);
-            Flags = RestrictionReason != null ? (Flags | 262144) : (Flags & ~262144);
-            Flags = BotInlinePlaceholder != null ? (Flags | 524288) : (Flags & ~524288);
-            Flags = LangCode != null ? (Flags | 4194304) : (Flags & ~4194304);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -141,14 +134,11 @@ namespace TeleSharp.TL
                 LangCode = StringUtil.Deserialize(br);
             else
                 LangCode = null;
-
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
 
 
@@ -184,7 +174,6 @@ namespace TeleSharp.TL
                 StringUtil.Serialize(BotInlinePlaceholder, bw);
             if ((Flags & 4194304) != 0)
                 StringUtil.Serialize(LangCode, bw);
-
         }
     }
 }

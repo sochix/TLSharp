@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(978896884)]
@@ -18,20 +13,18 @@ namespace TeleSharp.TL
             }
         }
 
-        public bool Ordered { get; set; }
         public TLVector<TLAbsRichText> Items { get; set; }
 
+        public bool Ordered { get; set; }
 
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             Ordered = BoolUtil.Deserialize(br);
             Items = (TLVector<TLAbsRichText>)ObjectUtils.DeserializeVector<TLAbsRichText>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -39,7 +32,6 @@ namespace TeleSharp.TL
             bw.Write(Constructor);
             BoolUtil.Serialize(Ordered, bw);
             ObjectUtils.SerializeObject(Items, bw);
-
         }
     }
 }

@@ -1,75 +1,70 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
-    [TLObject(-1588737454)]
+    [TLObject(213142300)]
     public class TLChannel : TLAbsChat
     {
+        public long? AccessHash { get; set; }
+
+        public TLChannelAdminRights AdminRights { get; set; }
+
+        public TLChannelBannedRights BannedRights { get; set; }
+
+        public bool Broadcast { get; set; }
+
         public override int Constructor
         {
             get
             {
-                return -1588737454;
+                return 213142300;
             }
         }
 
-        public int Flags { get; set; }
         public bool Creator { get; set; }
-        public bool Kicked { get; set; }
-        public bool Left { get; set; }
-        public bool Editor { get; set; }
-        public bool Moderator { get; set; }
-        public bool Broadcast { get; set; }
-        public bool Verified { get; set; }
-        public bool Megagroup { get; set; }
-        public bool Restricted { get; set; }
-        public bool Democracy { get; set; }
-        public bool Signatures { get; set; }
-        public bool Min { get; set; }
-        public int Id { get; set; }
-        public long? AccessHash { get; set; }
-        public string Title { get; set; }
-        public string Username { get; set; }
-        public TLAbsChatPhoto Photo { get; set; }
+
         public int Date { get; set; }
-        public int Version { get; set; }
+
+        public bool Democracy { get; set; }
+
+        public bool Editor { get; set; }
+
+        public int Flags { get; set; }
+
+        public int Id { get; set; }
+
+        public bool Left { get; set; }
+
+        public bool Megagroup { get; set; }
+
+        public bool Min { get; set; }
+
+        public TLAbsChatPhoto Photo { get; set; }
+
+        public bool Restricted { get; set; }
+
         public string RestrictionReason { get; set; }
 
+        public bool Signatures { get; set; }
+
+        public string Title { get; set; }
+
+        public string Username { get; set; }
+
+        public bool Verified { get; set; }
+
+        public int Version { get; set; }
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Creator ? (Flags | 1) : (Flags & ~1);
-            Flags = Kicked ? (Flags | 2) : (Flags & ~2);
-            Flags = Left ? (Flags | 4) : (Flags & ~4);
-            Flags = Editor ? (Flags | 8) : (Flags & ~8);
-            Flags = Moderator ? (Flags | 16) : (Flags & ~16);
-            Flags = Broadcast ? (Flags | 32) : (Flags & ~32);
-            Flags = Verified ? (Flags | 128) : (Flags & ~128);
-            Flags = Megagroup ? (Flags | 256) : (Flags & ~256);
-            Flags = Restricted ? (Flags | 512) : (Flags & ~512);
-            Flags = Democracy ? (Flags | 1024) : (Flags & ~1024);
-            Flags = Signatures ? (Flags | 2048) : (Flags & ~2048);
-            Flags = Min ? (Flags | 4096) : (Flags & ~4096);
-            Flags = AccessHash != null ? (Flags | 8192) : (Flags & ~8192);
-            Flags = Username != null ? (Flags | 64) : (Flags & ~64);
-            Flags = RestrictionReason != null ? (Flags | 512) : (Flags & ~512);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             Flags = br.ReadInt32();
             Creator = (Flags & 1) != 0;
-            Kicked = (Flags & 2) != 0;
             Left = (Flags & 4) != 0;
             Editor = (Flags & 8) != 0;
-            Moderator = (Flags & 16) != 0;
             Broadcast = (Flags & 32) != 0;
             Verified = (Flags & 128) != 0;
             Megagroup = (Flags & 256) != 0;
@@ -97,16 +92,21 @@ namespace TeleSharp.TL
             else
                 RestrictionReason = null;
 
+            if ((Flags & 16384) != 0)
+                AdminRights = (TLChannelAdminRights)ObjectUtils.DeserializeObject(br);
+            else
+                AdminRights = null;
 
+            if ((Flags & 32768) != 0)
+                BannedRights = (TLChannelBannedRights)ObjectUtils.DeserializeObject(br);
+            else
+                BannedRights = null;
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
-
-
 
 
 
@@ -128,7 +128,10 @@ namespace TeleSharp.TL
             bw.Write(Version);
             if ((Flags & 512) != 0)
                 StringUtil.Serialize(RestrictionReason, bw);
-
+            if ((Flags & 16384) != 0)
+                ObjectUtils.SerializeObject(AdminRights, bw);
+            if ((Flags & 32768) != 0)
+                ObjectUtils.SerializeObject(BannedRights, bw);
         }
     }
 }

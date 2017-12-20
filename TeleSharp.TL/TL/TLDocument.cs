@@ -1,15 +1,14 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-2027738169)]
     public class TLDocument : TLAbsDocument
     {
+        public long AccessHash { get; set; }
+
+        public TLVector<TLAbsDocumentAttribute> Attributes { get; set; }
+
         public override int Constructor
         {
             get
@@ -18,20 +17,22 @@ namespace TeleSharp.TL
             }
         }
 
-        public long Id { get; set; }
-        public long AccessHash { get; set; }
         public int Date { get; set; }
-        public string MimeType { get; set; }
-        public int Size { get; set; }
-        public TLAbsPhotoSize Thumb { get; set; }
-        public int DcId { get; set; }
-        public int Version { get; set; }
-        public TLVector<TLAbsDocumentAttribute> Attributes { get; set; }
 
+        public int DcId { get; set; }
+
+        public long Id { get; set; }
+
+        public string MimeType { get; set; }
+
+        public int Size { get; set; }
+
+        public TLAbsPhotoSize Thumb { get; set; }
+
+        public int Version { get; set; }
 
         public void ComputeFlags()
         {
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -45,7 +46,6 @@ namespace TeleSharp.TL
             DcId = br.ReadInt32();
             Version = br.ReadInt32();
             Attributes = (TLVector<TLAbsDocumentAttribute>)ObjectUtils.DeserializeVector<TLAbsDocumentAttribute>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -60,7 +60,6 @@ namespace TeleSharp.TL
             bw.Write(DcId);
             bw.Write(Version);
             ObjectUtils.SerializeObject(Attributes, bw);
-
         }
     }
 }

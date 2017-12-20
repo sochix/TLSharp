@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-2074799289)]
@@ -18,26 +13,28 @@ namespace TeleSharp.TL
             }
         }
 
-        public int Flags { get; set; }
-        public bool ShippingAddressRequested { get; set; }
-        public bool Test { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public TLWebDocument Photo { get; set; }
-        public int? ReceiptMsgId { get; set; }
         public string Currency { get; set; }
-        public long TotalAmount { get; set; }
+
+        public string Description { get; set; }
+
+        public int Flags { get; set; }
+
+        public TLWebDocument Photo { get; set; }
+
+        public int? ReceiptMsgId { get; set; }
+
+        public bool ShippingAddressRequested { get; set; }
+
         public string StartParam { get; set; }
 
+        public bool Test { get; set; }
+
+        public string Title { get; set; }
+
+        public long TotalAmount { get; set; }
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = ShippingAddressRequested ? (Flags | 2) : (Flags & ~2);
-            Flags = Test ? (Flags | 8) : (Flags & ~8);
-            Flags = Photo != null ? (Flags | 1) : (Flags & ~1);
-            Flags = ReceiptMsgId != null ? (Flags | 4) : (Flags & ~4);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -60,13 +57,11 @@ namespace TeleSharp.TL
             Currency = StringUtil.Deserialize(br);
             TotalAmount = br.ReadInt64();
             StartParam = StringUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
 
 
@@ -79,7 +74,6 @@ namespace TeleSharp.TL
             StringUtil.Serialize(Currency, bw);
             bw.Write(TotalAmount);
             StringUtil.Serialize(StartParam, bw);
-
         }
     }
 }

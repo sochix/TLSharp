@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(400266251)]
@@ -18,24 +13,24 @@ namespace TeleSharp.TL
             }
         }
 
-        public int Flags { get; set; }
-        public string Id { get; set; }
-        public string Type { get; set; }
-        public TLAbsPhoto Photo { get; set; }
-        public TLAbsDocument Document { get; set; }
-        public string Title { get; set; }
         public string Description { get; set; }
+
+        public TLAbsDocument Document { get; set; }
+
+        public int Flags { get; set; }
+
+        public string Id { get; set; }
+
+        public TLAbsPhoto Photo { get; set; }
+
         public TLAbsBotInlineMessage SendMessage { get; set; }
 
+        public string Title { get; set; }
+
+        public string Type { get; set; }
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Photo != null ? (Flags | 1) : (Flags & ~1);
-            Flags = Document != null ? (Flags | 2) : (Flags & ~2);
-            Flags = Title != null ? (Flags | 4) : (Flags & ~4);
-            Flags = Description != null ? (Flags | 8) : (Flags & ~8);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -64,13 +59,11 @@ namespace TeleSharp.TL
                 Description = null;
 
             SendMessage = (TLAbsBotInlineMessage)ObjectUtils.DeserializeObject(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
             StringUtil.Serialize(Id, bw);
             StringUtil.Serialize(Type, bw);
@@ -83,7 +76,6 @@ namespace TeleSharp.TL
             if ((Flags & 8) != 0)
                 StringUtil.Serialize(Description, bw);
             ObjectUtils.SerializeObject(SendMessage, bw);
-
         }
     }
 }

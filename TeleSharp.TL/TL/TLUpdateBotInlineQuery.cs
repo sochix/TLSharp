@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(1417832080)]
@@ -19,18 +14,19 @@ namespace TeleSharp.TL
         }
 
         public int Flags { get; set; }
-        public long QueryId { get; set; }
-        public int UserId { get; set; }
-        public string Query { get; set; }
+
         public TLAbsGeoPoint Geo { get; set; }
+
         public string Offset { get; set; }
 
+        public string Query { get; set; }
+
+        public long QueryId { get; set; }
+
+        public int UserId { get; set; }
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Geo != null ? (Flags | 1) : (Flags & ~1);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -45,13 +41,11 @@ namespace TeleSharp.TL
                 Geo = null;
 
             Offset = StringUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
             bw.Write(QueryId);
             bw.Write(UserId);
@@ -59,7 +53,6 @@ namespace TeleSharp.TL
             if ((Flags & 1) != 0)
                 ObjectUtils.SerializeObject(Geo, bw);
             StringUtil.Serialize(Offset, bw);
-
         }
     }
 }

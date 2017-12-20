@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(-1137057461)]
@@ -18,22 +13,22 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public int Flags { get; set; }
-        public bool NoWebpage { get; set; }
-        public int? ReplyToMsgId { get; set; }
-        public TLAbsInputPeer Peer { get; set; }
-        public string Message { get; set; }
         public TLVector<TLAbsMessageEntity> Entities { get; set; }
-        public bool Response { get; set; }
 
+        public int Flags { get; set; }
+
+        public string Message { get; set; }
+
+        public bool NoWebpage { get; set; }
+
+        public TLAbsInputPeer Peer { get; set; }
+
+        public int? ReplyToMsgId { get; set; }
+
+        public bool Response { get; set; }
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = NoWebpage ? (Flags | 2) : (Flags & ~2);
-            Flags = ReplyToMsgId != null ? (Flags | 1) : (Flags & ~1);
-            Flags = Entities != null ? (Flags | 8) : (Flags & ~8);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -51,14 +46,16 @@ namespace TeleSharp.TL.Messages
                 Entities = (TLVector<TLAbsMessageEntity>)ObjectUtils.DeserializeVector<TLAbsMessageEntity>(br);
             else
                 Entities = null;
+        }
 
-
+        public override void DeserializeResponse(BinaryReader br)
+        {
+            Response = BoolUtil.Deserialize(br);
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
 
             if ((Flags & 1) != 0)
@@ -67,12 +64,6 @@ namespace TeleSharp.TL.Messages
             StringUtil.Serialize(Message, bw);
             if ((Flags & 8) != 0)
                 ObjectUtils.SerializeObject(Entities, bw);
-
-        }
-        public override void DeserializeResponse(BinaryReader br)
-        {
-            Response = BoolUtil.Deserialize(br);
-
         }
     }
 }

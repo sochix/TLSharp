@@ -1,15 +1,12 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(-858565059)]
     public class TLBotResults : TLObject
     {
+        public int CacheTime { get; set; }
+
         public override int Constructor
         {
             get
@@ -19,21 +16,19 @@ namespace TeleSharp.TL.Messages
         }
 
         public int Flags { get; set; }
-        public bool Gallery { get; set; }
-        public long QueryId { get; set; }
-        public string NextOffset { get; set; }
-        public TLInlineBotSwitchPM SwitchPm { get; set; }
-        public TLVector<TLAbsBotInlineResult> Results { get; set; }
-        public int CacheTime { get; set; }
 
+        public bool Gallery { get; set; }
+
+        public string NextOffset { get; set; }
+
+        public long QueryId { get; set; }
+
+        public TLVector<TLAbsBotInlineResult> Results { get; set; }
+
+        public TLInlineBotSwitchPM SwitchPm { get; set; }
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Gallery ? (Flags | 1) : (Flags & ~1);
-            Flags = NextOffset != null ? (Flags | 2) : (Flags & ~2);
-            Flags = SwitchPm != null ? (Flags | 4) : (Flags & ~4);
-
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -53,13 +48,11 @@ namespace TeleSharp.TL.Messages
 
             Results = (TLVector<TLAbsBotInlineResult>)ObjectUtils.DeserializeVector<TLAbsBotInlineResult>(br);
             CacheTime = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
 
             bw.Write(QueryId);
@@ -69,7 +62,6 @@ namespace TeleSharp.TL.Messages
                 ObjectUtils.SerializeObject(SwitchPm, bw);
             ObjectUtils.SerializeObject(Results, bw);
             bw.Write(CacheTime);
-
         }
     }
 }
