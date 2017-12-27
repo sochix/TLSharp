@@ -30,6 +30,8 @@ namespace TLSharp.Core
         private List<TLDcOption> dcOptions;
         private TcpClientConnectionHandler _handler;
 
+        public Session Session { get { return _session; } }
+
         public TelegramClient(int apiId, string apiHash,
             Session session = null, string sessionUserId = "session", TcpClientConnectionHandler handler = null)
         {
