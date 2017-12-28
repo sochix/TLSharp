@@ -30,6 +30,10 @@ namespace TLSharp.Core
         private List<TLDcOption> dcOptions;
         private TcpClientConnectionHandler _handler;
 
+        public delegate void UpdatesEvent (TelegramClient source, TLAbsUpdates updates);
+
+        public event UpdatesEvent Updates;
+
         public Session Session { get { return _session; } }
 
         public TelegramClient(int apiId, string apiHash,
@@ -59,6 +63,7 @@ namespace TLSharp.Core
             }
 
             _sender = new MtProtoSender(_transport, _session);
+            _sender.UpdatesEvent += _sender_UpdatesEvent;
 
             //set-up layer
             var config = new TLRequestGetConfig();
@@ -106,6 +111,11 @@ namespace TLSharp.Core
                 var imported = await SendRequestAsync<TLAuthorization>(importAuthorization);
                 OnUserAuthenticated(((TLUser)imported.User));
             }
+        }
+
+        private void _sender_UpdatesEvent (TLAbsUpdates updates)
+        {
+            Updates (this, updates);
         }
 
         private async Task RequestWithDcMigration(TLMethod request) 
