@@ -136,17 +136,30 @@ namespace TLSharp.Core.Network
             return new Tuple<byte[], ulong, int>(message, remoteMessageId, remoteSequence);
         }
 
-        public async Task<byte[]> Receive(TeleSharp.TL.TLMethod request)
+        public async Task<byte []> Receive (TeleSharp.TL.TLMethod request)
         {
-            while (!request.ConfirmReceived)
+            while (!request.ConfirmReceived) 
             {
-                var result = DecodeMessage((await _transport.Receieve()).Body);
+                var result = DecodeMessage ((await _transport.Receieve ()).Body);
 
-                using (var messageStream = new MemoryStream(result.Item1, false))
-                using (var messageReader = new BinaryReader(messageStream))
+                using (var messageStream = new MemoryStream (result.Item1, false))
+                using (var messageReader = new BinaryReader (messageStream)) 
                 {
-                    await processMessage(result.Item2, result.Item3, messageReader, request);
+                    await processMessage (result.Item2, result.Item3, messageReader, request);
                 }
+            }
+
+            return null;
+        }
+
+        public async Task<byte[]> Receive()
+        {
+            var result = DecodeMessage ((await _transport.Receieve ()).Body);
+
+            using (var messageStream = new MemoryStream (result.Item1, false))
+            using (var messageReader = new BinaryReader (messageStream)) 
+            {
+                await processMessage (result.Item2, result.Item3, messageReader, null);
             }
 
             return null;
@@ -171,11 +184,13 @@ namespace TLSharp.Core.Network
             // TODO: check sessionid
             // TODO: check seqno
 
+
             //logger.debug("processMessage: msg_id {0}, sequence {1}, data {2}", BitConverter.ToString(((MemoryStream)messageReader.BaseStream).GetBuffer(), (int) messageReader.BaseStream.Position, (int) (messageReader.BaseStream.Length - messageReader.BaseStream.Position)).Replace("-","").ToLower());
             needConfirmation.Add(messageId);
 
             uint code = messageReader.ReadUInt32();
             messageReader.BaseStream.Position -= 4;
+            Console.WriteLine ("Msg code: {0:x8}", code);
             switch (code)
             {
                 case 0x73f1f8dc: // container
@@ -217,21 +232,20 @@ namespace TLSharp.Core.Network
                 case 0x78d4dec1:
                 case 0x725b04c3:
                 case 0x74ae4240:
-                    return await HandleUpdate(messageId, sequence, messageReader, request);
+                    return await HandleUpdate(code, sequence, messageReader, request);
                 default:
                     //logger.debug("unknown message: {0}", code);
                     return false;
             }
         }
 
-        private async Task<bool> HandleUpdate(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
+        private async Task<bool> HandleUpdate(uint code, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
         {
 			try
 			{
-                var update = ParseUpdate (messageId, messageReader);
+                var update = ParseUpdate (code, messageReader);
                 if (update != null && UpdatesEvent != null)
 				    UpdatesEvent(update);
-                await Receive (request);
 			}
 			catch 
 			{
@@ -239,9 +253,9 @@ namespace TLSharp.Core.Network
             return false;
         }
 
-        private TeleSharp.TL.TLAbsUpdates ParseUpdate(ulong messageId, BinaryReader messageReader)
+        private TeleSharp.TL.TLAbsUpdates ParseUpdate(uint code, BinaryReader messageReader)
         {
-            switch (messageId)
+            switch (code)
             {
             case 0xe317af7e:
                 return DecodeUpdate<TeleSharp.TL.TLUpdatesTooLong>(messageReader);

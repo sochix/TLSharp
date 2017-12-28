@@ -138,6 +138,11 @@ namespace TLSharp.Core
             }
         }
 
+        public async Task WaitEventAsync()
+        {
+           await _sender.Receive ();
+        }
+
         public bool IsUserAuthorized()
         {
             return _session.TLUser != null;
