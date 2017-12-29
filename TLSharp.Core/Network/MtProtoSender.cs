@@ -145,7 +145,7 @@ namespace TLSharp.Core.Network
                 using (var messageStream = new MemoryStream (result.Item1, false))
                 using (var messageReader = new BinaryReader (messageStream)) 
                 {
-                    await processMessage (result.Item2, result.Item3, messageReader, request);
+                    processMessage (result.Item2, result.Item3, messageReader, request);
                 }
             }
 
@@ -159,7 +159,7 @@ namespace TLSharp.Core.Network
             using (var messageStream = new MemoryStream (result.Item1, false))
             using (var messageReader = new BinaryReader (messageStream)) 
             {
-                await processMessage (result.Item2, result.Item3, messageReader, null);
+                processMessage (result.Item2, result.Item3, messageReader, null);
             }
 
             return null;
@@ -178,7 +178,7 @@ namespace TLSharp.Core.Network
             await Receive(pingRequest);
         }
 
-        private async Task<bool> processMessage(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
+        private bool processMessage(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
         {
             // TODO: check salt
             // TODO: check sessionid
@@ -195,7 +195,7 @@ namespace TLSharp.Core.Network
             {
                 case 0x73f1f8dc: // container
                                  //logger.debug("MSG container");
-                    return await HandleContainer(messageId, sequence, messageReader, request);
+                    return HandleContainer(messageId, sequence, messageReader, request);
                 case 0x7abe77ec: // ping
                                  //logger.debug("MSG ping");
                     return HandlePing(messageId, sequence, messageReader);
@@ -225,21 +225,21 @@ namespace TLSharp.Core.Network
                     return HandleRpcResult(messageId, sequence, messageReader, request);
                 case 0x3072cfa1: // gzip_packed
                                  //logger.debug("MSG gzip_packed");
-                    return await HandleGzipPacked(messageId, sequence, messageReader, request);
+                    return HandleGzipPacked(messageId, sequence, messageReader, request);
                 case 0xe317af7e:
                 case 0xd3f45784:
                 case 0x2b2fbd4e:
                 case 0x78d4dec1:
                 case 0x725b04c3:
                 case 0x74ae4240:
-                    return await HandleUpdate(code, sequence, messageReader, request);
+                    return HandleUpdate(code, sequence, messageReader, request);
                 default:
                     //logger.debug("unknown message: {0}", code);
                     return false;
             }
         }
 
-        private async Task<bool> HandleUpdate(uint code, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
+        private bool HandleUpdate(uint code, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
         {
 			try
 			{
@@ -281,14 +281,14 @@ namespace TLSharp.Core.Network
             return update;
         }
 
-        private async Task<bool> HandleGzipPacked(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
+        private bool HandleGzipPacked(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
         {
             uint code = messageReader.ReadUInt32();
             byte[] packedData = GZipStream.UncompressBuffer(Serializers.Bytes.read(messageReader));
             using (MemoryStream packedStream = new MemoryStream(packedData, false))
             using (BinaryReader compressedReader = new BinaryReader(packedStream))
             {
-                await processMessage(messageId, sequence, compressedReader, request);
+                processMessage(messageId, sequence, compressedReader, request);
             }
 
             return true;
@@ -539,7 +539,7 @@ namespace TLSharp.Core.Network
             return false;
         }
 
-        private async Task<bool> HandleContainer(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
+        private bool HandleContainer(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
         {
             uint code = messageReader.ReadUInt32();
             int size = messageReader.ReadInt32();
@@ -551,7 +551,7 @@ namespace TLSharp.Core.Network
                 long beginPosition = messageReader.BaseStream.Position;
                 try
                 {
-                    if (!await processMessage(innerMessageId, sequence, messageReader, request))
+                    if (!processMessage(innerMessageId, sequence, messageReader, request))
                     {
                         messageReader.BaseStream.Position = beginPosition + innerLength;
                     }
