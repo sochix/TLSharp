@@ -31,8 +31,6 @@ namespace TLSharpPOC
             new MainClass().MainAsync(args).Wait();
         }
 
-        private readonly Dictionary<int, TLUser> ContactList;
-
         private async Task MainAsync(string[] args)
         {
             TelegramClient client = null;
