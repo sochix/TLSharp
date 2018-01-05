@@ -330,6 +330,7 @@ namespace TLSharp.Core.Network
             { // rpc_error
                 int errorCode = messageReader.ReadInt32();
                 string errorMessage = Serializers.String.read(messageReader);
+                Console.Error.WriteLine($"ERROR: {errorMessage} - {errorCode}");
 
                 if (errorMessage.StartsWith("FLOOD_WAIT_"))
                 {

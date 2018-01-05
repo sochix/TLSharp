@@ -113,9 +113,17 @@ namespace TLSharp.Core
             }
         }
 
+        public async Task MainLoopAsync()
+        {
+            for (;;)
+            {
+                await WaitEventAsync();
+            }
+        }
+
         private void _sender_UpdatesEvent (TLAbsUpdates updates)
         {
-            Updates (this, updates);
+            Updates?.Invoke (this, updates);
         }
 
         private async Task RequestWithDcMigration(TLMethod request) 
