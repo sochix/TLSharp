@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TeleSharp.TL;
 using TeleSharp.TL.Account;
@@ -31,8 +32,10 @@ namespace TLSharp.Core
         private TcpClientConnectionHandler _handler;
 
         public delegate void UpdatesEvent (TelegramClient source, TLAbsUpdates updates);
+        public delegate void ClientEvent(TelegramClient source);
 
         public event UpdatesEvent Updates;
+        public event ClientEvent IdleLoop;
 
         public Session Session { get { return _session; } }
 
@@ -113,11 +116,20 @@ namespace TLSharp.Core
             }
         }
 
-        public async Task MainLoopAsync()
+        public async Task MainLoopAsync(CancellationTokenSource source)
         {
             for (;;)
             {
-                await WaitEventAsync();
+                try
+                {
+                    await WaitEventAsync(source.Token);
+                } catch (OperationCanceledException)
+                {
+                }
+                finally
+                {
+                    IdleLoop(this);
+                }
             }
         }
 
@@ -146,9 +158,9 @@ namespace TLSharp.Core
             }
         }
 
-        public async Task WaitEventAsync()
+        public async Task WaitEventAsync(CancellationToken token)
         {
-           await _sender.Receive ();
+           await _sender.Receive (token);
         }
 
         public bool IsUserAuthorized()
