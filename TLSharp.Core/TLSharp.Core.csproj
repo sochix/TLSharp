@@ -1,89 +1,31 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{400D2544-1CC6-4D8A-A62C-2292D9947A16}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TLSharp.Core</RootNamespace>
-    <AssemblyName>TLSharp.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFrameworks>netstandard2.0;net47</TargetFrameworks>
+    <PackageId>TLSharp.Core</PackageId>
+    <Version>1.0.1</Version>
+    <Authors>TLSharp.Core</Authors>
+    <Company>TLSharp.Core</Company>
+    <Product>TLSharp.Core</Product>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='net47'">
   </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Ionic.ZLib, Version=2.0.0.14, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MarkerMetro.Unity.Ionic.Zlib.2.0.0.14\lib\net35\Ionic.ZLib.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="Ionic.Zlib.Core" Version="1.0.0" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Auth\Authenticator.cs" />
-    <Compile Include="Auth\Step1_PQRequest.cs" />
-    <Compile Include="Auth\Step2_DHExchange.cs" />
-    <Compile Include="Auth\Step3_CompleteDHExchange.cs" />
-    <Compile Include="MTProto\Crypto\AES.cs" />
-    <Compile Include="MTProto\Crypto\AuthKey.cs" />
-    <Compile Include="MTProto\Crypto\BigInteger.cs" />
-    <Compile Include="MTProto\Crypto\Crc32.cs" />
-    <Compile Include="MTProto\Crypto\Factorizator.cs" />
-    <Compile Include="MTProto\Crypto\MD5Digest.cs" />
-    <Compile Include="MTProto\Crypto\RSA.cs" />
-    <Compile Include="MTProto\Crypto\Salt.cs" />
-    <Compile Include="MTProto\Serializers.cs" />
-    <Compile Include="Network\MtProtoPlainSender.cs" />
-    <Compile Include="Network\MtProtoSender.cs" />
-    <Compile Include="Network\TcpMessage.cs" />
-    <Compile Include="Network\TcpTransport.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Requests\AckRequest.cs" />
-    <Compile Include="Requests\PingRequest.cs" />
-    <Compile Include="Utils\UploadHelper.cs" />
-    <Compile Include="Session.cs" />
-    <Compile Include="TelegramClient.cs" />
-    <Compile Include="Utils\Helpers.cs" />
+    <ProjectReference Include="..\TeleSharp.TL\TeleSharp.TL.csproj" />
   </ItemGroup>
+
   <ItemGroup>
-    <None Include="packages.config" />
+    <Folder Include="Properties\" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\TeleSharp.TL\TeleSharp.TL.csproj">
-      <Project>{d6144517-91d2-4880-86df-e9ff5d7f383a}</Project>
-      <Name>TeleSharp.TL</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>
