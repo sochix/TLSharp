@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using TLSharp.Core.MTProto;
 using TLSharp.Core.MTProto.Crypto;
 
@@ -9,10 +10,43 @@ namespace TLSharp.Core.Auth
 {
     public class Step1_Response
     {
+        public Step1_Response()
+        {
+            Nonce = new byte[16];
+            ServerNonce = new byte[16];
+        }
+
         public byte[] Nonce { get; set; }
         public byte[] ServerNonce { get; set; }
         public BigInteger Pq { get; set; }
         public List<byte[]> Fingerprints { get; set; }
+
+        public byte[] ToBytes()
+        {
+            new Random().NextBytes(Nonce);
+            const int constructorNumber = 0x05162463;
+            const int vectorConstructorNumber = 0x1cb5c415;
+
+
+            using (var memoryStream = new MemoryStream())
+            {
+                using (var binaryWriter = new BinaryWriter(memoryStream))
+                {
+                    binaryWriter.Write(constructorNumber);
+                    binaryWriter.Write(ServerNonce);
+                    binaryWriter.Write(Nonce);
+                    Serializers.Bytes.write(binaryWriter, Pq.ToByteArrayUnsigned());
+                    binaryWriter.Write(vectorConstructorNumber);
+                    binaryWriter.Write(Fingerprints.Count);
+                    foreach (var fingerprint in Fingerprints)
+                    {
+                        binaryWriter.Write(fingerprint);
+                    }
+
+                    return memoryStream.ToArray();
+                }
+            }
+        }
     }
 
     public class Step1_PQRequest
@@ -62,7 +96,6 @@ namespace TLSharp.Core.Auth
                     {
                         throw new InvalidOperationException("invalid nonce from server");
                     }
-
                     var serverNonce = binaryReader.ReadBytes(16);
 
                     byte[] pqbytes = Serializers.Bytes.read(binaryReader);
@@ -92,5 +125,6 @@ namespace TLSharp.Core.Auth
                 }
             }
         }
+
     }
 }

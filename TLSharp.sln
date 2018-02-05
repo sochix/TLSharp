@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLSharp.Core", "TLSharp.Core\TLSharp.Core.csproj", "{400D2544-1CC6-4D8A-A62C-2292D9947A16}"
 EndProject
@@ -14,6 +14,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLSharp.Tests.VS", "TLSharp.Tests.VS\TLSharp.Tests.VS.csproj", "{AFFC3B00-3E4D-4327-8F7A-08EE41E0C8B7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLSharp.Tests.NUnit", "TLSharp.Tests.NUnit\TLSharp.Tests.NUnit.csproj", "{E90B705B-19FA-43BA-B952-69957976D12C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{AECAC38E-472B-4D0A-94F7-C818DC71D3A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientConsoleApp", "Apps\ClientConsoleApp\ClientConsoleApp.csproj", "{15296FBD-23B9-4786-8CC0-65C872FBFDAC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TlgListenerApplication", "Apps\TlgListenerApplication\TlgListenerApplication.csproj", "{15F1CFA2-E099-48FD-97E7-BE06AA5B3EA6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +51,24 @@ Global
 		{E90B705B-19FA-43BA-B952-69957976D12C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E90B705B-19FA-43BA-B952-69957976D12C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E90B705B-19FA-43BA-B952-69957976D12C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15296FBD-23B9-4786-8CC0-65C872FBFDAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15296FBD-23B9-4786-8CC0-65C872FBFDAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15296FBD-23B9-4786-8CC0-65C872FBFDAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15296FBD-23B9-4786-8CC0-65C872FBFDAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15F1CFA2-E099-48FD-97E7-BE06AA5B3EA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15F1CFA2-E099-48FD-97E7-BE06AA5B3EA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15F1CFA2-E099-48FD-97E7-BE06AA5B3EA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15F1CFA2-E099-48FD-97E7-BE06AA5B3EA6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{15296FBD-23B9-4786-8CC0-65C872FBFDAC} = {AECAC38E-472B-4D0A-94F7-C818DC71D3A6}
+		{15F1CFA2-E099-48FD-97E7-BE06AA5B3EA6} = {AECAC38E-472B-4D0A-94F7-C818DC71D3A6}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E4B0D0B6-F353-4A26-91A4-BCE2E1904E06}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
@@ -80,8 +104,5 @@ Global
 		$2.inheritsSet = Mono
 		$2.inheritsScope = text/x-csharp
 		$2.scope = text/x-csharp
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

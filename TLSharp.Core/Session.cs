@@ -26,7 +26,7 @@ namespace TLSharp.Core
         public Session Load(string sessionUserId)
         {
             var sessionFileName = $"{sessionUserId}.dat";
-            if (!File.Exists(sessionFileName))
+            //if (!File.Exists(sessionFileName))
                 return null;
 
             using (var stream = new FileStream(sessionFileName, FileMode.Open))
@@ -73,7 +73,7 @@ namespace TLSharp.Core
 
         private ISessionStore _store;
 
-        private Session(ISessionStore store)
+        public Session(ISessionStore store)
         {
             random = new Random();
             _store = store;
@@ -155,14 +155,14 @@ namespace TLSharp.Core
             _store.Save(this);
         }
 
-        public static Session TryLoadOrCreateNew(ISessionStore store, string sessionUserId)
+        public static Session TryLoadOrCreateNew(ISessionStore store, string sessionUserId, string serverAddress = "", int? serverPort = null)
         {
             return store.Load(sessionUserId) ?? new Session(store)
             {
                 Id = GenerateRandomUlong(),
                 SessionUserId = sessionUserId,
-                ServerAddress = defaultConnectionAddress,
-                Port = defaultConnectionPort
+                ServerAddress = string.IsNullOrEmpty(serverAddress) ? defaultConnectionAddress : serverAddress,
+                Port = serverPort ?? defaultConnectionPort
             };
         }
 

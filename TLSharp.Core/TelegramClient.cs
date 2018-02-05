@@ -31,7 +31,7 @@ namespace TLSharp.Core
         private TcpClientConnectionHandler _handler;
 
         public TelegramClient(int apiId, string apiHash,
-            ISessionStore store = null, string sessionUserId = "session", TcpClientConnectionHandler handler = null)
+            ISessionStore store = null, string sessionUserId = "session", TcpClientConnectionHandler handler = null, string serverAddress = "", int? serverPort = null)
         {
             if (apiId == default(int))
                 throw new MissingApiConfigurationException("API_ID");
@@ -46,8 +46,8 @@ namespace TLSharp.Core
             _apiId = apiId;
             _handler = handler;
 
-            _session = Session.TryLoadOrCreateNew(store, sessionUserId);
-            _transport = new TcpTransport(_session.ServerAddress, _session.Port, _handler);
+            _session = Session.TryLoadOrCreateNew(store, sessionUserId, serverAddress, serverPort);
+            _transport = new TcpTransport(string.IsNullOrEmpty(serverAddress) ? _session.ServerAddress : serverAddress, serverPort ?? _session.Port, _handler);
         }
 
         public async Task<bool> ConnectAsync(bool reconnect = false)
@@ -251,45 +251,7 @@ namespace TLSharp.Core
                    });
         }
 
-        public async Task<TLAbsUpdates> ForwardMessageAsync(TLAbsInputPeer peer, TLAbsInputPeer peerto, int messageId)
-        {
-            if (!IsUserAuthorized())
-                throw new InvalidOperationException("Authorize user first!");
-
-            var rand = new Random();
-
-            var a = new TLVector<long>();
-            a.Add(rand.Next());
-            var b = new TLVector<int>();
-            b.Add(messageId);
-            var aa = new TLRequestForwardMessages();
-            aa.FromPeer = peer;
-            aa.ToPeer = peerto;
-            aa.RandomId = a;
-            aa.MessageId = messageId;
-            aa.Id = b;
-            aa.Silent = true;
-            aa.WithMyScore = true;
-
-            return await SendRequestAsync<TLUpdates>(aa);
-        }
-
-        public async Task<TLAbsUpdates> ForwardMessagesAsync(TLAbsInputPeer peerfrom, TLAbsInputPeer peerto, TLVector<int> messagesId)
-        {
-            if (!IsUserAuthorized())
-                throw new InvalidOperationException("Authorize user first!");
-
-            return await SendRequestAsync<TLAbsUpdates>(
-                new TLRequestForwardMessages()
-                {
-                    Id = messagesId,
-                    ToPeer = peerto,
-                    FromPeer = peerfrom,
-                    RandomId = new TLVector<long>() { Helpers.GenerateRandomLong() }
-                });
-        }
-
-        public async Task<TLAbsUpdates> ForwardMessageAsync(TLAbsInputPeer peer, int messageId)
+        public async Task<TLAbsUpdates> ForwardMessageAsync(TLAbsInputPeer target, int messageId)
         {
             if (!IsUserAuthorized())
                 throw new InvalidOperationException("Authorize user first!");
@@ -297,11 +259,12 @@ namespace TLSharp.Core
             return await SendRequestAsync<TLAbsUpdates>(
                 new TLRequestForwardMessage()
                 {
+                    Peer = target,
                     Id = messageId,
-                    Peer = peer,
                     RandomId = Helpers.GenerateRandomLong()
                 });
         }
+
 
         public async Task<Boolean> SendTypingAsync(TLAbsInputPeer peer)
         {
@@ -378,22 +341,6 @@ namespace TLSharp.Core
                 Peer = peer,
                 AddOffset = offset,
                 MaxId = max_id,
-                Limit = limit
-            };
-            return await SendRequestAsync<TLAbsMessages>(req);
-        }
-
-        public async Task<TLAbsMessages> GetHistoryAsync(TLAbsInputPeer peer, int offset, int max_id, int min_id, int limit)
-        {
-            if (!IsUserAuthorized())
-                throw new InvalidOperationException("Authorize user first!");
-
-            var req = new TLRequestGetHistory()
-            {
-                Peer = peer,
-                AddOffset = offset,
-                MaxId = max_id,
-                MinId = min_id,
                 Limit = limit
             };
             return await SendRequestAsync<TLAbsMessages>(req);
