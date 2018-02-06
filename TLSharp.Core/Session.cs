@@ -27,7 +27,7 @@ namespace TLSharp.Core
         {
             var sessionFileName = $"{sessionUserId}.dat";
             //if (!File.Exists(sessionFileName))
-                return null;
+            return null;
 
             using (var stream = new FileStream(sessionFileName, FileMode.Open))
             {
@@ -54,9 +54,9 @@ namespace TLSharp.Core
 
     public class Session
     {
-	    private const string defaultConnectionAddress = "149.154.175.100";//"149.154.167.50";
+        private const string defaultConnectionAddress = "149.154.175.100";//"149.154.167.50";
 
-		private const int defaultConnectionPort = 443;
+        private const int defaultConnectionPort = 443;
 
         public string SessionUserId { get; set; }
         public string ServerAddress { get; set; }
@@ -179,7 +179,7 @@ namespace TLSharp.Core
             long newMessageId = ((time / 1000 + TimeOffset) << 32) |
                                 ((time % 1000) << 22) |
                                 (random.Next(524288) << 2); // 2^19
-                                                            // [ unix timestamp : 32 bit] [ milliseconds : 10 bit ] [ buffer space : 1 bit ] [ random : 19 bit ] [ msg_id type : 2 bit ] = [ msg_id : 64 bit ]
+            // [ unix timestamp : 32 bit] [ milliseconds : 10 bit ] [ buffer space : 1 bit ] [ random : 19 bit ] [ msg_id type : 2 bit ] = [ msg_id : 64 bit ]
 
             if (LastMessageId >= newMessageId)
             {

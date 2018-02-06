@@ -12,6 +12,25 @@ namespace TLSharp.Core.Auth
         public byte[] ServerNonce { get; set; }
         public byte[] NewNonce { get; set; }
         public byte[] EncryptedAnswer { get; set; }
+
+        public byte[] ToBytes()
+        {
+            new Random().NextBytes(Nonce);
+            const uint constructorNumber = 0xd0e8075c;
+
+            using (var memoryStream = new MemoryStream())
+            {
+                using (var binaryWriter = new BinaryWriter(memoryStream))
+                {
+                    binaryWriter.Write(constructorNumber);
+                    binaryWriter.Write(ServerNonce);
+                    binaryWriter.Write(Nonce);
+                    binaryWriter.Write(EncryptedAnswer);
+
+                    return memoryStream.ToArray();
+                }
+            }
+        }
     }
 
     public class Step2_DHExchange
@@ -48,7 +67,7 @@ namespace TLSharp.Core.Auth
                     foreach (byte[] fingerprint in fingerprints)
                     {
                         ciphertext = RSA.Encrypt(BitConverter.ToString(fingerprint).Replace("-", string.Empty),
-                                                 pqInnerData.GetBuffer(), 0, (int)pqInnerData.Position);
+                            pqInnerData.GetBuffer(), 0, (int)pqInnerData.Position);
                         if (ciphertext != null)
                         {
                             targetFingerprint = fingerprint;

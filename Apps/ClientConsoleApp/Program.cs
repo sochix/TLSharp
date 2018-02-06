@@ -19,10 +19,15 @@ namespace ClientConsoleApp
 
         static void Main(string[] args)
         {
-            System.Threading.Thread.Sleep(2000);
+            Thread.Sleep(2000);
             Console.WriteLine("Hello World!");
 
-            var client = GetTlgClient().Result;
+            //var tcpClient = new TcpClient();
+            //tcpClient.Connect(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 5000));
+            //TestTcpClient(tcpClient);
+            //TestTcpClient(tcpClient);
+
+            TelegramClient client = GetTlgClient().Result;
             var normalizedNumber = NumberToSendMessage.StartsWith("+") ?
                 NumberToSendMessage.Substring(1, NumberToSendMessage.Length - 1) :
                 NumberToSendMessage;
@@ -86,10 +91,8 @@ namespace ClientConsoleApp
 
         }
 
-        private static void TestTcpClient()
+        private static void TestTcpClient(TcpClient tcpClient)
         {
-            var tcpClient = new TcpClient();
-            tcpClient.Connect(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 5000));
             if (tcpClient.Connected)
             {
                 using (var memoryStream = new MemoryStream())
@@ -108,8 +111,7 @@ namespace ClientConsoleApp
                 }
             }
 
-            System.Threading.Thread.Sleep(20000);
-
+            Thread.Sleep(5000);
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Ionic.Crc;
 using TLSharp.Core.Auth;
+using TLSharp.Core.MTProto;
 using TLSharp.Core.MTProto.Crypto;
 using TLSharp.Core.Network;
 using TLSharp.Core.Utils;
@@ -59,16 +60,141 @@ namespace TlgListenerApplication
             }
         }
 
-
-        private static void ProcessRequestBySocket(TcpListener tcpListener)
+        private static void ProcessRequest(TcpListener tcpListener)
         {
-            Console.WriteLine("Processing socket...");
-            var socketClient = tcpListener.AcceptSocket();
+            Console.WriteLine("Processing...");
+            var tcpClient = tcpListener.AcceptTcpClient();
+            var netStream = tcpClient.GetStream();
+
+            //var getingCounter = 0;
+            //while (true)
+            //{
+            //    if (!netStream.DataAvailable)
+            //        continue;
+            //    Console.WriteLine("Get data " + ++getingCounter);
+            //}
+
+            while (tcpClient.Connected)
+            {
+                System.Threading.Thread.Sleep(100);
+                if (!netStream.DataAvailable) continue;
+
+                byte[] nonceFromClient = new byte[16];
+                uint responseCode = 0;
+                const uint step1Constructor = 0x60469778;
+                const uint step2Constructor = 0xd712e4be;
+
+                if (netStream.CanRead)
+                {
+                    var bytes = new byte[tcpClient.ReceiveBufferSize];
+                    netStream.Read(bytes, 0, (int)tcpClient.ReceiveBufferSize);
+                    var tcpMessage = TcpMessage.Decode(bytes);
+                    var binaryReader = new BinaryReader(new MemoryStream(tcpMessage.Body, false));
+                    var a = binaryReader.ReadInt64();
+                    var msgId = binaryReader.ReadInt64();
+                    var datalength = binaryReader.ReadInt32();
+                    var data = binaryReader.ReadBytes(datalength);
+
+                    var binaryReader2 = new BinaryReader(new MemoryStream(data, false));
+
+                    responseCode = binaryReader2.ReadUInt32();
+                    Console.WriteLine("Request code: " + responseCode);
+                    if (responseCode == step1Constructor)//---Step1_PQRequest
+                    {
+                        nonceFromClient = binaryReader2.ReadBytes(16);
+                    }
+                    else if (responseCode == step2Constructor)//---Step1_PQRequest
+                    {
+                        nonceFromClient = binaryReader2.ReadBytes(16);
+                    }
+
+                    //var obj = new Step1_PQRequest().FromBytes(data);
+                    //var rr = FromByteArray<Step1_PQRequest>(data);
+
+                    //var binaryReader = new BinaryReader(netStream);
+                    //var a = binaryReader.ReadInt64();
+                    //var b = binaryReader.ReadInt32();
+                    //var c = binaryReader.ReadInt32();
+                    //var d = binaryReader.ReadInt32();
+
+                    //Console.WriteLine("This is what the host returned to you: " + returndata);
+                }
+
+                if (netStream.CanWrite)
+                {
+                   
+                    var fingerprint = StringToByteArray("216be86c022bb4c3");
+
+                    byte[] outputdata = null;
+                    if (responseCode == step1Constructor)
+                    {
+                        var nonce = new byte[16];
+                        new Random().NextBytes(nonce);
+                        outputdata = new Step1_Response()
+                        {
+                            Pq = new BigInteger(1, BitConverter.GetBytes(880)),
+                            ServerNonce = nonceFromClient,
+                            Nonce = nonce,
+                            Fingerprints = new List<byte[]>() { fingerprint }
+                        }.ToBytes();
+                    }
+                    else if (responseCode == step2Constructor)
+                    {
+                        var newnonce = new byte[32];
+                        new Random().NextBytes(newnonce);
+
+                        byte[] answer;
+                        var hashsum = Encoding.UTF8.GetBytes("asdfghjklmnbvcxzasdf");
+                        const uint innerCode = 0xb5890dba;
+                        AESKeyData key = AES.GenerateKeyDataFromNonces(nonceFromClient, newnonce);
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            using (var binaryWriter = new BinaryWriter(memoryStream))
+                            {
+                                binaryWriter.Write(hashsum);
+                                binaryWriter.Write(innerCode);
+                                binaryWriter.Write(nonceFromClient);
+                                binaryWriter.Write(newnonce);
+                                binaryWriter.Write(123456789);
+                                Serializers.Bytes.write(binaryWriter, new BigInteger(1, BitConverter.GetBytes(777)).ToByteArrayUnsigned());
+                                Serializers.Bytes.write(binaryWriter, new BigInteger(1, BitConverter.GetBytes(888)).ToByteArrayUnsigned());
+                                answer = memoryStream.ToArray();
+                            }
+                        }
+
+                        outputdata = new Step2_Response()
+                        {
+                            ServerNonce = nonceFromClient,
+                            Nonce = newnonce,
+                            NewNonce = newnonce,
+                            EncryptedAnswer = AES.EncryptAES(key, answer)
+                        }.ToBytes();
+                    }
+
+                    var bytes = PrepareToSend(outputdata);
+                    var datatosend = Encode(bytes, 11);
+                    netStream.Write(datatosend, 0, datatosend.Length);
+                }
+                else
+                {
+                    Console.WriteLine("You cannot write data to this stream.");
+                    tcpClient.Close();
+                    netStream.Close();
+                }
+            }
+        }
+
+        private static void ProcessRequestSocket(TcpListener tcpListener)
+        {
+            Console.WriteLine("Processing...");
+            var tcpClient = tcpListener.AcceptSocket();
+
+            var bytes = new byte[tcpClient.ReceiveBufferSize];
+            var countbyte = tcpClient.Receive(bytes);
+
+            return;
 
             byte[] nonceFromClient = new byte[16];
-
-            var bytes = new byte[socketClient.ReceiveBufferSize];
-            socketClient.Receive(bytes);
             var tcpMessage = TcpMessage.Decode(bytes);
             var binaryReader = new BinaryReader(new MemoryStream(tcpMessage.Body, false));
             var a = binaryReader.ReadInt64();
@@ -89,6 +215,7 @@ namespace TlgListenerApplication
             new Random().NextBytes(nonce);
 
             var fingerprint = StringToByteArray("216be86c022bb4c3");
+            //var rr = BitConverter.ToString(fingerprint).Replace("-", "");
 
             var step1 = new Step1_Response()
             {
@@ -97,80 +224,12 @@ namespace TlgListenerApplication
                 Nonce = nonce,
                 Fingerprints = new List<byte[]>() { fingerprint }
             };
-            var bytestosend = PrepareToSend(step1.ToBytes());
-            var datatosend = Encode(bytestosend, 11);
-            socketClient.Send(datatosend);
-        }
+            var bytes1 = PrepareToSend(step1.ToBytes());
+            var datatosend = Encode(bytes1, 11);
+            //Byte[] sendBytes = Encoding.UTF8.GetBytes("Is anybody there?");
+            tcpClient.Send(datatosend, SocketFlags.Truncated);
 
-        private static void ProcessRequest(TcpListener tcpListener)
-        {
-            Console.WriteLine("Processing...");
-            var tcpClient = tcpListener.AcceptTcpClient();
-
-            var netStream = tcpClient.GetStream();
-            if (netStream.DataAvailable)
-            {
-                byte[] nonceFromClient = new byte[16];
-                if (netStream.CanRead)
-                {
-                    var bytes = new byte[tcpClient.ReceiveBufferSize];
-                    netStream.Read(bytes, 0, (int)tcpClient.ReceiveBufferSize);
-                    var tcpMessage = TcpMessage.Decode(bytes);
-                    var binaryReader = new BinaryReader(new MemoryStream(tcpMessage.Body, false));
-                    //var a = binaryReader.ReadInt64();
-                    var msgId = binaryReader.ReadInt64();
-                    var datalength = binaryReader.ReadInt32();
-                    var data = binaryReader.ReadBytes(datalength);
-
-                    var binaryReader2 = new BinaryReader(new MemoryStream(data, false));
-                    const int responseConstructorNumber = 0x60469778;
-                    var responseCode = binaryReader2.ReadInt32();
-                    Console.WriteLine("Request code: " + responseCode);
-                    if (responseCode == responseConstructorNumber)//---Step1_PQRequest
-                    {
-                        nonceFromClient = binaryReader2.ReadBytes(16);
-                    }
-
-                    //var obj = new Step1_PQRequest().FromBytes(data);
-                    //var rr = FromByteArray<Step1_PQRequest>(data);
-
-                    //var binaryReader = new BinaryReader(netStream);
-                    //var a = binaryReader.ReadInt64();
-                    //var b = binaryReader.ReadInt32();
-                    //var c = binaryReader.ReadInt32();
-                    //var d = binaryReader.ReadInt32();
-
-
-                    //Console.WriteLine("This is what the host returned to you: " + returndata);
-                }
-
-                if (netStream.CanWrite)
-                {
-                    var nonce = new byte[16];
-                    new Random().NextBytes(nonce);
-
-                    var fingerprint = StringToByteArray("216be86c022bb4c3");
-                    //var rr = BitConverter.ToString(fingerprint).Replace("-", "");
-
-                    var step1 = new Step1_Response()
-                    {
-                        Pq = new BigInteger(1, BitConverter.GetBytes(880)),
-                        ServerNonce = nonceFromClient,
-                        Nonce = nonce,
-                        Fingerprints = new List<byte[]>() { fingerprint }
-                    };
-                    var bytes = PrepareToSend(step1.ToBytes());
-                    var datatosend = Encode(bytes, 11);
-                    //Byte[] sendBytes = Encoding.UTF8.GetBytes("Is anybody there?");
-                    netStream.Write(datatosend, 0, datatosend.Length);
-                }
-                else
-                {
-                    Console.WriteLine("You cannot write data to this stream.");
-                    netStream.Close();
-                    tcpClient.Close();
-                }
-            }
+            //tcpClient.Close();
         }
 
         public static async Task<TcpMessage> Receieve(TcpClient tcpClient)
@@ -247,7 +306,7 @@ namespace TlgListenerApplication
             long newMessageId = ((time / 1000 + timeOffset) << 32) |
                                 ((time % 1000) << 22) |
                                 (random.Next(524288) << 2); // 2^19
-                                                            // [ unix timestamp : 32 bit] [ milliseconds : 10 bit ] [ buffer space : 1 bit ] [ random : 19 bit ] [ msg_id type : 2 bit ] = [ msg_id : 64 bit ]
+            // [ unix timestamp : 32 bit] [ milliseconds : 10 bit ] [ buffer space : 1 bit ] [ random : 19 bit ] [ msg_id type : 2 bit ] = [ msg_id : 64 bit ]
 
             if (lastMessageId >= newMessageId)
             {
