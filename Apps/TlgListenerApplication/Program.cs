@@ -83,6 +83,7 @@ namespace TlgListenerApplication
                 uint responseCode = 0;
                 const uint step1Constructor = 0x60469778;
                 const uint step2Constructor = 0xd712e4be;
+                const uint step3Constructor = 0xf5045f1f;
 
                 if (netStream.CanRead)
                 {
@@ -122,7 +123,7 @@ namespace TlgListenerApplication
 
                 if (netStream.CanWrite)
                 {
-                   
+
                     var fingerprint = StringToByteArray("216be86c022bb4c3");
 
                     byte[] outputdata = null;
@@ -140,13 +141,13 @@ namespace TlgListenerApplication
                     }
                     else if (responseCode == step2Constructor)
                     {
-                        var newnonce = new byte[32];
+                        var newnonce = new byte[16];
                         new Random().NextBytes(newnonce);
 
                         byte[] answer;
                         var hashsum = Encoding.UTF8.GetBytes("asdfghjklmnbvcxzasdf");
                         const uint innerCode = 0xb5890dba;
-                        AESKeyData key = AES.GenerateKeyDataFromNonces(nonceFromClient, newnonce);
+                        AESKeyData key = AES.GenerateKeyDataFromNonces(newnonce, newnonce);
                         using (var memoryStream = new MemoryStream())
                         {
                             using (var binaryWriter = new BinaryWriter(memoryStream))
@@ -169,6 +170,23 @@ namespace TlgListenerApplication
                             NewNonce = newnonce,
                             EncryptedAnswer = AES.EncryptAES(key, answer)
                         }.ToBytes();
+                    }
+                    else if (responseCode == step3Constructor)
+                    {
+                        var newnonce = new byte[16];
+                        new Random().NextBytes(newnonce);
+                        const uint innerCode = 0x3bcbf734;
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            using (var binaryWriter = new BinaryWriter(memoryStream))
+                            {
+                                binaryWriter.Write(innerCode);
+                                binaryWriter.Write(newnonce);
+                                binaryWriter.Write(nonceFromClient);
+                                binaryWriter.Write(newnonce);
+                                outputdata = memoryStream.ToArray();
+                            }
+                        }
                     }
 
                     var bytes = PrepareToSend(outputdata);

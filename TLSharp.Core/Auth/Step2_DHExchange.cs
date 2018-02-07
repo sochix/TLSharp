@@ -15,7 +15,6 @@ namespace TLSharp.Core.Auth
 
         public byte[] ToBytes()
         {
-            new Random().NextBytes(Nonce);
             const uint constructorNumber = 0xd0e8075c;
 
             using (var memoryStream = new MemoryStream())
@@ -25,7 +24,8 @@ namespace TLSharp.Core.Auth
                     binaryWriter.Write(constructorNumber);
                     binaryWriter.Write(ServerNonce);
                     binaryWriter.Write(Nonce);
-                    binaryWriter.Write(EncryptedAnswer);
+                    //binaryWriter.Write(EncryptedAnswer);
+                    Serializers.Bytes.write(binaryWriter, EncryptedAnswer);
 
                     return memoryStream.ToArray();
                 }
@@ -152,7 +152,7 @@ namespace TLSharp.Core.Auth
                         EncryptedAnswer = encryptedAnswer,
                         ServerNonce = serverNonceFromServer,
                         Nonce = nonceFromServer,
-                        NewNonce = newNonce
+                        NewNonce = serverNonceFromServer
                     };
                 }
             }

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text;
 using TLSharp.Core.MTProto;
 using TLSharp.Core.MTProto.Crypto;
 
@@ -11,7 +12,6 @@ namespace TLSharp.Core.Auth
     {
         public AuthKey AuthKey { get; set; }
         public int TimeOffset { get; set; }
-
     }
 
     public class Step3_CompleteDHExchange
@@ -37,6 +37,7 @@ namespace TLSharp.Core.Auth
                 using (BinaryReader dhInnerDataReader = new BinaryReader(dhInnerData))
                 {
                     byte[] hashsum = dhInnerDataReader.ReadBytes(20);
+                    var hashsumstr = Encoding.UTF8.GetString(hashsum);
                     uint code = dhInnerDataReader.ReadUInt32();
                     if (code != 0xb5890dba)
                     {
