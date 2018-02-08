@@ -117,8 +117,6 @@ namespace TlgListenerApplication
                     //var b = binaryReader.ReadInt32();
                     //var c = binaryReader.ReadInt32();
                     //var d = binaryReader.ReadInt32();
-
-                    //Console.WriteLine("This is what the host returned to you: " + returndata);
                 }
 
                 if (netStream.CanWrite)
