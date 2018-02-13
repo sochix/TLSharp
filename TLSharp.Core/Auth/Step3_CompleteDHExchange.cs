@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
 using TLSharp.Core.MTProto;
 using TLSharp.Core.MTProto.Crypto;
 
