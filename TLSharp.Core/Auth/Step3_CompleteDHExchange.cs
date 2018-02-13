@@ -37,7 +37,6 @@ namespace TLSharp.Core.Auth
                 using (BinaryReader dhInnerDataReader = new BinaryReader(dhInnerData))
                 {
                     byte[] hashsum = dhInnerDataReader.ReadBytes(20);
-                    var hashsumstr = Encoding.UTF8.GetString(hashsum);
                     uint code = dhInnerDataReader.ReadUInt32();
                     if (code != 0xb5890dba)
                     {

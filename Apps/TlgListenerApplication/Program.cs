@@ -91,22 +91,38 @@ namespace TlgListenerApplication
                     netStream.Read(bytes, 0, (int)tcpClient.ReceiveBufferSize);
                     var tcpMessage = TcpMessage.Decode(bytes);
                     var binaryReader = new BinaryReader(new MemoryStream(tcpMessage.Body, false));
-                    var a = binaryReader.ReadInt64();
-                    var msgId = binaryReader.ReadInt64();
-                    var datalength = binaryReader.ReadInt32();
-                    var data = binaryReader.ReadBytes(datalength);
 
-                    var binaryReader2 = new BinaryReader(new MemoryStream(data, false));
-
-                    responseCode = binaryReader2.ReadUInt32();
-                    Console.WriteLine("Request code: " + responseCode);
-                    if (responseCode == step1Constructor)//---Step1_PQRequest
+                    var authKeyId = binaryReader.ReadInt64();
+                    if (authKeyId == 0)
                     {
-                        nonceFromClient = binaryReader2.ReadBytes(16);
+                        var msgId = binaryReader.ReadInt64();
+                        var datalength = binaryReader.ReadInt32();
+                        var data = binaryReader.ReadBytes(datalength);
+
+                        var binaryReader2 = new BinaryReader(new MemoryStream(data, false));
+
+                        responseCode = binaryReader2.ReadUInt32();
+                        Console.WriteLine("Request code: " + responseCode);
+                        if (responseCode == step1Constructor) //---Step1_PQRequest
+                        {
+                            nonceFromClient = binaryReader2.ReadBytes(16);
+                        }
+                        else if (responseCode == step2Constructor) //---Step1_PQRequest
+                        {
+                            nonceFromClient = binaryReader2.ReadBytes(16);
+                        }
                     }
-                    else if (responseCode == step2Constructor)//---Step1_PQRequest
+                    else
                     {
-                        nonceFromClient = binaryReader2.ReadBytes(16);
+                        var decodeMessage = DecodeMessage(tcpMessage.Body);
+                        var buffer = new byte[binaryReader.BaseStream.Length - 24];
+                        int count;
+                        using (var ms = new MemoryStream())
+                            while ((count = binaryReader.Read(buffer, 0, buffer.Length)) != 0)
+                                ms.Write(buffer, 0, count);
+
+                        //var keyData = Helpers.CalcKey(buffer, messageKey, false);
+                        //var data = AES.DecryptAES(keyData, buffer);
                     }
 
                     //var obj = new Step1_PQRequest().FromBytes(data);
@@ -333,7 +349,7 @@ namespace TlgListenerApplication
             return newMessageId;
         }
 
-        private Tuple<byte[], ulong, int> DecodeMessage(byte[] body)
+        private static Tuple<byte[], ulong, int> DecodeMessage(byte[] body)
         {
             byte[] message;
             ulong remoteMessageId;

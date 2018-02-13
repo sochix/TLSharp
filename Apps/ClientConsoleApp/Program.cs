@@ -48,7 +48,7 @@ namespace ClientConsoleApp
             int ApiId = int.Parse(ConfigurationManager.AppSettings["ApiId"]);
             //string AuthCode = ConfigurationManager.AppSettings["AuthCode"];
             string MainPhoneNumber = ConfigurationManager.AppSettings["NumberToAuthenticate"];
-            var client = new TelegramClient(ApiId, ApiHash, null, "session", null, "127.0.0.1", 5000);
+            var client = new TelegramClient(ApiId, ApiHash);//, null, "session", null, "127.0.0.1", 5000
             var phoneCodeHash = string.Empty;
             authenticated:
             Console.WriteLine("Start app");
