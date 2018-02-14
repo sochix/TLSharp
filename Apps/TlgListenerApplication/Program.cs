@@ -80,6 +80,8 @@ namespace TlgListenerApplication
                 if (!netStream.DataAvailable) continue;
 
                 byte[] nonceFromClient = new byte[16];
+                byte[] servernonce = new byte[16];
+                byte[] newNonce = new byte[32];
                 uint responseCode = 0;
                 const uint step1Constructor = 0x60469778;
                 const uint step2Constructor = 0xd712e4be;
@@ -110,6 +112,10 @@ namespace TlgListenerApplication
                         else if (responseCode == step2Constructor) //---Step1_PQRequest
                         {
                             nonceFromClient = binaryReader2.ReadBytes(16);
+                            servernonce = binaryReader2.ReadBytes(16);
+                            var useless = binaryReader2.ReadBytes(13);
+                            var ciphertext = binaryReader2.ReadBytes(256);
+                            
                         }
                     }
                     else
@@ -155,13 +161,13 @@ namespace TlgListenerApplication
                     }
                     else if (responseCode == step2Constructor)
                     {
-                        var newnonce = new byte[16];
-                        new Random().NextBytes(newnonce);
+                        //var nonce = new byte[16];
+                        //new Random().NextBytes(nonce);
 
                         byte[] answer;
                         var hashsum = Encoding.UTF8.GetBytes("asdfghjklmnbvcxzasdf");
                         const uint innerCode = 0xb5890dba;
-                        AESKeyData key = AES.GenerateKeyDataFromNonces(newnonce, newnonce);
+                        AESKeyData key = AES.GenerateKeyDataFromNonces(servernonce, newNonce);
                         using (var memoryStream = new MemoryStream())
                         {
                             using (var binaryWriter = new BinaryWriter(memoryStream))
@@ -169,7 +175,7 @@ namespace TlgListenerApplication
                                 binaryWriter.Write(hashsum);
                                 binaryWriter.Write(innerCode);
                                 binaryWriter.Write(nonceFromClient);
-                                binaryWriter.Write(newnonce);
+                                binaryWriter.Write(newNonce);
                                 binaryWriter.Write(123456789);
                                 Serializers.Bytes.write(binaryWriter, new BigInteger(1, BitConverter.GetBytes(777)).ToByteArrayUnsigned());
                                 Serializers.Bytes.write(binaryWriter, new BigInteger(1, BitConverter.GetBytes(888)).ToByteArrayUnsigned());
@@ -180,8 +186,8 @@ namespace TlgListenerApplication
                         outputdata = new Step2_Response()
                         {
                             ServerNonce = nonceFromClient,
-                            Nonce = newnonce,
-                            NewNonce = newnonce,
+                            Nonce = servernonce,
+                            NewNonce = newNonce,
                             EncryptedAnswer = AES.EncryptAES(key, answer)
                         }.ToBytes();
                     }

@@ -26,8 +26,8 @@ namespace TLSharp.Core
         public Session Load(string sessionUserId)
         {
             var sessionFileName = $"{sessionUserId}.dat";
-            //if (!File.Exists(sessionFileName))
-            return null;
+            if (!File.Exists(sessionFileName))
+                return null;
 
             using (var stream = new FileStream(sessionFileName, FileMode.Open))
             {
