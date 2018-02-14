@@ -129,6 +129,7 @@ namespace TLSharp.Core
                 finally
                 {
                     IdleLoop?.Invoke(this);
+                    IdleLoop = null;
                 }
             }
         }
