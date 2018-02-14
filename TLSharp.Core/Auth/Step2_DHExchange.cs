@@ -152,7 +152,7 @@ namespace TLSharp.Core.Auth
                         EncryptedAnswer = encryptedAnswer,
                         ServerNonce = serverNonceFromServer,
                         Nonce = nonceFromServer,
-                        NewNonce = serverNonceFromServer
+                        NewNonce = newNonce
                     };
                 }
             }
