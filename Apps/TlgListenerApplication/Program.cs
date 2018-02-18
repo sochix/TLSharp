@@ -114,8 +114,10 @@ namespace TlgListenerApplication
                             nonceFromClient = binaryReader2.ReadBytes(16);
                             servernonce = binaryReader2.ReadBytes(16);
                             var useless = binaryReader2.ReadBytes(13);
-                            var ciphertext = binaryReader2.ReadBytes(256);
-                            
+                            var ciphertext = binaryReader2.ReadBytes(500);
+                            var newnoncetemp = new byte[32];
+                            Array.Copy(ciphertext, ciphertext.Length - 32, newnoncetemp,0,32);
+                            //ciphertext.CopyTo(newnoncetemp, ciphertext.Length - 32);
                         }
                     }
                     else
