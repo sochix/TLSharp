@@ -11,7 +11,6 @@ namespace TLSharp.Core.Auth
     {
         public AuthKey AuthKey { get; set; }
         public int TimeOffset { get; set; }
-
     }
 
     public class Step3_CompleteDHExchange

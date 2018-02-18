@@ -319,6 +319,10 @@ namespace TLSharp.Core.Network
                 {
                     throw new CloudPasswordNeededException("This Account has Cloud Password !");
                 }
+                else if (errorMessage == "MESSAGE_ID_INVALID")
+                {
+                    throw new InvalidOperationException("The provided message id is invalid " + errorMessage);
+                }
                 else
                 {
                     throw new InvalidOperationException(errorMessage);
@@ -548,7 +552,7 @@ namespace TLSharp.Core.Network
         private const string REPORT_MESSAGE =
             " See: https://github.com/sochix/TLSharp#i-get-a-xxxmigrationexception-or-a-migrate_x-error";
 
-        protected DataCenterMigrationException(string msg, int dc) : base (msg + REPORT_MESSAGE)
+        protected DataCenterMigrationException(string msg, int dc) : base(msg + REPORT_MESSAGE)
         {
             DC = dc;
         }
@@ -557,7 +561,7 @@ namespace TLSharp.Core.Network
     internal class PhoneMigrationException : DataCenterMigrationException
     {
         internal PhoneMigrationException(int dc)
-            : base ($"Phone number registered to a different DC: {dc}.", dc)
+            : base($"Phone number registered to a different DC: {dc}.", dc)
         {
         }
     }
@@ -565,7 +569,7 @@ namespace TLSharp.Core.Network
     internal class FileMigrationException : DataCenterMigrationException
     {
         internal FileMigrationException(int dc)
-            : base ($"File located on a different DC: {dc}.", dc)
+            : base($"File located on a different DC: {dc}.", dc)
         {
         }
     }
@@ -577,7 +581,7 @@ namespace TLSharp.Core.Network
         {
         }
     }
-    
+
     internal class NetworkMigrationException : DataCenterMigrationException
     {
         internal NetworkMigrationException(int dc)

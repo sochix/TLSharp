@@ -31,7 +31,7 @@ namespace TLSharp.Core
         private TcpClientConnectionHandler _handler;
 
         public TelegramClient(int apiId, string apiHash,
-            ISessionStore store = null, string sessionUserId = "session", TcpClientConnectionHandler handler = null)
+            ISessionStore store = null, string sessionUserId = "session", TcpClientConnectionHandler handler = null, string serverAddress = "", int? serverPort = null)
         {
             if (apiId == default(int))
                 throw new MissingApiConfigurationException("API_ID");
@@ -46,8 +46,8 @@ namespace TLSharp.Core
             _apiId = apiId;
             _handler = handler;
 
-            _session = Session.TryLoadOrCreateNew(store, sessionUserId);
-            _transport = new TcpTransport(_session.ServerAddress, _session.Port, _handler);
+            _session = Session.TryLoadOrCreateNew(store, sessionUserId, serverAddress, serverPort);
+            _transport = new TcpTransport(string.IsNullOrEmpty(serverAddress) ? _session.ServerAddress : serverAddress, serverPort ?? _session.Port, _handler);
         }
 
         public async Task<bool> ConnectAsync(bool reconnect = false)
@@ -109,10 +109,10 @@ namespace TLSharp.Core
             }
         }
 
-        private async Task RequestWithDcMigration(TLMethod request) 
+        private async Task RequestWithDcMigration(TLMethod request)
         {
             var completed = false;
-            while(!completed)
+            while (!completed)
             {
                 try
                 {
@@ -120,7 +120,7 @@ namespace TLSharp.Core
                     await _sender.Receive(request);
                     completed = true;
                 }
-                catch(DataCenterMigrationException e)
+                catch (DataCenterMigrationException e)
                 {
                     await ReconnectToDcAsync(e.DC);
                     // prepare the request for another try
@@ -171,7 +171,7 @@ namespace TLSharp.Core
 
             if (String.IsNullOrWhiteSpace(code))
                 throw new ArgumentNullException(nameof(code));
-            
+
             var request = new TLRequestSignIn() { PhoneNumber = phoneNumber, PhoneCodeHash = phoneCodeHash, PhoneCode = code };
 
             await RequestWithDcMigration(request);
@@ -180,7 +180,7 @@ namespace TLSharp.Core
 
             return ((TLUser)request.Response.User);
         }
-        
+
         public async Task<TLPassword> GetPasswordSetting()
         {
             var request = new TLRequestGetPassword();
@@ -211,7 +211,7 @@ namespace TLSharp.Core
         public async Task<TLUser> SignUpAsync(string phoneNumber, string phoneCodeHash, string code, string firstName, string lastName)
         {
             var request = new TLRequestSignUp() { PhoneNumber = phoneNumber, PhoneCode = code, PhoneCodeHash = phoneCodeHash, FirstName = firstName, LastName = lastName };
-            
+
             await RequestWithDcMigration(request);
 
             OnUserAuthenticated(((TLUser)request.Response.User));
@@ -250,6 +250,21 @@ namespace TLSharp.Core
                        RandomId = Helpers.GenerateRandomLong()
                    });
         }
+
+        public async Task<TLAbsUpdates> ForwardMessageAsync(TLAbsInputPeer target, int messageId)
+        {
+            if (!IsUserAuthorized())
+                throw new InvalidOperationException("Authorize user first!");
+
+            return await SendRequestAsync<TLAbsUpdates>(
+                new TLRequestForwardMessage()
+                {
+                    Peer = target,
+                    Id = messageId,
+                    RandomId = Helpers.GenerateRandomLong()
+                });
+        }
+
 
         public async Task<Boolean> SendTypingAsync(TLAbsInputPeer peer)
         {

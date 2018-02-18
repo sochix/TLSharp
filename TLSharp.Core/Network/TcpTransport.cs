@@ -18,8 +18,7 @@ namespace TLSharp.Core.Network
             {
                 _tcpClient = new TcpClient();
 
-                var ipAddress = IPAddress.Parse(address);
-                _tcpClient.Connect(ipAddress, port);
+                _tcpClient.Connect(IPAddress.Parse(address), port);
             }
             else
                 _tcpClient = handler(address, port);
@@ -38,6 +37,9 @@ namespace TLSharp.Core.Network
 
         public async Task<TcpMessage> Receieve()
         {
+            if (!_tcpClient.Connected)
+                throw new InvalidOperationException("Client not connected to server.");
+
             var stream = _tcpClient.GetStream();
 
             var packetLengthBytes = new byte[4];
