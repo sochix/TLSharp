@@ -18,6 +18,8 @@ namespace TLSharp.Core.Network
     {
         //private ulong sessionId = GenerateRandomUlong();
 
+        private static NLog.Logger logger = NLog.LogManager.GetLogger("MTProto");
+
         private readonly uint UpdatesTooLongID = (uint) new TeleSharp.TL.TLUpdatesTooLong ().Constructor;
 
         private TcpTransport _transport;
@@ -88,7 +90,9 @@ namespace TLSharp.Core.Network
                     plaintextWriter.Write(packet.Length);
                     plaintextWriter.Write(packet);
 
-                    msgKey = Helpers.CalcMsgKey(plaintextPacket.GetBuffer());
+                    var buffer = plaintextPacket.GetBuffer();
+                    logger.Debug(Sniffer.MessageOut(buffer));
+                    msgKey = Helpers.CalcMsgKey(buffer);
                     ciphertext = AES.EncryptAES(Helpers.CalcKey(_session.AuthKey.Data, msgKey, true), plaintextPacket.GetBuffer());
                 }
             }
@@ -123,6 +127,7 @@ namespace TLSharp.Core.Network
                 AESKeyData keyData = Helpers.CalcKey(_session.AuthKey.Data, msgKey, false);
 
                 byte[] plaintext = AES.DecryptAES(keyData, inputReader.ReadBytes((int)(inputStream.Length - inputStream.Position)));
+                logger.Debug(Sniffer.MessageIn(plaintext));
 
                 using (MemoryStream plaintextStream = new MemoryStream(plaintext))
                 using (BinaryReader plaintextReader = new BinaryReader(plaintextStream))
