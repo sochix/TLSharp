@@ -91,7 +91,7 @@ namespace TLSharp.Core.Network
                     plaintextWriter.Write(packet);
 
                     var buffer = plaintextPacket.GetBuffer();
-                    logger.Debug(Sniffer.MessageOut(buffer));
+                    logger.Debug("Send {0} {1}", request, Sniffer.MessageOut(buffer));
                     msgKey = Helpers.CalcMsgKey(buffer);
                     ciphertext = AES.EncryptAES(Helpers.CalcKey(_session.AuthKey.Data, msgKey, true), plaintextPacket.GetBuffer());
                 }
