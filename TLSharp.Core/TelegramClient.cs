@@ -120,6 +120,8 @@ namespace TLSharp.Core
         public async Task MainLoopAsync(int timeslicems)
         {
             logger.Trace("Entered loop");
+            await SendPingAsync();
+            var lastPing = DateTime.UtcNow;
             for (;;)
             {
                 try
@@ -131,6 +133,12 @@ namespace TLSharp.Core
                 }
                 finally
                 {
+                    var now = DateTime.UtcNow;
+                    if ((now - lastPing).TotalSeconds >= 30)
+                    {
+                        await SendPingAsync();
+                        lastPing = now;
+                    }
                     if (IdleLoop != null)
                     {
                         logger.Trace("Running idle tasks");
@@ -262,6 +270,7 @@ namespace TLSharp.Core
         }
         public async Task<T> SendRequestAsync<T>(TLMethod methodToExecute)
         {
+            logger.Info("Sending Request: {0} {1:x8}", methodToExecute, methodToExecute.Constructor);
             await RequestWithDcMigration(methodToExecute);
 
             var result = methodToExecute.GetType().GetProperty("Response").GetValue(methodToExecute);

@@ -199,6 +199,7 @@ namespace TLSharp.Core.Network
 
             uint code = messageReader.ReadUInt32();
             messageReader.BaseStream.Position -= 4;
+            logger.Info("Processing message {0:x8}", code);
             switch (code)
             {
                 case 0x73f1f8dc: // container
@@ -243,7 +244,7 @@ namespace TLSharp.Core.Network
                 case 0x11f1331c:
                     return HandleUpdate(code, sequence, messageReader, request);
                 default:
-                    Console.WriteLine ("Msg code: {0:x8}", code);
+                    logger.Info("unhandled message");
                     return false;
             }
         }
