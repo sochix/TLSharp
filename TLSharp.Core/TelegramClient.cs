@@ -120,8 +120,8 @@ namespace TLSharp.Core
         public async Task MainLoopAsync(int timeslicems)
         {
             logger.Trace("Entered loop");
-            await SendPingAsync();
             var lastPing = DateTime.UtcNow;
+            await SendPingAsync();
             for (;;)
             {
                 try
