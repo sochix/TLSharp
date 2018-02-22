@@ -18,7 +18,7 @@ namespace TLSharp.Core.Network
         private static string WriteMessage(StringBuilder log, byte[] data)
         {
             foreach (var b in data)
-                log.AppendFormat(" {:x2}", b);
+                log.AppendFormat(" {0:x2}", b);
             return log.ToString();
         }
     }
