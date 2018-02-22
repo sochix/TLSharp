@@ -22,7 +22,7 @@ namespace TLSharp.Core
 {
     public class TelegramClient : IDisposable
     {
-        private static NLog.Logger logger = NLog.LogManager.GetLogger("TelegramClient");
+        internal static NLog.Logger logger = NLog.LogManager.GetLogger("TelegramClient");
         private MtProtoSender _sender;
         private AuthKey _key;
         private TcpTransport _transport;
@@ -119,20 +119,24 @@ namespace TLSharp.Core
 
         public async Task MainLoopAsync(int timeslicems)
         {
+            logger.Trace("Entered loop");
             for (;;)
             {
                 try
                 {
-                    logger.Trace("Socket waiting");
                     await WaitEventAsync(timeslicems);
-                } catch (TimeoutException)
+                } catch (OperationCanceledException)
                 {
+                    logger.Trace("Timeout");
                 }
                 finally
                 {
-                    logger.Trace("Running idle tasks");
-                    IdleLoop?.Invoke(this);
-                    IdleLoop = null;
+                    if (IdleLoop != null)
+                    {
+                        logger.Trace("Running idle tasks");
+                        IdleLoop.Invoke(this);
+                        IdleLoop = null;
+                    }
                 }
             }
         }

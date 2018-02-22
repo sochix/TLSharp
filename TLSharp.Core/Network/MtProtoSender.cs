@@ -47,9 +47,8 @@ namespace TLSharp.Core.Network
             return confirmed ? _session.Sequence++ * 2 + 1 : _session.Sequence * 2;
         }
 
-        public async Task Send(TeleSharp.TL.TLMethod request)
+        private async Task Ack()
         {
-            // TODO: refactor
             if (needConfirmation.Any())
             {
                 var ackRequest = new AckRequest(needConfirmation);
@@ -61,8 +60,10 @@ namespace TLSharp.Core.Network
                     needConfirmation.Clear();
                 }
             }
+        }
 
-
+        public async Task Send(TeleSharp.TL.TLMethod request)
+        {
             using (var memory = new MemoryStream())
             using (var writer = new BinaryWriter(memory))
             {
@@ -91,7 +92,7 @@ namespace TLSharp.Core.Network
                     plaintextWriter.Write(packet);
 
                     var buffer = plaintextPacket.GetBuffer();
-                    logger.Debug("Send {0} {1}", request, Sniffer.MessageOut(buffer));
+                    logger.Debug("Send {0} {1:x8} {2}", request, request.Constructor, Sniffer.MessageOut(buffer));
                     msgKey = Helpers.CalcMsgKey(buffer);
                     ciphertext = AES.EncryptAES(Helpers.CalcKey(_session.AuthKey.Data, msgKey, true), plaintextPacket.GetBuffer());
                 }
@@ -194,6 +195,7 @@ namespace TLSharp.Core.Network
 
             //logger.debug("processMessage: msg_id {0}, sequence {1}, data {2}", BitConverter.ToString(((MemoryStream)messageReader.BaseStream).GetBuffer(), (int) messageReader.BaseStream.Position, (int) (messageReader.BaseStream.Length - messageReader.BaseStream.Position)).Replace("-","").ToLower());
             needConfirmation.Add(messageId);
+            Ack().Wait();
 
             uint code = messageReader.ReadUInt32();
             messageReader.BaseStream.Position -= 4;

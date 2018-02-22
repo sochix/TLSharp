@@ -10,8 +10,10 @@ namespace TLSharp.Core.Network
 
     public class TcpTransport : IDisposable
     {
+        private static NLog.Logger logger = TelegramClient.logger;
         private readonly TcpClient _tcpClient;
         private int sendCounter = 0;
+        private CancellationTokenSource tokenSource = new CancellationTokenSource();
 
         public TcpTransport(string address, int port, TcpClientConnectionHandler handler = null)
         {
@@ -39,17 +41,20 @@ namespace TLSharp.Core.Network
 
         public async Task<TcpMessage> Receieve()
         {
+            logger.Trace($"Wait for answer {_tcpClient.Available} ...");
             var stream = _tcpClient.GetStream();
 
             var packetLengthBytes = new byte[4];
             if (await stream.ReadAsync(packetLengthBytes, 0, 4) != 4)
                 throw new InvalidOperationException("Couldn't read the packet length");
             int packetLength = BitConverter.ToInt32(packetLengthBytes, 0);
+            logger.Debug("[IN] Packet length: {0}", packetLength);
 
             var seqBytes = new byte[4];
             if (await stream.ReadAsync(seqBytes, 0, 4) != 4)
                 throw new InvalidOperationException("Couldn't read the sequence");
             int seq = BitConverter.ToInt32(seqBytes, 0);
+            logger.Debug("[IN] Sequence: {0}", seq);
 
             int readBytes = 0;
             var body = new byte[packetLength - 12];
@@ -89,21 +94,33 @@ namespace TLSharp.Core.Network
 
         public async Task<TcpMessage> Receieve(int timeoutms)
         {
+            logger.Trace($"Wait for event {_tcpClient.Available} ...");
             var stream = _tcpClient.GetStream();
 
             var packetLengthBytes = new byte[4];
-            var recvTask = stream.ReadAsync(packetLengthBytes, 0, 4);
-            var task = await Task.WhenAny(recvTask, Task.Delay(timeoutms));
-            if (task != recvTask)
-                throw new TimeoutException();
-            if (recvTask.Result != 4)
+            var token = tokenSource.Token;
+            stream.ReadTimeout = timeoutms;
+            int bytes = 0;
+            try
+            {
+                bytes = stream.Read(packetLengthBytes, 0, 4);
+            } catch (System.IO.IOException io)
+            {
+                var socketError = io.InnerException as SocketException;
+                if (socketError != null && socketError.SocketErrorCode == SocketError.TimedOut)
+                    throw new OperationCanceledException();
+                throw io;
+            }
+            if (bytes != 4)
                 throw new InvalidOperationException("Couldn't read the packet length");
             int packetLength = BitConverter.ToInt32(packetLengthBytes, 0);
+            logger.Debug("[IN]* Packet length: {0}", packetLength);
 
             var seqBytes = new byte[4];
             if (await stream.ReadAsync(seqBytes, 0, 4) != 4)
                 throw new InvalidOperationException("Couldn't read the sequence");
             int seq = BitConverter.ToInt32(seqBytes, 0);
+            logger.Debug("[IN]* sequence: {0}", seq);
 
             int readBytes = 0;
             var body = new byte[packetLength - 12];
