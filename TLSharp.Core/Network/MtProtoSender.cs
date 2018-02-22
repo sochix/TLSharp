@@ -159,9 +159,9 @@ namespace TLSharp.Core.Network
             return null;
         }
 
-        public async Task<byte[]> Receive(CancellationToken token)
+        public async Task<byte[]> Receive(int timeoutms)
         {
-            var result = DecodeMessage ((await _transport.Receieve (token)).Body);
+            var result = DecodeMessage ((await _transport.Receieve (timeoutms)).Body);
 
             using (var messageStream = new MemoryStream (result.Item1, false))
             using (var messageReader = new BinaryReader (messageStream)) 

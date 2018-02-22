@@ -117,15 +117,15 @@ namespace TLSharp.Core
             }
         }
 
-        public async Task MainLoopAsync(CancellationTokenSource source)
+        public async Task MainLoopAsync(int timeslicems)
         {
             for (;;)
             {
                 try
                 {
                     logger.Trace("Socket waiting");
-                    await WaitEventAsync(source.Token);
-                } catch (OperationCanceledException)
+                    await WaitEventAsync(timeslicems);
+                } catch (TimeoutException)
                 {
                 }
                 finally
@@ -162,9 +162,9 @@ namespace TLSharp.Core
             }
         }
 
-        public async Task WaitEventAsync(CancellationToken token)
+        public async Task WaitEventAsync(int timeoutms)
         {
-           await _sender.Receive (token);
+            await _sender.Receive (timeoutms);
         }
 
         public bool IsUserAuthorized()

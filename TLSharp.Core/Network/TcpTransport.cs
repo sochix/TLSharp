@@ -87,12 +87,16 @@ namespace TLSharp.Core.Network
             return new TcpMessage(seq, body);
         }
 
-        public async Task<TcpMessage> Receieve(CancellationToken token)
+        public async Task<TcpMessage> Receieve(int timeoutms)
         {
             var stream = _tcpClient.GetStream();
 
             var packetLengthBytes = new byte[4];
-            if (await stream.ReadAsync(packetLengthBytes, 0, 4, token) != 4)
+            var recvTask = stream.ReadAsync(packetLengthBytes, 0, 4);
+            var task = await Task.WhenAny(recvTask, Task.Delay(timeoutms));
+            if (task != recvTask)
+                throw new TimeoutException();
+            if (recvTask.Result != 4)
                 throw new InvalidOperationException("Couldn't read the packet length");
             int packetLength = BitConverter.ToInt32(packetLengthBytes, 0);
 
