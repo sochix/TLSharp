@@ -13,6 +13,7 @@ using TLSharp.Core.MTProto;
 using TLSharp.Core.MTProto.Crypto;
 using TLSharp.Core.Network;
 using TLSharp.Core.Utils;
+using static TLSharp.Core.MTProto.Serializers;
 
 namespace TlgListenerApplication
 {
@@ -113,10 +114,12 @@ namespace TlgListenerApplication
                         {
                             nonceFromClient = binaryReader2.ReadBytes(16);
                             servernonce = binaryReader2.ReadBytes(16);
-                            var useless = binaryReader2.ReadBytes(13);
-                            var ciphertext = binaryReader2.ReadBytes(500);
-                            var newnoncetemp = new byte[32];
-                            Array.Copy(ciphertext, ciphertext.Length - 32, newnoncetemp,0,32);
+                            var p = binaryReader2.ReadBytes(4);
+                            var q = binaryReader2.ReadBytes(8);
+                            var targetFingerprint = binaryReader2.ReadBytes(8);
+
+                            var ciphertext = Bytes.read(binaryReader2);
+                            Array.Copy(ciphertext, ciphertext.Length - 32, newNonce, 0, 32);
                             //ciphertext.CopyTo(newnoncetemp, ciphertext.Length - 32);
                         }
                     }
@@ -177,10 +180,10 @@ namespace TlgListenerApplication
                                 binaryWriter.Write(hashsum);
                                 binaryWriter.Write(innerCode);
                                 binaryWriter.Write(nonceFromClient);
-                                binaryWriter.Write(newNonce);
+                                binaryWriter.Write(servernonce);
                                 binaryWriter.Write(123456789);
-                                Serializers.Bytes.write(binaryWriter, new BigInteger(1, BitConverter.GetBytes(777)).ToByteArrayUnsigned());
-                                Serializers.Bytes.write(binaryWriter, new BigInteger(1, BitConverter.GetBytes(888)).ToByteArrayUnsigned());
+                                Bytes.write(binaryWriter, new BigInteger(1, BitConverter.GetBytes(777)).ToByteArrayUnsigned());
+                                Bytes.write(binaryWriter, new BigInteger(1, BitConverter.GetBytes(888)).ToByteArrayUnsigned());
                                 answer = memoryStream.ToArray();
                             }
                         }
@@ -205,7 +208,7 @@ namespace TlgListenerApplication
                                 binaryWriter.Write(innerCode);
                                 binaryWriter.Write(newnonce);
                                 binaryWriter.Write(nonceFromClient);
-                                binaryWriter.Write(newnonce);
+                                binaryWriter.Write(hashnewnonce);
                                 outputdata = memoryStream.ToArray();
                             }
                         }
