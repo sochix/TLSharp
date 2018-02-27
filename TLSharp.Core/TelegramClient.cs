@@ -31,6 +31,7 @@ namespace TLSharp.Core
         private Session _session;
         private List<TLDcOption> dcOptions;
         private TcpClientConnectionHandler _handler;
+        private bool _looping;
 
         public delegate void UpdatesEvent (TelegramClient source, TLAbsUpdates updates);
         public delegate void ClientEvent(TelegramClient source);
@@ -117,12 +118,18 @@ namespace TLSharp.Core
             }
         }
 
+        public void Close()
+        {
+            _looping = false;
+        }
+
         public async Task MainLoopAsync(int timeslicems)
         {
             logger.Trace("Entered loop");
             var lastPing = DateTime.UtcNow;
             await SendPingAsync();
-            for (;;)
+            _looping = true;
+            while (_looping)
             {
                 try
                 {
