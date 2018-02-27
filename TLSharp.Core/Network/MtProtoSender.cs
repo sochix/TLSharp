@@ -433,30 +433,30 @@ namespace TLSharp.Core.Network
             switch (errorCode)
             {
                 case 16:
-                    throw new InvalidOperationException("msg_id too low (most likely, client time is wrong; it would be worthwhile to synchronize it using msg_id notifications and re-send the original message with the “correct” msg_id or wrap it in a container with a new msg_id if the original message had waited too long on the client to be transmitted)");
+                    throw new BadMessageException("msg_id too low (most likely, client time is wrong; it would be worthwhile to synchronize it using msg_id notifications and re-send the original message with the “correct” msg_id or wrap it in a container with a new msg_id if the original message had waited too long on the client to be transmitted)");
                 case 17:
-                    throw new InvalidOperationException("msg_id too high (similar to the previous case, the client time has to be synchronized, and the message re-sent with the correct msg_id)");
+                    throw new BadMessageException("msg_id too high (similar to the previous case, the client time has to be synchronized, and the message re-sent with the correct msg_id)");
                 case 18:
-                    throw new InvalidOperationException("incorrect two lower order msg_id bits (the server expects client message msg_id to be divisible by 4)");
+                    throw new BadMessageException("incorrect two lower order msg_id bits (the server expects client message msg_id to be divisible by 4)");
                 case 19:
-                    throw new InvalidOperationException("container msg_id is the same as msg_id of a previously received message (this must never happen)");
+                    throw new BadMessageException("container msg_id is the same as msg_id of a previously received message (this must never happen)");
                 case 20:
-                    throw new InvalidOperationException("message too old, and it cannot be verified whether the server has received a message with this msg_id or not");
+                    throw new BadMessageException("message too old, and it cannot be verified whether the server has received a message with this msg_id or not");
                 case 32:
-                    throw new InvalidOperationException("msg_seqno too low (the server has already received a message with a lower msg_id but with either a higher or an equal and odd seqno)");
+                    throw new BadMessageException("msg_seqno too low (the server has already received a message with a lower msg_id but with either a higher or an equal and odd seqno)");
                 case 33:
-                    throw new InvalidOperationException(" msg_seqno too high (similarly, there is a message with a higher msg_id but with either a lower or an equal and odd seqno)");
+                    throw new BadMessageException(" msg_seqno too high (similarly, there is a message with a higher msg_id but with either a lower or an equal and odd seqno)");
                 case 34:
-                    throw new InvalidOperationException("an even msg_seqno expected (irrelevant message), but odd received");
+                    throw new BadMessageException("an even msg_seqno expected (irrelevant message), but odd received");
                 case 35:
-                    throw new InvalidOperationException("odd msg_seqno expected (relevant message), but even received");
+                    throw new BadMessageException("odd msg_seqno expected (relevant message), but even received");
                 case 48:
-                    throw new InvalidOperationException("incorrect server salt (in this case, the bad_server_salt response is received with the correct salt, and the message is to be re-sent with it)");
+                    throw new BadMessageException("incorrect server salt (in this case, the bad_server_salt response is received with the correct salt, and the message is to be re-sent with it)");
                 case 64:
-                    throw new InvalidOperationException("invalid container");
+                    throw new BadMessageException("invalid container");
 
             }
-            throw new NotImplementedException("This should never happens");
+            throw new NotImplementedException("This should never happen!");
             /*
 			logger.debug("bad_msg_notification: msgid {0}, seq {1}, errorcode {2}", requestId, requestSequence,
 						 errorCode);
@@ -585,63 +585,6 @@ namespace TLSharp.Core.Network
         private MemoryStream makeMemory(int len)
         {
             return new MemoryStream(new byte[len], 0, len, true, true);
-        }
-    }
-
-    public class FloodException : Exception
-    {
-        public TimeSpan TimeToWait { get; private set; }
-
-        internal FloodException(TimeSpan timeToWait)
-            : base($"Flood prevention. Telegram now requires your program to do requests again only after {timeToWait.TotalSeconds} seconds have passed ({nameof(TimeToWait)} property)." +
-                    " If you think the culprit of this problem may lie in TLSharp's implementation, open a Github issue please.")
-        {
-            TimeToWait = timeToWait;
-        }
-    }
-
-    internal abstract class DataCenterMigrationException : Exception
-    {
-        internal int DC { get; private set; }
-
-        private const string REPORT_MESSAGE =
-            " See: https://github.com/sochix/TLSharp#i-get-a-xxxmigrationexception-or-a-migrate_x-error";
-
-        protected DataCenterMigrationException(string msg, int dc) : base (msg + REPORT_MESSAGE)
-        {
-            DC = dc;
-        }
-    }
-
-    internal class PhoneMigrationException : DataCenterMigrationException
-    {
-        internal PhoneMigrationException(int dc)
-            : base ($"Phone number registered to a different DC: {dc}.", dc)
-        {
-        }
-    }
-
-    internal class FileMigrationException : DataCenterMigrationException
-    {
-        internal FileMigrationException(int dc)
-            : base ($"File located on a different DC: {dc}.", dc)
-        {
-        }
-    }
-
-    internal class UserMigrationException : DataCenterMigrationException
-    {
-        internal UserMigrationException(int dc)
-            : base($"User located on a different DC: {dc}.", dc)
-        {
-        }
-    }
-    
-    internal class NetworkMigrationException : DataCenterMigrationException
-    {
-        internal NetworkMigrationException(int dc)
-            : base($"Network located on a different DC: {dc}.", dc)
-        {
         }
     }
 }

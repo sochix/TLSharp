@@ -72,6 +72,7 @@
     <Compile Include="TelegramClient.cs" />
     <Compile Include="Utils\Helpers.cs" />
     <Compile Include="Network\Sniffer.cs" />
+    <Compile Include="Network\Exceptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
