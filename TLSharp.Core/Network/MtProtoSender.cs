@@ -258,10 +258,11 @@ namespace TLSharp.Core.Network
                 {
                     UpdatesEvent (update);
                 }
+                return true;
 			}
 			catch (Exception ex)
 			{
-                Console.WriteLine (ex);
+                logger.Error($"HandleUpdate failed: {ex}");
 			}
             return false;
         }
