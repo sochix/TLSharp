@@ -573,9 +573,9 @@ namespace TLSharp.Core.Network
                         messageReader.BaseStream.Position = beginPosition + innerLength;
                     }
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    //	logger.error("failed to process message in contailer: {0}", e);
+                    logger.Debug($"failed to process message in contailer: {e}");
                     messageReader.BaseStream.Position = beginPosition + innerLength;
                 }
             }
