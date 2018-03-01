@@ -37,7 +37,8 @@ namespace TLSharp.Core
         public delegate void ClientEvent(TelegramClient source);
 
         public event UpdatesEvent Updates;
-        public event ClientEvent IdleLoop;
+        public event ClientEvent ScheduledTasks;
+        public event ClientEvent IdleTasks;
 
         public Session Session { get { return _session; } }
 
@@ -148,12 +149,13 @@ namespace TLSharp.Core
                         await SendPingAsync();
                         lastPing = now;
                     }
-                    if (IdleLoop != null)
+                    if (ScheduledTasks != null)
                     {
                         logger.Trace("Running idle tasks");
-                        IdleLoop.Invoke(this);
-                        IdleLoop = null;
+                        ScheduledTasks.Invoke(this);
+                        ScheduledTasks = null;
                     }
+                    IdleTasks?.Invoke(this);
                 }
             }
         }
