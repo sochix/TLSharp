@@ -573,6 +573,10 @@ namespace TLSharp.Core.Network
                         messageReader.BaseStream.Position = beginPosition + innerLength;
                     }
                 }
+                catch (BadMessageException e)
+                {
+                    throw e;
+                }
                 catch (Exception e)
                 {
                     logger.Debug($"failed to process message in contailer: {e}");
