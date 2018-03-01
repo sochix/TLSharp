@@ -41,6 +41,8 @@ namespace TLSharp.Core
 
         public Session Session { get { return _session; } }
 
+        public volatile bool AllowEvents = false;
+
         public TelegramClient(int apiId, string apiHash,
             Session session = null, string sessionUserId = "session", TcpClientConnectionHandler handler = null)
         {
@@ -158,7 +160,8 @@ namespace TLSharp.Core
 
         private void _sender_UpdatesEvent (TLAbsUpdates updates)
         {
-            Updates?.Invoke (this, updates);
+            if (AllowEvents && Updates != null)
+                Updates(this, updates);
         }
 
         private async Task RequestWithDcMigration(TLMethod request) 
