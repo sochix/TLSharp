@@ -50,7 +50,7 @@ namespace TLSharp.Core
             _transport = new TcpTransport(_session.ServerAddress, _session.Port, _handler);
         }
 
-        public async Task<bool> ConnectAsync(bool reconnect = false)
+        public async Task ConnectAsync(bool reconnect = false)
         {
             if (_session.AuthKey == null || reconnect)
             {
@@ -77,8 +77,6 @@ namespace TLSharp.Core
             await _sender.Receive(invokewithLayer);
 
             dcOptions = ((TLConfig)invokewithLayer.Response).DcOptions.ToList();
-
-            return true;
         }
 
         private async Task ReconnectToDcAsync(int dcId)
