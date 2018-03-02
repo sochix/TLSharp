@@ -211,10 +211,10 @@ It's likely [Telegram restrictions](https://core.telegram.org/api/errors#420-flo
 
 #### Why does TLSharp lacks feature XXXX?
 
-Now TLSharp is basic realization of Telegram protocol, you can be a contributor or a sponsor to speed-up developemnt of any feature.
+TLSharp only covers basic functionality of the Telegram protocol, you can be a contributor or a sponsor to speed-up developemnt of any more new features.
 
-#### Nothing helps
-Ask your question at gitter or create an issue in project bug tracker.
+#### Where else to ask for help?
+If you think you have found a bug in TLSharp, create a github issue. But if you just have questions about how to use TLSharp, use our gitter channel (https://gitter.im/TLSharp/Lobby) or our Telegram channel (https://t.me/joinchat/AgtDiBEqG1i-qPqttNFLbA).
 
 **Attach following information**:
 
