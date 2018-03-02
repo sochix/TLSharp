@@ -30,55 +30,65 @@ namespace TLSharp.Core
         private List<TLDcOption> dcOptions;
         private TcpClientConnectionHandler _handler;
 
-        public TelegramClient(int apiId, string apiHash,
-            ISessionStore store = null, string sessionUserId = "session", TcpClientConnectionHandler handler = null)
+        public TelegramClient(int apiId, string apiHash, ISessionStore store = null, string sessionUserId = "session", TcpClientConnectionHandler handler = null)
         {
-            if (apiId == default(int))
-                throw new MissingApiConfigurationException("API_ID");
-            if (string.IsNullOrEmpty(apiHash))
-                throw new MissingApiConfigurationException("API_HASH");
-
-            if (store == null)
-                store = new FileSessionStore();
-
-            TLContext.Init();
-            _apiHash = apiHash;
-            _apiId = apiId;
-            _handler = handler;
-
-            _session = Session.TryLoadOrCreateNew(store, sessionUserId);
-            _transport = new TcpTransport(_session.ServerAddress, _session.Port, _handler);
-        }
-
-        public async Task ConnectAsync(bool reconnect = false)
-        {
-            if (_session.AuthKey == null || reconnect)
+            try
             {
-                var result = await Authenticator.DoAuthentication(_transport);
-                _session.AuthKey = result.AuthKey;
-                _session.TimeOffset = result.TimeOffset;
+                if (apiId == default(int))
+                    throw new MissingApiConfigurationException("API_ID");
+                if (string.IsNullOrEmpty(apiHash))
+                    throw new MissingApiConfigurationException("API_HASH");
+
+                if (store == null)
+                    store = new FileSessionStore();
+
+                TLContext.Init();
+                _apiHash = apiHash;
+                _apiId = apiId;
+                _handler = handler;
+
+                _session = Session.TryLoadOrCreateNew(store, sessionUserId);
+                _transport = new TcpTransport(_session.ServerAddress, _session.Port, _handler);
             }
-
-            _sender = new MtProtoSender(_transport, _session);
-
-            //set-up layer
-            var config = new TLRequestGetConfig();
-            var request = new TLRequestInitConnection()
+            catch
             {
-                ApiId = _apiId,
-                AppVersion = "1.0.0",
-                DeviceModel = "PC",
-                LangCode = "en",
-                Query = config,
-                SystemVersion = "Win 10.0"
-            };
-            var invokewithLayer = new TLRequestInvokeWithLayer() { Layer = 66, Query = request };
-            await _sender.Send(invokewithLayer);
-            await _sender.Receive(invokewithLayer);
-
-            dcOptions = ((TLConfig)invokewithLayer.Response).DcOptions.ToList();
+                throw new Exception("Not connected to the internet");
+            }
         }
+        public async Task<bool> ConnectAsync(bool reconnect = false)
+        {
+            try
+            {
+                if (_session.AuthKey == null || reconnect)
+                {
+                    var result = await Authenticator.DoAuthentication(_transport);
+                    _session.AuthKey = result.AuthKey;
+                    _session.TimeOffset = result.TimeOffset;
+                }
+                _sender = new MtProtoSender(_transport, _session);
 
+                //set-up layer
+                var config = new TLRequestGetConfig();
+                var request = new TLRequestInitConnection()
+                {
+                    ApiId = _apiId,
+                    AppVersion = "1.0.0",
+                    DeviceModel = "PC",
+                    LangCode = "en",
+                    Query = config,
+                    SystemVersion = "Win 10.0"
+                };
+                var invokewithLayer = new TLRequestInvokeWithLayer() { Layer = 66, Query = request };
+                await _sender.Send(invokewithLayer);
+                await _sender.Receive(invokewithLayer);
+                dcOptions = ((TLConfig)invokewithLayer.Response).DcOptions.ToList();
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
         private async Task ReconnectToDcAsync(int dcId)
         {
             if (dcOptions == null || !dcOptions.Any())
