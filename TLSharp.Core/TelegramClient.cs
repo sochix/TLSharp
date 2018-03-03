@@ -107,7 +107,7 @@ namespace TLSharp.Core
             }
         }
 
-        private async Task RequestWithDcMigration(TLMethod request) 
+        private async Task RequestWithDcMigration(TLMethod request)
         {
             if (_sender == null)
                 throw new InvalidOperationException("Not connected!");
