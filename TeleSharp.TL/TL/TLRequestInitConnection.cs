@@ -43,6 +43,22 @@ namespace TeleSharp.TL
 
         }
 
+        public void DeserializeBodyFromRequest(BinaryReader br)
+        {
+            ApiId = br.ReadInt32();
+            DeviceModel = StringUtil.Deserialize(br);
+            SystemVersion = StringUtil.Deserialize(br);
+            AppVersion = StringUtil.Deserialize(br);
+            LangCode = StringUtil.Deserialize(br);
+
+            int queryconstructorid = br.ReadInt32();
+            var obj = Activator.CreateInstance(TLContext.getType(queryconstructorid));
+            ((TLObject)obj).DeserializeBody(br);
+            Query = (TLObject)obj;
+
+
+        }
+
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);

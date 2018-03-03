@@ -72,7 +72,7 @@ namespace TLSharp.Core.Auth
             }
 
             BigInteger b = new BigInteger(2048, new Random());
-            BigInteger gb = BigInteger.ValueOf(g).ModPow(b, dhPrime);
+            BigInteger gb = BigInteger.ValueOf(g).ModPow(b, dhPrime);// encrypt data generate public key
             _gab = ga.ModPow(b, dhPrime);
 
             // logger.debug("gab: {0}", gab);
@@ -107,7 +107,8 @@ namespace TLSharp.Core.Auth
             // logger.debug("client dh inner data papared len {0}: {1}", clientDHInnerDataBytes.Length, BitConverter.ToString(clientDHInnerDataBytes).Replace("-", ""));
 
             // encryption
-            byte[] clientDhInnerDataEncryptedBytes = AES.EncryptAES(key, clientDHInnerDataBytes);
+            //TODO: uncomment encryption
+            byte[] clientDhInnerDataEncryptedBytes = clientDHInnerDataBytes;// AES.EncryptAES(key, clientDHInnerDataBytes);
 
             // logger.debug("inner data encrypted {0}: {1}", clientDhInnerDataEncryptedBytes.Length, BitConverter.ToString(clientDhInnerDataEncryptedBytes).Replace("-", ""));
 

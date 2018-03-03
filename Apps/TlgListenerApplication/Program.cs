@@ -14,6 +14,7 @@ using TLSharp.Core.MTProto.Crypto;
 using TLSharp.Core.Network;
 using TLSharp.Core.Utils;
 using static TLSharp.Core.MTProto.Serializers;
+using TeleSharp.TL;
 
 namespace TlgListenerApplication
 {
@@ -26,6 +27,7 @@ namespace TlgListenerApplication
 
         static void Main(string[] args)
         {
+            TLContext.Init();
             Console.WriteLine("Listening...");
             TcpListener();
             Console.WriteLine("The end");
@@ -66,6 +68,8 @@ namespace TlgListenerApplication
             Console.WriteLine("Processing...");
             var tcpClient = tcpListener.AcceptTcpClient();
             var netStream = tcpClient.GetStream();
+            BigInteger ga = null;
+            var sequenceNumber = 1;
 
             //var getingCounter = 0;
             //while (true)
@@ -83,10 +87,13 @@ namespace TlgListenerApplication
                 byte[] nonceFromClient = new byte[16];
                 byte[] servernonce = new byte[16];
                 byte[] newNonce = new byte[32];
-                uint responseCode = 0;
-                const uint step1Constructor = 0x60469778;
-                const uint step2Constructor = 0xd712e4be;
-                const uint step3Constructor = 0xf5045f1f;
+                int responseCode = 0;
+                BigInteger a = new BigInteger(2048, new Random());
+                var dhPrime = new BigInteger("00C150023E2F70DB7985DED064759CFECF0AF328E69A41DAF4D6F01B538135A6F91F8F8B2A0EC9BA9720CE352EFCF6C5680FFC424BD634864902DE0B4BD6D49F4E580230E3AE97D95C8B19442B3C0A10D8F5633FECEDD6926A7F6DAB0DDB7D457F9EA81B8465FCD6FFFEED114011DF91C059CAEDAF97625F6C96ECC74725556934EF781D866B34F011FCE4D835A090196E9A5F0E4449AF7EB697DDB9076494CA5F81104A305B6DD27665722C46B60E5DF680FB16B210607EF217652E60236C255F6A28315F4083A96791D7214BF64C1DF4FD0DB1944FB26A2A57031B32EEE64AD15A8BA68885CDE74A5BFC920F6ABF59BA5C75506373E7130F9042DA922179251F", 16);
+
+                const long step1Constructor = 0x60469778;
+                const long step2Constructor = 0xd712e4be;
+                const long step3Constructor = 0xf5045f1f;
 
                 if (netStream.CanRead)
                 {
@@ -94,6 +101,7 @@ namespace TlgListenerApplication
                     netStream.Read(bytes, 0, (int)tcpClient.ReceiveBufferSize);
                     var tcpMessage = TcpMessage.Decode(bytes);
                     var binaryReader = new BinaryReader(new MemoryStream(tcpMessage.Body, false));
+
 
                     var authKeyId = binaryReader.ReadInt64();
                     if (authKeyId == 0)
@@ -104,7 +112,7 @@ namespace TlgListenerApplication
 
                         var binaryReader2 = new BinaryReader(new MemoryStream(data, false));
 
-                        responseCode = binaryReader2.ReadUInt32();
+                        responseCode = (int)binaryReader2.ReadUInt32();
                         Console.WriteLine("Request code: " + responseCode);
                         if (responseCode == step1Constructor) //---Step1_PQRequest
                         {
@@ -118,20 +126,46 @@ namespace TlgListenerApplication
                             var q = binaryReader2.ReadBytes(8);
                             var targetFingerprint = binaryReader2.ReadBytes(8);
 
+                            //TODO: need to decryption
                             var ciphertext = Bytes.read(binaryReader2);
                             Array.Copy(ciphertext, ciphertext.Length - 32, newNonce, 0, 32);
                             //ciphertext.CopyTo(newnoncetemp, ciphertext.Length - 32);
                         }
+                        else if (responseCode == step3Constructor) //---Step1_PQRequest
+                        {
+                            nonceFromClient = binaryReader2.ReadBytes(16);
+                            servernonce = binaryReader2.ReadBytes(16);
+
+                            //TODO: need to decryption
+                            var ciphertext = Bytes.read(binaryReader2);
+                            var binaryReadernner = new BinaryReader(new MemoryStream(ciphertext, false));
+                            var hasheddata = binaryReadernner.ReadBytes(20);
+                            var client_dh_inner_data_code = binaryReadernner.ReadUInt32();
+                            if (client_dh_inner_data_code != 0x6643b654)
+                            {
+                                throw new Exception("We have a complex story");
+                            }
+                            var nonceFromClient_temp = binaryReadernner.ReadBytes(16);
+                            var servernonce_temp = binaryReadernner.ReadBytes(16);
+                            var zero = binaryReadernner.ReadUInt64();
+                            var gb = Bytes.read(binaryReadernner);
+                        }
                     }
                     else
                     {
-                        var decodeMessage = DecodeMessage(tcpMessage.Body);
-                        var buffer = new byte[binaryReader.BaseStream.Length - 24];
-                        int count;
-                        using (var ms = new MemoryStream())
-                            while ((count = binaryReader.Read(buffer, 0, buffer.Length)) != 0)
-                                ms.Write(buffer, 0, count);
+                        var decodeMessage = DecodeMessage(tcpMessage.Body, null);
+                        var objrawReader = new BinaryReader(new MemoryStream(decodeMessage.Item1, false));
+                        responseCode = objrawReader.ReadInt32();
+                        int layer = objrawReader.ReadInt32();
+                        int Constructor2 = objrawReader.ReadInt32();
+                        Type t = TLContext.getType(Constructor2);
+                        var obj = Activator.CreateInstance(t);
 
+                        ((TLRequestInitConnection)obj).DeserializeBodyFromRequest(objrawReader);
+                        if (((TLRequestInitConnection)obj).Query is TeleSharp.TL.Help.TLRequestGetConfig)
+                        {
+
+                        }
                         //var keyData = Helpers.CalcKey(buffer, messageKey, false);
                         //var data = AES.DecryptAES(keyData, buffer);
                     }
@@ -173,6 +207,10 @@ namespace TlgListenerApplication
                         var hashsum = Encoding.UTF8.GetBytes("asdfghjklmnbvcxzasdf");
                         const uint innerCode = 0xb5890dba;
                         AESKeyData key = AES.GenerateKeyDataFromNonces(servernonce, newNonce);
+
+                        var g = 47;
+                        ga = BigInteger.ValueOf(g).ModPow(a, dhPrime);
+
                         using (var memoryStream = new MemoryStream())
                         {
                             using (var binaryWriter = new BinaryWriter(memoryStream))
@@ -181,9 +219,10 @@ namespace TlgListenerApplication
                                 binaryWriter.Write(innerCode);
                                 binaryWriter.Write(nonceFromClient);
                                 binaryWriter.Write(servernonce);
-                                binaryWriter.Write(123456789);
-                                Bytes.write(binaryWriter, new BigInteger(1, BitConverter.GetBytes(777)).ToByteArrayUnsigned());
-                                Bytes.write(binaryWriter, new BigInteger(1, BitConverter.GetBytes(888)).ToByteArrayUnsigned());
+                                binaryWriter.Write(g);
+                                Bytes.write(binaryWriter, dhPrime.ToByteArrayUnsigned());
+                                Bytes.write(binaryWriter, ga.ToByteArrayUnsigned());
+                                Bytes.write(binaryWriter, BitConverter.GetBytes((int)(Convert.ToInt64((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds) / 1000)));//server datetime
                                 answer = memoryStream.ToArray();
                             }
                         }
@@ -198,25 +237,102 @@ namespace TlgListenerApplication
                     }
                     else if (responseCode == step3Constructor)
                     {
-                        var newnonce = new byte[16];
-                        new Random().NextBytes(newnonce);
+                        AuthKey authKey = new AuthKey(ga.ModPow(a, dhPrime));
+                        var newNonceHash = authKey.CalcNewNonceHash(newNonce, 1);
                         const uint innerCode = 0x3bcbf734;
                         using (var memoryStream = new MemoryStream())
                         {
                             using (var binaryWriter = new BinaryWriter(memoryStream))
                             {
                                 binaryWriter.Write(innerCode);
-                                binaryWriter.Write(newnonce);
+                                binaryWriter.Write(servernonce);
                                 binaryWriter.Write(nonceFromClient);
-                                binaryWriter.Write(hashnewnonce);
+                                binaryWriter.Write(newNonceHash);//hashnewnonce
                                 outputdata = memoryStream.ToArray();
                             }
                         }
                     }
+                    else if (responseCode == -627372787)
+                    {
+                        long authkey = 123456789;
+                        byte[] message = null;
 
-                    var bytes = PrepareToSend(outputdata);
-                    var datatosend = Encode(bytes, 11);
-                    netStream.Write(datatosend, 0, datatosend.Length);
+                        #region Generate TLConfig
+                        //---Genrate mock tlconfig
+                        var config = new TLConfig();
+                        config.CallConnectTimeoutMs = 7777;
+                        config.CallPacketTimeoutMs = 7777;
+                        config.CallReceiveTimeoutMs = 7777;
+                        config.CallRingTimeoutMs = 7777;
+                        config.ChatBigSize = 7777;
+                        config.ChatSizeMax = 777;
+                        config.Date = Convert.ToInt32((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds);
+                        config.DcOptions = new TLVector<TLDcOption>()
+                        {
+                            new TLDcOption(){Flags=0,Id=1,IpAddress="192.168.1.1",Port=5000,TcpoOnly=true }
+                        };
+                        config.DisabledFeatures = new TLVector<TLDisabledFeature>();
+                        config.ForwardedCountMax = 777;
+                        config.MegagroupSizeMax = 777;
+                        config.NotifyCloudDelayMs = 7777;
+                        config.NotifyDefaultDelayMs = 7777;
+                        config.OfflineBlurTimeoutMs = 7777;
+                        config.OfflineIdleTimeoutMs = 7777;
+                        config.OnlineCloudTimeoutMs = 7777;
+                        config.OnlineUpdatePeriodMs = 7777;
+                        config.PhonecallsEnabled = false;
+                        config.PinnedDialogsCountMax = 7;
+                        config.PushChatLimit = 7;
+                        config.PushChatPeriodMs = 777;
+                        config.RatingEDecay = 777;
+                        config.SavedGifsLimit = 777;
+                        config.StickersRecentLimit = 777;
+                        config.ThisDc = 1;//TODO: ---what's this?!---
+                        config.MeUrlPrefix = "https";
+                        config.TestMode = false;
+                        #endregion 
+
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            using (var binaryWriter = new BinaryWriter(memoryStream))
+                            {
+                                binaryWriter.Write(0xf35c6d01);//main code
+                                //binaryWriter.Write(0xf35c6d02);//code
+                                binaryWriter.Write(18446744073709111111);//requestId -- ulong
+                                //binaryWriter.Write(0x2144ca17);//innercode -- int
+                                //binaryWriter.Write(1123456789);//sample code
+                                //Serializers.Bytes.write(binaryWriter, config.Serialize());
+                                binaryWriter.Write(config.Serialize());
+                                message = memoryStream.ToArray();
+                            }
+                        }
+
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            using (var binaryWriter = new BinaryWriter(memoryStream))
+                            {
+                                binaryWriter.Write(authkey);
+                                binaryWriter.Write(servernonce);
+                                binaryWriter.Write(authkey);//salt
+                                binaryWriter.Write(authkey);//sessionId
+                                binaryWriter.Write(authkey);//messageid
+                                binaryWriter.Write(sequenceNumber);
+
+                                binaryWriter.Write(message.Length);
+                                binaryWriter.Write(message);
+
+                                outputdata = memoryStream.ToArray();
+                            }
+                        }
+
+                    }
+
+
+                    if (responseCode != -627372787)
+                        outputdata = PrepareToSend(outputdata);
+
+                    outputdata = Encode(outputdata, sequenceNumber++);
+                    netStream.Write(outputdata, 0, outputdata.Length);
                 }
                 else
                 {
@@ -275,7 +391,7 @@ namespace TlgListenerApplication
             //tcpClient.Close();
         }
 
-        public static async Task<TcpMessage> Receieve(TcpClient tcpClient)
+        private static async Task<TcpMessage> Receieve(TcpClient tcpClient)
         {
             var stream = tcpClient.GetStream();
 
@@ -360,7 +476,8 @@ namespace TlgListenerApplication
             return newMessageId;
         }
 
-        private static Tuple<byte[], ulong, int> DecodeMessage(byte[] body)
+        #region helpers
+        private static Tuple<byte[], ulong, int> DecodeMessage(byte[] body, AESKeyData keyData)
         {
             byte[] message;
             ulong remoteMessageId;
@@ -374,9 +491,10 @@ namespace TlgListenerApplication
 
                 ulong remoteAuthKeyId = inputReader.ReadUInt64(); // TODO: check auth key id
                 byte[] msgKey = inputReader.ReadBytes(16); // TODO: check msg_key correctness
-                AESKeyData keyData = Helpers.CalcKey(body, msgKey, false);
 
-                byte[] plaintext = AES.DecryptAES(keyData, inputReader.ReadBytes((int)(inputStream.Length - inputStream.Position)));
+                //TODO: return to decryption
+                //byte[] plaintext = AES.DecryptAES(keyData, inputReader.ReadBytes((int)(inputStream.Length - inputStream.Position)));               
+                byte[] plaintext = inputReader.ReadBytes((int)(inputStream.Length - inputStream.Position));
 
                 using (MemoryStream plaintextStream = new MemoryStream(plaintext))
                 using (BinaryReader plaintextReader = new BinaryReader(plaintextStream))
@@ -434,12 +552,42 @@ namespace TlgListenerApplication
             }
         }
 
-        public static byte[] StringToByteArray(string hex)
+        private static byte[] StringToByteArray(string hex)
         {
             return Enumerable.Range(0, hex.Length)
                 .Where(x => x % 2 == 0)
                 .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
                 .ToArray();
         }
+
+        private static object DeserializeObject(BinaryReader reader)
+        {
+            int Constructor = reader.ReadInt32();
+            object obj;
+            Type t = null;
+            try
+            {
+                t = TLContext.getType(Constructor);
+                obj = Activator.CreateInstance(t);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidDataException("Constructor Invalid Or Context.Init Not Called !", ex);
+            }
+            if (t.IsSubclassOf(typeof(TLMethod)))
+            {
+                //((TLMethod)obj).DeserializeResponse(reader);
+                //return obj;
+                ((TLMethod)obj).DeserializeBody(reader);
+                return obj;
+            }
+            else if (t.IsSubclassOf(typeof(TLObject)))
+            {
+                ((TLObject)obj).DeserializeBody(reader);
+                return obj;
+            }
+            else throw new NotImplementedException("Weird Type : " + t.Namespace + " | " + t.Name);
+        }
+        #endregion
     }
 }
