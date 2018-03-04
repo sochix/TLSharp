@@ -29,11 +29,6 @@ namespace TLSharp.Core.Network
             _session = session;
         }
 
-        public void ChangeTransport(TcpTransport transport)
-        {
-            _transport = transport;
-        }
-
         private int GenerateSequence(bool confirmed)
         {
             return confirmed ? _session.Sequence++ * 2 + 1 : _session.Sequence * 2;
