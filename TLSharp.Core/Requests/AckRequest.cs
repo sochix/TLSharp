@@ -9,6 +9,10 @@ namespace TLSharp.Core.Requests
     {
         private readonly List<ulong> _msgs;
 
+        public AckRequest()
+        {
+
+        }
         public AckRequest(List<ulong> msgs)
         {
             _msgs = msgs;

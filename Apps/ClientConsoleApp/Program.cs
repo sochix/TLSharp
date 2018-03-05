@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TeleSharp.TL;
 using TLSharp.Core;
+using TLSharp.Core.MTProto.Crypto;
 
 namespace ClientConsoleApp
 {
@@ -19,6 +20,7 @@ namespace ClientConsoleApp
 
         static void Main(string[] args)
         {
+            TestNewNonce();
             Thread.Sleep(2000);
             Console.WriteLine("Hello World!");
 
@@ -112,6 +114,28 @@ namespace ClientConsoleApp
             }
 
             Thread.Sleep(5000);
+        }
+
+        private static void TestNewNonce()
+        {
+            var g = 47;
+            BigInteger a = new BigInteger(2048, new Random());
+            BigInteger b = new BigInteger(2048, new Random());
+            var dhPrime = new BigInteger("20030004000", 16);
+
+            var ga = BigInteger.ValueOf(g).ModPow(a, dhPrime);
+            var gb = BigInteger.ValueOf(g).ModPow(b, dhPrime);
+
+            var ka = gb.ModPow(a, dhPrime);
+            var kb = ga.ModPow(b, dhPrime);
+
+
+            if (ka.Equals(kb))
+            {
+
+            }
+
+            return;
         }
     }
 }

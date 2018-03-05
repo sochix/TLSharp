@@ -15,6 +15,8 @@ using TLSharp.Core.Network;
 using TLSharp.Core.Utils;
 using static TLSharp.Core.MTProto.Serializers;
 using TeleSharp.TL;
+using TeleSharp.TL.Auth;
+using TLSharp.Core.Requests;
 
 namespace TlgListenerApplication
 {
@@ -28,6 +30,7 @@ namespace TlgListenerApplication
         static void Main(string[] args)
         {
             TLContext.Init();
+            ObjectUtils.ServerSide = true;
             Console.WriteLine("Listening...");
             TcpListener();
             Console.WriteLine("The end");
@@ -69,8 +72,12 @@ namespace TlgListenerApplication
             var tcpClient = tcpListener.AcceptTcpClient();
             var netStream = tcpClient.GetStream();
             BigInteger ga = null;
+            byte[] newNonce = new byte[32];
+            BigInteger a = new BigInteger(2048, new Random());
+            var dhPrime = new BigInteger("00C150023E2F70DB7985DED064759CFECF0AF328E69A41DAF4D6F01B538135A6F91F8F8B2A0EC9BA9720CE352EFCF6C5680FFC424BD634864902DE0B4BD6D49F4E580230E3AE97D95C8B19442B3C0A10D8F5633FECEDD6926A7F6DAB0DDB7D457F9EA81B8465FCD6FFFEED114011DF91C059CAEDAF97625F6C96ECC74725556934EF781D866B34F011FCE4D835A090196E9A5F0E4449AF7EB697DDB9076494CA5F81104A305B6DD27665722C46B60E5DF680FB16B210607EF217652E60236C255F6A28315F4083A96791D7214BF64C1DF4FD0DB1944FB26A2A57031B32EEE64AD15A8BA68885CDE74A5BFC920F6ABF59BA5C75506373E7130F9042DA922179251F", 16);
+            BigInteger gb = null;
             var sequenceNumber = 1;
-
+            ulong? messageId = null;
             //var getingCounter = 0;
             //while (true)
             //{
@@ -86,10 +93,10 @@ namespace TlgListenerApplication
 
                 byte[] nonceFromClient = new byte[16];
                 byte[] servernonce = new byte[16];
-                byte[] newNonce = new byte[32];
-                int responseCode = 0;
-                BigInteger a = new BigInteger(2048, new Random());
-                var dhPrime = new BigInteger("00C150023E2F70DB7985DED064759CFECF0AF328E69A41DAF4D6F01B538135A6F91F8F8B2A0EC9BA9720CE352EFCF6C5680FFC424BD634864902DE0B4BD6D49F4E580230E3AE97D95C8B19442B3C0A10D8F5633FECEDD6926A7F6DAB0DDB7D457F9EA81B8465FCD6FFFEED114011DF91C059CAEDAF97625F6C96ECC74725556934EF781D866B34F011FCE4D835A090196E9A5F0E4449AF7EB697DDB9076494CA5F81104A305B6DD27665722C46B60E5DF680FB16B210607EF217652E60236C255F6A28315F4083A96791D7214BF64C1DF4FD0DB1944FB26A2A57031B32EEE64AD15A8BA68885CDE74A5BFC920F6ABF59BA5C75506373E7130F9042DA922179251F", 16);
+
+                uint responseCode = 0;
+                int innerCode = 0;
+                long authkey = 123456789;
 
                 const long step1Constructor = 0x60469778;
                 const long step2Constructor = 0xd712e4be;
@@ -112,7 +119,7 @@ namespace TlgListenerApplication
 
                         var binaryReader2 = new BinaryReader(new MemoryStream(data, false));
 
-                        responseCode = (int)binaryReader2.ReadUInt32();
+                        responseCode = binaryReader2.ReadUInt32();
                         Console.WriteLine("Request code: " + responseCode);
                         if (responseCode == step1Constructor) //---Step1_PQRequest
                         {
@@ -148,36 +155,52 @@ namespace TlgListenerApplication
                             var nonceFromClient_temp = binaryReadernner.ReadBytes(16);
                             var servernonce_temp = binaryReadernner.ReadBytes(16);
                             var zero = binaryReadernner.ReadUInt64();
-                            var gb = Bytes.read(binaryReadernner);
+                            gb = new BigInteger(Bytes.read(binaryReadernner));
                         }
                     }
                     else
                     {
                         var decodeMessage = DecodeMessage(tcpMessage.Body, null);
                         var objrawReader = new BinaryReader(new MemoryStream(decodeMessage.Item1, false));
-                        responseCode = objrawReader.ReadInt32();
-                        int layer = objrawReader.ReadInt32();
-                        int Constructor2 = objrawReader.ReadInt32();
-                        Type t = TLContext.getType(Constructor2);
-                        var obj = Activator.CreateInstance(t);
+                        messageId = decodeMessage.Item2;
+                        innerCode = objrawReader.ReadInt32();
 
-                        ((TLRequestInitConnection)obj).DeserializeBodyFromRequest(objrawReader);
-                        if (((TLRequestInitConnection)obj).Query is TeleSharp.TL.Help.TLRequestGetConfig)
+
+                        if (innerCode == 0x62d6b459)//acknowledged 
                         {
-
+                            var vector = objrawReader.ReadInt32();
+                            var msgCount = objrawReader.ReadInt32();
+                            continue;
                         }
+                        else //if (responseCode == -627372787)
+                        {
+                            objrawReader.BaseStream.Position += -4;
+                            var obj = ObjectUtils.DeserializeObject(objrawReader);
+                            if (obj is TLRequestInvokeWithLayer)
+                            {
+                                var invokewithlayer = (TLRequestInvokeWithLayer)obj;
+                                if (invokewithlayer.Query is TLRequestInitConnection)
+                                {
+
+                                }
+                                else if (invokewithlayer.Query is TLRequestSendCode)
+                                {
+
+                                }
+                            }
+                            else if (obj is TLRequestSendCode)
+                            {
+                                var requestSendCode = (TLRequestSendCode)obj;
+                            }
+                            else if (obj is TLRequestSignIn)
+                            {
+                                var requestSignIn = (TLRequestSignIn)obj;
+                            }
+                        }
+
                         //var keyData = Helpers.CalcKey(buffer, messageKey, false);
                         //var data = AES.DecryptAES(keyData, buffer);
                     }
-
-                    //var obj = new Step1_PQRequest().FromBytes(data);
-                    //var rr = FromByteArray<Step1_PQRequest>(data);
-
-                    //var binaryReader = new BinaryReader(netStream);
-                    //var a = binaryReader.ReadInt64();
-                    //var b = binaryReader.ReadInt32();
-                    //var c = binaryReader.ReadInt32();
-                    //var d = binaryReader.ReadInt32();
                 }
 
                 if (netStream.CanWrite)
@@ -205,7 +228,7 @@ namespace TlgListenerApplication
 
                         byte[] answer;
                         var hashsum = Encoding.UTF8.GetBytes("asdfghjklmnbvcxzasdf");
-                        const uint innerCode = 0xb5890dba;
+                        const uint innerCodetemp = 0xb5890dba;
                         AESKeyData key = AES.GenerateKeyDataFromNonces(servernonce, newNonce);
 
                         var g = 47;
@@ -216,7 +239,7 @@ namespace TlgListenerApplication
                             using (var binaryWriter = new BinaryWriter(memoryStream))
                             {
                                 binaryWriter.Write(hashsum);
-                                binaryWriter.Write(innerCode);
+                                binaryWriter.Write(innerCodetemp);
                                 binaryWriter.Write(nonceFromClient);
                                 binaryWriter.Write(servernonce);
                                 binaryWriter.Write(g);
@@ -237,14 +260,15 @@ namespace TlgListenerApplication
                     }
                     else if (responseCode == step3Constructor)
                     {
-                        AuthKey authKey = new AuthKey(ga.ModPow(a, dhPrime));
+                        var _gba = gb.ModPow(a, dhPrime);
+                        AuthKey authKey = new AuthKey(_gba);
                         var newNonceHash = authKey.CalcNewNonceHash(newNonce, 1);
-                        const uint innerCode = 0x3bcbf734;
+                        const uint innerCodeTemp = 0x3bcbf734;
                         using (var memoryStream = new MemoryStream())
                         {
                             using (var binaryWriter = new BinaryWriter(memoryStream))
                             {
-                                binaryWriter.Write(innerCode);
+                                binaryWriter.Write(innerCodeTemp);
                                 binaryWriter.Write(servernonce);
                                 binaryWriter.Write(nonceFromClient);
                                 binaryWriter.Write(newNonceHash);//hashnewnonce
@@ -252,11 +276,33 @@ namespace TlgListenerApplication
                             }
                         }
                     }
-                    else if (responseCode == -627372787)
+                    else if (innerCode == -2035355412)//TLRequestSendCode
                     {
-                        long authkey = 123456789;
-                        byte[] message = null;
+                        #region Generate TLSentCode
 
+                        var sentCode = new TLSentCode();
+                        sentCode.PhoneRegistered = false;
+                        sentCode.Timeout = 7777;
+                        sentCode.PhoneCodeHash = "asdfghjklmnbvcxzasdf";
+                        sentCode.Flags = 3;
+                        sentCode.NextType = new TLCodeTypeSms();
+                        sentCode.Type = new TLSentCodeTypeApp() { Length = 20 };
+
+                        #endregion
+
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            using (var binaryWriter = new BinaryWriter(memoryStream))
+                            {
+                                binaryWriter.Write(0xf35c6d01);//main code
+                                binaryWriter.Write(messageId.Value);//requestId -- ulong -- from mesage id 
+                                sentCode.SerializeBody(binaryWriter);
+                                outputdata = memoryStream.ToArray();
+                            }
+                        }
+                    }
+                    else if (innerCode == -627372787)
+                    {
                         #region Generate TLConfig
                         //---Genrate mock tlconfig
                         var config = new TLConfig();
@@ -269,7 +315,7 @@ namespace TlgListenerApplication
                         config.Date = Convert.ToInt32((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds);
                         config.DcOptions = new TLVector<TLDcOption>()
                         {
-                            new TLDcOption(){Flags=0,Id=1,IpAddress="192.168.1.1",Port=5000,TcpoOnly=true }
+                            new TLDcOption(){Flags=0,Id=1,IpAddress="127.0.0.1",Port=5000 }
                         };
                         config.DisabledFeatures = new TLVector<TLDisabledFeature>();
                         config.ForwardedCountMax = 777;
@@ -288,47 +334,57 @@ namespace TlgListenerApplication
                         config.SavedGifsLimit = 777;
                         config.StickersRecentLimit = 777;
                         config.ThisDc = 1;//TODO: ---what's this?!---
-                        config.MeUrlPrefix = "https";
+                        config.MeUrlPrefix = "https://t.me/";
                         config.TestMode = false;
-                        #endregion 
+                        #endregion
 
                         using (var memoryStream = new MemoryStream())
                         {
                             using (var binaryWriter = new BinaryWriter(memoryStream))
                             {
                                 binaryWriter.Write(0xf35c6d01);//main code
-                                //binaryWriter.Write(0xf35c6d02);//code
-                                binaryWriter.Write(18446744073709111111);//requestId -- ulong
-                                //binaryWriter.Write(0x2144ca17);//innercode -- int
-                                //binaryWriter.Write(1123456789);//sample code
-                                //Serializers.Bytes.write(binaryWriter, config.Serialize());
-                                binaryWriter.Write(config.Serialize());
-                                message = memoryStream.ToArray();
-                            }
-                        }
-
-                        using (var memoryStream = new MemoryStream())
-                        {
-                            using (var binaryWriter = new BinaryWriter(memoryStream))
-                            {
-                                binaryWriter.Write(authkey);
-                                binaryWriter.Write(servernonce);
-                                binaryWriter.Write(authkey);//salt
-                                binaryWriter.Write(authkey);//sessionId
-                                binaryWriter.Write(authkey);//messageid
-                                binaryWriter.Write(sequenceNumber);
-
-                                binaryWriter.Write(message.Length);
-                                binaryWriter.Write(message);
-
+                                                               //binaryWriter.Write(0xf35c6d02);//code
+                                binaryWriter.Write(messageId.Value);//requestId -- ulong -- from mesage id
+                                                                    //binaryWriter.Write(0x2144ca17);//innercode -- int
+                                                                    //binaryWriter.Write(1123456789);//sample code
+                                                                    //Serializers.Bytes.write(binaryWriter, config.Serialize());
+                                config.SerializeBody(binaryWriter);
                                 outputdata = memoryStream.ToArray();
                             }
                         }
 
                     }
+                    else if (innerCode == -1126886015)
+                    {
+                        #region Generate TLAuthorization
 
+                        var auth = new TeleSharp.TL.Auth.TLAuthorization();
+                        auth.Flags = 3;
+                        auth.User = new TLUser() { FirstName = "Meysami" };
 
-                    if (responseCode != -627372787)
+                        #endregion
+
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            using (var binaryWriter = new BinaryWriter(memoryStream))
+                            {
+                                binaryWriter.Write(0xf35c6d01);//main code
+                                binaryWriter.Write(messageId.Value);//requestId -- ulong -- from mesage id 
+                                auth.SerializeBody(binaryWriter);
+                                outputdata = memoryStream.ToArray();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        continue;
+                    }
+
+                    if (innerCode != 0)
+                    {
+                        outputdata = PrepareToSend2(outputdata, authkey, servernonce, sequenceNumber);
+                    }
+                    else
                         outputdata = PrepareToSend(outputdata);
 
                     outputdata = Encode(outputdata, sequenceNumber++);
@@ -455,6 +511,27 @@ namespace TlgListenerApplication
                     byte[] packet = memoryStream.ToArray();
 
                     return packet;
+                }
+            }
+        }
+
+        public static byte[] PrepareToSend2(byte[] message, long authkey, byte[] servernonce, int sequenceNumber)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                using (var binaryWriter = new BinaryWriter(memoryStream))
+                {
+                    binaryWriter.Write(authkey);
+                    binaryWriter.Write(servernonce);
+                    binaryWriter.Write(authkey);//salt
+                    binaryWriter.Write(authkey);//sessionId
+                    binaryWriter.Write(authkey);//messageid
+                    binaryWriter.Write(sequenceNumber);
+
+                    binaryWriter.Write(message.Length);
+                    binaryWriter.Write(message);
+
+                    return memoryStream.ToArray();
                 }
             }
         }

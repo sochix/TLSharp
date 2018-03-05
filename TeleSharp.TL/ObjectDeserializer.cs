@@ -10,6 +10,7 @@ namespace TeleSharp.TL
 {
     public class ObjectUtils
     {
+        public static bool ServerSide = false;
         public static object DeserializeObject(BinaryReader reader)
         {
             int Constructor = reader.ReadInt32();
@@ -24,6 +25,13 @@ namespace TeleSharp.TL
             {
                 throw new InvalidDataException("Constructor Invalid Or Context.Init Not Called !", ex);
             }
+
+            if (ServerSide)
+            {
+                ((TLObject)obj).DeserializeBody(reader);
+                return obj;
+            }
+
             if (t.IsSubclassOf(typeof(TLMethod)))
             {
                 ((TLMethod)obj).DeserializeResponse(reader);
