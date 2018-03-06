@@ -17,6 +17,7 @@ using static TLSharp.Core.MTProto.Serializers;
 using TeleSharp.TL;
 using TeleSharp.TL.Auth;
 using TLSharp.Core.Requests;
+using TeleSharp.TL.Contacts;
 
 namespace TlgListenerApplication
 {
@@ -196,6 +197,10 @@ namespace TlgListenerApplication
                             {
                                 var requestSignIn = (TLRequestSignIn)obj;
                             }
+                            else if (obj is TLRequestGetContacts)
+                            {
+                                var requestGetContacts = (TLRequestGetContacts)obj;
+                            }
                         }
 
                         //var keyData = Helpers.CalcKey(buffer, messageKey, false);
@@ -371,6 +376,34 @@ namespace TlgListenerApplication
                                 binaryWriter.Write(0xf35c6d01);//main code
                                 binaryWriter.Write(messageId.Value);//requestId -- ulong -- from mesage id 
                                 auth.SerializeBody(binaryWriter);
+                                outputdata = memoryStream.ToArray();
+                            }
+                        }
+                    }
+                    else if (innerCode == 583445000)//GetContacts
+                    {
+                        #region Generate TLAbsContacts
+
+                        var contacts = new TLContacts();
+                        contacts.Contacts = new TLVector<TLContact>()
+                        {
+                            new TLContact(){UserId=11 },
+                            new TLContact(){UserId=12 }
+                        };
+                        contacts.Users = new TLVector<TLAbsUser>() {
+                            new TLUser(){ Bot=false,FirstName="Mary",Id=11},
+                            new TLUser(){ Bot=false,FirstName="Mary 2",Id=12}
+                        };
+
+                        #endregion
+
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            using (var binaryWriter = new BinaryWriter(memoryStream))
+                            {
+                                binaryWriter.Write(0xf35c6d01);//main code
+                                binaryWriter.Write(messageId.Value);//requestId -- ulong -- from mesage id 
+                                contacts.SerializeBody(binaryWriter);
                                 outputdata = memoryStream.ToArray();
                             }
                         }
