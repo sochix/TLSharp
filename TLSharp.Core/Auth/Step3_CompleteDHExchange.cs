@@ -108,7 +108,8 @@ namespace TLSharp.Core.Auth
 
             // encryption
             //TODO: uncomment encryption
-            byte[] clientDhInnerDataEncryptedBytes = clientDHInnerDataBytes;// AES.EncryptAES(key, clientDHInnerDataBytes);
+            //byte[] clientDhInnerDataEncryptedBytes = clientDHInnerDataBytes;
+            byte[] clientDhInnerDataEncryptedBytes = AES.EncryptAES(key, clientDHInnerDataBytes);
 
             // logger.debug("inner data encrypted {0}: {1}", clientDhInnerDataEncryptedBytes.Length, BitConverter.ToString(clientDhInnerDataEncryptedBytes).Replace("-", ""));
 

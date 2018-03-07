@@ -79,6 +79,9 @@ namespace TlgListenerApplication
             BigInteger gb = null;
             var sequenceNumber = 1;
             ulong? messageId = null;
+            var privateKey = new BigInteger("582A4D5EE3A45C1AEEBDECD549D1FD4E12337B05C4C0A03FA8FF4A0A7B2861BAB86E8B58A70AAB9CF173FA313348239E28B17D34C7CEC8B68544BAD8623A306D747B7DC1D3D064FA73CE96893E8AFC36F7CDF58A383F48BDEC284D30BFFBC3F1A413DC869B3692EDD26004EE661C021BDA32F124D6631C67891E3E35EEDEAA08BFED8DBB7A6CC1D550CF16C67703BBDFFF0500FD81A55F98D92ECD67CE3CC31B766EA0DFBA284E18677E46036D9ED04105AAD11E97FD675F49A3B54D5AD395AA3C5B8343CDFF70C2E2A9243A47FBC5F541BBAE910B5DD1BF574B1E732A105C2B8F5239A4DFA0BCE0559F18BA0C44D31A279FA7CDCA612BD8F9796EBD114F7FA9", 16);
+            AuthKey authKey = null;
+
             //var getingCounter = 0;
             //while (true)
             //{
@@ -97,7 +100,7 @@ namespace TlgListenerApplication
 
                 uint responseCode = 0;
                 int innerCode = 0;
-                long authkey = 123456789;
+                long authkeysample = 123456789;
 
                 const long step1Constructor = 0x60469778;
                 const long step2Constructor = 0xd712e4be;
@@ -132,11 +135,19 @@ namespace TlgListenerApplication
                             servernonce = binaryReader2.ReadBytes(16);
                             var p = binaryReader2.ReadBytes(4);
                             var q = binaryReader2.ReadBytes(8);
-                            var targetFingerprint = binaryReader2.ReadBytes(8);
+                            var targetFingerprint = BitConverter.ToString(binaryReader2.ReadBytes(8)).Replace("-", string.Empty);
 
                             //TODO: need to decryption
                             var ciphertext = Bytes.read(binaryReader2);
-                            Array.Copy(ciphertext, ciphertext.Length - 32, newNonce, 0, 32);
+                            ciphertext = RSA.Decrypt(targetFingerprint, ciphertext, privateKey, 0, ciphertext.Length);
+                            var cipherReader = new BinaryReader(new MemoryStream(ciphertext, false));
+                            var hashsum = cipherReader.ReadBytes(20);
+                            var innercode = cipherReader.ReadUInt32();//0x83c95aec
+                            var pq = cipherReader.ReadBytes(20);
+                            var noncetemp = cipherReader.ReadBytes(16);
+                            var servernoncetemp = cipherReader.ReadBytes(16);
+                            newNonce = cipherReader.ReadBytes(32);
+                            //Array.Copy(ciphertext, ciphertext.Length - 32, newNonce, 0, 32);
                             //ciphertext.CopyTo(newnoncetemp, ciphertext.Length - 32);
                         }
                         else if (responseCode == step3Constructor) //---Step1_PQRequest
@@ -146,7 +157,9 @@ namespace TlgListenerApplication
 
                             //TODO: need to decryption
                             var ciphertext = Bytes.read(binaryReader2);
-                            var binaryReadernner = new BinaryReader(new MemoryStream(ciphertext, false));
+                            AESKeyData key = AES.GenerateKeyDataFromNonces(servernonce, newNonce);
+                            var cleartext = AES.DecryptAES(key, ciphertext);
+                            var binaryReadernner = new BinaryReader(new MemoryStream(cleartext, false));
                             var hasheddata = binaryReadernner.ReadBytes(20);
                             var client_dh_inner_data_code = binaryReadernner.ReadUInt32();
                             if (client_dh_inner_data_code != 0x6643b654)
@@ -161,7 +174,9 @@ namespace TlgListenerApplication
                     }
                     else
                     {
-                        var decodeMessage = DecodeMessage(tcpMessage.Body, null);
+                        var _gba = gb.ModPow(a, dhPrime);
+                        authKey = new AuthKey(_gba);
+                        var decodeMessage = DecodeMessage(tcpMessage.Body, authKey);
                         var objrawReader = new BinaryReader(new MemoryStream(decodeMessage.Item1, false));
                         messageId = decodeMessage.Item2;
                         innerCode = objrawReader.ReadInt32();
@@ -182,11 +197,11 @@ namespace TlgListenerApplication
                                 var invokewithlayer = (TLRequestInvokeWithLayer)obj;
                                 if (invokewithlayer.Query is TLRequestInitConnection)
                                 {
-
+                                    var requestInitConnection = (TLRequestInitConnection)invokewithlayer.Query;
                                 }
                                 else if (invokewithlayer.Query is TLRequestSendCode)
                                 {
-
+                                    var requestSendCode = (TLRequestSendCode)invokewithlayer.Query;
                                 }
                             }
                             else if (obj is TLRequestSendCode)
@@ -266,7 +281,7 @@ namespace TlgListenerApplication
                     else if (responseCode == step3Constructor)
                     {
                         var _gba = gb.ModPow(a, dhPrime);
-                        AuthKey authKey = new AuthKey(_gba);
+                        authKey = new AuthKey(_gba);
                         var newNonceHash = authKey.CalcNewNonceHash(newNonce, 1);
                         const uint innerCodeTemp = 0x3bcbf734;
                         using (var memoryStream = new MemoryStream())
@@ -415,7 +430,7 @@ namespace TlgListenerApplication
 
                     if (innerCode != 0)
                     {
-                        outputdata = PrepareToSend2(outputdata, authkey, servernonce, sequenceNumber);
+                        outputdata = PrepareToSend2(outputdata, authKey.Id, 0, 0, 0, servernonce, sequenceNumber, authKey);
                     }
                     else
                         outputdata = PrepareToSend(outputdata);
@@ -548,20 +563,35 @@ namespace TlgListenerApplication
             }
         }
 
-        public static byte[] PrepareToSend2(byte[] message, long authkey, byte[] servernonce, int sequenceNumber)
+        public static byte[] PrepareToSend2(byte[] message, ulong authKeyId, ulong salt, ulong sessionId, ulong messageId, byte[] servernonce, int sequenceNumber, AuthKey authKey)
         {
             using (var memoryStream = new MemoryStream())
             {
                 using (var binaryWriter = new BinaryWriter(memoryStream))
                 {
-                    binaryWriter.Write(authkey);
-                    binaryWriter.Write(servernonce);
-                    binaryWriter.Write(authkey);//salt
-                    binaryWriter.Write(authkey);//sessionId
-                    binaryWriter.Write(authkey);//messageid
+                    //binaryWriter.Write(servernonce);
+                    binaryWriter.Write(salt);//salt
+                    binaryWriter.Write(sessionId);//sessionId
+                    binaryWriter.Write(messageId);//messageid
                     binaryWriter.Write(sequenceNumber);
 
                     binaryWriter.Write(message.Length);
+                    binaryWriter.Write(message);
+
+                    message = memoryStream.ToArray();
+                }
+            }
+
+            byte[] msgKey = Helpers.CalcMsgKey(message);
+            AESKeyData key = Helpers.CalcKey(authKey.Data, msgKey, false);
+            message = AES.EncryptAES(key, message);
+
+            using (var memoryStream = new MemoryStream())
+            {
+                using (var binaryWriter = new BinaryWriter(memoryStream))
+                {
+                    binaryWriter.Write(authKeyId);
+                    binaryWriter.Write(msgKey);
                     binaryWriter.Write(message);
 
                     return memoryStream.ToArray();
@@ -587,7 +617,7 @@ namespace TlgListenerApplication
         }
 
         #region helpers
-        private static Tuple<byte[], ulong, int> DecodeMessage(byte[] body, AESKeyData keyData)
+        private static Tuple<byte[], ulong, int> DecodeMessage(byte[] body, AuthKey authkey)
         {
             byte[] message;
             ulong remoteMessageId;
@@ -601,10 +631,11 @@ namespace TlgListenerApplication
 
                 ulong remoteAuthKeyId = inputReader.ReadUInt64(); // TODO: check auth key id
                 byte[] msgKey = inputReader.ReadBytes(16); // TODO: check msg_key correctness
-
+                AESKeyData keyData = Helpers.CalcKey(authkey.Data, msgKey, true);
                 //TODO: return to decryption
-                //byte[] plaintext = AES.DecryptAES(keyData, inputReader.ReadBytes((int)(inputStream.Length - inputStream.Position)));               
-                byte[] plaintext = inputReader.ReadBytes((int)(inputStream.Length - inputStream.Position));
+                var cipherText = inputReader.ReadBytes((int)(inputStream.Length - inputStream.Position));
+                byte[] plaintext = AES.DecryptAES(keyData, cipherText);
+                //byte[] plaintext = inputReader.ReadBytes((int)(inputStream.Length - inputStream.Position));
 
                 using (MemoryStream plaintextStream = new MemoryStream(plaintext))
                 using (BinaryReader plaintextReader = new BinaryReader(plaintextStream))

@@ -5,12 +5,14 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TeleSharp.TL;
 using TLSharp.Core;
 using TLSharp.Core.MTProto.Crypto;
+using static TLSharp.Core.MTProto.Serializers;
 
 namespace ClientConsoleApp
 {
@@ -20,7 +22,7 @@ namespace ClientConsoleApp
 
         static void Main(string[] args)
         {
-            TestNewNonce();
+            //TestRSA();
             Thread.Sleep(2000);
             Console.WriteLine("Hello World!");
 
@@ -134,6 +136,44 @@ namespace ClientConsoleApp
             {
 
             }
+
+            return;
+        }
+
+        private static void TestRSA()
+        {
+            BigInteger e, n, d;
+            using (var rsa = new RSACryptoServiceProvider(2048))
+            {
+                try
+                {
+                    var keys = rsa.ExportParameters(true);
+
+                    var strE = BitConverter.ToString(keys.Exponent).Replace("-", "");
+                    var strN = BitConverter.ToString(keys.Modulus).Replace("-", "");
+                    var strD = BitConverter.ToString(keys.D).Replace("-", "");
+
+                    e = new BigInteger(strE, 16);
+                    n = new BigInteger(strN, 16);
+                    d = new BigInteger(strD, 16);
+
+                    //e = new BigInteger(1, keys.Exponent);
+                    //n = new BigInteger(1, keys.Modulus);
+                    //d = new BigInteger(1, keys.D);
+                }
+                finally
+                {
+                    rsa.PersistKeyInCsp = false;
+                }
+            }
+           
+            var text1 = "abcd--------------------------------123456789--------------------------------------------------------------------------------mnabcd--------------------------------123456789-----------------------------------------------------------------------------mn";
+            var data = Encoding.ASCII.GetBytes(text1);
+
+            byte[] ciphertext = new BigInteger(1, data).ModPow(e, n).ToByteArrayUnsigned();
+            byte[] cleartext = new BigInteger(1, ciphertext).ModPow(d, n).ToByteArrayUnsigned();
+
+            var text2 = ASCIIEncoding.ASCII.GetString(cleartext);
 
             return;
         }

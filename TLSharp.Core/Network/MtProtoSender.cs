@@ -85,8 +85,8 @@ namespace TLSharp.Core.Network
                     msgKey = Helpers.CalcMsgKey(plaintextPacket.GetBuffer());
 
                     //TODO: return to encryption
-                    //ciphertext = AES.EncryptAES(Helpers.CalcKey(_session.AuthKey.Data, msgKey, true), plaintextPacket.GetBuffer());
-                    ciphertext = plaintextPacket.GetBuffer();
+                    ciphertext = AES.EncryptAES(Helpers.CalcKey(_session.AuthKey.Data, msgKey, true), plaintextPacket.GetBuffer());
+                    //ciphertext = plaintextPacket.GetBuffer();
                 }
             }
 
@@ -120,8 +120,8 @@ namespace TLSharp.Core.Network
                 AESKeyData keyData = Helpers.CalcKey(_session.AuthKey.Data, msgKey, false);
 
                 //TODO: back to encryption
-                //byte[] plaintext = AES.DecryptAES(keyData, inputReader.ReadBytes((int)(inputStream.Length - inputStream.Position)));
-                byte[] plaintext = inputReader.ReadBytes((int)(inputStream.Length - inputStream.Position));
+                byte[] plaintext = AES.DecryptAES(keyData, inputReader.ReadBytes((int)(inputStream.Length - inputStream.Position)));
+                //byte[] plaintext = inputReader.ReadBytes((int)(inputStream.Length - inputStream.Position));
 
                 using (MemoryStream plaintextStream = new MemoryStream(plaintext))
                 using (BinaryReader plaintextReader = new BinaryReader(plaintextStream))

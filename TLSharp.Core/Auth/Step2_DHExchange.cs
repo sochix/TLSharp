@@ -63,28 +63,27 @@ namespace TLSharp.Core.Auth
                     pqInnerDataWriter.Write(newNonce);
 
                     //TODO--change by main version code----
-                    byte[] ciphertext = pqInnerData.ToArray();
-                    byte[] targetFingerprint = fingerprints[0];
+                    //byte[] ciphertext = pqInnerData.ToArray();
+                    //byte[] targetFingerprint = fingerprints[0];
 
+                    byte[] ciphertext = null;
+                    byte[] targetFingerprint = null;
+                    foreach (byte[] fingerprint in fingerprints)
+                    {
+                        ciphertext = RSA.Encrypt(BitConverter.ToString(fingerprint).Replace("-", string.Empty),
+                            pqInnerData.GetBuffer(), 0, (int)pqInnerData.Position);
+                        if (ciphertext != null)
+                        {
+                            targetFingerprint = fingerprint;
+                            break;
+                        }
+                    }
 
-                    //byte[] ciphertext = null;
-                    //byte[] targetFingerprint = null;
-                    //foreach (byte[] fingerprint in fingerprints)
-                    //{
-                    //    ciphertext = RSA.Encrypt(BitConverter.ToString(fingerprint).Replace("-", string.Empty),
-                    //        pqInnerData.GetBuffer(), 0, (int)pqInnerData.Position);
-                    //    if (ciphertext != null)
-                    //    {
-                    //        targetFingerprint = fingerprint;
-                    //        break;
-                    //    }
-                    //}
-
-                    //if (ciphertext == null)
-                    //{
-                    //    throw new InvalidOperationException(
-                    //        String.Format("not found valid key for fingerprints: {0}", String.Join(", ", fingerprints)));
-                    //}
+                    if (ciphertext == null)
+                    {
+                        throw new InvalidOperationException(
+                            String.Format("not found valid key for fingerprints: {0}", String.Join(", ", fingerprints)));
+                    }
 
                     using (MemoryStream reqDHParams = new MemoryStream(1024))
                     {
