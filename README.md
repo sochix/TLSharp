@@ -81,13 +81,13 @@ You can call any method on authenticated user. For example, let's send message t
   var result = await client.GetContactsAsync();
 
   //find recipient in contacts
-  var user = result.Users.lists
+  var user = result.Users
 	  .Where(x => x.GetType() == typeof (TLUser))
 	  .Cast<TLUser>()
-	  .FirstOrDefault(x => x.phone == "<recipient_phone>");
+	  .FirstOrDefault(x => x.Phone == "<recipient_phone>");
 	
   //send message
-  await client.SendMessageAsync(new TLInputPeerUser() {user_id = user.id}, "OUR_MESSAGE");
+  await client.SendMessageAsync(new TLInputPeerUser() {UserId = user.Id}, "OUR_MESSAGE");
 ```
 
 Full code you can see at [SendMessage test](https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L87)
@@ -95,16 +95,16 @@ Full code you can see at [SendMessage test](https://github.com/sochix/TLSharp/bl
 To send message to channel you could use the following code:
 ```csharp
   //get user dialogs
-  var dialogs = await client.GetUserDialogsAsync();
+  var dialogs = (TLDialogs) await client.GetUserDialogsAsync();
 
   //find channel by title
-  var chat = dialogs.chats.lists
+  var chat = dialogs.Chats
     .Where(c => c.GetType() == typeof(TLChannel))
     .Cast<TLChannel>()
-    .FirstOrDefault(c => c.title == "<channel_title>");
+    .FirstOrDefault(c => c.Title == "<channel_title>");
 
   //send message
-  await client.SendMessageAsync(new TLInputPeerChannel() { channel_id = chat.id, access_hash = chat.access_hash.Value }, "OUR_MESSAGE");
+  await client.SendMessageAsync(new TLInputPeerChannel() { ChannelId = chat.Id, AccessHash = chat.AccessHash.Value }, "OUR_MESSAGE");
 ```
 Full code you can see at [SendMessageToChannel test](https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L107)
 ## Working with files
@@ -117,9 +117,9 @@ Telegram separate files to two categories -> big file and small file. File is Bi
 TLSharp provides two wrappers for sending photo and document
 
 ```csharp
-	await client.SendUploadedPhoto(new TLInputPeerUser() { user_id = user.id }, fileResult, "kitty");
+	await client.SendUploadedPhoto(new TLInputPeerUser() { UserId = user.Id }, fileResult, "kitty");
 	await client.SendUploadedDocument(
-                new TLInputPeerUser() { user_id = user.id },
+                new TLInputPeerUser() { UserId = user.Id },
                 fileResult,
                 "some zips", //caption
                 "application/zip", //mime-type
@@ -132,11 +132,11 @@ To download file you should call **GetFile** method
 	await client.GetFile(
                 new TLInputDocumentFileLocation()
                 {
-                    access_hash = document.access_hash,
-                    id = document.id,
-                    version = document.version
+                    AccessHash = document.AccessHash,
+                    Id = document.Id,
+                    Version = document.Version
                 },
-                document.size); //size of fileChunk you want to retrieve
+                document.Size); //size of fileChunk you want to retrieve
 ```
 
 Full code you can see at [DownloadFileFromContactTest](https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L167)
@@ -169,12 +169,12 @@ Don't panic. You can call any method with help of `SendRequestAsync` function. F
   //Create request 
   var req = new TLRequestSetTyping()
   {
-    action = new TLSendMessageTypingAction(),
-    peer = peer
+    Action = new TLSendMessageTypingAction(),
+    Peer = new TLInputPeerUser() { UserId = user.Id }
   };
 
   //run request, and deserialize response to Boolean
-  return await SendRequestAsync<Boolean>(req);
+  return await client.SendRequestAsync<Boolean>(req);
 ``` 
 
 **Where you can find a list of requests and its params?**
