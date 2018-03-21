@@ -95,7 +95,7 @@ Full code you can see at [SendMessage test](https://github.com/sochix/TLSharp/bl
 To send message to channel you could use the following code:
 ```csharp
   //get user dialogs
-  var dialogs = (TLDialogs) await client.GetUserDialogsAsync();
+  var dialogs = (TLDialogsSlice) await client.GetUserDialogsAsync();
 
   //find channel by title
   var chat = dialogs.Chats
