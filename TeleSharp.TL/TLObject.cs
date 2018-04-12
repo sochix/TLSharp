@@ -36,7 +36,6 @@ namespace TeleSharp.TL
         }
         public void Serialize(BinaryWriter writer)
         {
-            writer.Write(Constructor);
             SerializeBody(writer);
         }
         public void Deserialize(BinaryReader reader)
