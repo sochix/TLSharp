@@ -31,7 +31,7 @@ namespace TeleSharp.TL
                 Serialize(bw);
                 bw.Close();
                 m.Close();
-                return m.GetBuffer();
+                return m.ToArray();
             }
         }
         public void Serialize(BinaryWriter writer)
