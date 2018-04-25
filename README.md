@@ -6,6 +6,8 @@ TLSharp
 
 _Unofficial_ Telegram (http://telegram.org) client library implemented in C#. Latest TL scheme supported, thanks to Afshin Arani
 
+🚩 Check out [TeleJS](https://github.com/RD17/TeleJS) - a pure JavaScript implementation of Telegram MTP protocol
+
 It's a perfect fit for any developer who would like to send data directly to Telegram users or write own custom Telegram client.
 
 :star2: If you :heart: library, please star it! :star2:
