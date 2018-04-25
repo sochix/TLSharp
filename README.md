@@ -19,9 +19,10 @@ It's a perfect fit for any developer who would like to send data directly to Tel
   - [First requests](#first-requests)
   - [Working with files](#working-with-files)
 - [Available Methods](#available-methods)
-- [Contributing](#contributing)
+- [Contributors](#contributors)
 - [FAQ](#faq)
 - [Donations](#donations)
+- [Support](#support)
 - [License](#license)
 
 # How do I add this to my project?
@@ -229,6 +230,11 @@ Thanks for donations! It's highly appreciated.
 
 List of donators:
 * [mtbitcoin](https://github.com/mtbitcoin)
+
+# Support
+If you have troubles while using TLSharp, I can help you for an additional fee. 
+
+My pricing is **219$/hour**. I accept PayPal. To request a paid support write me at Telegram @sochix, start your message with phrase [PAID SUPPORT].
 
 # Contributors
 * [Afshin Arani](http://aarani.ir) - TLGenerator, and a lot of other usefull things
