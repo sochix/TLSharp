@@ -6,7 +6,7 @@ namespace TLSharp.Core.Requests
 {
     public class AuthSendCodeRequest : MTProtoRequest
     {
-        
+
         public bool _phoneRegistered;
         public string _phoneCodeHash;
         public SendCodeArgs args=new SendCodeArgs();
