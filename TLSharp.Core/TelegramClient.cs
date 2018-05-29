@@ -41,7 +41,6 @@ namespace TLSharp.Core
             if (store == null)
                 store = new FileSessionStore();
 
-            TLContext.Init();
             _apiHash = apiHash;
             _apiId = apiId;
             _handler = handler;
