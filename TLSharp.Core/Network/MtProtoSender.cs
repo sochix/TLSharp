@@ -18,20 +18,15 @@ namespace TLSharp.Core.Network
     {
         //private ulong sessionId = GenerateRandomUlong();
 
-        private TcpTransport _transport;
-        private Session _session;
+        private readonly TcpTransport _transport;
+        private readonly Session _session;
 
-        public List<ulong> needConfirmation = new List<ulong>();
+        public readonly List<ulong> needConfirmation = new List<ulong>();
 
         public MtProtoSender(TcpTransport transport, Session session)
         {
             _transport = transport;
             _session = session;
-        }
-
-        public void ChangeTransport(TcpTransport transport)
-        {
-            _transport = transport;
         }
 
         private int GenerateSequence(bool confirmed)

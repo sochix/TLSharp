@@ -1,11 +1,12 @@
 TLSharp
 -------------------------------
 
-[![Join the chat at https://gitter.im/TLSharp/Lobby](https://badges.gitter.im/TLSharp/Lobby.svg)](https://gitter.im/TLSharp/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build status](https://ci.appveyor.com/api/projects/status/95rl618ch5c4h2fa?svg=true)](https://ci.appveyor.com/project/sochix/tlsharp)
 [![NuGet version](https://badge.fury.io/nu/TLSharp.svg)](https://badge.fury.io/nu/TLSharp)
 
 _Unofficial_ Telegram (http://telegram.org) client library implemented in C#. Latest TL scheme supported, thanks to Afshin Arani
+
+🚩 Check out [TeleJS](https://github.com/RD17/TeleJS) - a pure JavaScript implementation of Telegram MTP protocol
 
 It's a perfect fit for any developer who would like to send data directly to Telegram users or write own custom Telegram client.
 
@@ -20,9 +21,10 @@ It's a perfect fit for any developer who would like to send data directly to Tel
   - [First requests](#first-requests)
   - [Working with files](#working-with-files)
 - [Available Methods](#available-methods)
-- [Contributing](#contributing)
+- [Contributors](#contributors)
 - [FAQ](#faq)
 - [Donations](#donations)
+- [Support](#support)
 - [License](#license)
 
 # How do I add this to my project?
@@ -81,13 +83,13 @@ You can call any method on authenticated user. For example, let's send message t
   var result = await client.GetContactsAsync();
 
   //find recipient in contacts
-  var user = result.Users.lists
+  var user = result.Users
 	  .Where(x => x.GetType() == typeof (TLUser))
 	  .Cast<TLUser>()
-	  .FirstOrDefault(x => x.phone == "<recipient_phone>");
+	  .FirstOrDefault(x => x.Phone == "<recipient_phone>");
 	
   //send message
-  await client.SendMessageAsync(new TLInputPeerUser() {user_id = user.id}, "OUR_MESSAGE");
+  await client.SendMessageAsync(new TLInputPeerUser() {UserId = user.Id}, "OUR_MESSAGE");
 ```
 
 Full code you can see at [SendMessage test](https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L87)
@@ -95,16 +97,16 @@ Full code you can see at [SendMessage test](https://github.com/sochix/TLSharp/bl
 To send message to channel you could use the following code:
 ```csharp
   //get user dialogs
-  var dialogs = await client.GetUserDialogsAsync();
+  var dialogs = (TLDialogsSlice) await client.GetUserDialogsAsync();
 
   //find channel by title
-  var chat = dialogs.chats.lists
+  var chat = dialogs.Chats
     .Where(c => c.GetType() == typeof(TLChannel))
     .Cast<TLChannel>()
-    .FirstOrDefault(c => c.title == "<channel_title>");
+    .FirstOrDefault(c => c.Title == "<channel_title>");
 
   //send message
-  await client.SendMessageAsync(new TLInputPeerChannel() { channel_id = chat.id, access_hash = chat.access_hash.Value }, "OUR_MESSAGE");
+  await client.SendMessageAsync(new TLInputPeerChannel() { ChannelId = chat.Id, AccessHash = chat.AccessHash.Value }, "OUR_MESSAGE");
 ```
 Full code you can see at [SendMessageToChannel test](https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L107)
 ## Working with files
@@ -117,9 +119,9 @@ Telegram separate files to two categories -> big file and small file. File is Bi
 TLSharp provides two wrappers for sending photo and document
 
 ```csharp
-	await client.SendUploadedPhoto(new TLInputPeerUser() { user_id = user.id }, fileResult, "kitty");
+	await client.SendUploadedPhoto(new TLInputPeerUser() { UserId = user.Id }, fileResult, "kitty");
 	await client.SendUploadedDocument(
-                new TLInputPeerUser() { user_id = user.id },
+                new TLInputPeerUser() { UserId = user.Id },
                 fileResult,
                 "some zips", //caption
                 "application/zip", //mime-type
@@ -132,11 +134,11 @@ To download file you should call **GetFile** method
 	await client.GetFile(
                 new TLInputDocumentFileLocation()
                 {
-                    access_hash = document.access_hash,
-                    id = document.id,
-                    version = document.version
+                    AccessHash = document.AccessHash,
+                    Id = document.Id,
+                    Version = document.Version
                 },
-                document.size); //size of fileChunk you want to retrieve
+                document.Size); //size of fileChunk you want to retrieve
 ```
 
 Full code you can see at [DownloadFileFromContactTest](https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L167)
@@ -169,12 +171,12 @@ Don't panic. You can call any method with help of `SendRequestAsync` function. F
   //Create request 
   var req = new TLRequestSetTyping()
   {
-    action = new TLSendMessageTypingAction(),
-    peer = peer
+    Action = new TLSendMessageTypingAction(),
+    Peer = new TLInputPeerUser() { UserId = user.Id }
   };
 
   //run request, and deserialize response to Boolean
-  return await SendRequestAsync<Boolean>(req);
+  return await client.SendRequestAsync<Boolean>(req);
 ``` 
 
 **Where you can find a list of requests and its params?**
@@ -211,10 +213,10 @@ It's likely [Telegram restrictions](https://core.telegram.org/api/errors#420-flo
 
 #### Why does TLSharp lacks feature XXXX?
 
-Now TLSharp is basic realization of Telegram protocol, you can be a contributor or a sponsor to speed-up developemnt of any feature.
+TLSharp only covers basic functionality of the Telegram protocol, you can be a contributor or a sponsor to speed-up developemnt of any more new features.
 
-#### Nothing helps
-Ask your question at gitter or create an issue in project bug tracker.
+#### Where else to ask for help?
+If you think you have found a bug in TLSharp, create a github issue. But if you just have questions about how to use TLSharp, use our gitter channel (https://gitter.im/TLSharp/Lobby) or our Telegram channel (https://t.me/joinchat/AgtDiBEqG1i-qPqttNFLbA).
 
 **Attach following information**:
 
@@ -230,6 +232,11 @@ Thanks for donations! It's highly appreciated.
 
 List of donators:
 * [mtbitcoin](https://github.com/mtbitcoin)
+
+# Support
+If you have troubles while using TLSharp, I can help you for an additional fee. 
+
+My pricing is **219$/hour**. I accept PayPal. To request a paid support write me at Telegram @sochix, start your message with phrase [PAID SUPPORT].
 
 # Contributors
 * [Afshin Arani](http://aarani.ir) - TLGenerator, and a lot of other usefull things

@@ -41,7 +41,6 @@ namespace TLSharp.Core
             if (store == null)
                 store = new FileSessionStore();
 
-            TLContext.Init();
             _apiHash = apiHash;
             _apiId = apiId;
             _handler = handler;
@@ -50,7 +49,7 @@ namespace TLSharp.Core
             _transport = new TcpTransport(_session.ServerAddress, _session.Port, _handler);
         }
 
-        public async Task<bool> ConnectAsync(bool reconnect = false)
+        public async Task ConnectAsync(bool reconnect = false)
         {
             if (_session.AuthKey == null || reconnect)
             {
@@ -77,8 +76,6 @@ namespace TLSharp.Core
             await _sender.Receive(invokewithLayer);
 
             dcOptions = ((TLConfig)invokewithLayer.Response).DcOptions.ToList();
-
-            return true;
         }
 
         private async Task ReconnectToDcAsync(int dcId)
@@ -109,8 +106,11 @@ namespace TLSharp.Core
             }
         }
 
-        private async Task RequestWithDcMigration(TLMethod request) 
+        private async Task RequestWithDcMigration(TLMethod request)
         {
+            if (_sender == null)
+                throw new InvalidOperationException("Not connected!");
+
             var completed = false;
             while(!completed)
             {
@@ -138,9 +138,6 @@ namespace TLSharp.Core
         {
             if (String.IsNullOrWhiteSpace(phoneNumber))
                 throw new ArgumentNullException(nameof(phoneNumber));
-
-            if (_sender == null)
-                throw new InvalidOperationException("Not connected!");
 
             var authCheckPhoneRequest = new TLRequestCheckPhone() { PhoneNumber = phoneNumber };
 
