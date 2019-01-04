@@ -263,6 +263,9 @@ namespace TLSharp.Core
             if (!IsUserAuthorized())
                 throw new InvalidOperationException("Authorize user first!");
 
+            if (offset_peer == null)
+                offset_peer = new TLInputPeerSelf();
+
             var req = new TLRequestGetDialogs()
             { 
                 OffsetDate = offset_date, 
