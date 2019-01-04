@@ -258,11 +258,22 @@ namespace TLSharp.Core
             return await SendRequestAsync<Boolean>(req);
         }
 
-        public async Task<TLAbsDialogs> GetUserDialogsAsync()
+        public async Task<TLAbsDialogs> GetUserDialogsAsync(int offsetDate = 0, int offsetId = 0, TLAbsInputPeer offsetPeer = null, int limit = 100)
         {
-            var peer = new TLInputPeerSelf();
-            return await SendRequestAsync<TLAbsDialogs>(
-                new TLRequestGetDialogs() { OffsetDate = 0, OffsetPeer = peer, Limit = 100 });
+            if (!IsUserAuthorized())
+                throw new InvalidOperationException("Authorize user first!");
+
+            if (offsetPeer == null)
+                offsetPeer = new TLInputPeerSelf();
+
+            var req = new TLRequestGetDialogs()
+            { 
+                OffsetDate = offsetDate, 
+                OffsetId = offsetId, 
+                OffsetPeer = offsetPeer, 
+                Limit = limit
+            };
+            return await SendRequestAsync<TLAbsDialogs>(req);
         }
 
         public async Task<TLAbsUpdates> SendUploadedPhoto(TLAbsInputPeer peer, TLAbsInputFile file, string caption)
@@ -313,7 +324,7 @@ namespace TLSharp.Core
             await _sender.SendPingAsync();
         }
 
-        public async Task<TLAbsMessages> GetHistoryAsync(TLAbsInputPeer peer, int offset, int max_id, int limit)
+        public async Task<TLAbsMessages> GetHistoryAsync(TLAbsInputPeer peer, int offsetId = 0, int offsetDate = 0, int addOffset = 0, int limit = 100, int maxId = 0, int minId = 0)
         {
             if (!IsUserAuthorized())
                 throw new InvalidOperationException("Authorize user first!");
@@ -321,9 +332,12 @@ namespace TLSharp.Core
             var req = new TLRequestGetHistory()
             {
                 Peer = peer,
-                AddOffset = offset,
-                MaxId = max_id,
-                Limit = limit
+                OffsetId = offsetId,
+                OffsetDate = offsetDate,
+                AddOffset = addOffset,
+                Limit = limit,
+                MaxId = maxId,
+                MinId = minId
             };
             return await SendRequestAsync<TLAbsMessages>(req);
         }
