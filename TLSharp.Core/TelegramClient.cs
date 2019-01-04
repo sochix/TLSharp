@@ -258,19 +258,19 @@ namespace TLSharp.Core
             return await SendRequestAsync<Boolean>(req);
         }
 
-        public async Task<TLAbsDialogs> GetUserDialogsAsync(int offset_date = 0, int offset_id = 0, TLAbsInputPeer offset_peer = null, int limit = 100)
+        public async Task<TLAbsDialogs> GetUserDialogsAsync(int offsetDate = 0, int offsetId = 0, TLAbsInputPeer offsetPeer = null, int limit = 100)
         {
             if (!IsUserAuthorized())
                 throw new InvalidOperationException("Authorize user first!");
 
-            if (offset_peer == null)
-                offset_peer = new TLInputPeerSelf();
+            if (offsetPeer == null)
+                offsetPeer = new TLInputPeerSelf();
 
             var req = new TLRequestGetDialogs()
             { 
-                OffsetDate = offset_date, 
-                OffsetId = offset_id, 
-                OffsetPeer = offset_peer, 
+                OffsetDate = offsetDate, 
+                OffsetId = offsetId, 
+                OffsetPeer = offsetPeer, 
                 Limit = limit
             };
             return await SendRequestAsync<TLAbsDialogs>(req);
@@ -324,10 +324,7 @@ namespace TLSharp.Core
             await _sender.SendPingAsync();
         }
 
-        /// <summary>
-        /// messages.getHistory#dcbb8260 peer:InputPeer offset_id:int offset_date:date add_offset:int limit:int max_id:int min_id:int hash:int = messages.Messages
-        /// </summary>
-        public async Task<TLAbsMessages> GetHistoryAsync(TLAbsInputPeer peer, int offset_id = 0, int offset_date = 0, int add_offset = 0, int limit = 100, int max_id = 0, int min_id = 0)
+        public async Task<TLAbsMessages> GetHistoryAsync(TLAbsInputPeer peer, int offsetId = 0, int offsetDate = 0, int addOffset = 0, int limit = 100, int maxId = 0, int minId = 0)
         {
             if (!IsUserAuthorized())
                 throw new InvalidOperationException("Authorize user first!");
@@ -335,12 +332,12 @@ namespace TLSharp.Core
             var req = new TLRequestGetHistory()
             {
                 Peer = peer,
-                OffsetId = offset_id,
-                OffsetDate = offset_date,
-                AddOffset = add_offset,
+                OffsetId = offsetId,
+                OffsetDate = offsetDate,
+                AddOffset = addOffset,
                 Limit = limit,
-                MaxId = max_id,
-                MinId = min_id    
+                MaxId = maxId,
+                MinId = minId
             };
             return await SendRequestAsync<TLAbsMessages>(req);
         }
