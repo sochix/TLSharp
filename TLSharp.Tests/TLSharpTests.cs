@@ -79,42 +79,47 @@ namespace TLSharp.Tests
         private void GatherTestConfiguration()
         {
             string appConfigMsgWarning = "{0} not configured in app.config! Some tests may fail.";
+            // https://github.com/dotnet/corefx/issues/22101#issuecomment-374415132
+            Configuration config = ConfigurationManager.OpenMappedExeConfiguration(new ExeConfigurationFileMap
+            {
+                ExeConfigFilename = Path.Combine(AppContext.BaseDirectory, "app.config")
+            }, ConfigurationUserLevel.None);
 
-            ApiHash = ConfigurationManager.AppSettings[nameof(ApiHash)];
+            ApiHash = config.AppSettings.Settings[nameof(ApiHash)].Value;
             if (string.IsNullOrEmpty(ApiHash))
                 Debug.WriteLine(appConfigMsgWarning, nameof(ApiHash));
 
-            var apiId = ConfigurationManager.AppSettings[nameof(ApiId)];
+            var apiId = config.AppSettings.Settings[nameof(ApiId)].Value;
             if (string.IsNullOrEmpty(apiId))
                 Debug.WriteLine(appConfigMsgWarning, nameof(ApiId));
             else
                 ApiId = int.Parse(apiId);
 
-            NumberToAuthenticate = ConfigurationManager.AppSettings[nameof(NumberToAuthenticate)];
+            NumberToAuthenticate = config.AppSettings.Settings[nameof(NumberToAuthenticate)].Value;
             if (string.IsNullOrEmpty(NumberToAuthenticate))
                 Debug.WriteLine(appConfigMsgWarning, nameof(NumberToAuthenticate));
 
-            CodeToAuthenticate = ConfigurationManager.AppSettings[nameof(CodeToAuthenticate)];
+            CodeToAuthenticate = config.AppSettings.Settings[nameof(CodeToAuthenticate)].Value;
             if (string.IsNullOrEmpty(CodeToAuthenticate))
                 Debug.WriteLine(appConfigMsgWarning, nameof(CodeToAuthenticate));
 
-            PasswordToAuthenticate = ConfigurationManager.AppSettings[nameof(PasswordToAuthenticate)];
+            PasswordToAuthenticate = config.AppSettings.Settings[nameof(PasswordToAuthenticate)].Value;
             if (string.IsNullOrEmpty(PasswordToAuthenticate))
                 Debug.WriteLine(appConfigMsgWarning, nameof(PasswordToAuthenticate));
 
-            NotRegisteredNumberToSignUp = ConfigurationManager.AppSettings[nameof(NotRegisteredNumberToSignUp)];
+            NotRegisteredNumberToSignUp = config.AppSettings.Settings[nameof(NotRegisteredNumberToSignUp)].Value;
             if (string.IsNullOrEmpty(NotRegisteredNumberToSignUp))
                 Debug.WriteLine(appConfigMsgWarning, nameof(NotRegisteredNumberToSignUp));
 
-            UserNameToSendMessage = ConfigurationManager.AppSettings[nameof(UserNameToSendMessage)];
+            UserNameToSendMessage = config.AppSettings.Settings[nameof(UserNameToSendMessage)].Value;
             if (string.IsNullOrEmpty(UserNameToSendMessage))
                 Debug.WriteLine(appConfigMsgWarning, nameof(UserNameToSendMessage));
 
-            NumberToGetUserFull = ConfigurationManager.AppSettings[nameof(NumberToGetUserFull)];
+            NumberToGetUserFull = config.AppSettings.Settings[nameof(NumberToGetUserFull)].Value;
             if (string.IsNullOrEmpty(NumberToGetUserFull))
                 Debug.WriteLine(appConfigMsgWarning, nameof(NumberToGetUserFull));
 
-            NumberToAddToChat = ConfigurationManager.AppSettings[nameof(NumberToAddToChat)];
+            NumberToAddToChat = config.AppSettings.Settings[nameof(NumberToAddToChat)].Value;
             if (string.IsNullOrEmpty(NumberToAddToChat))
                 Debug.WriteLine(appConfigMsgWarning, nameof(NumberToAddToChat));
         }
@@ -268,7 +273,7 @@ namespace TLSharp.Tests
                     Version = document.Version
                 },
                 document.Size);
-            
+
             Assert.IsTrue(resFile.Bytes.Length > 0);
         }
 
@@ -283,7 +288,7 @@ namespace TLSharp.Tests
             var user = result.Users
                 .OfType<TLUser>()
                 .FirstOrDefault(x => x.Id == 5880094);
-    
+
             var photo = ((TLUserProfilePhoto)user.Photo);
             var photoLocation = (TLFileLocation) photo.PhotoBig;
 
@@ -294,7 +299,7 @@ namespace TLSharp.Tests
                 VolumeId = photoLocation.VolumeId
             }, 1024);
 
-            var res = await client.GetUserDialogsAsync(); 
+            var res = await client.GetUserDialogsAsync();
 
             Assert.IsTrue(resFile.Bytes.Length > 0);
         }
