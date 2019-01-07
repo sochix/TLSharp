@@ -6,10 +6,9 @@ using NUnit.Framework;
 
 namespace TLSharp.Tests
 {
-    [TestFixture]
     public class TLSharpTestsNUnit : TLSharpTests
     {
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void Init()
         {
             base.Init(o => Assert.IsNotNull(o), b => Assert.IsTrue(b));
