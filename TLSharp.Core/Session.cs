@@ -155,14 +155,24 @@ namespace TLSharp.Core
             _store.Save(this);
         }
 
-        public static Session TryLoadOrCreateNew(ISessionStore store, string sessionUserId)
+        public static Session TryLoad(ISessionStore store, string sessionUserId)
         {
-            return store.Load(sessionUserId) ?? new Session(store)
+            return store.Load(sessionUserId);
+        }
+
+        public static Session Create(
+            ISessionStore store, 
+            string sessionUserId, 
+            string serverAddress = defaultConnectionAddress, 
+            int serverPort = defaultConnectionPort
+        )
+        {
+            return new Session(store)
             {
                 Id = GenerateRandomUlong(),
                 SessionUserId = sessionUserId,
-                ServerAddress = defaultConnectionAddress,
-                Port = defaultConnectionPort
+                ServerAddress = serverAddress,
+                Port = serverPort
             };
         }
 

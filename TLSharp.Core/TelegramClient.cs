@@ -16,6 +16,7 @@ using TLSharp.Core.MTProto.Crypto;
 using TLSharp.Core.Network;
 using TLSharp.Core.Utils;
 using TLAuthorization = TeleSharp.TL.Auth.TLAuthorization;
+using System.Net;
 
 namespace TLSharp.Core
 {
@@ -30,8 +31,13 @@ namespace TLSharp.Core
         private List<TLDcOption> dcOptions;
         private TcpClientConnectionHandler _handler;
 
-        public TelegramClient(int apiId, string apiHash,
-            ISessionStore store = null, string sessionUserId = "session", TcpClientConnectionHandler handler = null)
+        public TelegramClient(int apiId, 
+            string apiHash,
+            ISessionStore store = null, 
+            string sessionUserId = "session", 
+            TcpClientConnectionHandler handler = null,
+            IPEndPoint connectionAddress = null
+        )
         {
             if (apiId == default(int))
                 throw new MissingApiConfigurationException("API_ID");
@@ -45,7 +51,20 @@ namespace TLSharp.Core
             _apiId = apiId;
             _handler = handler;
 
-            _session = Session.TryLoadOrCreateNew(store, sessionUserId);
+            _session = Session.TryLoad(store, sessionUserId);
+
+            if(_session == null)
+            {
+                if(connectionAddress != null)
+                {
+                    _session = Session.Create(store, sessionUserId, connectionAddress.Address.ToString(), connectionAddress.Port);
+                }
+                else
+                {
+                    _session = Session.Create(store, sessionUserId);
+                }
+            }
+
             _transport = new TcpTransport(_session.ServerAddress, _session.Port, _handler);
         }
 
