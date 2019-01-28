@@ -34,20 +34,20 @@ namespace TLSharp.Core.Utils
 
             Array.Copy(msgKey, 0, buffer, 0, 16);            // buffer[0:16] = msgKey
             Array.Copy(sharedKey, x, buffer, 16, 32);     // buffer[16:48] = authKey[x:x+32]
-            byte[] sha1a = sha1(buffer);                     // sha1a = sha1(buffer)
+            byte[] sha1a = Sha1(buffer);                     // sha1a = sha1(buffer)
 
             Array.Copy(sharedKey, 32 + x, buffer, 0, 16);   // buffer[0:16] = authKey[x+32:x+48]
             Array.Copy(msgKey, 0, buffer, 16, 16);           // buffer[16:32] = msgKey
             Array.Copy(sharedKey, 48 + x, buffer, 32, 16);  // buffer[32:48] = authKey[x+48:x+64]
-            byte[] sha1b = sha1(buffer);                     // sha1b = sha1(buffer)
+            byte[] sha1b = Sha1(buffer);                     // sha1b = sha1(buffer)
 
             Array.Copy(sharedKey, 64 + x, buffer, 0, 32);   // buffer[0:32] = authKey[x+64:x+96]
             Array.Copy(msgKey, 0, buffer, 32, 16);           // buffer[32:48] = msgKey
-            byte[] sha1c = sha1(buffer);                     // sha1c = sha1(buffer)
+            byte[] sha1c = Sha1(buffer);                     // sha1c = sha1(buffer)
 
             Array.Copy(msgKey, 0, buffer, 0, 16);            // buffer[0:16] = msgKey
             Array.Copy(sharedKey, 96 + x, buffer, 16, 32);  // buffer[16:48] = authKey[x+96:x+128]
-            byte[] sha1d = sha1(buffer);                     // sha1d = sha1(buffer)
+            byte[] sha1d = Sha1(buffer);                     // sha1d = sha1(buffer)
 
             byte[] key = new byte[32];                       // key = sha1a[0:8] + sha1b[8:20] + sha1c[4:16]
             Array.Copy(sha1a, 0, key, 0, 8);
@@ -66,18 +66,18 @@ namespace TLSharp.Core.Utils
         public static byte[] CalcMsgKey(byte[] data)
         {
             byte[] msgKey = new byte[16];
-            Array.Copy(sha1(data), 4, msgKey, 0, 16);
+            Array.Copy(Sha1(data), 4, msgKey, 0, 16);
             return msgKey;
         }
 
         public static byte[] CalcMsgKey(byte[] data, int offset, int limit)
         {
             byte[] msgKey = new byte[16];
-            Array.Copy(sha1(data, offset, limit), 4, msgKey, 0, 16);
+            Array.Copy(Sha1(data, offset, limit), 4, msgKey, 0, 16);
             return msgKey;
         }
 
-        public static byte[] sha1(byte[] data)
+        public static byte[] Sha1(byte[] data)
         {
             using (SHA1 sha1 = new SHA1Managed())
             {
@@ -85,7 +85,7 @@ namespace TLSharp.Core.Utils
             }
         }
 
-        public static byte[] sha1(byte[] data, int offset, int limit)
+        public static byte[] Sha1(byte[] data, int offset, int limit)
         {
             using (SHA1 sha1 = new SHA1Managed())
             {

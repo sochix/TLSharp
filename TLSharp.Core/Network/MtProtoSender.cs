@@ -101,11 +101,26 @@ namespace TLSharp.Core.Network
             ulong remoteMessageId;
             int remoteSequence;
 
+            /*
+            if (body.Length<8)
+            {
+                List<byte> lb = new List<byte>();
+                foreach (var vb in body)
+                    lb.Add(vb);
+                for (int i = lb.Count; i < (8+16); i++)
+                    lb.Add(0);
+
+                body = lb.ToArray();
+            }
+            */
+
             using (var inputStream = new MemoryStream(body))
             using (var inputReader = new BinaryReader(inputStream))
             {
                 if (inputReader.BaseStream.Length < 8)
+                {               
                     throw new InvalidOperationException($"Can't decode packet");
+                }
 
                 ulong remoteAuthKeyId = inputReader.ReadUInt64(); // TODO: check auth key id
                 byte[] msgKey = inputReader.ReadBytes(16); // TODO: check msg_key correctness
@@ -342,7 +357,7 @@ namespace TLSharp.Core.Network
                 }
                 catch (ZlibException ex)
                 {
-
+                    Console.WriteLine(ex.Message);
                 }
             }
             else
@@ -512,6 +527,7 @@ namespace TLSharp.Core.Network
                 {
                     //	logger.error("failed to process message in contailer: {0}", e);
                     messageReader.BaseStream.Position = beginPosition + innerLength;
+                    Console.WriteLine(e.Message);
                 }
             }
 

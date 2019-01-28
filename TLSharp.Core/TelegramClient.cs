@@ -83,14 +83,23 @@ namespace TLSharp.Core
             if (dcOptions == null || !dcOptions.Any())
                 throw new InvalidOperationException($"Can't reconnect. Establish initial connection first.");
 
+            TLDcOption dc = null;
+            foreach (var d2 in dcOptions)
+            {
+                if (d2.Id == dcId && d2.Ipv6 == false)
+                {
+                    dc = d2;
+                    break;
+                }
+            }
+
             TLExportedAuthorization exported = null;
             if (_session.TLUser != null)
             {
                 TLRequestExportAuthorization exportAuthorization = new TLRequestExportAuthorization() { DcId = dcId };
-                exported = await SendRequestAsync<TLExportedAuthorization>(exportAuthorization,times);
+                exported = await SendRequestAsync<TLExportedAuthorization>(exportAuthorization, times);
             }
 
-            var dc = dcOptions.First(d => d.Id == dcId);
 
             _transport = new TcpTransport(dc.IpAddress, dc.Port, _handler);
             _session.ServerAddress = dc.IpAddress;
@@ -124,7 +133,7 @@ namespace TLSharp.Core
                 }
                 catch(DataCenterMigrationException e)
                 {
-                    if (times <= 1)
+                    if (times <= 150)
                     {
                         await ReconnectToDcAsync(e.DC, times + 1);
                         // prepare the request for another try
