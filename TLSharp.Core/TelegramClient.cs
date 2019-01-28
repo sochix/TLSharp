@@ -22,13 +22,13 @@ namespace TLSharp.Core
     public class TelegramClient : IDisposable
     {
         private MtProtoSender _sender;
-        private AuthKey _key;
+        private readonly AuthKey _key;
         private TcpTransport _transport;
         private string _apiHash = "";
         private int _apiId = 0;
         private Session _session;
         private List<TLDcOption> dcOptions;
-        private TcpClientConnectionHandler _handler;
+        private readonly TcpClientConnectionHandler _handler;
 
         public TelegramClient(int apiId, string apiHash,
             ISessionStore store = null, string sessionUserId = "session", TcpClientConnectionHandler handler = null)
@@ -78,7 +78,7 @@ namespace TLSharp.Core
             dcOptions = ((TLConfig)invokewithLayer.Response).DcOptions.ToList();
         }
 
-        private async Task ReconnectToDcAsync(int dcId)
+        private async Task ReconnectToDcAsync(int dcId, int times)
         {
             if (dcOptions == null || !dcOptions.Any())
                 throw new InvalidOperationException($"Can't reconnect. Establish initial connection first.");
@@ -87,7 +87,7 @@ namespace TLSharp.Core
             if (_session.TLUser != null)
             {
                 TLRequestExportAuthorization exportAuthorization = new TLRequestExportAuthorization() { DcId = dcId };
-                exported = await SendRequestAsync<TLExportedAuthorization>(exportAuthorization);
+                exported = await SendRequestAsync<TLExportedAuthorization>(exportAuthorization,times);
             }
 
             var dc = dcOptions.First(d => d.Id == dcId);
@@ -101,12 +101,14 @@ namespace TLSharp.Core
             if (_session.TLUser != null)
             {
                 TLRequestImportAuthorization importAuthorization = new TLRequestImportAuthorization() { Id = exported.Id, Bytes = exported.Bytes };
-                var imported = await SendRequestAsync<TLAuthorization>(importAuthorization);
+                var imported = await SendRequestAsync<TLAuthorization>(importAuthorization,times);
                 OnUserAuthenticated(((TLUser)imported.User));
             }
+
+
         }
 
-        private async Task RequestWithDcMigration(TLMethod request)
+        private async Task RequestWithDcMigration(TLMethod request, int times)
         {
             if (_sender == null)
                 throw new InvalidOperationException("Not connected!");
@@ -122,9 +124,20 @@ namespace TLSharp.Core
                 }
                 catch(DataCenterMigrationException e)
                 {
-                    await ReconnectToDcAsync(e.DC);
-                    // prepare the request for another try
-                    request.ConfirmReceived = false;
+                    if (times <= 1)
+                    {
+                        await ReconnectToDcAsync(e.DC, times + 1);
+                        // prepare the request for another try
+                        request.ConfirmReceived = false;
+                    }
+                    else
+                    {
+                        throw e;
+                    }
+                }
+                catch (TLSharp.Core.Network.FloodException e)
+                {
+                    throw e;
                 }
             }
         }
@@ -141,7 +154,7 @@ namespace TLSharp.Core
 
             var authCheckPhoneRequest = new TLRequestCheckPhone() { PhoneNumber = phoneNumber };
 
-            await RequestWithDcMigration(authCheckPhoneRequest);
+            await RequestWithDcMigration(authCheckPhoneRequest,0);
 
             return authCheckPhoneRequest.Response.PhoneRegistered;
         }
@@ -153,7 +166,7 @@ namespace TLSharp.Core
 
             var request = new TLRequestSendCode() { PhoneNumber = phoneNumber, ApiId = _apiId, ApiHash = _apiHash };
 
-            await RequestWithDcMigration(request);
+            await RequestWithDcMigration(request,0);
 
             return request.Response.PhoneCodeHash;
         }
@@ -171,7 +184,7 @@ namespace TLSharp.Core
             
             var request = new TLRequestSignIn() { PhoneNumber = phoneNumber, PhoneCodeHash = phoneCodeHash, PhoneCode = code };
 
-            await RequestWithDcMigration(request);
+            await RequestWithDcMigration(request,0);
 
             OnUserAuthenticated(((TLUser)request.Response.User));
 
@@ -182,7 +195,7 @@ namespace TLSharp.Core
         {
             var request = new TLRequestGetPassword();
 
-            await RequestWithDcMigration(request);
+            await RequestWithDcMigration(request,0);
 
             return ((TLPassword)request.Response);
         }
@@ -198,7 +211,7 @@ namespace TLSharp.Core
 
             var request = new TLRequestCheckPassword() { PasswordHash = password_hash };
 
-            await RequestWithDcMigration(request);
+            await RequestWithDcMigration(request,0);
 
             OnUserAuthenticated(((TLUser)request.Response.User));
 
@@ -209,15 +222,15 @@ namespace TLSharp.Core
         {
             var request = new TLRequestSignUp() { PhoneNumber = phoneNumber, PhoneCode = code, PhoneCodeHash = phoneCodeHash, FirstName = firstName, LastName = lastName };
             
-            await RequestWithDcMigration(request);
+            await RequestWithDcMigration(request,0);
 
             OnUserAuthenticated(((TLUser)request.Response.User));
 
             return ((TLUser)request.Response.User);
         }
-        public async Task<T> SendRequestAsync<T>(TLMethod methodToExecute)
+        public async Task<T> SendRequestAsync<T>(TLMethod methodToExecute, int times)
         {
-            await RequestWithDcMigration(methodToExecute);
+            await RequestWithDcMigration(methodToExecute, times);
 
             var result = methodToExecute.GetType().GetProperty("Response").GetValue(methodToExecute);
 
@@ -231,7 +244,7 @@ namespace TLSharp.Core
 
             var req = new TLRequestGetContacts() { Hash = "" };
 
-            return await SendRequestAsync<TLContacts>(req);
+            return await SendRequestAsync<TLContacts>(req,0);
         }
 
         public async Task<TLAbsUpdates> SendMessageAsync(TLAbsInputPeer peer, string message)
@@ -239,13 +252,13 @@ namespace TLSharp.Core
             if (!IsUserAuthorized())
                 throw new InvalidOperationException("Authorize user first!");
 
-            return await SendRequestAsync<TLAbsUpdates>(
-                   new TLRequestSendMessage()
-                   {
-                       Peer = peer,
-                       Message = message,
-                       RandomId = Helpers.GenerateRandomLong()
-                   });
+            var x = new TLRequestSendMessage()
+            {
+                Peer = peer,
+                Message = message,
+                RandomId = Helpers.GenerateRandomLong()
+            };
+            return await SendRequestAsync<TLAbsUpdates>(x, 0);
         }
 
         public async Task<Boolean> SendTypingAsync(TLAbsInputPeer peer)
@@ -255,7 +268,7 @@ namespace TLSharp.Core
                 Action = new TLSendMessageTypingAction(),
                 Peer = peer
             };
-            return await SendRequestAsync<Boolean>(req);
+            return await SendRequestAsync<Boolean>(req,0);
         }
 
         public async Task<TLAbsDialogs> GetUserDialogsAsync(int offsetDate = 0, int offsetId = 0, TLAbsInputPeer offsetPeer = null, int limit = 100)
@@ -273,7 +286,7 @@ namespace TLSharp.Core
                 OffsetPeer = offsetPeer, 
                 Limit = limit
             };
-            return await SendRequestAsync<TLAbsDialogs>(req);
+            return await SendRequestAsync<TLAbsDialogs>(req,0);
         }
 
         public async Task<TLAbsUpdates> SendUploadedPhoto(TLAbsInputPeer peer, TLAbsInputFile file, string caption)
@@ -285,7 +298,7 @@ namespace TLSharp.Core
                 ClearDraft = false,
                 Media = new TLInputMediaUploadedPhoto() { File = file, Caption = caption },
                 Peer = peer
-            });
+            },0);
         }
 
         public async Task<TLAbsUpdates> SendUploadedDocument(
@@ -304,7 +317,7 @@ namespace TLSharp.Core
                     Attributes = attributes
                 },
                 Peer = peer
-            });
+            },0);
         }
 
         public async Task<TLFile> GetFile(TLAbsInputFileLocation location, int filePartSize, int offset = 0)
@@ -315,7 +328,7 @@ namespace TLSharp.Core
                 Location = location,
                 Limit = filePartSize,
                 Offset = offset
-            });
+            },0);
             return result;
         }
 
@@ -339,7 +352,7 @@ namespace TLSharp.Core
                 MaxId = maxId,
                 MinId = minId
             };
-            return await SendRequestAsync<TLAbsMessages>(req);
+            return await SendRequestAsync<TLAbsMessages>(req,0);
         }
 
         /// <summary>
@@ -356,7 +369,7 @@ namespace TLSharp.Core
                 Limit = limit
             };
 
-            return await SendRequestAsync<TLFound>(r);
+            return await SendRequestAsync<TLFound>(r,0);
         }
 
         private void OnUserAuthenticated(TLUser TLUser)

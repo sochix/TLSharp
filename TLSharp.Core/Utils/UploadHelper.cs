@@ -97,7 +97,7 @@ namespace TLSharp.Core.Utils
                         FilePart = partNumber,
                         Bytes = part,
                         FileTotalParts = partsCount
-                    });
+                    },0);
                 }
                 else
                 {
@@ -106,7 +106,7 @@ namespace TLSharp.Core.Utils
                         FileId = file_id,
                         FilePart = partNumber,
                         Bytes = part
-                    });
+                    },0);
                 }
                 partNumber++;
             }

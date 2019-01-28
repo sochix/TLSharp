@@ -66,7 +66,7 @@ namespace TLSharp.Core.Network
 
             byte[] msgKey;
             byte[] ciphertext;
-            using (MemoryStream plaintextPacket = makeMemory(8 + 8 + 8 + 4 + 4 + packet.Length))
+            using (MemoryStream plaintextPacket = MakeMemory(8 + 8 + 8 + 4 + 4 + packet.Length))
             {
                 using (BinaryWriter plaintextWriter = new BinaryWriter(plaintextPacket))
                 {
@@ -82,7 +82,7 @@ namespace TLSharp.Core.Network
                 }
             }
 
-            using (MemoryStream ciphertextPacket = makeMemory(8 + 16 + ciphertext.Length))
+            using (MemoryStream ciphertextPacket = MakeMemory(8 + 16 + ciphertext.Length))
             {
                 using (BinaryWriter writer = new BinaryWriter(ciphertextPacket))
                 {
@@ -136,7 +136,7 @@ namespace TLSharp.Core.Network
                 using (var messageStream = new MemoryStream(result.Item1, false))
                 using (var messageReader = new BinaryReader(messageStream))
                 {
-                    processMessage(result.Item2, result.Item3, messageReader, request);
+                    ProcessMessage(result.Item2, result.Item3, messageReader, request);
                 }
             }
 
@@ -156,7 +156,7 @@ namespace TLSharp.Core.Network
             await Receive(pingRequest);
         }
 
-        private bool processMessage(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
+        private bool ProcessMessage(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
         {
             // TODO: check salt
             // TODO: check sessionid
@@ -240,7 +240,7 @@ namespace TLSharp.Core.Network
             using (MemoryStream packedStream = new MemoryStream(packedData, false))
             using (BinaryReader compressedReader = new BinaryReader(packedStream))
             {
-                processMessage(messageId, sequence, compressedReader, request);
+                ProcessMessage(messageId, sequence, compressedReader, request);
             }
 
             return true;
@@ -503,7 +503,7 @@ namespace TLSharp.Core.Network
                 long beginPosition = messageReader.BaseStream.Position;
                 try
                 {
-                    if (!processMessage(innerMessageId, sequence, messageReader, request))
+                    if (!ProcessMessage(innerMessageId, sequence, messageReader, request))
                     {
                         messageReader.BaseStream.Position = beginPosition + innerLength;
                     }
@@ -518,7 +518,7 @@ namespace TLSharp.Core.Network
             return false;
         }
 
-        private MemoryStream makeMemory(int len)
+        private MemoryStream MakeMemory(int len)
         {
             return new MemoryStream(new byte[len], 0, len, true, true);
         }
