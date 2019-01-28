@@ -93,13 +93,14 @@ namespace TLSharp.Core
                 }
             }
 
+            
             TLExportedAuthorization exported = null;
             if (_session.TLUser != null)
             {
                 TLRequestExportAuthorization exportAuthorization = new TLRequestExportAuthorization() { DcId = dcId };
                 exported = await SendRequestAsync<TLExportedAuthorization>(exportAuthorization, times);
             }
-
+            
 
             _transport = new TcpTransport(dc.IpAddress, dc.Port, _handler);
             _session.ServerAddress = dc.IpAddress;
@@ -107,13 +108,14 @@ namespace TLSharp.Core
 
             await ConnectAsync(true);
 
+            
             if (_session.TLUser != null)
             {
                 TLRequestImportAuthorization importAuthorization = new TLRequestImportAuthorization() { Id = exported.Id, Bytes = exported.Bytes };
                 var imported = await SendRequestAsync<TLAuthorization>(importAuthorization,times);
                 OnUserAuthenticated(((TLUser)imported.User));
             }
-
+            
 
         }
 
@@ -147,6 +149,10 @@ namespace TLSharp.Core
                 catch (TLSharp.Core.Network.FloodException e)
                 {
                     throw e;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
                 }
             }
         }
