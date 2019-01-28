@@ -18,7 +18,7 @@ namespace TLSharp.Core.Network
             random = new Random();
         }
 
-        public async Task Send(byte[] data)
+        public void Send(byte[] data)
         {
             using (var memoryStream = new MemoryStream())
             {
@@ -31,14 +31,14 @@ namespace TLSharp.Core.Network
 
                     byte[] packet = memoryStream.ToArray();
 
-                    await _transport.Send(packet);
+                    _transport.Send(packet);
                 }
             }
         }
 
-        public async Task<byte[]> Receive()
+        public byte[] Receive()
         {
-            var result = await _transport.Receieve();
+            var result = _transport.Receieve();
 
             using (var memoryStream = new MemoryStream(result.Body))
             {

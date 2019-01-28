@@ -25,28 +25,28 @@ namespace TLSharp.Core.Network
                 _tcpClient = handler(address, port);
         }
 
-        public async Task Send(byte[] packet)
+        public void Send(byte[] packet)
         {
             if (!_tcpClient.Connected)
                 throw new InvalidOperationException("Client not connected to server.");
 
             var tcpMessage = new TcpMessage(sendCounter, packet);
 
-            await _tcpClient.GetStream().WriteAsync(tcpMessage.Encode(), 0, tcpMessage.Encode().Length);
+            _tcpClient.GetStream().Write(tcpMessage.Encode(), 0, tcpMessage.Encode().Length);
             sendCounter++;
         }
 
-        public async Task<TcpMessage> Receieve()
+        public TcpMessage Receieve()
         {
             var stream = _tcpClient.GetStream();
 
             var packetLengthBytes = new byte[4];
-            if (await stream.ReadAsync(packetLengthBytes, 0, 4) != 4)
+            if (stream.Read(packetLengthBytes, 0, 4) != 4)
                 throw new InvalidOperationException("Couldn't read the packet length");
             int packetLength = BitConverter.ToInt32(packetLengthBytes, 0);
 
             var seqBytes = new byte[4];
-            if (await stream.ReadAsync(seqBytes, 0, 4) != 4)
+            if (stream.Read(seqBytes, 0, 4) != 4)
                 throw new InvalidOperationException("Couldn't read the sequence");
             int seq = BitConverter.ToInt32(seqBytes, 0);
 
@@ -57,7 +57,7 @@ namespace TLSharp.Core.Network
             do
             {
                 var bodyByte = new byte[packetLength - 12];
-                var availableBytes = await stream.ReadAsync(bodyByte, 0, neededToRead);
+                var availableBytes =  stream.Read(bodyByte, 0, neededToRead);
                 neededToRead -= availableBytes;
                 Buffer.BlockCopy(bodyByte, 0, body, readBytes, availableBytes);
                 readBytes += availableBytes;
@@ -65,7 +65,7 @@ namespace TLSharp.Core.Network
             while (readBytes != packetLength - 12);
 
             var crcBytes = new byte[4];
-            if (await stream.ReadAsync(crcBytes, 0, 4) != 4)
+            if ( stream.Read(crcBytes, 0, 4) != 4)
                 throw new InvalidOperationException("Couldn't read the crc");
             int checksum = BitConverter.ToInt32(crcBytes, 0);
 

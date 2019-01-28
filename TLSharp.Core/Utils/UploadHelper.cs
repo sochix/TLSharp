@@ -29,10 +29,10 @@ namespace TLSharp.Core.Utils
             return md5_checksum;
         }
 
-        public static async Task<TLAbsInputFile> UploadFile(this TelegramClient client, string name, StreamReader reader)
+        public static TLAbsInputFile UploadFile(this TelegramClient client, string name, StreamReader reader)
         {
             const long tenMb = 10 * 1024 * 1024;
-            return await UploadFile(name, reader, client, reader.BaseStream.Length >= tenMb);
+            return UploadFile(name, reader, client, reader.BaseStream.Length >= tenMb);
         }
 
         private static byte[] GetFile(StreamReader reader)
@@ -76,7 +76,7 @@ namespace TLSharp.Core.Utils
             return fileParts;
         }
 
-        private static async Task<TLAbsInputFile> UploadFile(string name, StreamReader reader,
+        private static TLAbsInputFile UploadFile(string name, StreamReader reader,
             TelegramClient client, bool isBigFileUpload)
         {
             var file = GetFile(reader);
@@ -91,7 +91,7 @@ namespace TLSharp.Core.Utils
 
                 if (isBigFileUpload)
                 {
-                    await client.SendRequestAsync<bool>(new TLRequestSaveBigFilePart
+                    client.SendRequestAsync<bool>(new TLRequestSaveBigFilePart
                     {
                         FileId = file_id,
                         FilePart = partNumber,
@@ -101,7 +101,7 @@ namespace TLSharp.Core.Utils
                 }
                 else
                 {
-                    await client.SendRequestAsync<bool>(new TLRequestSaveFilePart
+                    client.SendRequestAsync<bool>(new TLRequestSaveFilePart
                     {
                         FileId = file_id,
                         FilePart = partNumber,
