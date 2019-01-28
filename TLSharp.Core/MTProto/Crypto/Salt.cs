@@ -10,7 +10,7 @@ namespace TLSharp.Core.MTProto.Crypto
     {
         private int validSince;
         private int validUntil;
-        private ulong salt;
+        private readonly ulong salt;
 
         public Salt(int validSince, int validUntil, ulong salt)
         {
@@ -61,8 +61,8 @@ namespace TLSharp.Core.MTProto.Crypto
 
     public class GetFutureSaltsResponse
     {
-        private ulong requestId;
-        private int now;
+        private readonly ulong requestId;
+        private readonly int now;
         private SaltCollection salts;
 
         public GetFutureSaltsResponse(ulong requestId, int now)

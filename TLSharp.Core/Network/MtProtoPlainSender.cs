@@ -6,8 +6,8 @@ namespace TLSharp.Core.Network
 {
     public class MtProtoPlainSender
     {
-        private int sequence = 0;
-        private int timeOffset;
+        private readonly int sequence = 0;
+        private readonly int timeOffset;
         private long lastMessageId;
         private Random random;
         private TcpTransport _transport;
