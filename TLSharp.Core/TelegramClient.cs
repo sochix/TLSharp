@@ -45,7 +45,7 @@ namespace TLSharp.Core
             _handler = handler;
 
             _session = Session.TryLoadOrCreateNew(store, sessionUserId);
-            _transport = new TcpTransport(_session.ServerAddress, _session.Port, _handler);
+            _transport = new TcpTransport(_session.DataCenter.Address, _session.DataCenter.Port, _handler);
         }
 
         public async Task ConnectAsync(bool reconnect = false)
@@ -90,10 +90,10 @@ namespace TLSharp.Core
             }
 
             var dc = dcOptions.First(d => d.Id == dcId);
+            var dataCenter = new DataCenter (dcId, dc.IpAddress, dc.Port);
 
             _transport = new TcpTransport(dc.IpAddress, dc.Port, _handler);
-            _session.ServerAddress = dc.IpAddress;
-            _session.Port = dc.Port;
+            _session.DataCenter = dataCenter;
 
             await ConnectAsync(true);
 
@@ -121,6 +121,12 @@ namespace TLSharp.Core
                 }
                 catch(DataCenterMigrationException e)
                 {
+                    if (_session.DataCenter.DataCenterId.HasValue &&
+                        _session.DataCenter.DataCenterId.Value == e.DC)
+                    {
+                        throw new Exception($"Telegram server replied requesting a migration to DataCenter {e.DC} when this connection was already using this DataCenter", e);
+                    }
+
                     await ReconnectToDcAsync(e.DC);
                     // prepare the request for another try
                     request.ConfirmReceived = false;

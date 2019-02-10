@@ -59,8 +59,7 @@ namespace TLSharp.Core
 		private const int defaultConnectionPort = 443;
 
         public string SessionUserId { get; set; }
-        public string ServerAddress { get; set; }
-        public int Port { get; set; }
+        internal DataCenter DataCenter { get; set; }
         public AuthKey AuthKey { get; set; }
         public ulong Id { get; set; }
         public int Sequence { get; set; }
@@ -89,8 +88,8 @@ namespace TLSharp.Core
                 writer.Write(Salt);
                 writer.Write(LastMessageId);
                 writer.Write(TimeOffset);
-                Serializers.String.write(writer, ServerAddress);
-                writer.Write(Port);
+                Serializers.String.write(writer, DataCenter.Address);
+                writer.Write(DataCenter.Port);
 
                 if (TLUser != null)
                 {
@@ -132,6 +131,7 @@ namespace TLSharp.Core
                 }
 
                 var authData = Serializers.Bytes.read(reader);
+                var defaultDataCenter = new DataCenter (serverAddress, port);
 
                 return new Session(store)
                 {
@@ -144,8 +144,7 @@ namespace TLSharp.Core
                     SessionExpires = sessionExpires,
                     TLUser = TLUser,
                     SessionUserId = sessionUserId,
-                    ServerAddress = serverAddress,
-                    Port = port
+                    DataCenter = defaultDataCenter,
                 };
             }
         }
@@ -157,12 +156,13 @@ namespace TLSharp.Core
 
         public static Session TryLoadOrCreateNew(ISessionStore store, string sessionUserId)
         {
+            var defaultDataCenter = new DataCenter (defaultConnectionAddress, defaultConnectionPort);
+
             return store.Load(sessionUserId) ?? new Session(store)
             {
                 Id = GenerateRandomUlong(),
                 SessionUserId = sessionUserId,
-                ServerAddress = defaultConnectionAddress,
-                Port = defaultConnectionPort
+                DataCenter = defaultDataCenter,
             };
         }
 

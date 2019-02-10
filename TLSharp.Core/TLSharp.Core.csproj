@@ -68,6 +68,7 @@
     <Compile Include="Session.cs" />
     <Compile Include="TelegramClient.cs" />
     <Compile Include="Utils\Helpers.cs" />
+    <Compile Include="DataCenter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
