@@ -89,7 +89,7 @@ namespace TLSharp.Core
                 exported = await SendRequestAsync<TLExportedAuthorization>(exportAuthorization);
             }
 
-            var dc = dcOptions.First(d => d.Id == dcId);
+            var dc = dcOptions.First(d => d.Id == dcId && !d.Ipv6);
             var dataCenter = new DataCenter (dcId, dc.IpAddress, dc.Port);
 
             _transport = new TcpTransport(dc.IpAddress, dc.Port, _handler);
@@ -173,7 +173,7 @@ namespace TLSharp.Core
 
             if (String.IsNullOrWhiteSpace(code))
                 throw new ArgumentNullException(nameof(code));
-            
+
             var request = new TLRequestSignIn() { PhoneNumber = phoneNumber, PhoneCodeHash = phoneCodeHash, PhoneCode = code };
 
             await RequestWithDcMigration(request);
@@ -182,7 +182,7 @@ namespace TLSharp.Core
 
             return ((TLUser)request.Response.User);
         }
-        
+
         public async Task<TLPassword> GetPasswordSetting()
         {
             var request = new TLRequestGetPassword();
@@ -213,7 +213,7 @@ namespace TLSharp.Core
         public async Task<TLUser> SignUpAsync(string phoneNumber, string phoneCodeHash, string code, string firstName, string lastName)
         {
             var request = new TLRequestSignUp() { PhoneNumber = phoneNumber, PhoneCode = code, PhoneCodeHash = phoneCodeHash, FirstName = firstName, LastName = lastName };
-            
+
             await RequestWithDcMigration(request);
 
             OnUserAuthenticated(((TLUser)request.Response.User));
@@ -272,10 +272,10 @@ namespace TLSharp.Core
                 offsetPeer = new TLInputPeerSelf();
 
             var req = new TLRequestGetDialogs()
-            { 
-                OffsetDate = offsetDate, 
-                OffsetId = offsetId, 
-                OffsetPeer = offsetPeer, 
+            {
+                OffsetDate = offsetDate,
+                OffsetId = offsetId,
+                OffsetPeer = offsetPeer,
                 Limit = limit
             };
             return await SendRequestAsync<TLAbsDialogs>(req);
