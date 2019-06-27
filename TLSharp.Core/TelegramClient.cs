@@ -89,7 +89,7 @@ namespace TLSharp.Core
                 exported = await SendRequestAsync<TLExportedAuthorization>(exportAuthorization);
             }
 
-            var dc = dcOptions.First(d => d.Id == dcId && !d.Ipv6);
+            var dc = dcOptions.First(d => d.Id == dcId);
             var dataCenter = new DataCenter (dcId, dc.IpAddress, dc.Port);
 
             _transport = new TcpTransport(dc.IpAddress, dc.Port, _handler);
