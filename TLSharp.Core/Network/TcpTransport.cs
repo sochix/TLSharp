@@ -16,10 +16,11 @@ namespace TLSharp.Core.Network
         {
             if (handler == null)
             {
-                _tcpClient = new TcpClient();
-
                 var ipAddress = IPAddress.Parse(address);
-                _tcpClient.Connect(ipAddress, port);
+                var endpoint = new IPEndPoint(ipAddress, port);
+
+                _tcpClient = new TcpClient(endpoint);
+                _tcpClient.Connect(endpoint);
             }
             else
                 _tcpClient = handler(address, port);
