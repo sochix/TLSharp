@@ -19,7 +19,7 @@ namespace TLSharp.Core.Network
                 var ipAddress = IPAddress.Parse(address);
                 var endpoint = new IPEndPoint(ipAddress, port);
 
-                _tcpClient = new TcpClient(endpoint);
+                _tcpClient = new TcpClient(ipAddress.AddressFamily);
                 _tcpClient.Connect(endpoint);
             }
             else
