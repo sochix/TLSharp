@@ -100,6 +100,9 @@ _ReSharper*/
 *.[Rr]e[Ss]harper
 *.DotSettings.user
 
+# JetBrains Rider holds their temp data in the ".idea/" directory
+.idea/
+
 # JustCode is a .NET coding add-in
 .JustCode
 
