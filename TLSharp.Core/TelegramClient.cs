@@ -28,10 +28,10 @@ namespace TLSharp.Core
         private Session _session;
         private List<TLDcOption> dcOptions;
         private TcpClientConnectionHandler _handler;
-        private int _requestTimeout;
+        private TimeSpan _requestTimeout;
 
         public TelegramClient(int apiId, string apiHash,
-            ISessionStore store = null, string sessionUserId = "session", TcpClientConnectionHandler handler = null, int requestTimeout = 5)
+            ISessionStore store = null, string sessionUserId = "session", TcpClientConnectionHandler handler = null, double requestTimeout = 5d)
         {
             if (apiId == default(int))
                 throw new MissingApiConfigurationException("API_ID");
@@ -44,7 +44,7 @@ namespace TLSharp.Core
             _apiHash = apiHash;
             _apiId = apiId;
             _handler = handler;
-            _requestTimeout = requestTimeout;
+            _requestTimeout = TimeSpan.FromSeconds(requestTimeout);
 
             _session = Session.TryLoadOrCreateNew(store, sessionUserId);
             _transport = new TcpTransport(_session.DataCenter.Address, _session.DataCenter.Port, _handler);
@@ -116,7 +116,7 @@ namespace TLSharp.Core
             var startedAt = DateTime.Now;
             while(!completed)
             {
-                if ((DateTime.Now - startedAt).TotalSeconds > _requestTimeout)
+                if ((DateTime.Now - startedAt) > _requestTimeout)
                 {
                     throw new Exception("Request Timeout");
                 }
