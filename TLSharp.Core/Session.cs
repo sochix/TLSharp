@@ -14,9 +14,18 @@ namespace TLSharp.Core
 
     public class FileSessionStore : ISessionStore
     {
+        private readonly string _storePath;
+
+        public FileSessionStore(string storePath = "")
+        {
+            _storePath = storePath;
+        }
+
         public void Save(Session session)
         {
-            using (var stream = new FileStream($"{session.SessionUserId}.dat", FileMode.OpenOrCreate))
+            string sessionPath = Path.Combine(_storePath, $"{session.SessionUserId}.dat");
+
+            using (var stream = new FileStream(sessionPath, FileMode.OpenOrCreate))
             {
                 var result = session.ToBytes();
                 stream.Write(result, 0, result.Length);
@@ -25,11 +34,12 @@ namespace TLSharp.Core
 
         public Session Load(string sessionUserId)
         {
-            var sessionFileName = $"{sessionUserId}.dat";
-            if (!File.Exists(sessionFileName))
+            string sessionPath = Path.Combine(_storePath, $"{sessionUserId}.dat");
+
+            if (!File.Exists(sessionPath))
                 return null;
 
-            using (var stream = new FileStream(sessionFileName, FileMode.Open))
+            using (var stream = new FileStream(sessionPath, FileMode.Open))
             {
                 var buffer = new byte[2048];
                 stream.Read(buffer, 0, 2048);
