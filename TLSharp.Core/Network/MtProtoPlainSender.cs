@@ -37,7 +37,7 @@ namespace TLSharp.Core.Network
 
         public async Task<byte[]> Receive()
         {
-            var result = await _transport.Receieve();
+            var result = await _transport.Receive();
 
             using (var memoryStream = new MemoryStream(result.Body))
             {
