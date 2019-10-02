@@ -43,7 +43,7 @@ namespace TLSharp.Core.Network
             sendCounter++;
         }
 
-        public async Task<TcpMessage> Receieve()
+        public async Task<TcpMessage> Receive()
         {
             var packetLengthBytes = new byte[4];
             if (await _stream.ReadAsync(packetLengthBytes, 0, 4) != 4)

@@ -131,7 +131,7 @@ namespace TLSharp.Core.Network
         {
             while (!request.ConfirmReceived)
             {
-                var result = DecodeMessage((await _transport.Receieve()).Body);
+                var result = DecodeMessage((await _transport.Receive()).Body);
 
                 using (var messageStream = new MemoryStream(result.Item1, false))
                 using (var messageReader = new BinaryReader(messageStream))
