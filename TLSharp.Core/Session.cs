@@ -14,9 +14,24 @@ namespace TLSharp.Core
 
     public class FileSessionStore : ISessionStore
     {
+        private readonly DirectoryInfo basePath;
+
+        public FileSessionStore(DirectoryInfo basePath = null)
+        {
+            if (basePath != null && !basePath.Exists)
+            {
+                throw new ArgumentException("basePath doesn't exist", nameof(basePath));
+            }
+            this.basePath = basePath;
+        }
+
         public void Save(Session session)
         {
-            using (var stream = new FileStream($"{session.SessionUserId}.dat", FileMode.OpenOrCreate))
+            string sessionFileName = $"{session.SessionUserId}.dat";
+            var sessionPath = basePath == null ? sessionFileName :
+                Path.Combine(basePath.FullName, sessionFileName);
+
+            using (var stream = new FileStream(sessionPath, FileMode.OpenOrCreate))
             {
                 var result = session.ToBytes();
                 stream.Write(result, 0, result.Length);
@@ -25,11 +40,14 @@ namespace TLSharp.Core
 
         public Session Load(string sessionUserId)
         {
-            var sessionFileName = $"{sessionUserId}.dat";
-            if (!File.Exists(sessionFileName))
+            string sessionFileName = $"{sessionUserId}.dat";
+            var sessionPath = basePath == null ? sessionFileName :
+                Path.Combine(basePath.FullName, sessionFileName);
+
+            if (!File.Exists(sessionPath))
                 return null;
 
-            using (var stream = new FileStream(sessionFileName, FileMode.Open))
+            using (var stream = new FileStream(sessionPath, FileMode.Open))
             {
                 var buffer = new byte[2048];
                 stream.Read(buffer, 0, 2048);
