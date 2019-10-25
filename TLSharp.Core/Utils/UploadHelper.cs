@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TeleSharp.TL;
 using TeleSharp.TL.Upload;
@@ -31,8 +31,13 @@ namespace TLSharp.Core.Utils
 
         public static async Task<TLAbsInputFile> UploadFile(this TelegramClient client, string name, StreamReader reader)
         {
+            return await UploadFile(client, name, reader, CancellationToken.None).ConfigureAwait(false);
+        }
+
+        public static async Task<TLAbsInputFile> UploadFile(this TelegramClient client, string name, StreamReader reader, CancellationToken token)
+        {
             const long tenMb = 10 * 1024 * 1024;
-            return await UploadFile(name, reader, client, reader.BaseStream.Length >= tenMb);
+            return await UploadFile(name, reader, client, reader.BaseStream.Length >= tenMb, token).ConfigureAwait(false);
         }
 
         private static byte[] GetFile(StreamReader reader)
@@ -77,8 +82,10 @@ namespace TLSharp.Core.Utils
         }
 
         private static async Task<TLAbsInputFile> UploadFile(string name, StreamReader reader,
-            TelegramClient client, bool isBigFileUpload)
+            TelegramClient client, bool isBigFileUpload, CancellationToken token)
         {
+            token.ThrowIfCancellationRequested();
+            
             var file = GetFile(reader);
             var fileParts = GetFileParts(file);
 
@@ -97,7 +104,7 @@ namespace TLSharp.Core.Utils
                         FilePart = partNumber,
                         Bytes = part,
                         FileTotalParts = partsCount
-                    });
+                    }, token).ConfigureAwait(false);
                 }
                 else
                 {
@@ -106,7 +113,7 @@ namespace TLSharp.Core.Utils
                         FileId = file_id,
                         FilePart = partNumber,
                         Bytes = part
-                    });
+                    }, token).ConfigureAwait(false);
                 }
                 partNumber++;
             }
@@ -120,16 +127,14 @@ namespace TLSharp.Core.Utils
                     Parts = partsCount
                 };
             }
-            else
+
+            return new TLInputFile
             {
-                return new TLInputFile
-                {
-                    Id = file_id,
-                    Name = name,
-                    Parts = partsCount,
-                    Md5Checksum = GetFileHash(file)
-                };
-            }
+                Id = file_id,
+                Name = name,
+                Parts = partsCount,
+                Md5Checksum = GetFileHash(file)
+            };
         }
     }
 }
