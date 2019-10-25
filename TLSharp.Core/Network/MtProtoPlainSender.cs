@@ -7,15 +7,15 @@ namespace TLSharp.Core.Network
 {
     public class MtProtoPlainSender
     {
-        private int timeOffset;
-        private long lastMessageId;
-        private Random random;
-        private TcpTransport _transport;
+        private int _timeOffset;
+        private long _lastMessageId;
+        private readonly Random _random;
+        private readonly TcpTransport _transport;
 
         public MtProtoPlainSender(TcpTransport transport)
         {
             _transport = transport;
-            random = new Random();
+            _random = new Random();
         }
 
         public async Task Send(byte[] data, CancellationToken token)
@@ -62,17 +62,17 @@ namespace TLSharp.Core.Network
         private long GetNewMessageId()
         {
             long time = Convert.ToInt64((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds);
-            long newMessageId = ((time / 1000 + timeOffset) << 32) |
+            long newMessageId = ((time / 1000 + _timeOffset) << 32) |
                                 ((time % 1000) << 22) |
-                                (random.Next(524288) << 2); // 2^19
+                                (_random.Next(524288) << 2); // 2^19
                                                             // [ unix timestamp : 32 bit] [ milliseconds : 10 bit ] [ buffer space : 1 bit ] [ random : 19 bit ] [ msg_id type : 2 bit ] = [ msg_id : 64 bit ]
 
-            if (lastMessageId >= newMessageId)
+            if (_lastMessageId >= newMessageId)
             {
-                newMessageId = lastMessageId + 4;
+                newMessageId = _lastMessageId + 4;
             }
 
-            lastMessageId = newMessageId;
+            _lastMessageId = newMessageId;
             return newMessageId;
         }
 

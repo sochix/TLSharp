@@ -23,16 +23,12 @@ namespace TLSharp.Core
     {
         private MtProtoSender _sender;
         private TcpTransport _transport;
-        private string _apiHash = "";
-        private int _apiId = 0;
-        private Session _session;
-        private List<TLDcOption> dcOptions;
-        private TcpClientConnectionHandler _handler;
+        private readonly string _apiHash = "";
+        private readonly int _apiId;
+        private List<TLDcOption> _dcOptions;
+        private readonly TcpClientConnectionHandler _handler;
 
-        public Session Session
-        {
-            get { return _session; }
-        }
+        public Session Session { get; }
 
         public TelegramClient(int apiId, string apiHash,
             ISessionStore store = null, string sessionUserId = "session", TcpClientConnectionHandler handler = null)
@@ -49,8 +45,8 @@ namespace TLSharp.Core
             _apiId = apiId;
             _handler = handler;
 
-            _session = Session.TryLoadOrCreateNew(store, sessionUserId);
-            _transport = new TcpTransport(_session.DataCenter.Address, _session.DataCenter.Port, _handler);
+            Session = Session.TryLoadOrCreateNew(store, sessionUserId);
+            _transport = new TcpTransport(Session.DataCenter.Address, Session.DataCenter.Port, _handler);
         }
 
        
@@ -58,14 +54,14 @@ namespace TLSharp.Core
         {
             token.ThrowIfCancellationRequested();
             
-            if (_session.AuthKey == null || reconnect)
+            if (Session.AuthKey == null || reconnect)
             {
                 var result = await Authenticator.DoAuthentication(_transport, token).ConfigureAwait(false);
-                _session.AuthKey = result.AuthKey;
-                _session.TimeOffset = result.TimeOffset;
+                Session.AuthKey = result.AuthKey;
+                Session.TimeOffset = result.TimeOffset;
             }
 
-            _sender = new MtProtoSender(_transport, _session);
+            _sender = new MtProtoSender(_transport, Session);
 
             //set-up layer
             var config = new TLRequestGetConfig();
@@ -82,32 +78,32 @@ namespace TLSharp.Core
             await _sender.Send(invokewithLayer, token).ConfigureAwait(false);
             await _sender.Receive(invokewithLayer, token).ConfigureAwait(false);
 
-            dcOptions = ((TLConfig)invokewithLayer.Response).DcOptions.ToList();
+            _dcOptions = ((TLConfig)invokewithLayer.Response).DcOptions.ToList();
         }
 
         private async Task ReconnectToDcAsync(int dcId, CancellationToken token)
         {
             token.ThrowIfCancellationRequested();
             
-            if (dcOptions == null || !dcOptions.Any())
+            if (_dcOptions == null || !_dcOptions.Any())
                 throw new InvalidOperationException($"Can't reconnect. Establish initial connection first.");
 
             TLExportedAuthorization exported = null;
-            if (_session.TLUser != null)
+            if (Session.TLUser != null)
             {
                 TLRequestExportAuthorization exportAuthorization = new TLRequestExportAuthorization() { DcId = dcId };
                 exported = await SendRequestAsync<TLExportedAuthorization>(exportAuthorization, token).ConfigureAwait(false);
             }
 
-            var dc = dcOptions.First(d => d.Id == dcId);
+            var dc = _dcOptions.First(d => d.Id == dcId);
             var dataCenter = new DataCenter (dcId, dc.IpAddress, dc.Port);
 
             _transport = new TcpTransport(dc.IpAddress, dc.Port, _handler);
-            _session.DataCenter = dataCenter;
+            Session.DataCenter = dataCenter;
 
             await ConnectAsync(true, token).ConfigureAwait(false);
 
-            if (_session.TLUser != null)
+            if (Session.TLUser != null)
             {
                 TLRequestImportAuthorization importAuthorization = new TLRequestImportAuthorization() { Id = exported.Id, Bytes = exported.Bytes };
                 var imported = await SendRequestAsync<TLAuthorization>(importAuthorization, token).ConfigureAwait(false);
@@ -131,8 +127,8 @@ namespace TLSharp.Core
                 }
                 catch(DataCenterMigrationException e)
                 {
-                    if (_session.DataCenter.DataCenterId.HasValue &&
-                        _session.DataCenter.DataCenterId.Value == e.DC)
+                    if (Session.DataCenter.DataCenterId.HasValue &&
+                        Session.DataCenter.DataCenterId.Value == e.DC)
                     {
                         throw new Exception($"Telegram server replied requesting a migration to DataCenter {e.DC} when this connection was already using this DataCenter", e);
                     }
@@ -146,7 +142,7 @@ namespace TLSharp.Core
 
         public bool IsUserAuthorized()
         {
-            return _session.TLUser != null;
+            return Session.TLUser != null;
         }
 
         public async Task<bool> IsPhoneRegisteredAsync(string phoneNumber, CancellationToken token = default(CancellationToken))
@@ -380,10 +376,10 @@ namespace TLSharp.Core
 
         private void OnUserAuthenticated(TLUser TLUser)
         {
-            _session.TLUser = TLUser;
-            _session.SessionExpires = int.MaxValue;
+            Session.TLUser = TLUser;
+            Session.SessionExpires = int.MaxValue;
 
-            _session.Save();
+            Session.Save();
         }
 
         public bool IsConnected
