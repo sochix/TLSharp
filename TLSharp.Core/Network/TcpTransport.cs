@@ -33,7 +33,7 @@ namespace TLSharp.Core.Network
             }
         }
 
-        public async Task Send(byte[] packet, CancellationToken token)
+        public async Task Send(byte[] packet, CancellationToken token = default(CancellationToken))
         {
             if (!_tcpClient.Connected)
                 throw new InvalidOperationException("Client not connected to server.");
@@ -44,7 +44,7 @@ namespace TLSharp.Core.Network
             sendCounter++;
         }
 
-        public async Task<TcpMessage> Receive(CancellationToken token)
+        public async Task<TcpMessage> Receive(CancellationToken token = default(CancellationToken))
         {
             var packetLengthBytes = new byte[4];
             if (await _stream.ReadAsync(packetLengthBytes, 0, 4, token).ConfigureAwait(false) != 4)
