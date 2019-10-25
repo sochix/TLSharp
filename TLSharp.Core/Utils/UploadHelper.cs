@@ -29,12 +29,7 @@ namespace TLSharp.Core.Utils
             return md5_checksum;
         }
 
-        public static async Task<TLAbsInputFile> UploadFile(this TelegramClient client, string name, StreamReader reader)
-        {
-            return await UploadFile(client, name, reader, CancellationToken.None).ConfigureAwait(false);
-        }
-
-        public static async Task<TLAbsInputFile> UploadFile(this TelegramClient client, string name, StreamReader reader, CancellationToken token)
+        public static async Task<TLAbsInputFile> UploadFile(this TelegramClient client, string name, StreamReader reader, CancellationToken token = default(CancellationToken))
         {
             const long tenMb = 10 * 1024 * 1024;
             return await UploadFile(name, reader, client, reader.BaseStream.Length >= tenMb, token).ConfigureAwait(false);

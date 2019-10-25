@@ -49,12 +49,8 @@ namespace TLSharp.Core
             _transport = new TcpTransport(Session.DataCenter.Address, Session.DataCenter.Port, _handler);
         }
 
-        public async Task ConnectAsync(bool reconnect = false)
-        {
-            await ConnectAsync(CancellationToken.None, reconnect).ConfigureAwait(false);
-        }
-        
-        public async Task ConnectAsync(CancellationToken token, bool reconnect = false)
+       
+        public async Task ConnectAsync(bool reconnect = false, CancellationToken token = default(CancellationToken))
         {
             token.ThrowIfCancellationRequested();
             
@@ -105,7 +101,7 @@ namespace TLSharp.Core
             _transport = new TcpTransport(dc.IpAddress, dc.Port, _handler);
             Session.DataCenter = dataCenter;
 
-            await ConnectAsync(token, true).ConfigureAwait(false);
+            await ConnectAsync(true, token).ConfigureAwait(false);
 
             if (Session.TLUser != null)
             {
@@ -149,12 +145,7 @@ namespace TLSharp.Core
             return Session.TLUser != null;
         }
 
-        public async Task<bool> IsPhoneRegisteredAsync(string phoneNumber)
-        {
-            return await IsPhoneRegisteredAsync(phoneNumber, CancellationToken.None).ConfigureAwait(false);
-        }
-        
-        public async Task<bool> IsPhoneRegisteredAsync(string phoneNumber, CancellationToken token)
+        public async Task<bool> IsPhoneRegisteredAsync(string phoneNumber, CancellationToken token = default(CancellationToken))
         {
             if (String.IsNullOrWhiteSpace(phoneNumber))
                 throw new ArgumentNullException(nameof(phoneNumber));
@@ -166,12 +157,7 @@ namespace TLSharp.Core
             return authCheckPhoneRequest.Response.PhoneRegistered;
         }
 
-        public async Task<string> SendCodeRequestAsync(string phoneNumber)
-        {
-            return await SendCodeRequestAsync(phoneNumber, CancellationToken.None).ConfigureAwait(false);
-        }
-
-        public async Task<string> SendCodeRequestAsync(string phoneNumber, CancellationToken token)
+        public async Task<string> SendCodeRequestAsync(string phoneNumber, CancellationToken token = default(CancellationToken))
         {
             if (String.IsNullOrWhiteSpace(phoneNumber))
                 throw new ArgumentNullException(nameof(phoneNumber));
@@ -183,12 +169,7 @@ namespace TLSharp.Core
             return request.Response.PhoneCodeHash;
         }
 
-        public async Task<TLUser> MakeAuthAsync(string phoneNumber, string phoneCodeHash, string code)
-        {
-            return await MakeAuthAsync(phoneNumber, phoneCodeHash, code, CancellationToken.None).ConfigureAwait(false);
-        }
-
-        public async Task<TLUser> MakeAuthAsync(string phoneNumber, string phoneCodeHash, string code, CancellationToken token)
+        public async Task<TLUser> MakeAuthAsync(string phoneNumber, string phoneCodeHash, string code, CancellationToken token = default(CancellationToken))
         {
             if (String.IsNullOrWhiteSpace(phoneNumber))
                 throw new ArgumentNullException(nameof(phoneNumber));
@@ -208,12 +189,7 @@ namespace TLSharp.Core
             return ((TLUser)request.Response.User);
         }
 
-        public async Task<TLPassword> GetPasswordSetting()
-        {
-            return await GetPasswordSetting(CancellationToken.None).ConfigureAwait(false);
-        }
-
-        public async Task<TLPassword> GetPasswordSetting(CancellationToken token)
+        public async Task<TLPassword> GetPasswordSetting(CancellationToken token = default(CancellationToken))
         {
             var request = new TLRequestGetPassword();
 
@@ -222,12 +198,7 @@ namespace TLSharp.Core
             return ((TLPassword)request.Response);
         }
 
-        public async Task<TLUser> MakeAuthWithPasswordAsync(TLPassword password, string password_str)
-        {
-            return await MakeAuthWithPasswordAsync(password, password_str, CancellationToken.None).ConfigureAwait(false);
-        }
-
-        public async Task<TLUser> MakeAuthWithPasswordAsync(TLPassword password, string password_str, CancellationToken token)
+        public async Task<TLUser> MakeAuthWithPasswordAsync(TLPassword password, string password_str, CancellationToken token = default(CancellationToken))
         {
             token.ThrowIfCancellationRequested();
 
@@ -246,12 +217,7 @@ namespace TLSharp.Core
             return ((TLUser)request.Response.User);
         }
 
-        public async Task<TLUser> SignUpAsync(string phoneNumber, string phoneCodeHash, string code, string firstName, string lastName)
-        {
-            return await SignUpAsync(phoneNumber, phoneCodeHash, code, firstName, lastName, CancellationToken.None).ConfigureAwait(false);
-        }
-        
-        public async Task<TLUser> SignUpAsync(string phoneNumber, string phoneCodeHash, string code, string firstName, string lastName, CancellationToken token)
+        public async Task<TLUser> SignUpAsync(string phoneNumber, string phoneCodeHash, string code, string firstName, string lastName, CancellationToken token = default(CancellationToken))
         {
             var request = new TLRequestSignUp() { PhoneNumber = phoneNumber, PhoneCode = code, PhoneCodeHash = phoneCodeHash, FirstName = firstName, LastName = lastName };
             
@@ -262,12 +228,7 @@ namespace TLSharp.Core
             return ((TLUser)request.Response.User);
         }
 
-        public async Task<T> SendRequestAsync<T>(TLMethod methodToExecute)
-        {
-            return await SendRequestAsync<T>(methodToExecute, CancellationToken.None).ConfigureAwait(false);
-        }
-
-        public async Task<T> SendRequestAsync<T>(TLMethod methodToExecute, CancellationToken token)
+        public async Task<T> SendRequestAsync<T>(TLMethod methodToExecute, CancellationToken token = default(CancellationToken))
         {
             await RequestWithDcMigration(methodToExecute, token).ConfigureAwait(false);
 
@@ -276,12 +237,7 @@ namespace TLSharp.Core
             return (T)result;
         }
 
-        public async Task<TLContacts> GetContactsAsync()
-        {
-            return await GetContactsAsync(CancellationToken.None).ConfigureAwait(false);
-        }
-
-        public async Task<TLContacts> GetContactsAsync(CancellationToken token)
+        public async Task<TLContacts> GetContactsAsync(CancellationToken token = default(CancellationToken))
         {
             if (!IsUserAuthorized())
                 throw new InvalidOperationException("Authorize user first!");
@@ -291,12 +247,7 @@ namespace TLSharp.Core
             return await SendRequestAsync<TLContacts>(req, token).ConfigureAwait(false);
         }
 
-        public async Task<TLAbsUpdates> SendMessageAsync(TLAbsInputPeer peer, string message)
-        {
-            return await SendMessageAsync(peer, message, CancellationToken.None).ConfigureAwait(false);
-        }
-        
-        public async Task<TLAbsUpdates> SendMessageAsync(TLAbsInputPeer peer, string message, CancellationToken token)
+        public async Task<TLAbsUpdates> SendMessageAsync(TLAbsInputPeer peer, string message, CancellationToken token = default(CancellationToken))
         {
             if (!IsUserAuthorized())
                 throw new InvalidOperationException("Authorize user first!");
@@ -310,12 +261,7 @@ namespace TLSharp.Core
                    }, token).ConfigureAwait(false);
         }
 
-        public async Task<Boolean> SendTypingAsync(TLAbsInputPeer peer)
-        {
-            return await SendTypingAsync(peer, CancellationToken.None).ConfigureAwait(false);
-        }
-
-        public async Task<Boolean> SendTypingAsync(TLAbsInputPeer peer, CancellationToken token)
+        public async Task<Boolean> SendTypingAsync(TLAbsInputPeer peer, CancellationToken token = default(CancellationToken))
         {
             var req = new TLRequestSetTyping()
             {
@@ -325,12 +271,8 @@ namespace TLSharp.Core
             return await SendRequestAsync<Boolean>(req, token).ConfigureAwait(false);
         }
 
-        public async Task<TLAbsDialogs> GetUserDialogsAsync(int offsetDate = 0, int offsetId = 0, TLAbsInputPeer offsetPeer = null, int limit = 100)
-        {
-            return await GetUserDialogsAsync(CancellationToken.None, offsetDate, offsetId, offsetPeer, limit).ConfigureAwait(false);
-        }
-        
-        public async Task<TLAbsDialogs> GetUserDialogsAsync(CancellationToken token, int offsetDate = 0, int offsetId = 0, TLAbsInputPeer offsetPeer = null, int limit = 100)
+        public async Task<TLAbsDialogs> GetUserDialogsAsync(int offsetDate = 0, int offsetId = 0, TLAbsInputPeer offsetPeer = null, int limit = 100,
+            CancellationToken token = default(CancellationToken))
         {
             if (!IsUserAuthorized())
                 throw new InvalidOperationException("Authorize user first!");
@@ -348,12 +290,7 @@ namespace TLSharp.Core
             return await SendRequestAsync<TLAbsDialogs>(req, token).ConfigureAwait(false);
         }
 
-        public async Task<TLAbsUpdates> SendUploadedPhoto(TLAbsInputPeer peer, TLAbsInputFile file, string caption)
-        {
-            return await SendUploadedPhoto(peer, file, caption, CancellationToken.None).ConfigureAwait(false);
-        }
-        
-        public async Task<TLAbsUpdates> SendUploadedPhoto(TLAbsInputPeer peer, TLAbsInputFile file, string caption, CancellationToken token)
+        public async Task<TLAbsUpdates> SendUploadedPhoto(TLAbsInputPeer peer, TLAbsInputFile file, string caption, CancellationToken token = default(CancellationToken))
         {
             return await SendRequestAsync<TLAbsUpdates>(new TLRequestSendMedia()
             {
@@ -365,12 +302,8 @@ namespace TLSharp.Core
             }, token).ConfigureAwait(false);
         }
 
-        public async Task<TLAbsUpdates> SendUploadedDocument(TLAbsInputPeer peer, TLAbsInputFile file, string caption, string mimeType, TLVector<TLAbsDocumentAttribute> attributes)
-        {
-            return await SendUploadedDocument(peer, file, caption, mimeType, attributes, CancellationToken.None).ConfigureAwait(false);
-        }
-        
-        public async Task<TLAbsUpdates> SendUploadedDocument(TLAbsInputPeer peer, TLAbsInputFile file, string caption, string mimeType, TLVector<TLAbsDocumentAttribute> attributes, CancellationToken token)
+        public async Task<TLAbsUpdates> SendUploadedDocument(TLAbsInputPeer peer, TLAbsInputFile file, string caption, string mimeType, TLVector<TLAbsDocumentAttribute> attributes,
+            CancellationToken token = default(CancellationToken))
         {
             return await SendRequestAsync<TLAbsUpdates>(new TLRequestSendMedia()
             {
@@ -388,15 +321,9 @@ namespace TLSharp.Core
             }, token).ConfigureAwait(false);
         }
 
-        public async Task<TLFile> GetFile(TLAbsInputFileLocation location, int filePartSize, int offset = 0)
+        public async Task<TLFile> GetFile(TLAbsInputFileLocation location, int filePartSize, int offset = 0, CancellationToken token = default(CancellationToken))
         {
-            return await GetFile(location, filePartSize, CancellationToken.None, offset).ConfigureAwait(false);
-        }
-        
-        public async Task<TLFile> GetFile(TLAbsInputFileLocation location, int filePartSize, CancellationToken token, int offset = 0)
-        {
-            TLFile result = null;
-            result = await SendRequestAsync<TLFile>(new TLRequestGetFile()
+            var result = await SendRequestAsync<TLFile>(new TLRequestGetFile()
             {
                 Location = location,
                 Limit = filePartSize,
@@ -405,12 +332,13 @@ namespace TLSharp.Core
             return result;
         }
 
-        public async Task SendPingAsync(CancellationToken token)
+        public async Task SendPingAsync(CancellationToken token = default(CancellationToken))
         {
             await _sender.SendPingAsync(token).ConfigureAwait(false);
         }
 
-        public async Task<TLAbsMessages> GetHistoryAsync(TLAbsInputPeer peer, CancellationToken token, int offsetId = 0, int offsetDate = 0, int addOffset = 0, int limit = 100, int maxId = 0, int minId = 0)
+        public async Task<TLAbsMessages> GetHistoryAsync(TLAbsInputPeer peer, int offsetId = 0, int offsetDate = 0, int addOffset = 0, int limit = 100, int maxId = 0,
+            int minId = 0, CancellationToken token = default(CancellationToken))
         {
             if (!IsUserAuthorized())
                 throw new InvalidOperationException("Authorize user first!");
@@ -433,13 +361,9 @@ namespace TLSharp.Core
         /// </summary>
         /// <param name="q">User or chat name</param>
         /// <param name="limit">Max result count</param>
+        /// <param name="token"></param>
         /// <returns></returns>
-        public async Task<TLFound> SearchUserAsync(string q, int limit = 10)
-        {
-            return await SearchUserAsync(q, CancellationToken.None, limit).ConfigureAwait(false);
-        }
-        
-        public async Task<TLFound> SearchUserAsync(string q, CancellationToken token, int limit = 10)
+        public async Task<TLFound> SearchUserAsync(string q, int limit = 10, CancellationToken token = default(CancellationToken))
         {
             var r = new TeleSharp.TL.Contacts.TLRequestSearch
             {
