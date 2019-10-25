@@ -12,7 +12,7 @@ namespace TLSharp.Core.Network
     {
         private readonly TcpClient _tcpClient; 
         private readonly NetworkStream _stream;
-        private int _sendCounter;
+        private int sendCounter = 0;
 
         public TcpTransport(string address, int port, TcpClientConnectionHandler handler = null)
         {
@@ -38,10 +38,10 @@ namespace TLSharp.Core.Network
             if (!_tcpClient.Connected)
                 throw new InvalidOperationException("Client not connected to server.");
 
-            var tcpMessage = new TcpMessage(_sendCounter, packet);
+            var tcpMessage = new TcpMessage(sendCounter, packet);
 
             await _stream.WriteAsync(tcpMessage.Encode(), 0, tcpMessage.Encode().Length, token).ConfigureAwait(false);
-            _sendCounter++;
+            sendCounter++;
         }
 
         public async Task<TcpMessage> Receive(CancellationToken token)
@@ -95,7 +95,13 @@ namespace TLSharp.Core.Network
             return new TcpMessage(seq, body);
         }
 
-        public bool IsConnected => _tcpClient.Connected;
+        public bool IsConnected
+        {
+            get
+            {
+                return this._tcpClient.Connected;
+            }
+        }
 
 
         public void Dispose()
