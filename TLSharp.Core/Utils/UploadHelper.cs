@@ -122,14 +122,16 @@ namespace TLSharp.Core.Utils
                     Parts = partsCount
                 };
             }
-
-            return new TLInputFile
+            else
             {
-                Id = file_id,
-                Name = name,
-                Parts = partsCount,
-                Md5Checksum = GetFileHash(file)
-            };
+                return new TLInputFile
+                {
+                    Id = file_id,
+                    Name = name,
+                    Parts = partsCount,
+                    Md5Checksum = GetFileHash(file)
+                };
+            }
         }
     }
 }
