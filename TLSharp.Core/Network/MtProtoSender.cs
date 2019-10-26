@@ -33,7 +33,7 @@ namespace TLSharp.Core.Network
             return confirmed ? _session.Sequence++ * 2 + 1 : _session.Sequence * 2;
         }
 
-        public async Task Send(TeleSharp.TL.TLMethod request, CancellationToken token)
+        public async Task Send(TeleSharp.TL.TLMethod request, CancellationToken token = default(CancellationToken))
         {
             token.ThrowIfCancellationRequested();
 
@@ -61,7 +61,7 @@ namespace TLSharp.Core.Network
             _session.Save();
         }
 
-        public async Task Send(byte[] packet, TeleSharp.TL.TLMethod request, CancellationToken token)
+        public async Task Send(byte[] packet, TeleSharp.TL.TLMethod request, CancellationToken token = default(CancellationToken))
         {
             token.ThrowIfCancellationRequested();
             
@@ -130,7 +130,7 @@ namespace TLSharp.Core.Network
             return new Tuple<byte[], ulong, int>(message, remoteMessageId, remoteSequence);
         }
 
-        public async Task<byte[]> Receive(TeleSharp.TL.TLMethod request, CancellationToken token)
+        public async Task<byte[]> Receive(TeleSharp.TL.TLMethod request, CancellationToken token = default(CancellationToken))
         {
             while (!request.ConfirmReceived)
             {
@@ -148,7 +148,7 @@ namespace TLSharp.Core.Network
             return null;
         }
 
-        public async Task SendPingAsync(CancellationToken token)
+        public async Task SendPingAsync(CancellationToken token = default(CancellationToken))
         {
             token.ThrowIfCancellationRequested();
 

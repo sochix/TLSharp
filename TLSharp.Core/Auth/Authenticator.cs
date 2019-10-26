@@ -6,7 +6,7 @@ namespace TLSharp.Core.Auth
 {
     public static class Authenticator
     {
-        public static async Task<Step3_Response> DoAuthentication(TcpTransport transport, CancellationToken token)
+        public static async Task<Step3_Response> DoAuthentication(TcpTransport transport, CancellationToken token = default(CancellationToken))
         {
             token.ThrowIfCancellationRequested();
             

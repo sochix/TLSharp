@@ -18,7 +18,7 @@ namespace TLSharp.Core.Network
             _random = new Random();
         }
 
-        public async Task Send(byte[] data, CancellationToken token)
+        public async Task Send(byte[] data, CancellationToken token = default(CancellationToken))
         {
             token.ThrowIfCancellationRequested();
 
@@ -38,7 +38,7 @@ namespace TLSharp.Core.Network
             }
         }
 
-        public async Task<byte[]> Receive(CancellationToken token)
+        public async Task<byte[]> Receive(CancellationToken token = default(CancellationToken))
         {
             token.ThrowIfCancellationRequested();
 
