@@ -7,15 +7,15 @@ namespace TLSharp.Core.Network
 {
     public class MtProtoPlainSender
     {
-        private int _timeOffset;
-        private long _lastMessageId;
-        private readonly Random _random;
-        private readonly TcpTransport _transport;
+        private int timeOffset;
+        private long lastMessageId;
+        private readonly Random random;
+        private readonly TcpTransport transport;
 
         public MtProtoPlainSender(TcpTransport transport)
         {
-            _transport = transport;
-            _random = new Random();
+            this.transport = transport;
+            random = new Random();
         }
 
         public async Task Send(byte[] data, CancellationToken token = default(CancellationToken))
@@ -33,7 +33,7 @@ namespace TLSharp.Core.Network
 
                     byte[] packet = memoryStream.ToArray();
 
-                    await _transport.Send(packet, token).ConfigureAwait(false);
+                    await transport.Send(packet, token).ConfigureAwait(false);
                 }
             }
         }
@@ -42,7 +42,7 @@ namespace TLSharp.Core.Network
         {
             token.ThrowIfCancellationRequested();
 
-            var result = await _transport.Receive(token).ConfigureAwait(false);
+            var result = await transport.Receive(token).ConfigureAwait(false);
 
             using (var memoryStream = new MemoryStream(result.Body))
             {
@@ -62,17 +62,17 @@ namespace TLSharp.Core.Network
         private long GetNewMessageId()
         {
             long time = Convert.ToInt64((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds);
-            long newMessageId = ((time / 1000 + _timeOffset) << 32) |
+            long newMessageId = ((time / 1000 + timeOffset) << 32) |
                                 ((time % 1000) << 22) |
-                                (_random.Next(524288) << 2); // 2^19
+                                (random.Next(524288) << 2); // 2^19
                                                             // [ unix timestamp : 32 bit] [ milliseconds : 10 bit ] [ buffer space : 1 bit ] [ random : 19 bit ] [ msg_id type : 2 bit ] = [ msg_id : 64 bit ]
 
-            if (_lastMessageId >= newMessageId)
+            if (lastMessageId >= newMessageId)
             {
-                newMessageId = _lastMessageId + 4;
+                newMessageId = lastMessageId + 4;
             }
 
-            _lastMessageId = newMessageId;
+            lastMessageId = newMessageId;
             return newMessageId;
         }
 
