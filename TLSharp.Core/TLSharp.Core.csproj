@@ -1,16 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{400D2544-1CC6-4D8A-A62C-2292D9947A16}</ProjectGuid>
     <OutputType>Library</OutputType>
+    <PackageId>TLSharp</PackageId>
+    <Title>Telegram client library implemented in C#</Title>
+    <Authors>Ilya P</Authors>
+    <PackageVersion Condition=" '$(VERSION)' == '' ">0.1.0.433</PackageVersion>
+    <PackageTags>telegram client;telegram API</PackageTags>
+    <PackageProjectUrl>http://sochix.github.io/TLSharp/</PackageProjectUrl>
+    <PackageIconUrl>https://core.telegram.org/favicon.ico</PackageIconUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Description>Unofficial Telegram (http://telegram.org) client library implemented in C#. Latest TL scheme
+      supported.
+
+      Consider donation to speed up development process.
+
+      Bitcoin wallet: 3K1ocweFgaHnAibJ3n6hX7RNZWFTFcJjUe
+
+      It's a perfect fit for any developer who would like to send data directly to Telegram users or write own
+      custom Telegram client.</Description>
+    <PackageLicense>MIT</PackageLicense>
+    <Copyright>Copyright 2019</Copyright>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/sochix/TLSharp</RepositoryUrl>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TLSharp.Core</RootNamespace>
     <AssemblyName>TLSharp.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <FileAlignment>512</FileAlignment>
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeTLAssets</TargetsForTfmSpecificBuildOutput>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,10 +58,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ionic.ZLib, Version=2.0.0.14, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MarkerMetro.Unity.Ionic.Zlib.2.0.0.14\lib\net35\Ionic.ZLib.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <PackageReference Include="BigMathNetStandard" Version="1.0.0" />
+    <PackageReference Include="DotNetZip" Version="1.13.5" />
+<!--    <PackageReference Include="Ionic.Zlib" Version="1.9.1.5" />-->
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,42 +74,46 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Auth\Authenticator.cs" />
-    <Compile Include="Auth\Step1_PQRequest.cs" />
-    <Compile Include="Auth\Step2_DHExchange.cs" />
-    <Compile Include="Auth\Step3_CompleteDHExchange.cs" />
-    <Compile Include="MTProto\Crypto\AES.cs" />
-    <Compile Include="MTProto\Crypto\AuthKey.cs" />
-    <Compile Include="MTProto\Crypto\BigInteger.cs" />
-    <Compile Include="MTProto\Crypto\Crc32.cs" />
-    <Compile Include="MTProto\Crypto\Factorizator.cs" />
-    <Compile Include="MTProto\Crypto\MD5Digest.cs" />
-    <Compile Include="MTProto\Crypto\RSA.cs" />
-    <Compile Include="MTProto\Crypto\Salt.cs" />
-    <Compile Include="MTProto\Serializers.cs" />
-    <Compile Include="Network\MtProtoPlainSender.cs" />
-    <Compile Include="Network\MtProtoSender.cs" />
-    <Compile Include="Network\TcpMessage.cs" />
-    <Compile Include="Network\TcpTransport.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Requests\AckRequest.cs" />
-    <Compile Include="Requests\PingRequest.cs" />
-    <Compile Include="Utils\UploadHelper.cs" />
-    <Compile Include="Session.cs" />
-    <Compile Include="TelegramClient.cs" />
-    <Compile Include="Utils\Helpers.cs" />
-    <Compile Include="DataCenter.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\TeleSharp.TL\TeleSharp.TL.csproj">
+    <ProjectReference Include="..\TeleSharp.TL\TeleSharp.TL.csproj" PrivateAssets="All">
       <Project>{d6144517-91d2-4880-86df-e9ff5d7f383a}</Project>
       <Name>TeleSharp.TL</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
+  <Target Name="IncludeTLAssets">
+    <ItemGroup>
+      <BuildOutputInPackage Include="$(OutputPath)\TeleSharp.TL.dll" />
+    </ItemGroup>
+  </Target>
+
+  <ItemGroup>
+    <_UnmanagedRegistrationCache Remove="obj\TLSharp.Core.csproj.UnmanagedRegistration.cache" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ResolveComReferenceCache Remove="obj\Debug\netstandard2.0\TLSharp.Core.csproj.ResolveComReference.cache" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <IntermediateAssembly Remove="obj\Debug\netstandard2.0\TLSharp.Core.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_DebugSymbolsIntermediatePath Remove="obj\Debug\netstandard2.0\TLSharp.Core.pdb" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_DeploymentManifestEntryPoint Remove="obj\Debug\netstandard2.0\TLSharp.Core.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ApplicationManifest Remove="obj\Debug\netstandard2.0\Native.TLSharp.Core.manifest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DeployManifest Remove="obj\Debug\netstandard2.0\TLSharp.Core.application" />
+  </ItemGroup>
+
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

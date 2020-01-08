@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Ionic.Crc;
+using Ionic.Zlib;
 
 namespace TLSharp.Core.Network
 {
