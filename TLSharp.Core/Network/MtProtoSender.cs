@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -11,7 +10,6 @@ using TeleSharp.TL;
 using TLSharp.Core.Exceptions;
 using TLSharp.Core.MTProto;
 using TLSharp.Core.MTProto.Crypto;
-using TLSharp.Core.Network.Exceptions;
 using TLSharp.Core.Network.Requests;
 using TLSharp.Core.Utils;
 
@@ -24,7 +22,13 @@ namespace TLSharp.Core.Network
         private readonly TcpTransport transport;
         private readonly Session session;
 
+        private readonly uint UpdatesTooLongID = (uint) new TLUpdatesTooLong().Constructor;
+
         public readonly List<ulong> needConfirmation = new List<ulong>();
+
+        public delegate void HandleUpdates (TLAbsUpdates updates);
+
+        public event HandleUpdates UpdatesEvent;
 
         public MtProtoSender(TcpTransport transport, Session session)
         {
@@ -37,7 +41,7 @@ namespace TLSharp.Core.Network
             return confirmed ? session.Sequence++ * 2 + 1 : session.Sequence * 2;
         }
 
-        public async Task Send(TeleSharp.TL.TLMethod request, CancellationToken token = default(CancellationToken))
+        public async Task Send(TLMethod request, CancellationToken token = default(CancellationToken))
         {
             token.ThrowIfCancellationRequested();
 
@@ -54,7 +58,6 @@ namespace TLSharp.Core.Network
                 }
             }
 
-
             using (var memory = new MemoryStream())
             using (var writer = new BinaryWriter(memory))
             {
@@ -65,7 +68,7 @@ namespace TLSharp.Core.Network
             session.Save();
         }
 
-        public async Task Send(byte[] packet, TeleSharp.TL.TLMethod request, CancellationToken token = default(CancellationToken))
+        public async Task Send(byte[] packet, TLMethod request, CancellationToken token = default(CancellationToken))
         {
             token.ThrowIfCancellationRequested();
 
@@ -84,11 +87,12 @@ namespace TLSharp.Core.Network
                     plaintextWriter.Write(packet.Length);
                     plaintextWriter.Write(packet);
 
-                    msgKey = Helpers.CalcMsgKey(plaintextPacket.GetBuffer());
-                    ciphertext = AES.EncryptAES(Helpers.CalcKey(session.AuthKey.Data, msgKey, true), plaintextPacket.GetBuffer());
+                    var buffer = plaintextPacket.GetBuffer();
+                    msgKey = Helpers.CalcMsgKey(buffer);
+                    ciphertext = AES.EncryptAES(Helpers.CalcKey(session.AuthKey.Data, msgKey, true),
+                        plaintextPacket.GetBuffer());
                 }
             }
-
             using (MemoryStream ciphertextPacket = makeMemory(8 + 16 + ciphertext.Length))
             {
                 using (BinaryWriter writer = new BinaryWriter(ciphertextPacket))
@@ -98,6 +102,23 @@ namespace TLSharp.Core.Network
                     writer.Write(ciphertext);
 
                     await transport.Send(ciphertextPacket.GetBuffer(), token).ConfigureAwait(false);
+                }
+            }
+        }
+
+        private async Task Ack(CancellationToken token = default(CancellationToken))
+        {
+            token.ThrowIfCancellationRequested();
+
+            if (needConfirmation.Any())
+            {
+                var ackRequest = new AckRequest(needConfirmation);
+                using (var memory = new MemoryStream())
+                using (var writer = new BinaryWriter(memory))
+                {
+                    ackRequest.SerializeBody(writer);
+                    await Send(memory.ToArray(), ackRequest);
+                    needConfirmation.Clear();
                 }
             }
         }
@@ -134,20 +155,35 @@ namespace TLSharp.Core.Network
             return new Tuple<byte[], ulong, int>(message, remoteMessageId, remoteSequence);
         }
 
-        public async Task<byte[]> Receive(TeleSharp.TL.TLMethod request, CancellationToken token = default(CancellationToken))
+        public async Task<byte[]> Receive(TLMethod request, CancellationToken token = default(CancellationToken))
         {
-            while (!request.ConfirmReceived)
+            while (!request.ConfirmReceived) 
             {
                 var result = DecodeMessage((await transport.Receive(token).ConfigureAwait(false)).Body);
 
-                using (var messageStream = new MemoryStream(result.Item1, false))
-                using (var messageReader = new BinaryReader(messageStream))
+                using (var messageStream = new MemoryStream (result.Item1, false))
+                using (var messageReader = new BinaryReader (messageStream)) 
                 {
-                    processMessage(result.Item2, result.Item3, messageReader, request, token);
+                    await processMessageAsync(result.Item2, result.Item3, messageReader, request, token);
                 }
 
                 token.ThrowIfCancellationRequested();
             }
+
+            return null;
+        }
+
+        public async Task<byte[]> Receive(int timeoutms, CancellationToken token = default(CancellationToken))
+        {
+            var result = DecodeMessage((await transport.Receieve(timeoutms)).Body);
+
+            using (var messageStream = new MemoryStream(result.Item1, false))
+            using (var messageReader = new BinaryReader(messageStream))
+            {
+                await processMessageAsync(result.Item2, result.Item3, messageReader, null);
+            }
+
+            token.ThrowIfCancellationRequested();
 
             return null;
         }
@@ -167,7 +203,7 @@ namespace TLSharp.Core.Network
             await Receive(pingRequest, token).ConfigureAwait(false);
         }
 
-        private bool processMessage(ulong messageId, int sequence, BinaryReader messageReader, TLMethod request, CancellationToken token = default(CancellationToken))
+        private async Task<bool> processMessageAsync(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request, CancellationToken token = default(CancellationToken))
         {
             token.ThrowIfCancellationRequested();
 
@@ -175,8 +211,10 @@ namespace TLSharp.Core.Network
             // TODO: check sessionid
             // TODO: check seqno
 
+
             //logger.debug("processMessage: msg_id {0}, sequence {1}, data {2}", BitConverter.ToString(((MemoryStream)messageReader.BaseStream).GetBuffer(), (int) messageReader.BaseStream.Position, (int) (messageReader.BaseStream.Length - messageReader.BaseStream.Position)).Replace("-","").ToLower());
             needConfirmation.Add(messageId);
+            await Ack(token);
 
             uint code = messageReader.ReadUInt32();
             messageReader.BaseStream.Position -= 4;
@@ -184,7 +222,7 @@ namespace TLSharp.Core.Network
             {
                 case 0x73f1f8dc: // container
                                  //logger.debug("MSG container");
-                    return HandleContainer(messageId, sequence, messageReader, request, token);
+                    return await HandleContainerAsync(messageId, sequence, messageReader, request, token);
                 case 0x7abe77ec: // ping
                                  //logger.debug("MSG ping");
                     return HandlePing(messageId, sequence, messageReader);
@@ -202,7 +240,7 @@ namespace TLSharp.Core.Network
                     return HandleMsgsAck(messageId, sequence, messageReader);
                 case 0xedab447b: // bad_server_salt
                                  //logger.debug("MSG bad_server_salt");
-                    return HandleBadServerSalt(messageId, sequence, messageReader, request, token);
+                    return await HandleBadServerSaltAsync(messageId, sequence, messageReader, request, token);
                 case 0xa7eff811: // bad_msg_notification
                                  //logger.debug("MSG bad_msg_notification");
                     return HandleBadMsgNotification(messageId, sequence, messageReader);
@@ -214,39 +252,68 @@ namespace TLSharp.Core.Network
                     return HandleRpcResult(messageId, sequence, messageReader, request);
                 case 0x3072cfa1: // gzip_packed
                                  //logger.debug("MSG gzip_packed");
-                    return HandleGzipPacked(messageId, sequence, messageReader, request, token);
+                    return await HandleGzipPackedAsync(messageId, sequence, messageReader, request, token);
                 case 0xe317af7e:
                 case 0xd3f45784:
                 case 0x2b2fbd4e:
                 case 0x78d4dec1:
                 case 0x725b04c3:
                 case 0x74ae4240:
-                    return HandleUpdate(messageId, sequence, messageReader);
+                case 0x11f1331c:
+                    return HandleUpdate(code, sequence, messageReader, request);
                 default:
-                    //logger.debug("unknown message: {0}", code);
                     return false;
             }
         }
 
-        private bool HandleUpdate(ulong messageId, int sequence, BinaryReader messageReader)
+        private bool HandleUpdate(uint code, int sequence, BinaryReader messageReader, TLMethod request)
         {
-            return false;
-
-            /*
 			try
 			{
-				UpdatesEvent(TL.Parse<Updates>(messageReader));
-				return true;
+                var update = ParseUpdate (code, messageReader);
+                if (update != null && UpdatesEvent != null) 
+                {
+                    UpdatesEvent (update);
+                }
+                return true;
 			}
 			catch (Exception e)
 			{
-				logger.warning("update processing exception: {0}", e);
-				return false;
-			}
-			*/
+                return false;
+            }
         }
 
-        private bool HandleGzipPacked(ulong messageId, int sequence, BinaryReader messageReader, TLMethod request, CancellationToken token = default(CancellationToken))
+        private TLAbsUpdates ParseUpdate(uint code, BinaryReader messageReader)
+        {
+            switch (code)
+            {
+            case 0xe317af7e:
+                return DecodeUpdate<TLUpdatesTooLong>(messageReader);
+            case 0x914fbf11:
+                return DecodeUpdate<TLUpdateShortMessage> (messageReader);
+            case 0x16812688:
+                return DecodeUpdate<TLUpdateShortChatMessage> (messageReader);
+            case 0x78d4dec1:
+                return DecodeUpdate<TLUpdateShort> (messageReader);
+            case 0x725b04c3:
+                return DecodeUpdate<TLUpdatesCombined> (messageReader);
+            case 0x74ae4240:
+                return DecodeUpdate<TLUpdates> (messageReader);
+            case 0x11f1331c:
+                return DecodeUpdate<TLUpdateShortSentMessage> (messageReader);
+            default:
+                return null;
+            }
+        }
+
+        private TLAbsUpdates DecodeUpdate<T>(BinaryReader messageReader) where T : TLAbsUpdates
+        {
+            var ms = messageReader.BaseStream as MemoryStream;
+            var update = (T)ObjectUtils.DeserializeObject(messageReader);
+            return update;
+        }
+
+        private async Task<bool> HandleGzipPackedAsync(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request, CancellationToken token = default(CancellationToken))
         {
             token.ThrowIfCancellationRequested();
 
@@ -263,14 +330,14 @@ namespace TLSharp.Core.Network
                 }
                 using (BinaryReader compressedReader = new BinaryReader(ms))
                 {
-                    processMessage(messageId, sequence, compressedReader, request, token);
+                    await processMessageAsync(messageId, sequence, compressedReader, request, token);
                 }
             }
 
             return true;
         }
 
-        private bool HandleRpcResult(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
+        private bool HandleRpcResult(ulong messageId, int sequence, BinaryReader messageReader, TLMethod request)
         {
             uint code = messageReader.ReadUInt32();
             ulong requestId = messageReader.ReadUInt64();
@@ -299,6 +366,7 @@ namespace TLSharp.Core.Network
             { // rpc_error
                 int errorCode = messageReader.ReadInt32();
                 string errorMessage = Serializers.String.Read(messageReader);
+                Console.Error.WriteLine($"ERROR: {errorMessage} - {errorCode}");
 
                 if (errorMessage.StartsWith("FLOOD_WAIT_"))
                 {
@@ -409,7 +477,7 @@ namespace TLSharp.Core.Network
                     throw new InvalidOperationException("invalid container");
 
             }
-            throw new NotImplementedException("This should never happens");
+            throw new NotImplementedException("This should never happen!");
             /*
 			logger.debug("bad_msg_notification: msgid {0}, seq {1}, errorcode {2}", requestId, requestSequence,
 						 errorCode);
@@ -429,7 +497,7 @@ namespace TLSharp.Core.Network
             return true;
         }
 
-        private bool HandleBadServerSalt(ulong messageId, int sequence, BinaryReader messageReader, TLMethod request, CancellationToken token = default(CancellationToken))
+        private async Task<bool> HandleBadServerSaltAsync(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request, CancellationToken token = default(CancellationToken))
         {
             token.ThrowIfCancellationRequested();
 
@@ -444,7 +512,7 @@ namespace TLSharp.Core.Network
             session.Salt = newSalt;
 
             //resend
-            Send(request, token);
+            await Send(request, token);
             /*
             if(!runningRequests.ContainsKey(badMsgId)) {
                 logger.debug("bad server salt on unknown message");
@@ -492,7 +560,7 @@ namespace TLSharp.Core.Network
             return true;
         }
 
-        private bool HandlePong(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
+        private bool HandlePong(ulong messageId, int sequence, BinaryReader messageReader, TLMethod request)
         {
             uint code = messageReader.ReadUInt32();
             ulong msgId = messageReader.ReadUInt64();
@@ -510,7 +578,7 @@ namespace TLSharp.Core.Network
             return false;
         }
 
-        private bool HandleContainer(ulong messageId, int sequence, BinaryReader messageReader, TLMethod request, CancellationToken token = default(CancellationToken))
+        private async Task<bool> HandleContainerAsync(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request, CancellationToken token = default(CancellationToken))
         {
             token.ThrowIfCancellationRequested();
 
@@ -524,10 +592,15 @@ namespace TLSharp.Core.Network
                 long beginPosition = messageReader.BaseStream.Position;
                 try
                 {
-                    if (!processMessage(innerMessageId, sequence, messageReader, request, token))
+                    var processedMessage = await processMessageAsync(innerMessageId, sequence, messageReader, request, token);
+                    if (!processedMessage)
                     {
                         messageReader.BaseStream.Position = beginPosition + innerLength;
                     }
+                }
+                catch (InvalidOperationException e)
+                {
+                    throw e;
                 }
                 catch (Exception e)
                 {

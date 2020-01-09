@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
@@ -11,8 +12,6 @@ using TeleSharp.TL;
 using TeleSharp.TL.Messages;
 using TLSharp.Core;
 using TLSharp.Core.Exceptions;
-using TLSharp.Core.Network;
-using TLSharp.Core.Network.Exceptions;
 using TLSharp.Core.Utils;
 
 namespace TLSharp.Tests
@@ -129,7 +128,7 @@ namespace TLSharp.Tests
             var hash = await client.SendCodeRequestAsync(NumberToAuthenticate);
             var code = CodeToAuthenticate; // you can change code in debugger too
 
-            if (String.IsNullOrWhiteSpace(code))
+            if (string.IsNullOrWhiteSpace(code))
             {
                 throw new Exception("CodeToAuthenticate is empty in the app.config file, fill it with the code you just got now by SMS/Telegram");
             }
@@ -178,7 +177,7 @@ namespace TLSharp.Tests
 
             if (user == null)
             {
-                throw new System.Exception("Number was not found in Contacts List of user: " + NumberToSendMessage);
+                throw new Exception("Number was not found in Contacts List of user: " + NumberToSendMessage);
             }
 
             await client.SendTypingAsync(new TLInputPeerUser() { UserId = user.Id });
@@ -192,7 +191,7 @@ namespace TLSharp.Tests
 
             await client.ConnectAsync();
 
-            var dialogs = (TLDialogs) await client.GetUserDialogsAsync();
+            var dialogs = (TLDialogs)await client.GetUserDialogsAsync();
             var chat = dialogs.Chats
                 .OfType<TLChannel>()
                 .FirstOrDefault(c => c.Title == "TestGroup");
@@ -269,7 +268,7 @@ namespace TLSharp.Tests
                     Version = document.Version
                 },
                 document.Size);
-            
+
             Assert.IsTrue(resFile.Bytes.Length > 0);
         }
 
@@ -284,9 +283,9 @@ namespace TLSharp.Tests
             var user = result.Users
                 .OfType<TLUser>()
                 .FirstOrDefault(x => x.Id == 5880094);
-    
+
             var photo = ((TLUserProfilePhoto)user.Photo);
-            var photoLocation = (TLFileLocation) photo.PhotoBig;
+            var photoLocation = (TLFileLocation)photo.PhotoBig;
 
             var resFile = await client.GetFile(new TLInputFileLocation()
             {
@@ -295,7 +294,7 @@ namespace TLSharp.Tests
                 VolumeId = photoLocation.VolumeId
             }, 1024);
 
-            var res = await client.GetUserDialogsAsync(); 
+            var res = await client.GetUserDialogsAsync();
 
             Assert.IsTrue(resFile.Bytes.Length > 0);
         }
@@ -333,7 +332,7 @@ namespace TLSharp.Tests
                 {
                     await CheckPhones();
                 }
-                catch (FloodException floodException)
+                catch (Core.Network.Exceptions.FloodException floodException)
                 {
                     Console.WriteLine($"FLOODEXCEPTION: {floodException}");
                     Thread.Sleep(floodException.TimeToWait);
@@ -370,12 +369,74 @@ namespace TLSharp.Tests
 
             if (user == null)
             {
-                throw new System.Exception("Username was not found: " + UserNameToSendMessage);
+                throw new Exception("Username was not found: " + UserNameToSendMessage);
             }
 
             await client.SendTypingAsync(new TLInputPeerUser() { UserId = user.Id });
             Thread.Sleep(3000);
             await client.SendMessageAsync(new TLInputPeerUser() { UserId = user.Id }, "TEST");
+        }
+
+        public virtual async Task GetUpdatesForUser()
+        {
+            IList<TLMessage> newMsgs = new List<TLMessage>();
+            TLUser user = null;
+
+            var client = NewClient();
+            await client.ConnectAsync();
+
+            if (client.IsUserAuthorized())
+                user = client.Session.TLUser;
+
+            else
+            {
+                var hash = await client.SendCodeRequestAsync(NumberToAuthenticate);
+                var code = CodeToAuthenticate; // you can change code in debugger too
+                if (string.IsNullOrWhiteSpace(code))
+                {
+                    throw new Exception("CodeToAuthenticate is empty in the app.config file, fill it with the code you just got now by SMS/Telegram");
+                }
+
+                try
+                {
+                    user = await client.MakeAuthAsync(NumberToAuthenticate, hash, code);
+                }
+                catch (CloudPasswordNeededException)
+                {
+                    var passwordSetting = await client.GetPasswordSetting();
+                    var password = PasswordToAuthenticate;
+                    user = await client.MakeAuthWithPasswordAsync(passwordSetting, password);
+                }
+                catch (InvalidPhoneCodeException ex)
+                {
+                    throw new Exception("CodeToAuthenticate is wrong in the app.config file, fill it with the code you just got now by SMS/Telegram", ex);
+                }
+            }
+
+            client.Updates += (TelegramClient tclient, TLAbsUpdates updates) =>
+            {
+                if (updates is TLUpdates)
+                {
+                    var allupdates = updates as TLUpdates;
+
+                    foreach (var update in allupdates.Updates)
+                    {
+                        if (update is TLUpdateNewMessage)
+                        {
+                            var metaMsg = update as TLUpdateNewMessage;
+                            var msg = metaMsg.Message as TLMessage;
+                            newMsgs.Add(msg);
+                        }
+                    }
+                }
+            };
+
+            await client.MainLoopAsync(1000);
+
+            // At this point you would send yourself a UPDATE_1 message to trigger update
+
+            Assert.IsTrue(newMsgs.Count == 1);
+            Assert.IsTrue(newMsgs.First().Message.Equals("UPDATE_1"));
         }
     }
 }
