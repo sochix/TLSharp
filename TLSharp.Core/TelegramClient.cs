@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TeleSharp.TL;
 using TeleSharp.TL.Account;
@@ -21,13 +22,25 @@ namespace TLSharp.Core
 {
     public class TelegramClient : IDisposable
     {
+        internal static NLog.Logger logger = NLog.LogManager.GetLogger("TelegramClient");
         private MtProtoSender _sender;
+        private AuthKey _key;
         private TcpTransport _transport;
         private string _apiHash = "";
         private int _apiId = 0;
         private Session _session;
         private List<TLDcOption> dcOptions;
         private TcpClientConnectionHandler _handler;
+
+        private bool _looping = true;
+        public volatile bool AllowEvents = false;
+
+        public delegate void UpdatesEvent (TelegramClient source, TLAbsUpdates updates);
+        public delegate void ClientEvent(TelegramClient source);
+
+        public event UpdatesEvent Updates;
+        public event ClientEvent ScheduledTasks;
+        public event ClientEvent IdleTasks;
 
         public Session Session
         {
@@ -62,6 +75,7 @@ namespace TLSharp.Core
                 _session.TimeOffset = result.TimeOffset;
             }
 
+            _sender.UpdatesEvent += _sender_UpdatesEvent;
             _sender = new MtProtoSender(_transport, _session);
 
             //set-up layer
@@ -110,6 +124,50 @@ namespace TLSharp.Core
             }
         }
 
+        public void Close()
+        {
+            _looping = false;
+        }
+
+        public async Task MainLoopAsync(int timeslicems)
+        {
+            logger.Trace("Entered loop");
+            var lastPing = DateTime.UtcNow;
+            await SendPingAsync();
+            while (_looping)
+            {
+                try
+                {
+                    await WaitEventAsync(timeslicems);
+                } catch (OperationCanceledException)
+                {
+                    logger.Trace("Timeout");
+                }
+                finally
+                {
+                    var now = DateTime.UtcNow;
+                    if ((now - lastPing).TotalSeconds >= 30)
+                    {
+                        await SendPingAsync();
+                        lastPing = now;
+                    }
+                    if (ScheduledTasks != null)
+                    {
+                        logger.Trace("Running idle tasks");
+                        ScheduledTasks.Invoke(this);
+                        ScheduledTasks = null;
+                    }
+                    IdleTasks?.Invoke(this);
+                }
+            }
+        }
+        
+        private void _sender_UpdatesEvent (TLAbsUpdates updates)
+        {
+            if (AllowEvents && Updates != null)
+                Updates(this, updates);
+        }
+
         private async Task RequestWithDcMigration(TLMethod request)
         {
             if (_sender == null)
@@ -137,6 +195,11 @@ namespace TLSharp.Core
                     request.ConfirmReceived = false;
                 }
             }
+        }
+
+        public async Task WaitEventAsync(int timeoutms)
+        {
+            await _sender.Receive (timeoutms);
         }
 
         public bool IsUserAuthorized()
