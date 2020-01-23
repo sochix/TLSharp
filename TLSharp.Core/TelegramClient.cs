@@ -234,26 +234,6 @@ namespace TLSharp.Core
             return (T)result;
         }
 
-        public async Task<TLUser> UpdateUsernameAsync(string username)
-        {
-            if (!IsUserAuthorized())
-                throw new InvalidOperationException("Authorize user first!");
-
-            var req = new TLRequestUpdateUsername { Username = username };
-
-            return await SendRequestAsync<TLUser>(req);
-        }
-
-        public async Task<bool> CheckUsernameAsync(string username)
-        {
-            if (!IsUserAuthorized())
-                throw new InvalidOperationException("Authorize user first!");
-
-            var req = new TLRequestCheckUsername { Username = username };
-
-            return await SendRequestAsync<bool>(req);
-        }
-
         public async Task<TLImportedContacts> ImportContactsAsync(IReadOnlyList<TLInputPhoneContact> contacts)
         {
             if (!IsUserAuthorized())
