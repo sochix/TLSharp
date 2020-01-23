@@ -234,12 +234,42 @@ namespace TLSharp.Core
             return (T)result;
         }
 
+        public async Task<TLImportedContacts> ImportContactsAsync(IReadOnlyList<TLInputPhoneContact> contacts)
+        {
+            if (!IsUserAuthorized())
+                throw new InvalidOperationException("Authorize user first!");
+
+            var req = new TLRequestImportContacts { Contacts = new TLVector<TLInputPhoneContact>(contacts)};
+
+            return await SendRequestAsync<TLImportedContacts>(req);
+        }
+
+        public async Task<bool> DeleteContactsAsync(IReadOnlyList<TLAbsInputUser> users)
+        {
+            if (!IsUserAuthorized())
+                throw new InvalidOperationException("Authorize user first!");
+
+            var req = new TLRequestDeleteContacts {Id = new TLVector<TLAbsInputUser>(users)};
+
+            return await SendRequestAsync<bool>(req);
+        }
+
+        public async Task<TLLink> DeleteContactAsync(TLAbsInputUser user)
+        {
+            if (!IsUserAuthorized())
+                throw new InvalidOperationException("Authorize user first!");
+
+            var req = new TLRequestDeleteContact {Id = user};
+
+            return await SendRequestAsync<TLLink>(req);
+        }
+
         public async Task<TLContacts> GetContactsAsync()
         {
             if (!IsUserAuthorized())
                 throw new InvalidOperationException("Authorize user first!");
 
-            var req = new TLRequestGetContacts() { Hash = "" };
+            var req = new TLRequestGetContacts {Hash = ""};
 
             return await SendRequestAsync<TLContacts>(req);
         }
