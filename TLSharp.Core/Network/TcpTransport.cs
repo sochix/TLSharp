@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using Ionic.Crc;
 
 namespace TLSharp.Core.Network
 {
@@ -79,7 +80,7 @@ namespace TLSharp.Core.Network
             Buffer.BlockCopy(packetLengthBytes, 0, rv, 0, packetLengthBytes.Length);
             Buffer.BlockCopy(seqBytes, 0, rv, packetLengthBytes.Length, seqBytes.Length);
             Buffer.BlockCopy(body, 0, rv, packetLengthBytes.Length + seqBytes.Length, body.Length);
-            var crc32 = new Ionic.Crc.CRC32();
+            var crc32 = new CRC32();
             crc32.SlurpBlock(rv, 0, rv.Length);
             var validChecksum = crc32.Crc32Result;
 

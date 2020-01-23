@@ -13,6 +13,8 @@ namespace TeleSharp.Generator
 {
     class Program
     {
+        static string currentDirectory;
+        
         static List<String> keywords = new List<string>(new string[] { "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked", "class", "const", "continue", "decimal", "default", "delegate", "do", "double", "else", "enum", "event", "explicit", "extern", "false", "finally", "fixed", "float", "for", "foreach", "goto", "if", "implicit", "in", "in", "int", "interface", "internal", "is", "lock", "long", "namespace", "new", "null", "object", "operator", "out", "out", "override", "params", "private", "protected", "public", "readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string", "struct", "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort", "using", "virtual", "void", "volatile", "while", "add", "alias", "ascending", "async", "await", "descending", "dynamic", "from", "get", "global", "group", "into", "join", "let", "orderby", "partial", "partial", "remove", "select", "set", "value", "var", "where", "where", "yield" });
         static List<String> interfacesList = new List<string>();
         static List<String> classesList = new List<string>();
@@ -22,6 +24,7 @@ namespace TeleSharp.Generator
             string AbsStyle = File.ReadAllText("ConstructorAbs.tmp");
             string NormalStyle = File.ReadAllText("Constructor.tmp");
             string MethodStyle = File.ReadAllText("Method.tmp");
+            currentDirectory = Directory.GetCurrentDirectory();
             //string method = File.ReadAllText("constructor.tt");
             string Json = "";
             string url;
@@ -42,6 +45,7 @@ namespace TeleSharp.Generator
                 if (list.Count() > 1)
                 {
                     string path = (GetNameSpace(c.type).Replace("TeleSharp.TL", "TL\\").Replace(".", "") + "\\" + GetNameofClass(c.type, true) + ".cs").Replace("\\\\", "\\");
+                    if (string.IsNullOrEmpty(path)) continue;
                     FileStream classFile = MakeFile(path);
                     using (StreamWriter writer = new StreamWriter(classFile))
                     {
@@ -64,6 +68,7 @@ namespace TeleSharp.Generator
             foreach (var c in schema.constructors)
             {
                 string path = (GetNameSpace(c.predicate).Replace("TeleSharp.TL", "TL\\").Replace(".", "") + "\\" + GetNameofClass(c.predicate, false) + ".cs").Replace("\\\\", "\\");
+                if (string.IsNullOrEmpty(path)) continue;
                 FileStream classFile = MakeFile(path);
                 using (StreamWriter writer = new StreamWriter(classFile))
                 {
@@ -130,6 +135,7 @@ namespace TeleSharp.Generator
             foreach (var c in schema.methods)
             {
                 string path = (GetNameSpace(c.method).Replace("TeleSharp.TL", "TL\\").Replace(".", "") + "\\" + GetNameofClass(c.method, false, true) + ".cs").Replace("\\\\", "\\");
+                if (string.IsNullOrEmpty(path)) continue;
                 FileStream classFile = MakeFile(path);
                 using (StreamWriter writer = new StreamWriter(classFile))
                 {
@@ -426,7 +432,7 @@ namespace TeleSharp.Generator
         public static FileStream MakeFile(string path)
         {
             if (!Directory.Exists(Path.GetDirectoryName(path)))
-                Directory.CreateDirectory(Path.GetDirectoryName(path));
+                Directory.CreateDirectory(Path.GetDirectoryName($"{currentDirectory}../../../../{path}"));
             if (File.Exists(path))
                 File.Delete(path);
             return File.OpenWrite(path);
