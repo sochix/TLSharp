@@ -11,7 +11,17 @@ namespace TeleSharp.TL
     public class TLVector<T> : TLObject, IList<T>
     {
         [TLObject(481674261)]
-        private List<T> lists = new List<T>();
+        private List<T> lists;
+
+        public TLVector(IEnumerable<T> collection)
+        {
+            lists = new List<T>(collection);
+        }
+
+        public TLVector()
+        {
+            lists = new List<T>();
+        }
 
         public T this[int index]
         {
