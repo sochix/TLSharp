@@ -13,7 +13,6 @@ using TLSharp.Core;
 using TLSharp.Core.Exceptions;
 using TLSharp.Core.Network;
 using TLSharp.Core.Network.Exceptions;
-using TLSharp.Core.Requests;
 using TLSharp.Core.Utils;
 
 namespace TLSharp.Tests
