@@ -10,7 +10,9 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 using TeleSharp.TL.Messages;
 using TLSharp.Core;
+using TLSharp.Core.Exceptions;
 using TLSharp.Core.Network;
+using TLSharp.Core.Network.Exceptions;
 using TLSharp.Core.Requests;
 using TLSharp.Core.Utils;
 

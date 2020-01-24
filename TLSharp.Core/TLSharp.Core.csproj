@@ -48,6 +48,9 @@
     <Compile Include="Auth\Step1_PQRequest.cs" />
     <Compile Include="Auth\Step2_DHExchange.cs" />
     <Compile Include="Auth\Step3_CompleteDHExchange.cs" />
+    <Compile Include="Exceptions\CloudPasswordNeededException.cs" />
+    <Compile Include="Exceptions\InvalidPhoneCodeException.cs" />
+    <Compile Include="Exceptions\MissingApiConfigurationException.cs" />
     <Compile Include="MTProto\Crypto\AES.cs" />
     <Compile Include="MTProto\Crypto\AuthKey.cs" />
     <Compile Include="MTProto\Crypto\BigInteger.cs" />
@@ -57,10 +60,16 @@
     <Compile Include="MTProto\Crypto\RSA.cs" />
     <Compile Include="MTProto\Crypto\Salt.cs" />
     <Compile Include="MTProto\Serializers.cs" />
+    <Compile Include="Network\Exceptions\DataCenterMigrationException.cs" />
+    <Compile Include="Network\Exceptions\FileMigrationException.cs" />
+    <Compile Include="Network\Exceptions\FloodException.cs" />
     <Compile Include="Network\MtProtoPlainSender.cs" />
     <Compile Include="Network\MtProtoSender.cs" />
+    <Compile Include="Network\Exceptions\NetworkMigrationException.cs" />
+    <Compile Include="Network\Exceptions\PhoneMigrationException.cs" />
     <Compile Include="Network\TcpMessage.cs" />
     <Compile Include="Network\TcpTransport.cs" />
+    <Compile Include="Network\Exceptions\UserMigrationException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\AckRequest.cs" />
     <Compile Include="Requests\PingRequest.cs" />
