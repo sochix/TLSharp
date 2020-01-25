@@ -238,7 +238,7 @@ namespace TLSharp.Core.Network
         private bool HandleGzipPacked(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
         {
             uint code = messageReader.ReadUInt32();
-            byte[] packedData = GZipStream.UncompressBuffer(Serializers.Bytes.read(messageReader));
+            byte[] packedData = GZipStream.UncompressBuffer(Serializers.Bytes.Read(messageReader));
             using (MemoryStream packedStream = new MemoryStream(packedData, false))
             using (BinaryReader compressedReader = new BinaryReader(packedStream))
             {
@@ -276,7 +276,7 @@ namespace TLSharp.Core.Network
             if (innerCode == 0x2144ca19)
             { // rpc_error
                 int errorCode = messageReader.ReadInt32();
-                string errorMessage = Serializers.String.read(messageReader);
+                string errorMessage = Serializers.String.Read(messageReader);
 
                 if (errorMessage.StartsWith("FLOOD_WAIT_"))
                 {
@@ -327,7 +327,7 @@ namespace TLSharp.Core.Network
                 try
                 {
                     // gzip_packed
-                    byte[] packedData = Serializers.Bytes.read(messageReader);
+                    byte[] packedData = Serializers.Bytes.Read(messageReader);
                     using (var ms = new MemoryStream())
                     {
                         using (var packedStream = new MemoryStream(packedData, false))

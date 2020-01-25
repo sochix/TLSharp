@@ -106,7 +106,7 @@ namespace TLSharp.Core
                 writer.Write(Salt);
                 writer.Write(LastMessageId);
                 writer.Write(TimeOffset);
-                Serializers.String.write(writer, DataCenter.Address);
+                Serializers.String.Write(writer, DataCenter.Address);
                 writer.Write(DataCenter.Port);
 
                 if (TLUser != null)
@@ -120,7 +120,7 @@ namespace TLSharp.Core
                     writer.Write(0);
                 }
 
-                Serializers.Bytes.write(writer, AuthKey.Data);
+                Serializers.Bytes.Write(writer, AuthKey.Data);
 
                 return stream.ToArray();
             }
@@ -136,7 +136,7 @@ namespace TLSharp.Core
                 var salt = reader.ReadUInt64();
                 var lastMessageId = reader.ReadInt64();
                 var timeOffset = reader.ReadInt32();
-                var serverAddress = Serializers.String.read(reader);
+                var serverAddress = Serializers.String.Read(reader);
                 var port = reader.ReadInt32();
 
                 var isAuthExsist = reader.ReadInt32() == 1;
@@ -148,7 +148,7 @@ namespace TLSharp.Core
                     TLUser = (TLUser)ObjectUtils.DeserializeObject(reader);
                 }
 
-                var authData = Serializers.Bytes.read(reader);
+                var authData = Serializers.Bytes.Read(reader);
                 var defaultDataCenter = new DataCenter (serverAddress, port);
 
                 return new Session(store)

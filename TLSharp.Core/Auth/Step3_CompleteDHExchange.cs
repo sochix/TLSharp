@@ -62,8 +62,8 @@ namespace TLSharp.Core.Auth
                     // logger.debug("valid server nonce");
 
                     g = dhInnerDataReader.ReadInt32();
-                    dhPrime = new BigInteger(1, Serializers.Bytes.read(dhInnerDataReader));
-                    ga = new BigInteger(1, Serializers.Bytes.read(dhInnerDataReader));
+                    dhPrime = new BigInteger(1, Serializers.Bytes.Read(dhInnerDataReader));
+                    ga = new BigInteger(1, Serializers.Bytes.Read(dhInnerDataReader));
 
                     int serverTime = dhInnerDataReader.ReadInt32();
                     timeOffset = serverTime - (int)(Convert.ToInt64((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds) / 1000);
@@ -88,7 +88,7 @@ namespace TLSharp.Core.Auth
                     clientDhInnerDataWriter.Write(nonce);
                     clientDhInnerDataWriter.Write(serverNonce);
                     clientDhInnerDataWriter.Write((long)0); // TODO: retry_id
-                    Serializers.Bytes.write(clientDhInnerDataWriter, gb.ToByteArrayUnsigned());
+                    Serializers.Bytes.Write(clientDhInnerDataWriter, gb.ToByteArrayUnsigned());
 
                     using (MemoryStream clientDhInnerDataWithHash = new MemoryStream())
                     {
@@ -121,7 +121,7 @@ namespace TLSharp.Core.Auth
                     setClientDhParamsWriter.Write(0xf5045f1f);
                     setClientDhParamsWriter.Write(nonce);
                     setClientDhParamsWriter.Write(serverNonce);
-                    Serializers.Bytes.write(setClientDhParamsWriter, clientDhInnerDataEncryptedBytes);
+                    Serializers.Bytes.Write(setClientDhParamsWriter, clientDhInnerDataEncryptedBytes);
 
                     setclientDhParamsBytes = setClientDhParams.ToArray();
                 }
