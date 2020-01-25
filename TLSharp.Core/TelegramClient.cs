@@ -201,7 +201,6 @@ namespace TLSharp.Core
 
         public async Task<TLUser> MakeAuthWithPasswordAsync(TLPassword password, string password_str)
         {
-
             byte[] password_Bytes = Encoding.UTF8.GetBytes(password_str);
             IEnumerable<byte> rv = password.CurrentSalt.Concat(password_Bytes).Concat(password.CurrentSalt);
 
@@ -227,6 +226,7 @@ namespace TLSharp.Core
 
             return ((TLUser)request.Response.User);
         }
+
         public async Task<T> SendRequestAsync<T>(TLMethod methodToExecute)
         {
             await RequestWithDcMigration(methodToExecute);
@@ -236,72 +236,59 @@ namespace TLSharp.Core
             return (T)result;
         }
 
-        public async Task<TLUser> UpdateUsernameAsync(string username)
+        private async Task<T> SendAuthenticatedRequestAsync<T> (TLMethod methodToExecute)
         {
             if (!IsUserAuthorized())
                 throw new InvalidOperationException("Authorize user first!");
 
+            return await SendRequestAsync<T>(methodToExecute);
+        }
+
+        public async Task<TLUser> UpdateUsernameAsync(string username)
+        {
             var req = new TLRequestUpdateUsername { Username = username };
 
-            return await SendRequestAsync<TLUser>(req);
+            return await SendAuthenticatedRequestAsync<TLUser>(req);
         }
 
         public async Task<bool> CheckUsernameAsync(string username)
         {
-            if (!IsUserAuthorized())
-                throw new InvalidOperationException("Authorize user first!");
-
             var req = new TLRequestCheckUsername { Username = username };
 
-            return await SendRequestAsync<bool>(req);
+            return await SendAuthenticatedRequestAsync<bool>(req);
         }
 
         public async Task<TLImportedContacts> ImportContactsAsync(IReadOnlyList<TLInputPhoneContact> contacts)
         {
-            if (!IsUserAuthorized())
-                throw new InvalidOperationException("Authorize user first!");
-
             var req = new TLRequestImportContacts { Contacts = new TLVector<TLInputPhoneContact>(contacts)};
 
-            return await SendRequestAsync<TLImportedContacts>(req);
+            return await SendAuthenticatedRequestAsync<TLImportedContacts>(req);
         }
 
         public async Task<bool> DeleteContactsAsync(IReadOnlyList<TLAbsInputUser> users)
         {
-            if (!IsUserAuthorized())
-                throw new InvalidOperationException("Authorize user first!");
-
             var req = new TLRequestDeleteContacts {Id = new TLVector<TLAbsInputUser>(users)};
 
-            return await SendRequestAsync<bool>(req);
+            return await SendAuthenticatedRequestAsync<bool>(req);
         }
 
         public async Task<TLLink> DeleteContactAsync(TLAbsInputUser user)
         {
-            if (!IsUserAuthorized())
-                throw new InvalidOperationException("Authorize user first!");
-
             var req = new TLRequestDeleteContact {Id = user};
 
-            return await SendRequestAsync<TLLink>(req);
+            return await SendAuthenticatedRequestAsync<TLLink>(req);
         }
 
         public async Task<TLContacts> GetContactsAsync()
         {
-            if (!IsUserAuthorized())
-                throw new InvalidOperationException("Authorize user first!");
-
             var req = new TLRequestGetContacts() { Hash = "" };
 
-            return await SendRequestAsync<TLContacts>(req);
+            return await SendAuthenticatedRequestAsync<TLContacts>(req);
         }
 
         public async Task<TLAbsUpdates> SendMessageAsync(TLAbsInputPeer peer, string message)
         {
-            if (!IsUserAuthorized())
-                throw new InvalidOperationException("Authorize user first!");
-
-            return await SendRequestAsync<TLAbsUpdates>(
+            return await SendAuthenticatedRequestAsync<TLAbsUpdates>(
                    new TLRequestSendMessage()
                    {
                        Peer = peer,
@@ -322,9 +309,6 @@ namespace TLSharp.Core
 
         public async Task<TLAbsDialogs> GetUserDialogsAsync(int offsetDate = 0, int offsetId = 0, TLAbsInputPeer offsetPeer = null, int limit = 100)
         {
-            if (!IsUserAuthorized())
-                throw new InvalidOperationException("Authorize user first!");
-
             if (offsetPeer == null)
                 offsetPeer = new TLInputPeerSelf();
 
@@ -335,7 +319,7 @@ namespace TLSharp.Core
                 OffsetPeer = offsetPeer, 
                 Limit = limit
             };
-            return await SendRequestAsync<TLAbsDialogs>(req);
+            return await SendAuthenticatedRequestAsync<TLAbsDialogs>(req);
         }
 
         public async Task<TLAbsUpdates> SendUploadedPhoto(TLAbsInputPeer peer, TLAbsInputFile file, string caption)
@@ -388,9 +372,6 @@ namespace TLSharp.Core
 
         public async Task<TLAbsMessages> GetHistoryAsync(TLAbsInputPeer peer, int offsetId = 0, int offsetDate = 0, int addOffset = 0, int limit = 100, int maxId = 0, int minId = 0)
         {
-            if (!IsUserAuthorized())
-                throw new InvalidOperationException("Authorize user first!");
-
             var req = new TLRequestGetHistory()
             {
                 Peer = peer,
@@ -401,7 +382,7 @@ namespace TLSharp.Core
                 MaxId = maxId,
                 MinId = minId
             };
-            return await SendRequestAsync<TLAbsMessages>(req);
+            return await SendAuthenticatedRequestAsync<TLAbsMessages>(req);
         }
 
         /// <summary>
