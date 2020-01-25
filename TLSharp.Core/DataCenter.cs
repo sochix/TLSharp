@@ -1,4 +1,3 @@
-
 namespace TLSharp.Core
 {
     internal class DataCenter
@@ -14,8 +13,8 @@ namespace TLSharp.Core
         {
         }
 
-        internal int? DataCenterId { get; private set; }
-        internal string Address { get; private set; }
-        internal int Port { get; private set; }
+        internal int? DataCenterId { get; }
+        internal string Address { get; }
+        internal int Port { get; }
     }
 }
