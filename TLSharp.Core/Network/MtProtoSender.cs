@@ -11,7 +11,7 @@ using TLSharp.Core.Exceptions;
 using TLSharp.Core.MTProto;
 using TLSharp.Core.MTProto.Crypto;
 using TLSharp.Core.Network.Exceptions;
-using TLSharp.Core.Requests;
+using TLSharp.Core.Network.Requests;
 using TLSharp.Core.Utils;
 
 namespace TLSharp.Core.Network
