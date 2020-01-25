@@ -65,7 +65,7 @@ namespace TLSharp.Core.Auth
 
                     var serverNonce = binaryReader.ReadBytes(16);
 
-                    byte[] pqbytes = Serializers.Bytes.read(binaryReader);
+                    byte[] pqbytes = Serializers.Bytes.Read(binaryReader);
                     var pq = new BigInteger(1, pqbytes);
 
                     var vectorId = binaryReader.ReadInt32();
