@@ -36,9 +36,9 @@ namespace TLSharp.Core.Auth
                 using (BinaryWriter pqInnerDataWriter = new BinaryWriter(pqInnerData))
                 {
                     pqInnerDataWriter.Write(0x83c95aec); // pq_inner_data
-                    Serializers.Bytes.write(pqInnerDataWriter, pq.ToByteArrayUnsigned());
-                    Serializers.Bytes.write(pqInnerDataWriter, pqPair.Min.ToByteArrayUnsigned());
-                    Serializers.Bytes.write(pqInnerDataWriter, pqPair.Max.ToByteArrayUnsigned());
+                    Serializers.Bytes.Write(pqInnerDataWriter, pq.ToByteArrayUnsigned());
+                    Serializers.Bytes.Write(pqInnerDataWriter, pqPair.Min.ToByteArrayUnsigned());
+                    Serializers.Bytes.Write(pqInnerDataWriter, pqPair.Max.ToByteArrayUnsigned());
                     pqInnerDataWriter.Write(nonce);
                     pqInnerDataWriter.Write(serverNonce);
                     pqInnerDataWriter.Write(newNonce);
@@ -69,10 +69,10 @@ namespace TLSharp.Core.Auth
                             reqDHParamsWriter.Write(0xd712e4be); // req_dh_params
                             reqDHParamsWriter.Write(nonce);
                             reqDHParamsWriter.Write(serverNonce);
-                            Serializers.Bytes.write(reqDHParamsWriter, pqPair.Min.ToByteArrayUnsigned());
-                            Serializers.Bytes.write(reqDHParamsWriter, pqPair.Max.ToByteArrayUnsigned());
+                            Serializers.Bytes.Write(reqDHParamsWriter, pqPair.Min.ToByteArrayUnsigned());
+                            Serializers.Bytes.Write(reqDHParamsWriter, pqPair.Max.ToByteArrayUnsigned());
                             reqDHParamsWriter.Write(targetFingerprint);
-                            Serializers.Bytes.write(reqDHParamsWriter, ciphertext);
+                            Serializers.Bytes.Write(reqDHParamsWriter, ciphertext);
 
                             reqDhParamsBytes = reqDHParams.ToArray();
                         }
@@ -126,7 +126,7 @@ namespace TLSharp.Core.Auth
 					}
 					*/
 
-                    encryptedAnswer = Serializers.Bytes.read(responseReader);
+                    encryptedAnswer = Serializers.Bytes.Read(responseReader);
 
                     return new Step2_Response()
                     {

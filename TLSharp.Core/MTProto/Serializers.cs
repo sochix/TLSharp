@@ -9,7 +9,7 @@ namespace TLSharp.Core.MTProto
 
         public static class Bytes
         {
-            public static byte[] read(BinaryReader binaryReader)
+            public static byte[] Read(BinaryReader binaryReader)
             {
                 byte firstByte = binaryReader.ReadByte();
                 int len, padding;
@@ -33,7 +33,7 @@ namespace TLSharp.Core.MTProto
                 return data;
             }
 
-            public static BinaryWriter write(BinaryWriter binaryWriter, byte[] data)
+            public static BinaryWriter Write(BinaryWriter binaryWriter, byte[] data)
             {
                 int padding;
                 if (data.Length < 254)
@@ -73,26 +73,16 @@ namespace TLSharp.Core.MTProto
 
         public static class String
         {
-            public static string read(BinaryReader reader)
+            public static string Read(BinaryReader reader)
             {
-                byte[] data = Bytes.read(reader);
+                byte[] data = Bytes.Read(reader);
                 return Encoding.UTF8.GetString(data, 0, data.Length);
             }
 
-            public static BinaryWriter write(BinaryWriter writer, string str)
+            public static BinaryWriter Write(BinaryWriter writer, string str)
             {
-                return Bytes.write(writer, Encoding.UTF8.GetBytes(str));
+                return Bytes.Write(writer, Encoding.UTF8.GetBytes(str));
             }
-        }
-
-        public static string VectorToString<T>(List<T> list)
-        {
-            string[] tokens = new string[list.Count];
-            for (int i = 0; i < list.Count; i++)
-            {
-                tokens[i] = list[i].ToString();
-            }
-            return "[" + System.String.Join(", ", tokens) + "]";
         }
     }
 }
