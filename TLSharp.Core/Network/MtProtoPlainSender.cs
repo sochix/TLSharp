@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace TLSharp.Core.Network
@@ -17,8 +18,10 @@ namespace TLSharp.Core.Network
             random = new Random();
         }
 
-        public async Task Send(byte[] data)
+        public async Task Send(byte[] data, CancellationToken token = default(CancellationToken))
         {
+            token.ThrowIfCancellationRequested();
+
             using (var memoryStream = new MemoryStream())
             {
                 using (var binaryWriter = new BinaryWriter(memoryStream))
@@ -30,14 +33,16 @@ namespace TLSharp.Core.Network
 
                     byte[] packet = memoryStream.ToArray();
 
-                    await _transport.Send(packet);
+                    await _transport.Send(packet, token).ConfigureAwait(false);
                 }
             }
         }
 
-        public async Task<byte[]> Receive()
+        public async Task<byte[]> Receive(CancellationToken token = default(CancellationToken))
         {
-            var result = await _transport.Receive();
+            token.ThrowIfCancellationRequested();
+
+            var result = await _transport.Receive(token).ConfigureAwait(false);
 
             using (var memoryStream = new MemoryStream(result.Body))
             {
