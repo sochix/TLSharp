@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -24,7 +22,6 @@ using TLAuthorization = TeleSharp.TL.Auth.TLAuthorization;
 
 namespace TLSharp.Core
 {
-
     public class TelegramClient : IDisposable
     {
         private MtProtoSender sender;
@@ -51,7 +48,8 @@ namespace TLSharp.Core
         /// <param name="handler">A delegate to invoke when a connection is needed and that will return a TcpClient that will be used to connect</param>
         /// <param name="dcIpVersion">Indicates the preferred IpAddress version to use to connect to a Telegram server</param>
         public TelegramClient(int apiId, string apiHash,
-            ISessionStore store = null, string sessionUserId = "session", TcpClientConnectionHandler handler = null, DataCenterIPVersion dcIpVersion = DataCenterIPVersion.Default)
+            ISessionStore store = null, string sessionUserId = "session", TcpClientConnectionHandler handler = null,
+            DataCenterIPVersion dcIpVersion = DataCenterIPVersion.Default)
         {
             if (apiId == default(int))
                 throw new MissingApiConfigurationException("API_ID");
@@ -129,8 +127,8 @@ namespace TLSharp.Core
                 throw new Exception($"Telegram server didn't provide us with any IPAddress that matches your preferences. If you chose OnlyIPvX, try switch to PreferIPvX instead.");
 
             var dc = dcIpVersion == DataCenterIPVersion.PreferIPv4 ? dcs.First() : dcs.Last(); // ipv4 addresses are at the beginning of the list because it was ordered
-
-            var dataCenter = new DataCenter(dcId, dc.IpAddress, dc.Port);
+            
+            var dataCenter = new DataCenter (dcId, dc.IpAddress, dc.Port);
 
             transport = new TcpTransport(dc.IpAddress, dc.Port, handler);
             session.DataCenter = dataCenter;
@@ -213,7 +211,7 @@ namespace TLSharp.Core
 
             if (String.IsNullOrWhiteSpace(code))
                 throw new ArgumentNullException(nameof(code));
-
+            
             var request = new TLRequestSignIn() { PhoneNumber = phoneNumber, PhoneCodeHash = phoneCodeHash, PhoneCode = code };
 
             await RequestWithDcMigration(request, token).ConfigureAwait(false);
@@ -222,7 +220,7 @@ namespace TLSharp.Core
 
             return ((TLUser)request.Response.User);
         }
-
+        
         public async Task<TLPassword> GetPasswordSetting(CancellationToken token = default(CancellationToken))
         {
             var request = new TLRequestGetPassword();
@@ -254,7 +252,7 @@ namespace TLSharp.Core
         public async Task<TLUser> SignUpAsync(string phoneNumber, string phoneCodeHash, string code, string firstName, string lastName, CancellationToken token = default(CancellationToken))
         {
             var request = new TLRequestSignUp() { PhoneNumber = phoneNumber, PhoneCode = code, PhoneCodeHash = phoneCodeHash, FirstName = firstName, LastName = lastName };
-
+            
             await RequestWithDcMigration(request, token).ConfigureAwait(false);
 
             OnUserAuthenticated((TLUser)request.Response.User);
@@ -271,7 +269,7 @@ namespace TLSharp.Core
             return (T)result;
         }
 
-        internal async Task<T> SendAuthenticatedRequestAsync<T>(TLMethod methodToExecute, CancellationToken token = default(CancellationToken))
+        internal async Task<T> SendAuthenticatedRequestAsync<T> (TLMethod methodToExecute, CancellationToken token = default(CancellationToken))
         {
             if (!IsUserAuthorized())
                 throw new InvalidOperationException("Authorize user first!");
@@ -298,7 +296,7 @@ namespace TLSharp.Core
 
         public async Task<TLImportedContacts> ImportContactsAsync(IReadOnlyList<TLInputPhoneContact> contacts, CancellationToken token = default(CancellationToken))
         {
-            var req = new TLRequestImportContacts { Contacts = new TLVector<TLInputPhoneContact>(contacts) };
+            var req = new TLRequestImportContacts { Contacts = new TLVector<TLInputPhoneContact>(contacts)};
 
             return await SendAuthenticatedRequestAsync<TLImportedContacts>(req, token)
                 .ConfigureAwait(false);
@@ -306,7 +304,7 @@ namespace TLSharp.Core
 
         public async Task<bool> DeleteContactsAsync(IReadOnlyList<TLAbsInputUser> users, CancellationToken token = default(CancellationToken))
         {
-            var req = new TLRequestDeleteContacts { Id = new TLVector<TLAbsInputUser>(users) };
+            var req = new TLRequestDeleteContacts {Id = new TLVector<TLAbsInputUser>(users)};
 
             return await SendAuthenticatedRequestAsync<bool>(req, token)
                 .ConfigureAwait(false);
@@ -314,7 +312,7 @@ namespace TLSharp.Core
 
         public async Task<TLLink> DeleteContactAsync(TLAbsInputUser user, CancellationToken token = default(CancellationToken))
         {
-            var req = new TLRequestDeleteContact { Id = user };
+            var req = new TLRequestDeleteContact {Id = user};
 
             return await SendAuthenticatedRequestAsync<TLLink>(req, token)
                 .ConfigureAwait(false);
@@ -357,10 +355,10 @@ namespace TLSharp.Core
                 offsetPeer = new TLInputPeerSelf();
 
             var req = new TLRequestGetDialogs()
-            {
-                OffsetDate = offsetDate,
-                OffsetId = offsetId,
-                OffsetPeer = offsetPeer,
+            { 
+                OffsetDate = offsetDate, 
+                OffsetId = offsetId, 
+                OffsetPeer = offsetPeer, 
                 Limit = limit
             };
             return await SendAuthenticatedRequestAsync<TLAbsDialogs>(req, token)
@@ -370,13 +368,13 @@ namespace TLSharp.Core
         public async Task<TLAbsUpdates> SendUploadedPhoto(TLAbsInputPeer peer, TLAbsInputFile file, string caption, CancellationToken token = default(CancellationToken))
         {
             return await SendAuthenticatedRequestAsync<TLAbsUpdates>(new TLRequestSendMedia()
-            {
-                RandomId = Helpers.GenerateRandomLong(),
-                Background = false,
-                ClearDraft = false,
-                Media = new TLInputMediaUploadedPhoto() { File = file, Caption = caption },
-                Peer = peer
-            }, token)
+                {
+                    RandomId = Helpers.GenerateRandomLong(),
+                    Background = false,
+                    ClearDraft = false,
+                    Media = new TLInputMediaUploadedPhoto() { File = file, Caption = caption },
+                    Peer = peer
+                }, token)
                 .ConfigureAwait(false);
         }
 
@@ -384,30 +382,30 @@ namespace TLSharp.Core
             TLAbsInputPeer peer, TLAbsInputFile file, string caption, string mimeType, TLVector<TLAbsDocumentAttribute> attributes, CancellationToken token = default(CancellationToken))
         {
             return await SendAuthenticatedRequestAsync<TLAbsUpdates>(new TLRequestSendMedia()
-            {
-                RandomId = Helpers.GenerateRandomLong(),
-                Background = false,
-                ClearDraft = false,
-                Media = new TLInputMediaUploadedDocument()
                 {
-                    File = file,
-                    Caption = caption,
-                    MimeType = mimeType,
-                    Attributes = attributes
-                },
-                Peer = peer
-            }, token)
+                    RandomId = Helpers.GenerateRandomLong(),
+                    Background = false,
+                    ClearDraft = false,
+                    Media = new TLInputMediaUploadedDocument()
+                    {
+                        File = file,
+                        Caption = caption,
+                        MimeType = mimeType,
+                        Attributes = attributes
+                    },
+                    Peer = peer
+                }, token)
                 .ConfigureAwait(false);
         }
 
         public async Task<TLFile> GetFile(TLAbsInputFileLocation location, int filePartSize, int offset = 0, CancellationToken token = default(CancellationToken))
         {
             TLFile result = await SendAuthenticatedRequestAsync<TLFile>(new TLRequestGetFile
-            {
-                Location = location,
-                Limit = filePartSize,
-                Offset = offset
-            }, token)
+                {
+                    Location = location,
+                    Limit = filePartSize,
+                    Offset = offset
+                }, token)
                 .ConfigureAwait(false);
             return result;
         }
