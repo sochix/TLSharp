@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -24,7 +22,6 @@ using TLAuthorization = TeleSharp.TL.Auth.TLAuthorization;
 
 namespace TLSharp.Core
 {
-
     public class TelegramClient : IDisposable
     {
         private MtProtoSender sender;
@@ -34,24 +31,14 @@ namespace TLSharp.Core
         private Session session;
         private List<TLDcOption> dcOptions;
         private TcpClientConnectionHandler handler;
-        private DataCenterIPVersion dcIpVersion;
 
         public Session Session
         {
             get { return session; }
         }
 
-        /// <summary>
-        /// Creates a new TelegramClient
-        /// </summary>
-        /// <param name="apiId">The API ID provided by Telegram. Get one at https://my.telegram.org </param>
-        /// <param name="apiHash">The API Hash provided by Telegram. Get one at https://my.telegram.org </param>
-        /// <param name="store">An ISessionStore object that will handle the session</param>
-        /// <param name="sessionUserId">The name of the session that tracks login info about this TelegramClient connection</param>
-        /// <param name="handler">A delegate to invoke when a connection is needed and that will return a TcpClient that will be used to connect</param>
-        /// <param name="dcIpVersion">Indicates the preferred IpAddress version to use to connect to a Telegram server</param>
         public TelegramClient(int apiId, string apiHash,
-            ISessionStore store = null, string sessionUserId = "session", TcpClientConnectionHandler handler = null, DataCenterIPVersion dcIpVersion = DataCenterIPVersion.Default)
+            ISessionStore store = null, string sessionUserId = "session", TcpClientConnectionHandler handler = null)
         {
             if (apiId == default(int))
                 throw new MissingApiConfigurationException("API_ID");
@@ -64,10 +51,9 @@ namespace TLSharp.Core
             this.apiHash = apiHash;
             this.apiId = apiId;
             this.handler = handler;
-            this.dcIpVersion = dcIpVersion;
 
             session = Session.TryLoadOrCreateNew(store, sessionUserId);
-            transport = new TcpTransport(session.DataCenter.Address, session.DataCenter.Port, this.handler);
+            transport = new TcpTransport (session.DataCenter.Address, session.DataCenter.Port, this.handler);
         }
 
         public async Task ConnectAsync(bool reconnect = false, CancellationToken token = default(CancellationToken))
@@ -115,22 +101,8 @@ namespace TLSharp.Core
                 exported = await SendRequestAsync<TLExportedAuthorization>(exportAuthorization, token).ConfigureAwait(false);
             }
 
-            var dcs = dcOptions.Where(d => d.Id == dcId
-                                            && (
-                                                (dcIpVersion == DataCenterIPVersion.Default) // any
-                                                || (d.Ipv6 && dcIpVersion == DataCenterIPVersion.OnlyIPv6) // selects only ipv6 addresses 	
-                                                || (!d.Ipv6 && dcIpVersion == DataCenterIPVersion.OnlyIPv4) // selects only ipv4 addresses
-                                                || dcIpVersion == DataCenterIPVersion.PreferIPv4 // we can take both types of address
-                                                || dcIpVersion == DataCenterIPVersion.PreferIPv6 // we can take both types of address
-                                                )
-                                            ).OrderBy(d => d.Ipv6);
-
-            if (dcs.Count() == 0)
-                throw new Exception($"Telegram server didn't provide us with any IPAddress that matches your preferences. If you chose OnlyIPvX, try switch to PreferIPvX instead.");
-
-            var dc = dcIpVersion == DataCenterIPVersion.PreferIPv4 ? dcs.First() : dcs.Last(); // ipv4 addresses are at the beginning of the list because it was ordered
-
-            var dataCenter = new DataCenter(dcId, dc.IpAddress, dc.Port);
+            var dc = dcOptions.First(d => d.Id == dcId);
+            var dataCenter = new DataCenter (dcId, dc.IpAddress, dc.Port);
 
             transport = new TcpTransport(dc.IpAddress, dc.Port, handler);
             session.DataCenter = dataCenter;
@@ -151,7 +123,7 @@ namespace TLSharp.Core
                 throw new InvalidOperationException("Not connected!");
 
             var completed = false;
-            while (!completed)
+            while(!completed)
             {
                 try
                 {
@@ -159,7 +131,7 @@ namespace TLSharp.Core
                     await sender.Receive(request, token).ConfigureAwait(false);
                     completed = true;
                 }
-                catch (DataCenterMigrationException e)
+                catch(DataCenterMigrationException e)
                 {
                     if (session.DataCenter.DataCenterId.HasValue &&
                         session.DataCenter.DataCenterId.Value == e.DC)
@@ -213,7 +185,7 @@ namespace TLSharp.Core
 
             if (String.IsNullOrWhiteSpace(code))
                 throw new ArgumentNullException(nameof(code));
-
+            
             var request = new TLRequestSignIn() { PhoneNumber = phoneNumber, PhoneCodeHash = phoneCodeHash, PhoneCode = code };
 
             await RequestWithDcMigration(request, token).ConfigureAwait(false);
@@ -222,7 +194,7 @@ namespace TLSharp.Core
 
             return ((TLUser)request.Response.User);
         }
-
+        
         public async Task<TLPassword> GetPasswordSetting(CancellationToken token = default(CancellationToken))
         {
             var request = new TLRequestGetPassword();
@@ -254,7 +226,7 @@ namespace TLSharp.Core
         public async Task<TLUser> SignUpAsync(string phoneNumber, string phoneCodeHash, string code, string firstName, string lastName, CancellationToken token = default(CancellationToken))
         {
             var request = new TLRequestSignUp() { PhoneNumber = phoneNumber, PhoneCode = code, PhoneCodeHash = phoneCodeHash, FirstName = firstName, LastName = lastName };
-
+            
             await RequestWithDcMigration(request, token).ConfigureAwait(false);
 
             OnUserAuthenticated((TLUser)request.Response.User);
@@ -271,7 +243,7 @@ namespace TLSharp.Core
             return (T)result;
         }
 
-        internal async Task<T> SendAuthenticatedRequestAsync<T>(TLMethod methodToExecute, CancellationToken token = default(CancellationToken))
+        internal async Task<T> SendAuthenticatedRequestAsync<T> (TLMethod methodToExecute, CancellationToken token = default(CancellationToken))
         {
             if (!IsUserAuthorized())
                 throw new InvalidOperationException("Authorize user first!");
@@ -298,7 +270,7 @@ namespace TLSharp.Core
 
         public async Task<TLImportedContacts> ImportContactsAsync(IReadOnlyList<TLInputPhoneContact> contacts, CancellationToken token = default(CancellationToken))
         {
-            var req = new TLRequestImportContacts { Contacts = new TLVector<TLInputPhoneContact>(contacts) };
+            var req = new TLRequestImportContacts { Contacts = new TLVector<TLInputPhoneContact>(contacts)};
 
             return await SendAuthenticatedRequestAsync<TLImportedContacts>(req, token)
                 .ConfigureAwait(false);
@@ -306,7 +278,7 @@ namespace TLSharp.Core
 
         public async Task<bool> DeleteContactsAsync(IReadOnlyList<TLAbsInputUser> users, CancellationToken token = default(CancellationToken))
         {
-            var req = new TLRequestDeleteContacts { Id = new TLVector<TLAbsInputUser>(users) };
+            var req = new TLRequestDeleteContacts {Id = new TLVector<TLAbsInputUser>(users)};
 
             return await SendAuthenticatedRequestAsync<bool>(req, token)
                 .ConfigureAwait(false);
@@ -314,7 +286,7 @@ namespace TLSharp.Core
 
         public async Task<TLLink> DeleteContactAsync(TLAbsInputUser user, CancellationToken token = default(CancellationToken))
         {
-            var req = new TLRequestDeleteContact { Id = user };
+            var req = new TLRequestDeleteContact {Id = user};
 
             return await SendAuthenticatedRequestAsync<TLLink>(req, token)
                 .ConfigureAwait(false);
@@ -357,10 +329,10 @@ namespace TLSharp.Core
                 offsetPeer = new TLInputPeerSelf();
 
             var req = new TLRequestGetDialogs()
-            {
-                OffsetDate = offsetDate,
-                OffsetId = offsetId,
-                OffsetPeer = offsetPeer,
+            { 
+                OffsetDate = offsetDate, 
+                OffsetId = offsetId, 
+                OffsetPeer = offsetPeer, 
                 Limit = limit
             };
             return await SendAuthenticatedRequestAsync<TLAbsDialogs>(req, token)
@@ -370,13 +342,13 @@ namespace TLSharp.Core
         public async Task<TLAbsUpdates> SendUploadedPhoto(TLAbsInputPeer peer, TLAbsInputFile file, string caption, CancellationToken token = default(CancellationToken))
         {
             return await SendAuthenticatedRequestAsync<TLAbsUpdates>(new TLRequestSendMedia()
-            {
-                RandomId = Helpers.GenerateRandomLong(),
-                Background = false,
-                ClearDraft = false,
-                Media = new TLInputMediaUploadedPhoto() { File = file, Caption = caption },
-                Peer = peer
-            }, token)
+                {
+                    RandomId = Helpers.GenerateRandomLong(),
+                    Background = false,
+                    ClearDraft = false,
+                    Media = new TLInputMediaUploadedPhoto() { File = file, Caption = caption },
+                    Peer = peer
+                }, token)
                 .ConfigureAwait(false);
         }
 
@@ -384,30 +356,30 @@ namespace TLSharp.Core
             TLAbsInputPeer peer, TLAbsInputFile file, string caption, string mimeType, TLVector<TLAbsDocumentAttribute> attributes, CancellationToken token = default(CancellationToken))
         {
             return await SendAuthenticatedRequestAsync<TLAbsUpdates>(new TLRequestSendMedia()
-            {
-                RandomId = Helpers.GenerateRandomLong(),
-                Background = false,
-                ClearDraft = false,
-                Media = new TLInputMediaUploadedDocument()
                 {
-                    File = file,
-                    Caption = caption,
-                    MimeType = mimeType,
-                    Attributes = attributes
-                },
-                Peer = peer
-            }, token)
+                    RandomId = Helpers.GenerateRandomLong(),
+                    Background = false,
+                    ClearDraft = false,
+                    Media = new TLInputMediaUploadedDocument()
+                    {
+                        File = file,
+                        Caption = caption,
+                        MimeType = mimeType,
+                        Attributes = attributes
+                    },
+                    Peer = peer
+                }, token)
                 .ConfigureAwait(false);
         }
 
         public async Task<TLFile> GetFile(TLAbsInputFileLocation location, int filePartSize, int offset = 0, CancellationToken token = default(CancellationToken))
         {
             TLFile result = await SendAuthenticatedRequestAsync<TLFile>(new TLRequestGetFile
-            {
-                Location = location,
-                Limit = filePartSize,
-                Offset = offset
-            }, token)
+                {
+                    Location = location,
+                    Limit = filePartSize,
+                    Offset = offset
+                }, token)
                 .ConfigureAwait(false);
             return result;
         }
@@ -432,69 +404,6 @@ namespace TLSharp.Core
             };
             return await SendAuthenticatedRequestAsync<TLAbsMessages>(req, token)
                 .ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Authenticates a Bot 
-        /// </summary>
-        /// <param name="botAuthToken">The token of the bot to authenticate</param>
-        /// <param name="token"></param>
-        /// <returns>The TLUser descriptor</returns>
-        public async Task<TLUser> MakeAuthBotAsync(string botAuthToken, CancellationToken token = default(CancellationToken))
-        {
-            if (String.IsNullOrWhiteSpace(botAuthToken))
-            {
-                throw new ArgumentNullException(nameof(botAuthToken));
-            }
-
-            var request = new TLRequestImportBotAuthorization() { BotAuthToken = botAuthToken, ApiId = apiId, ApiHash = apiHash };
-
-            await RequestWithDcMigration(request, token).ConfigureAwait(false);
-
-            OnUserAuthenticated(((TLUser)request.Response.User));
-
-            return ((TLUser)request.Response.User);
-        }
-
-        /// <summary>
-        /// Gets the full information of a specified chat
-        /// </summary>
-        /// <param name="chatId">The ID of the chat we want the info of</param>
-        /// <param name="token"></param>
-        /// <returns></returns>
-        public async Task<TeleSharp.TL.Messages.TLChatFull> GetFullChat(int chatId, CancellationToken token = default(CancellationToken))
-        {
-            var req = new TLRequestGetFullChat() { ChatId = chatId };
-            var fchat = await SendRequestAsync<TeleSharp.TL.Messages.TLChatFull>(req).ConfigureAwait(false);
-
-            return fchat;
-        }
-
-        /// <summary>
-        /// Gets the list of chats opened by the authenticated user. 
-        /// Throws an exception if the authenticated user is a bot.
-        /// </summary> 
-        /// <param name="token"></param>
-        /// <returns>The list of chats opened by the authenticated user</returns>
-        public async Task<TLChats> GetAllChats(CancellationToken token = default(CancellationToken))
-        {
-            return await GetAllChats(null, token);
-        }
-
-        /// <summary>
-        /// Gets the list of chats opened by the authenticated user except the passed ones.
-        /// Throws an exception if the authenticated user is a bot.
-        /// </summary> 
-        /// <param name="exceptIds">The IDs of the chats that we don't want to be returned</param>
-        /// <param name="token"></param>
-        /// <returns>The list of chats opened by the authenticated user</returns>
-        public async Task<TLChats> GetAllChats(int[] exceptIds = null, CancellationToken token = default(CancellationToken))
-        {
-            var ichats = new TeleSharp.TL.TLVector<int>(); // we can't pass a null argument to the TLRequestGetChats
-            if (exceptIds != null)
-                Array.ForEach(exceptIds, x => ichats.Add(x));
-            var chatInfo = await SendRequestAsync<TLChats>(new TLRequestGetChats() { Id = ichats }).ConfigureAwait(false);
-            return chatInfo;
         }
 
         /// <summary>
