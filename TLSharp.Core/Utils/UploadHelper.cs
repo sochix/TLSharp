@@ -15,7 +15,7 @@ namespace TLSharp.Core.Utils
     {
         private static string GetFileHash(byte[] data)
         {
-            string md5_checksum;
+            string md5CheckSum;
             using (var md5 = MD5.Create())
             {
                 var hash = md5.ComputeHash(data);
@@ -24,10 +24,10 @@ namespace TLSharp.Core.Utils
                 foreach (byte t in hash)
                     hashResult.Append(t.ToString("x2"));
 
-                md5_checksum = hashResult.ToString();
+                md5CheckSum = hashResult.ToString();
             }
 
-            return md5_checksum;
+            return md5CheckSum;
         }
 
         public static async Task<TLAbsInputFile> UploadFile(this TelegramClient client, string name, StreamReader reader, CancellationToken token = default(CancellationToken))
