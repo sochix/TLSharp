@@ -10,11 +10,11 @@ namespace TLSharp.Core.Network
         private int timeOffset;
         private long lastMessageId;
         private Random random;
-        private TcpTransport _transport;
+        private TcpTransport transport;
 
         public MtProtoPlainSender(TcpTransport transport)
         {
-            _transport = transport;
+            this.transport = transport;
             random = new Random();
         }
 
@@ -33,7 +33,7 @@ namespace TLSharp.Core.Network
 
                     byte[] packet = memoryStream.ToArray();
 
-                    await _transport.Send(packet, token).ConfigureAwait(false);
+                    await transport.Send(packet, token).ConfigureAwait(false);
                 }
             }
         }
@@ -42,7 +42,7 @@ namespace TLSharp.Core.Network
         {
             token.ThrowIfCancellationRequested();
 
-            var result = await _transport.Receive(token).ConfigureAwait(false);
+            var result = await transport.Receive(token).ConfigureAwait(false);
 
             using (var memoryStream = new MemoryStream(result.Body))
             {

@@ -141,10 +141,10 @@ namespace TLSharp.Tests
             }
             catch (CloudPasswordNeededException ex)
             {
-                var password = await client.GetPasswordSetting();
-                var password_str = PasswordToAuthenticate;
+                var passwordSetting = await client.GetPasswordSetting();
+                var password = PasswordToAuthenticate;
 
-                user = await client.MakeAuthWithPasswordAsync(password,password_str);
+                user = await client.MakeAuthWithPasswordAsync(passwordSetting, password);
             }
             catch (InvalidPhoneCodeException ex)
             {

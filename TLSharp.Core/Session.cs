@@ -88,12 +88,12 @@ namespace TLSharp.Core
         public TLUser TLUser { get; set; }
         private Random random;
 
-        private ISessionStore _store;
+        private ISessionStore store;
 
         public Session(ISessionStore store)
         {
             random = new Random();
-            _store = store;
+            this.store = store;
         }
 
         public byte[] ToBytes()
@@ -169,7 +169,7 @@ namespace TLSharp.Core
 
         public void Save()
         {
-            _store.Save(this);
+            store.Save(this);
         }
 
         public static Session TryLoadOrCreateNew(ISessionStore store, string sessionUserId)
