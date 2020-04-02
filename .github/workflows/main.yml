@@ -43,7 +43,7 @@ jobs:
       run: Invoke-WebRequest https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -OutFile Nuget.exe
       
     - name: Install Dependencies
-      run: Nuget.exe restore
+      run: ./Nuget.exe restore
     
     - name: setup-msbuild
       uses: microsoft/setup-msbuild@v1
