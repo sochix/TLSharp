@@ -22,10 +22,10 @@ jobs:
     - uses: actions/checkout@v2
       
     - name: Download latest NuGet
-      uses: olegtarasov/download-nuget@v1
+      run:  curl -o nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
 
     - name: Install Dependencies
-      run: mono $NUGET_EXE restore
+      run: mono nuget.exe restore
       
     - name: Build Project
       run: MSBuild TLSharp.Core/TLSharp.Core.csproj
