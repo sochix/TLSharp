@@ -1,0 +1,50 @@
+name: CI
+on: [push, pull_request]
+
+env:
+  NUGET_URL: https://dist.nuget.org/win-x86-commandline/v5.4.0/nuget.exe
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      
+    - name: Download latest NuGet 
+      run: wget $NUGET_URL
+
+    - name: Install Dependencies
+      run: mono nuget.exe restore
+    
+    - name: Build Project
+      run: xbuild TLSharp.Core/TLSharp.Core.csproj
+      
+  macos:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+      
+    - name: Download latest NuGet
+      run:  curl -o nuget.exe $NUGET_URL
+
+    - name: Install Dependencies
+      run: mono nuget.exe restore
+      
+    - name: Build Project
+      run: MSBuild TLSharp.Core/TLSharp.Core.csproj
+
+  windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Download Nuget.exe
+      run: Invoke-WebRequest -OutFile Nuget.exe $Env:NUGET_URL
+      
+    - name: Install Dependencies
+      run: ./Nuget.exe restore
+    
+    - name: setup-msbuild
+      uses: microsoft/setup-msbuild@v1
+      
+    - name: Build Project
+      run: MSBuild TLSharp.sln
