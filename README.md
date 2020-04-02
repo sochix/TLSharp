@@ -13,7 +13,6 @@ It's a perfect fit for any developer who would like to send data directly to Tel
 # Table of contents
 
 - [How do I add this to my project?](#how-do-i-add-this-to-my-project)
-- [Dependencies](#dependencies)
 - [Starter Guide](#starter-guide)
   - [Quick configuration](#quick-configuration)
   - [First requests](#first-requests)
@@ -38,13 +37,6 @@ or build from source
 1. Clone TgSharp from GitHub
 1. Compile source with VS2015 or MonoDevelop
 1. Add reference to ```TgSharp.Core.dll``` to your awesome project.
-
-
-# Dependencies
-
-TgSharp has a few dependencies, but most of the functionality is implemented from scratch.
-All dependencies are listed in [packages.config file](https://github.com/nblockchain/TgSharp/blob/master/src/TgSharp.Core/packages.config).
-
 
 # Starter Guide
 

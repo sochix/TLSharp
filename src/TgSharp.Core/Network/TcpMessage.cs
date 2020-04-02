@@ -1,6 +1,7 @@
 using System;
 using System.IO;
-using Ionic.Crc;
+using System.Linq;
+using TgSharp.Core.MTProto.Crypto;
 
 namespace TgSharp.Core.Network
 {
@@ -35,9 +36,9 @@ namespace TgSharp.Core.Network
                     binaryWriter.Write(Body.Length + 12);
                     binaryWriter.Write(SequneceNumber);
                     binaryWriter.Write(Body);
-                    var crc32 = new CRC32();
-                    crc32.SlurpBlock(memoryStream.GetBuffer(), 0, 8 + Body.Length);
-                    binaryWriter.Write(crc32.Crc32Result);
+                    var crc32 = new Crc32();
+                    var checksum = crc32.ComputeHash(memoryStream.GetBuffer(), 0, 8 + Body.Length).Reverse().ToArray();
+                    binaryWriter.Write(checksum);
 
                     var transportPacket = memoryStream.ToArray();
 
@@ -67,13 +68,12 @@ namespace TgSharp.Core.Network
 
                     var seq = binaryReader.ReadInt32();
                     byte[] packet = binaryReader.ReadBytes(packetLength - 12);
-                    var checksum = (int)binaryReader.ReadInt32();
+                    var checksum = binaryReader.ReadBytes(4);
 
-                    var crc32 = new CRC32();
-                    crc32.SlurpBlock(body, 0, packetLength - 4);
-                    var validChecksum = crc32.Crc32Result;
+                    var crc32 = new Crc32();
+                    var computedChecksum = crc32.ComputeHash(body, 0, packetLength - 4).Reverse();
 
-                    if (checksum != validChecksum)
+                    if (!checksum.SequenceEqual(computedChecksum))
                     {
                         throw new InvalidOperationException("invalid checksum! skip");
                     }

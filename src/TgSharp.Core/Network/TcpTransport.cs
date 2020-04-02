@@ -1,8 +1,10 @@
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
+using TgSharp.Core.MTProto.Crypto;
 
 namespace TgSharp.Core.Network
 {
@@ -73,18 +75,16 @@ namespace TgSharp.Core.Network
             var crcBytes = new byte[4];
             if (await stream.ReadAsync(crcBytes, 0, 4, token).ConfigureAwait(false) != 4)
                 throw new InvalidOperationException("Couldn't read the crc");
-            int checksum = BitConverter.ToInt32(crcBytes, 0);
 
             byte[] rv = new byte[packetLengthBytes.Length + seqBytes.Length + body.Length];
 
             Buffer.BlockCopy(packetLengthBytes, 0, rv, 0, packetLengthBytes.Length);
             Buffer.BlockCopy(seqBytes, 0, rv, packetLengthBytes.Length, seqBytes.Length);
             Buffer.BlockCopy(body, 0, rv, packetLengthBytes.Length + seqBytes.Length, body.Length);
-            var crc32 = new Ionic.Crc.CRC32();
-            crc32.SlurpBlock(rv, 0, rv.Length);
-            var validChecksum = crc32.Crc32Result;
+            var crc32 = new Crc32();
+            var computedChecksum = crc32.ComputeHash(rv).Reverse();
 
-            if (checksum != validChecksum)
+            if (!crcBytes.SequenceEqual(computedChecksum))
             {
                 throw new InvalidOperationException("invalid checksum! skip");
             }
