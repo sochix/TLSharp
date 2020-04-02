@@ -16,14 +16,12 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2
-    - name: wget
-      uses: wei/wget@v1
-      with:
-        args: -O nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
-    
+    - name: Download latest NuGet (cross-platform)
+      uses: olegtarasov/download-nuget@v1
+
     - name: Install Dependencies
-      run: mono nuget.exe restore
+      run: |
+         mono $NUGET_EXE restore
     
     # Runs a set of commands using the runners shell
     - name: Build Project
@@ -40,11 +38,12 @@ jobs:
       uses: olegtarasov/download-nuget@v1
 
     - name: Install Dependencies
-      run: mono $NUGET_EXE restore
+      run: |
+         mono $NUGET_EXE restore
     
     # Runs a set of commands using the runners shell
     - name: Build Project
-      run: xbuild TLSharp.Core/TLSharp.Core.csproj
+      run: MSBuild TLSharp.Core/TLSharp.Core.csproj
   windows:
     # The type of runner that the job will run on
     runs-on: windows-latest
@@ -58,7 +57,8 @@ jobs:
       uses: warrenbuckley/Setup-Nuget@v1
       
     - name: Install Dependencies
-      run: Nuget.exe restore
+      run: |
+        Nuget.exe restore
     
     - name: setup-msbuild
       uses: microsoft/setup-msbuild@v1
