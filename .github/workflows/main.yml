@@ -35,8 +35,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
-    - name: Setup Nuget.exe
-      uses: warrenbuckley/Setup-Nuget@v1
+    - name: Download Nuget.exe
+      run: Invoke-WebRequest https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -OutFile Nuget.exe
       
     - name: Install Dependencies
       run: Nuget.exe restore
