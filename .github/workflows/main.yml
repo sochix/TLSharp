@@ -23,9 +23,7 @@ jobs:
         args: -O nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
     
     - name: Install Dependencies
-      run: |
-        mono nuget.exe install
-        mono nuget.exe restore
+      run: mono nuget.exe restore
     
     # Runs a set of commands using the runners shell
     - name: Build Project
@@ -42,9 +40,7 @@ jobs:
       uses: olegtarasov/download-nuget@v1
 
     - name: Install Dependencies
-      run: |
-         mono $NUGET_EXE install
-         mono $NUGET_EXE restore
+      run: mono $NUGET_EXE restore
     
     # Runs a set of commands using the runners shell
     - name: Build Project
@@ -62,9 +58,7 @@ jobs:
       uses: warrenbuckley/Setup-Nuget@v1
       
     - name: Install Dependencies
-      run: |
-        Nuget.exe install
-        Nuget.exe restore
+      run: Nuget.exe restore
     
     - name: setup-msbuild
       uses: microsoft/setup-msbuild@v1
