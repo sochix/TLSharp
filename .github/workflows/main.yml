@@ -44,7 +44,7 @@ jobs:
     
     # Runs a set of commands using the runners shell
     - name: Build Project
-      run: MSBuild TLSharp.Core/TLSharp.Core.csproj
+      run: MSBuild TLSharp.sln
   windows:
     # The type of runner that the job will run on
     runs-on: windows-latest
