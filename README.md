@@ -1,7 +1,7 @@
 TLSharp
 -------------------------------
 
-![Build status](https://github.com/sochix/TLSharp/workflows/.github/workflows/CI.yml/badge.svg)
+![Build status](https://github.com/sochix/TLSharp/workflows/CI/badge.svg)
 [![NuGet version](https://badge.fury.io/nu/TLSharp.svg)](https://badge.fury.io/nu/TLSharp)
 
 _Unofficial_ Telegram (http://telegram.org) client library implemented in C#. Latest TL scheme supported, thanks to Afshin Arani
