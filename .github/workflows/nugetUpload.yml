@@ -1,0 +1,29 @@
+name: nugetUpload
+on: [push, pull_request]
+
+env:
+  NUGET_URL: https://dist.nuget.org/win-x86-commandline/v5.4.0/nuget.exe
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download Nuget.exe
+      run: Invoke-WebRequest -OutFile Nuget.exe $Env:NUGET_URL
+
+    - name: Install Dependencies
+      run: ./Nuget.exe restore src/TgSharp.sln
+
+    - name: setup-msbuild
+      uses: microsoft/setup-msbuild@v1
+
+    - name: Build & Upload Package
+      run: |
+        $date = get-date -format "yyyyMMdd-HHmm"
+        $hash = & git rev-parse --short HEAD
+
+        ./Nuget.exe pack src/TgSharp.Core/TgSharp.Core.csproj -Version "0.0.1-date.$date.git.$hash" -Build -Properties Configuration=Release
+        If ($Env:GITHUB_REF -eq 'refs/heads/master' -AND '${{ secrets.NUGET_API_KEY }}' -ne '') {
+            ./Nuget.exe push "TgSharp.0.0.1-date.$date.git.$hash.nupkg" ${{secrets.NUGET_API_KEY}} -Source https://api.nuget.org/v3/index.json
+        }
