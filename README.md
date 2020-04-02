@@ -1,12 +1,10 @@
-TLSharp
+TgSharp
 -------------------------------
 
-![Build status](https://github.com/sochix/TLSharp/workflows/CI/badge.svg)
-[![NuGet version](https://badge.fury.io/nu/TLSharp.svg)](https://badge.fury.io/nu/TLSharp)
+![Build status](https://github.com/nblockchain/TgSharp/workflows/CI/badge.svg)
+[![NuGet version](https://badge.fury.io/nu/TgSharp.svg)](https://badge.fury.io/nu/TgSharp)
 
-_Unofficial_ Telegram (http://telegram.org) client library implemented in C#. Latest TL scheme supported, thanks to Afshin Arani
-
-🚩 Check out [TeleJS](https://github.com/RD17/TeleJS) - a pure JavaScript implementation of Telegram MTP protocol
+_Unofficial_ Telegram (http://telegram.org) client library implemented in C#.
 
 It's a perfect fit for any developer who would like to send data directly to Telegram users or write own custom Telegram client.
 
@@ -32,19 +30,21 @@ It's a perfect fit for any developer who would like to send data directly to Tel
 Install via NuGet
 
 ```
-	> Install-Package TLSharp
+	> Install-Package TgSharp
 ```
 
 or build from source
 
-1. Clone TLSharp from GitHub
+1. Clone TgSharp from GitHub
 1. Compile source with VS2015 or MonoDevelop
 1. Add reference to ```TLSharp.Core.dll``` to your awesome project.
 
+
 # Dependencies
 
-TLSharp has a few dependenices, most of functionality implemented from scratch.
-All dependencies listed in [package.conf file](https://github.com/sochix/TLSharp/blob/master/TLSharp.Core/packages.config).
+TgSharp has a few dependenices, most of functionality implemented from scratch.
+All dependencies listed in [package.conf file](https://github.com/nblockchain/TgSharp/blob/master/TLSharp.Core/packages.config).
+
 
 # Starter Guide
 
@@ -54,7 +54,9 @@ Telegram API isn't that easy to start. You need to do some configuration first.
 1. Create a [developer account](https://my.telegram.org/) in Telegram. 
 1. Goto [API development tools](https://my.telegram.org/apps) and copy **API_ID** and **API_HASH** from your account. You'll need it later.
 
+
 ## First requests
+
 To start work, create an instance of TelegramClient and establish connection
 
 ```csharp 
@@ -74,7 +76,7 @@ For authentication you need to run following code
 
 Full code you can see at [AuthUser test](https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L70)
 
-When user is authenticated, TLSharp creates special file called _session.dat_. In this file TLSharp store all information needed for user session. So you need to authenticate user every time the _session.dat_ file is corrupted or removed.
+When user is authenticated, TgSharp creates special file called _session.dat_. In this file TgSharp stores all information needed for user session. So you need to authenticate user every time the _session.dat_ file is corrupted or removed.
 
 You can call any method on authenticated user. For example, let's send message to a friend by his phone number:
 
@@ -109,14 +111,16 @@ To send message to channel you could use the following code:
   await client.SendMessageAsync(new TLInputPeerChannel() { ChannelId = chat.Id, AccessHash = chat.AccessHash.Value }, "OUR_MESSAGE");
 ```
 Full code you can see at [SendMessageToChannel test](https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L107)
+
+
 ## Working with files
-Telegram separate files to two categories -> big file and small file. File is Big if its size more than 10 Mb. TLSharp tries to hide this complexity from you, thats why we provide one method to upload files **UploadFile**.
+Telegram separate files to two categories -> big file and small file. File is Big if its size more than 10 Mb. TgSharp tries to hide this complexity from you, thats why we provide one method to upload files **UploadFile**.
 
 ```csharp
 	var fileResult = await client.UploadFile("cat.jpg", new StreamReader("data/cat.jpg"));
 ```
 
-TLSharp provides two wrappers for sending photo and document
+TgSharp provides two wrappers for sending photo and document
 
 ```csharp
 	await client.SendUploadedPhoto(new TLInputPeerUser() { UserId = user.Id }, fileResult, "kitty");
@@ -143,9 +147,10 @@ To download file you should call **GetFile** method
 
 Full code you can see at [DownloadFileFromContactTest](https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L167)
 
+
 # Available Methods
 
-For your convenience TLSharp have wrappers for several Telegram API methods. You could add your own, see details below.
+For your convenience TgSharp have wrappers for several Telegram API methods. You could add your own, see details below.
 
 1. IsPhoneRegisteredAsync
 1. SendCodeRequestAsync
@@ -161,6 +166,7 @@ For your convenience TLSharp have wrappers for several Telegram API methods. You
 1. UploadFile
 1. SendPingAsync
 1. GetHistoryAsync
+
 
 **What if you can't find needed method at the list?**
 
@@ -179,10 +185,12 @@ Don't panic. You can call any method with help of `SendRequestAsync` function. F
   return await client.SendRequestAsync<Boolean>(req);
 ``` 
 
+
 **Where you can find a list of requests and its params?**
 
 The only way is [Telegram API docs](https://core.telegram.org/methods). Yes, it's outdated. But there is no other source.
 Latest scheme in JSON format you can find [here](https://gist.github.com/aarani/b22b7cda024973dff68e1672794b0298)
+
 
 ## What things can I Implement (Project Roadmap)?
 
@@ -195,52 +203,61 @@ Latest scheme in JSON format you can find [here](https://gist.github.com/aarani/
 * [DONE] Add wrappers for media uploading and downloading
 * Store user session as JSON
 
+
 # FAQ
 
 #### What API layer is supported?
 The latest one - 66. Thanks to Afshin Arani for his TLGenerator
 
+
 #### I get a xxxMigrationException or a MIGRATE_X error!
 
-TLSharp library should automatically handle these errors. If you see such errors, please open a new Github issue with the details (include a stacktrace, etc.).
+TgSharp library should automatically handle these errors. If you see such errors, please open a new Github issue with the details (include a stacktrace, etc.).
 
 #### I get an exception: System.IO.EndOfStreamException: Unable to read beyond the end of the stream. All test methos except that AuthenticationWorks and TestConnection return same error. I did every thing including setting api id and hash, and setting server address.-
 
 You should create a Telegram session. See [configuration guide](#sending-messages-set-up)
 
+
 #### Why do I get a FloodException/FLOOD_WAIT error?
-It's likely [Telegram restrictions](https://core.telegram.org/api/errors#420-flood), or a bug in TLSharp (if you feel it's the latter, please open a Github issue). You can know the time to wait by accessing the FloodException::TimeToWait property.
+It's likely [Telegram restrictions](https://core.telegram.org/api/errors#420-flood), or a bug in TgSharp (if you feel it's the latter, please open a Github issue). You can know the time to wait by accessing the FloodException::TimeToWait property.
 
-#### Why does TLSharp lacks feature XXXX?
 
-TLSharp only covers basic functionality of the Telegram protocol, you can be a contributor or a sponsor to speed-up developemnt of any more new features.
+#### Why does TgSharp lacks feature XXXX?
+
+TgSharp only covers basic functionality of the Telegram protocol, you can be a contributor or a sponsor to speed-up developemnt of any more new features.
+
 
 #### Where else to ask for help?
-If you think you have found a bug in TLSharp, create a github issue. But if you just have questions about how to use TLSharp, use our gitter channel (https://gitter.im/TLSharp/Lobby) or our Telegram channel (https://t.me/joinchat/AgtDiBEqG1i-qPqttNFLbA).
+
+If you just have questions about how to use TgSharp, use our Telegram channel (https://t.me/joinchat/AgtDiBEqG1i-qPqttNFLbA) first. Don't create a github issue until you have confirmed with the maintainer and/or contributors if what you're experiencing is really a bug. When this has been confirmed, then:
 
 **Attach following information**:
 
-* Full problem description and exception message
-* Stack-trace
-* Your code that runs in to this exception
+* Steps to reproduce the issue (including your code)
+* Expected outcome.
+* Current outcome: if it's a crash, attach the full exception details (to get this, just paste what you get from `ex.ToString()`, which gives you exception type, exception message, stacktrace, and inner exceptions recursively).
 
-Without information listen above your issue will be closed. 
+Without information listen above your issue will be closed.
+
 
 # Donations
-Thanks for donations! It's highly appreciated. 
-<a href="https://www.paypal.me/IPirozhenko" title="Support project"><img src="https://img.shields.io/badge/Support%20project-paypal-brightgreen.svg"></a>
 
-List of donators:
-* [mtbitcoin](https://github.com/mtbitcoin)
+Please send your donation to this ETH address (owned by Afshin Arani): 0xbfd1b684e0DdA5C219e11315682a9722b3194131
+
 
 # Support
-If you have troubles while using TLSharp, I can help you for an additional fee. 
 
-My pricing is **219$/hour**. I accept PayPal. To request a paid support write me at Telegram @sochix, start your message with phrase [PAID SUPPORT].
+If you have troubles while using TgSharp, we may be able to help you; access our telegram channel first, and ask for "Paid support".
+
 
 # Contributors
-* [Afshin Arani](http://aarani.ir) - TLGenerator, and a lot of other usefull things
-* [Knocte](https://github.com/knocte)
+
+* [knocte](https://github.com/knocte) - Maintainer
+* [Afshin Arani](http://aarani.ir) - Main contributor
+* [CheshireCaat](http://github.com/CheshireCaat) - Occasional contributor
+* [sochix](https://github.com/sochix) - Original author
+
 
 # License
 
@@ -249,6 +266,7 @@ My pricing is **219$/hour**. I accept PayPal. To request a paid support write me
 The MIT License
 
 Copyright (c) 2015 Ilya Pirozhenko http://www.sochix.ru/
+Copyright (c) 2015-2020 TLSharp/TgSharp contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
