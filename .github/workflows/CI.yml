@@ -16,7 +16,7 @@ jobs:
       run: mono nuget.exe restore
     
     - name: Build Project
-      run: xbuild TLSharp.Core/TLSharp.Core.csproj
+      run: xbuild src/TgSharp.Core/TgSharp.Core.csproj
       
   macos:
     runs-on: macos-latest
@@ -30,7 +30,7 @@ jobs:
       run: mono nuget.exe restore
       
     - name: Build Project
-      run: MSBuild TLSharp.Core/TLSharp.Core.csproj
+      run: MSBuild src/TgSharp.Core/TgSharp.Core.csproj
 
   windows:
     runs-on: windows-latest
@@ -47,4 +47,4 @@ jobs:
       uses: microsoft/setup-msbuild@v1
       
     - name: Build Project
-      run: MSBuild TLSharp.sln
+      run: MSBuild src/TgSharp.sln
