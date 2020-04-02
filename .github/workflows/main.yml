@@ -40,7 +40,7 @@ jobs:
     - uses: actions/checkout@v2
     
     - name: Download Nuget.exe
-      run: Invoke-WebRequest https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -OutFile Nuget.exe
+      run: Invoke-WebRequest $NUGET_URL -OutFile Nuget.exe
       
     - name: Install Dependencies
       run: ./Nuget.exe restore
