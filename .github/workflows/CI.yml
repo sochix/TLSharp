@@ -13,10 +13,10 @@ jobs:
       run: wget $NUGET_URL
 
     - name: Install Dependencies
-      run: mono nuget.exe restore
+      run: mono nuget.exe restore src/TgSharp.sln
     
     - name: Build Project
-      run: xbuild TLSharp.Core/TLSharp.Core.csproj
+      run: xbuild src/TgSharp.Core/TgSharp.Core.csproj
       
   macos:
     runs-on: macos-latest
@@ -27,10 +27,10 @@ jobs:
       run:  curl -o nuget.exe $NUGET_URL
 
     - name: Install Dependencies
-      run: mono nuget.exe restore
+      run: mono nuget.exe restore src/TgSharp.sln
       
     - name: Build Project
-      run: MSBuild TLSharp.Core/TLSharp.Core.csproj
+      run: MSBuild src/TgSharp.Core/TgSharp.Core.csproj
 
   windows:
     runs-on: windows-latest
@@ -41,10 +41,10 @@ jobs:
       run: Invoke-WebRequest -OutFile Nuget.exe $Env:NUGET_URL
       
     - name: Install Dependencies
-      run: ./Nuget.exe restore
+      run: ./Nuget.exe restore src/TgSharp.sln
     
     - name: setup-msbuild
       uses: microsoft/setup-msbuild@v1
       
     - name: Build Project
-      run: MSBuild TLSharp.sln
+      run: MSBuild src/TgSharp.sln

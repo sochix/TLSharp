@@ -37,13 +37,13 @@ or build from source
 
 1. Clone TgSharp from GitHub
 1. Compile source with VS2015 or MonoDevelop
-1. Add reference to ```TLSharp.Core.dll``` to your awesome project.
+1. Add reference to ```TgSharp.Core.dll``` to your awesome project.
 
 
 # Dependencies
 
 TgSharp has a few dependenices, most of functionality implemented from scratch.
-All dependencies listed in [package.conf file](https://github.com/nblockchain/TgSharp/blob/master/TLSharp.Core/packages.config).
+All dependencies listed in [package.conf file](https://github.com/nblockchain/TgSharp/blob/master/src/TgSharp.Core/packages.config).
 
 
 # Starter Guide
@@ -74,7 +74,7 @@ For authentication you need to run following code
   var user = await client.MakeAuthAsync("<user_number>", hash, code);
 ``` 
 
-Full code you can see at [AuthUser test](https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L70)
+Full code you can see at [AuthUser test](https://github.com/nblockchain/TgSharp/blob/master/src/TgSharp.Tests/TgSharpTests.cs#L70)
 
 When user is authenticated, TgSharp creates special file called _session.dat_. In this file TgSharp stores all information needed for user session. So you need to authenticate user every time the _session.dat_ file is corrupted or removed.
 
@@ -94,7 +94,7 @@ You can call any method on authenticated user. For example, let's send message t
   await client.SendMessageAsync(new TLInputPeerUser() {UserId = user.Id}, "OUR_MESSAGE");
 ```
 
-Full code you can see at [SendMessage test](https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L87)
+Full code you can see at [SendMessage test](https://github.com/nblockchain/TgSharp/blob/master/src/TgSharp.Tests/TgSharpTests.cs#L87)
 
 To send message to channel you could use the following code:
 ```csharp
@@ -110,7 +110,7 @@ To send message to channel you could use the following code:
   //send message
   await client.SendMessageAsync(new TLInputPeerChannel() { ChannelId = chat.Id, AccessHash = chat.AccessHash.Value }, "OUR_MESSAGE");
 ```
-Full code you can see at [SendMessageToChannel test](https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L107)
+Full code you can see at [SendMessageToChannel test](https://github.com/nblockchain/TgSharp/blob/master/src/TgSharp.Tests/TgSharpTests.cs#L107)
 
 
 ## Working with files
@@ -131,7 +131,7 @@ TgSharp provides two wrappers for sending photo and document
                 "application/zip", //mime-type
                 new TLVector<TLAbsDocumentAttribute>()); //document attributes, such as file name
 ```
-Full code you can see at [SendPhotoToContactTest](https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L125) and [SendBigFileToContactTest](https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L143)
+Full code you can see at [SendPhotoToContactTest](https://github.com/nblockchain/TgSharp/blob/master/src/TgSharp.Tests/TgSharpTests.cs#L125) and [SendBigFileToContactTest](https://github.com/nblockchain/TgSharp/blob/master/src/TgSharp.Tests/TgSharpTests.cs#L143)
 
 To download file you should call **GetFile** method
 ```csharp
@@ -145,7 +145,7 @@ To download file you should call **GetFile** method
                 document.Size); //size of fileChunk you want to retrieve
 ```
 
-Full code you can see at [DownloadFileFromContactTest](https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L167)
+Full code you can see at [DownloadFileFromContactTest](https://github.com/nblockchain/TgSharp/blob/master/src/TgSharp.Tests/TgSharpTests.cs#L167)
 
 
 # Available Methods
