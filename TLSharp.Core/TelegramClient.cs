@@ -113,16 +113,14 @@ namespace TLSharp.Core
                 exported = await SendRequestAsync<TLExportedAuthorization>(exportAuthorization, token).ConfigureAwait(false);
             }
 
-            var dcs = dcOptions.Where(d => d.Id == dcId
-                                            && (
-                                                (dcIpVersion == DataCenterIPVersion.Default) // any
-                                                || (d.Ipv6 && dcIpVersion == DataCenterIPVersion.OnlyIPv6) // selects only ipv6 addresses 	
-                                                || (!d.Ipv6 && dcIpVersion == DataCenterIPVersion.OnlyIPv4) // selects only ipv4 addresses
-                                                || dcIpVersion == DataCenterIPVersion.PreferIPv4 // we can take both types of address
-                                                || dcIpVersion == DataCenterIPVersion.PreferIPv6 // we can take both types of address
-                                                )
-                                            );
-            
+            IEnumerable<TLDcOption> dcs;
+            if (dcIpVersion == DataCenterIPVersion.OnlyIPv6)
+                dcs = dcOptions.Where(d => d.Id == dcId && d.Ipv6); // selects only ipv6 addresses 	
+            else if (dcIpVersion == DataCenterIPVersion.OnlyIPv4)
+                dcs = dcOptions.Where(d => d.Id == dcId && !d.Ipv6); // selects only ipv4 addresses
+            else
+                dcs = dcOptions.Where(d => d.Id == dcId); // any
+
             TLDcOption dc;
             if (dcIpVersion != DataCenterIPVersion.Default)
             {
