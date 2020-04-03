@@ -23,7 +23,10 @@ jobs:
         $date = get-date -format "yyyyMMdd-HHmm"
         $hash = & git rev-parse --short HEAD
 
-        ./Nuget.exe pack src/TgSharp.Core/TgSharp.Core.csproj -Version "0.0.1-date.$date.git.$hash" -Build -Properties Configuration=Release
+        $baseVersion = "0.0.1"
+        $version = "$baseVersion-date.$date.git.$hash"
+
+        ./Nuget.exe pack src/TgSharp.Core/TgSharp.Core.csproj -Version $version -Build -Properties Configuration=Release
         If ($Env:GITHUB_REF -eq 'refs/heads/master' -AND '${{ secrets.NUGET_API_KEY }}' -ne '') {
-            ./Nuget.exe push "TgSharp.0.0.1-date.$date.git.$hash.nupkg" ${{secrets.NUGET_API_KEY}} -Source https://api.nuget.org/v3/index.json
+            ./Nuget.exe push "TgSharp.$version.nupkg" ${{secrets.NUGET_API_KEY}} -Source https://api.nuget.org/v3/index.json
         }
