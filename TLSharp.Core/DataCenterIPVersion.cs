@@ -7,24 +7,24 @@
     public enum DataCenterIPVersion
     {
         /// <summary>
-        /// Prefers IPv6 addresses if any is passed by Telegram
+        /// Picks the first available address passed by Telegram
         /// </summary>
-        Default = 0,
+        Default,
         /// <summary>
         /// Takes only IPv4 addresses
         /// </summary>
-        OnlyIPv4 = 1,
+        OnlyIPv4,
         /// <summary>
         /// Takes only IPv6 addresses
         /// </summary>
-        OnlyIPv6 = 2,
+        OnlyIPv6,
         /// <summary>
         /// Connection to IPv4 addresses is preferred to IPv6 addresses
         /// </summary>
-        PreferIPv4 = 3,
+        PreferIPv4,
         /// <summary>
         /// Connection to IPv6 addresses is preferred to IPv4 addresses 
         /// </summary>
-        PreferIPv6 = 4,
+        PreferIPv6,
     }
 }
