@@ -48,6 +48,7 @@
     <Compile Include="Auth\Step1_PQRequest.cs" />
     <Compile Include="Auth\Step2_DHExchange.cs" />
     <Compile Include="Auth\Step3_CompleteDHExchange.cs" />
+    <Compile Include="DataCenterIPVersion.cs" />
     <Compile Include="Exceptions\CloudPasswordNeededException.cs" />
     <Compile Include="Exceptions\InvalidPhoneCodeException.cs" />
     <Compile Include="Exceptions\MissingApiConfigurationException.cs" />
