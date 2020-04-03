@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Messages
 {
-    [TLObject(-91733382)]
+    [TLObject(1376532592)]
     public class TLRequestSendMessage : TLMethod
     {
         public override int Constructor
         {
             get
             {
-                return -91733382;
+                return 1376532592;
             }
         }
 
@@ -29,19 +29,12 @@ namespace TeleSharp.TL.Messages
         public long RandomId { get; set; }
         public TLAbsReplyMarkup ReplyMarkup { get; set; }
         public TLVector<TLAbsMessageEntity> Entities { get; set; }
+        public int? ScheduleDate { get; set; }
         public TLAbsUpdates Response { get; set; }
 
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = NoWebpage ? (Flags | 2) : (Flags & ~2);
-            Flags = Silent ? (Flags | 32) : (Flags & ~32);
-            Flags = Background ? (Flags | 64) : (Flags & ~64);
-            Flags = ClearDraft ? (Flags | 128) : (Flags & ~128);
-            Flags = ReplyToMsgId != null ? (Flags | 1) : (Flags & ~1);
-            Flags = ReplyMarkup != null ? (Flags | 4) : (Flags & ~4);
-            Flags = Entities != null ? (Flags | 8) : (Flags & ~8);
 
         }
 
@@ -70,13 +63,17 @@ namespace TeleSharp.TL.Messages
             else
                 Entities = null;
 
+            if ((Flags & 1024) != 0)
+                ScheduleDate = br.ReadInt32();
+            else
+                ScheduleDate = null;
+
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
 
 
@@ -91,6 +88,8 @@ namespace TeleSharp.TL.Messages
                 ObjectUtils.SerializeObject(ReplyMarkup, bw);
             if ((Flags & 8) != 0)
                 ObjectUtils.SerializeObject(Entities, bw);
+            if ((Flags & 1024) != 0)
+                bw.Write(ScheduleDate.Value);
 
         }
         public override void DeserializeResponse(BinaryReader br)

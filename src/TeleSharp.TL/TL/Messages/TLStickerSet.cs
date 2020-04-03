@@ -18,7 +18,7 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public TL.TLStickerSet Set { get; set; }
+        public TLStickerSet Set { get; set; }
         public TLVector<TLStickerPack> Packs { get; set; }
         public TLVector<TLAbsDocument> Documents { get; set; }
 
@@ -30,7 +30,7 @@ namespace TeleSharp.TL.Messages
 
         public override void DeserializeBody(BinaryReader br)
         {
-            Set = (TL.TLStickerSet)ObjectUtils.DeserializeObject(br);
+            Set = (TLStickerSet)ObjectUtils.DeserializeObject(br);
             Packs = (TLVector<TLStickerPack>)ObjectUtils.DeserializeVector<TLStickerPack>(br);
             Documents = (TLVector<TLAbsDocument>)ObjectUtils.DeserializeVector<TLAbsDocument>(br);
 

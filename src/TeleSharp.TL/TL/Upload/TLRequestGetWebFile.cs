@@ -18,7 +18,7 @@ namespace TeleSharp.TL.Upload
             }
         }
 
-        public TLInputWebFileLocation Location { get; set; }
+        public TLAbsInputWebFileLocation Location { get; set; }
         public int Offset { get; set; }
         public int Limit { get; set; }
         public Upload.TLWebFile Response { get; set; }
@@ -31,7 +31,7 @@ namespace TeleSharp.TL.Upload
 
         public override void DeserializeBody(BinaryReader br)
         {
-            Location = (TLInputWebFileLocation)ObjectUtils.DeserializeObject(br);
+            Location = (TLAbsInputWebFileLocation)ObjectUtils.DeserializeObject(br);
             Offset = br.ReadInt32();
             Limit = br.ReadInt32();
 

@@ -24,8 +24,6 @@ namespace TeleSharp.TL
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Missed ? (Flags | 1) : (Flags & ~1);
 
         }
 
@@ -39,7 +37,6 @@ namespace TeleSharp.TL
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
 
 

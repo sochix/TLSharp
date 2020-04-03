@@ -7,17 +7,19 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-1169445179)]
+    [TLObject(453805082)]
     public class TLDraftMessageEmpty : TLAbsDraftMessage
     {
         public override int Constructor
         {
             get
             {
-                return -1169445179;
+                return 453805082;
             }
         }
 
+        public int Flags { get; set; }
+        public int? Date { get; set; }
 
 
         public void ComputeFlags()
@@ -27,12 +29,21 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
+            Flags = br.ReadInt32();
+            if ((Flags & 1) != 0)
+                Date = br.ReadInt32();
+            else
+                Date = null;
+
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
+            bw.Write(Flags);
+            if ((Flags & 1) != 0)
+                bw.Write(Date.Value);
 
         }
     }

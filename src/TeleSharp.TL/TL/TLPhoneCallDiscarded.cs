@@ -21,6 +21,7 @@ namespace TeleSharp.TL
         public int Flags { get; set; }
         public bool NeedRating { get; set; }
         public bool NeedDebug { get; set; }
+        public bool Video { get; set; }
         public long Id { get; set; }
         public TLAbsPhoneCallDiscardReason Reason { get; set; }
         public int? Duration { get; set; }
@@ -28,11 +29,6 @@ namespace TeleSharp.TL
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = NeedRating ? (Flags | 4) : (Flags & ~4);
-            Flags = NeedDebug ? (Flags | 8) : (Flags & ~8);
-            Flags = Reason != null ? (Flags | 1) : (Flags & ~1);
-            Flags = Duration != null ? (Flags | 2) : (Flags & ~2);
 
         }
 
@@ -41,6 +37,7 @@ namespace TeleSharp.TL
             Flags = br.ReadInt32();
             NeedRating = (Flags & 4) != 0;
             NeedDebug = (Flags & 8) != 0;
+            Video = (Flags & 32) != 0;
             Id = br.ReadInt64();
             if ((Flags & 1) != 0)
                 Reason = (TLAbsPhoneCallDiscardReason)ObjectUtils.DeserializeObject(br);
@@ -58,8 +55,8 @@ namespace TeleSharp.TL
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
+
 
 
             bw.Write(Id);

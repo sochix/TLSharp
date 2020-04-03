@@ -7,21 +7,27 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-860866985)]
+    [TLObject(-1539849235)]
     public class TLWallPaper : TLAbsWallPaper
     {
         public override int Constructor
         {
             get
             {
-                return -860866985;
+                return -1539849235;
             }
         }
 
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public TLVector<TLAbsPhotoSize> Sizes { get; set; }
-        public int Color { get; set; }
+        public long Id { get; set; }
+        public int Flags { get; set; }
+        public bool Creator { get; set; }
+        public bool Default { get; set; }
+        public bool Pattern { get; set; }
+        public bool Dark { get; set; }
+        public long AccessHash { get; set; }
+        public string Slug { get; set; }
+        public TLAbsDocument Document { get; set; }
+        public TLWallPaperSettings Settings { get; set; }
 
 
         public void ComputeFlags()
@@ -31,10 +37,20 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            Id = br.ReadInt32();
-            Title = StringUtil.Deserialize(br);
-            Sizes = (TLVector<TLAbsPhotoSize>)ObjectUtils.DeserializeVector<TLAbsPhotoSize>(br);
-            Color = br.ReadInt32();
+            Id = br.ReadInt64();
+            Flags = br.ReadInt32();
+            Creator = (Flags & 1) != 0;
+            Default = (Flags & 2) != 0;
+            Pattern = (Flags & 8) != 0;
+            Dark = (Flags & 16) != 0;
+            AccessHash = br.ReadInt64();
+            Slug = StringUtil.Deserialize(br);
+            Document = (TLAbsDocument)ObjectUtils.DeserializeObject(br);
+            if ((Flags & 4) != 0)
+                Settings = (TLWallPaperSettings)ObjectUtils.DeserializeObject(br);
+            else
+                Settings = null;
+
 
         }
 
@@ -42,9 +58,16 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             bw.Write(Id);
-            StringUtil.Serialize(Title, bw);
-            ObjectUtils.SerializeObject(Sizes, bw);
-            bw.Write(Color);
+            bw.Write(Flags);
+
+
+
+
+            bw.Write(AccessHash);
+            StringUtil.Serialize(Slug, bw);
+            ObjectUtils.SerializeObject(Document, bw);
+            if ((Flags & 4) != 0)
+                ObjectUtils.SerializeObject(Settings, bw);
 
         }
     }

@@ -7,54 +7,39 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Account
 {
-    [TLObject(353818557)]
+    [TLObject(457157256)]
     public class TLRequestSendConfirmPhoneCode : TLMethod
     {
         public override int Constructor
         {
             get
             {
-                return 353818557;
+                return 457157256;
             }
         }
 
-        public int Flags { get; set; }
-        public bool AllowFlashcall { get; set; }
         public string Hash { get; set; }
-        public bool? CurrentNumber { get; set; }
+        public TLCodeSettings Settings { get; set; }
         public Auth.TLSentCode Response { get; set; }
 
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = AllowFlashcall ? (Flags | 1) : (Flags & ~1);
-            Flags = CurrentNumber != null ? (Flags | 1) : (Flags & ~1);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            Flags = br.ReadInt32();
-            AllowFlashcall = (Flags & 1) != 0;
             Hash = StringUtil.Deserialize(br);
-            if ((Flags & 1) != 0)
-                CurrentNumber = BoolUtil.Deserialize(br);
-            else
-                CurrentNumber = null;
-
+            Settings = (TLCodeSettings)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
-            bw.Write(Flags);
-
             StringUtil.Serialize(Hash, bw);
-            if ((Flags & 1) != 0)
-                BoolUtil.Serialize(CurrentNumber.Value, bw);
+            ObjectUtils.SerializeObject(Settings, bw);
 
         }
         public override void DeserializeResponse(BinaryReader br)

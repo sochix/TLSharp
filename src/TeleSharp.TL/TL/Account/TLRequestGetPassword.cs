@@ -18,7 +18,7 @@ namespace TeleSharp.TL.Account
             }
         }
 
-        public Account.TLAbsPassword Response { get; set; }
+        public Account.TLPassword Response { get; set; }
 
 
         public void ComputeFlags()
@@ -38,7 +38,7 @@ namespace TeleSharp.TL.Account
         }
         public override void DeserializeResponse(BinaryReader br)
         {
-            Response = (Account.TLAbsPassword)ObjectUtils.DeserializeObject(br);
+            Response = (Account.TLPassword)ObjectUtils.DeserializeObject(br);
 
         }
     }

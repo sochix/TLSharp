@@ -19,7 +19,7 @@ namespace TeleSharp.TL
         }
 
         public string Type { get; set; }
-        public TLAbsFileLocation Location { get; set; }
+        public TLFileLocationToBeDeprecated Location { get; set; }
         public int W { get; set; }
         public int H { get; set; }
         public byte[] Bytes { get; set; }
@@ -33,7 +33,7 @@ namespace TeleSharp.TL
         public override void DeserializeBody(BinaryReader br)
         {
             Type = StringUtil.Deserialize(br);
-            Location = (TLAbsFileLocation)ObjectUtils.DeserializeObject(br);
+            Location = (TLFileLocationToBeDeprecated)ObjectUtils.DeserializeObject(br);
             W = br.ReadInt32();
             H = br.ReadInt32();
             Bytes = BytesUtil.Deserialize(br);

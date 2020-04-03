@@ -28,9 +28,6 @@ namespace TeleSharp.TL.Payments
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = RequestedInfoId != null ? (Flags | 1) : (Flags & ~1);
-            Flags = ShippingOptionId != null ? (Flags | 2) : (Flags & ~2);
 
         }
 
@@ -55,7 +52,6 @@ namespace TeleSharp.TL.Payments
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
             bw.Write(MsgId);
             if ((Flags & 1) != 0)

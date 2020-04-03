@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-640214938)]
+    [TLObject(2089805750)]
     public class TLPageBlockVideo : TLAbsPageBlock
     {
         public override int Constructor
         {
             get
             {
-                return -640214938;
+                return 2089805750;
             }
         }
 
@@ -22,14 +22,11 @@ namespace TeleSharp.TL
         public bool Autoplay { get; set; }
         public bool Loop { get; set; }
         public long VideoId { get; set; }
-        public TLAbsRichText Caption { get; set; }
+        public TLPageCaption Caption { get; set; }
 
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Autoplay ? (Flags | 1) : (Flags & ~1);
-            Flags = Loop ? (Flags | 2) : (Flags & ~2);
 
         }
 
@@ -39,14 +36,13 @@ namespace TeleSharp.TL
             Autoplay = (Flags & 1) != 0;
             Loop = (Flags & 2) != 0;
             VideoId = br.ReadInt64();
-            Caption = (TLAbsRichText)ObjectUtils.DeserializeObject(br);
+            Caption = (TLPageCaption)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
 
 

@@ -24,6 +24,7 @@ namespace TeleSharp.TL
         public bool MediaUnread { get; set; }
         public bool Silent { get; set; }
         public bool Post { get; set; }
+        public bool Legacy { get; set; }
         public int Id { get; set; }
         public int? FromId { get; set; }
         public TLAbsPeer ToId { get; set; }
@@ -34,14 +35,6 @@ namespace TeleSharp.TL
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Out ? (Flags | 2) : (Flags & ~2);
-            Flags = Mentioned ? (Flags | 16) : (Flags & ~16);
-            Flags = MediaUnread ? (Flags | 32) : (Flags & ~32);
-            Flags = Silent ? (Flags | 8192) : (Flags & ~8192);
-            Flags = Post ? (Flags | 16384) : (Flags & ~16384);
-            Flags = FromId != null ? (Flags | 256) : (Flags & ~256);
-            Flags = ReplyToMsgId != null ? (Flags | 8) : (Flags & ~8);
 
         }
 
@@ -53,6 +46,7 @@ namespace TeleSharp.TL
             MediaUnread = (Flags & 32) != 0;
             Silent = (Flags & 8192) != 0;
             Post = (Flags & 16384) != 0;
+            Legacy = (Flags & 524288) != 0;
             Id = br.ReadInt32();
             if ((Flags & 256) != 0)
                 FromId = br.ReadInt32();
@@ -73,8 +67,8 @@ namespace TeleSharp.TL
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
+
 
 
 

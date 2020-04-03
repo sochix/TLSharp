@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-2059962289)]
+    [TLObject(681420594)]
     public class TLChannelForbidden : TLAbsChat
     {
         public override int Constructor
         {
             get
             {
-                return -2059962289;
+                return 681420594;
             }
         }
 
@@ -24,13 +24,11 @@ namespace TeleSharp.TL
         public int Id { get; set; }
         public long AccessHash { get; set; }
         public string Title { get; set; }
+        public int? UntilDate { get; set; }
 
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Broadcast ? (Flags | 32) : (Flags & ~32);
-            Flags = Megagroup ? (Flags | 256) : (Flags & ~256);
 
         }
 
@@ -42,19 +40,25 @@ namespace TeleSharp.TL
             Id = br.ReadInt32();
             AccessHash = br.ReadInt64();
             Title = StringUtil.Deserialize(br);
+            if ((Flags & 65536) != 0)
+                UntilDate = br.ReadInt32();
+            else
+                UntilDate = null;
+
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
 
 
             bw.Write(Id);
             bw.Write(AccessHash);
             StringUtil.Serialize(Title, bw);
+            if ((Flags & 65536) != 0)
+                bw.Write(UntilDate.Value);
 
         }
     }

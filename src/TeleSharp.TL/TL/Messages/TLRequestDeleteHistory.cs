@@ -20,6 +20,7 @@ namespace TeleSharp.TL.Messages
 
         public int Flags { get; set; }
         public bool JustClear { get; set; }
+        public bool Revoke { get; set; }
         public TLAbsInputPeer Peer { get; set; }
         public int MaxId { get; set; }
         public Messages.TLAffectedHistory Response { get; set; }
@@ -27,8 +28,6 @@ namespace TeleSharp.TL.Messages
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = JustClear ? (Flags | 1) : (Flags & ~1);
 
         }
 
@@ -36,6 +35,7 @@ namespace TeleSharp.TL.Messages
         {
             Flags = br.ReadInt32();
             JustClear = (Flags & 1) != 0;
+            Revoke = (Flags & 2) != 0;
             Peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
             MaxId = br.ReadInt32();
 
@@ -44,8 +44,8 @@ namespace TeleSharp.TL.Messages
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
+
 
             ObjectUtils.SerializeObject(Peer, bw);
             bw.Write(MaxId);

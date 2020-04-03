@@ -7,20 +7,19 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Auth
 {
-    [TLObject(453408308)]
+    [TLObject(-2131827673)]
     public class TLRequestSignUp : TLMethod
     {
         public override int Constructor
         {
             get
             {
-                return 453408308;
+                return -2131827673;
             }
         }
 
         public string PhoneNumber { get; set; }
         public string PhoneCodeHash { get; set; }
-        public string PhoneCode { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public Auth.TLAuthorization Response { get; set; }
@@ -35,7 +34,6 @@ namespace TeleSharp.TL.Auth
         {
             PhoneNumber = StringUtil.Deserialize(br);
             PhoneCodeHash = StringUtil.Deserialize(br);
-            PhoneCode = StringUtil.Deserialize(br);
             FirstName = StringUtil.Deserialize(br);
             LastName = StringUtil.Deserialize(br);
 
@@ -46,7 +44,6 @@ namespace TeleSharp.TL.Auth
             bw.Write(Constructor);
             StringUtil.Serialize(PhoneNumber, bw);
             StringUtil.Serialize(PhoneCodeHash, bw);
-            StringUtil.Serialize(PhoneCode, bw);
             StringUtil.Serialize(FirstName, bw);
             StringUtil.Serialize(LastName, bw);
 

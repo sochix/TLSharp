@@ -18,7 +18,7 @@ namespace TeleSharp.TL.Messages
             }
         }
 
-        public TLVector<TLDialog> Dialogs { get; set; }
+        public TLVector<TLAbsDialog> Dialogs { get; set; }
         public TLVector<TLAbsMessage> Messages { get; set; }
         public TLVector<TLAbsChat> Chats { get; set; }
         public TLVector<TLAbsUser> Users { get; set; }
@@ -31,7 +31,7 @@ namespace TeleSharp.TL.Messages
 
         public override void DeserializeBody(BinaryReader br)
         {
-            Dialogs = (TLVector<TLDialog>)ObjectUtils.DeserializeVector<TLDialog>(br);
+            Dialogs = (TLVector<TLAbsDialog>)ObjectUtils.DeserializeVector<TLAbsDialog>(br);
             Messages = (TLVector<TLAbsMessage>)ObjectUtils.DeserializeVector<TLAbsMessage>(br);
             Chats = (TLVector<TLAbsChat>)ObjectUtils.DeserializeVector<TLAbsChat>(br);
             Users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);

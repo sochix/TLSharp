@@ -7,17 +7,19 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Phone
 {
-    [TLObject(2027164582)]
+    [TLObject(-1295269440)]
     public class TLRequestDiscardCall : TLMethod
     {
         public override int Constructor
         {
             get
             {
-                return 2027164582;
+                return -1295269440;
             }
         }
 
+        public int Flags { get; set; }
+        public bool Video { get; set; }
         public TLInputPhoneCall Peer { get; set; }
         public int Duration { get; set; }
         public TLAbsPhoneCallDiscardReason Reason { get; set; }
@@ -32,6 +34,8 @@ namespace TeleSharp.TL.Phone
 
         public override void DeserializeBody(BinaryReader br)
         {
+            Flags = br.ReadInt32();
+            Video = (Flags & 1) != 0;
             Peer = (TLInputPhoneCall)ObjectUtils.DeserializeObject(br);
             Duration = br.ReadInt32();
             Reason = (TLAbsPhoneCallDiscardReason)ObjectUtils.DeserializeObject(br);
@@ -42,6 +46,8 @@ namespace TeleSharp.TL.Phone
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
+            bw.Write(Flags);
+
             ObjectUtils.SerializeObject(Peer, bw);
             bw.Write(Duration);
             ObjectUtils.SerializeObject(Reason, bw);

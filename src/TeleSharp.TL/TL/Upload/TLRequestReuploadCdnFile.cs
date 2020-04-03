@@ -7,20 +7,20 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Upload
 {
-    [TLObject(779755552)]
+    [TLObject(-1691921240)]
     public class TLRequestReuploadCdnFile : TLMethod
     {
         public override int Constructor
         {
             get
             {
-                return 779755552;
+                return -1691921240;
             }
         }
 
         public byte[] FileToken { get; set; }
         public byte[] RequestToken { get; set; }
-        public bool Response { get; set; }
+        public TLVector<TLFileHash> Response { get; set; }
 
 
         public void ComputeFlags()
@@ -44,7 +44,7 @@ namespace TeleSharp.TL.Upload
         }
         public override void DeserializeResponse(BinaryReader br)
         {
-            Response = BoolUtil.Deserialize(br);
+            Response = (TLVector<TLFileHash>)ObjectUtils.DeserializeVector<TLFileHash>(br);
 
         }
     }

@@ -7,17 +7,18 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Help
 {
-    [TLObject(-1372724842)]
+    [TLObject(1378703997)]
     public class TLRequestGetAppUpdate : TLMethod
     {
         public override int Constructor
         {
             get
             {
-                return -1372724842;
+                return 1378703997;
             }
         }
 
+        public string Source { get; set; }
         public Help.TLAbsAppUpdate Response { get; set; }
 
 
@@ -28,12 +29,14 @@ namespace TeleSharp.TL.Help
 
         public override void DeserializeBody(BinaryReader br)
         {
+            Source = StringUtil.Deserialize(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
+            StringUtil.Serialize(Source, bw);
 
         }
         public override void DeserializeResponse(BinaryReader br)

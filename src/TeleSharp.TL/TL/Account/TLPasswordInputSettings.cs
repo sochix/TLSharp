@@ -7,31 +7,27 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Account
 {
-    [TLObject(-2037289493)]
+    [TLObject(-1036572727)]
     public class TLPasswordInputSettings : TLObject
     {
         public override int Constructor
         {
             get
             {
-                return -2037289493;
+                return -1036572727;
             }
         }
 
         public int Flags { get; set; }
-        public byte[] NewSalt { get; set; }
+        public TLAbsPasswordKdfAlgo NewAlgo { get; set; }
         public byte[] NewPasswordHash { get; set; }
         public string Hint { get; set; }
         public string Email { get; set; }
+        public TLSecureSecretSettings NewSecureSettings { get; set; }
 
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = NewSalt != null ? (Flags | 1) : (Flags & ~1);
-            Flags = NewPasswordHash != null ? (Flags | 1) : (Flags & ~1);
-            Flags = Hint != null ? (Flags | 1) : (Flags & ~1);
-            Flags = Email != null ? (Flags | 2) : (Flags & ~2);
 
         }
 
@@ -39,9 +35,9 @@ namespace TeleSharp.TL.Account
         {
             Flags = br.ReadInt32();
             if ((Flags & 1) != 0)
-                NewSalt = BytesUtil.Deserialize(br);
+                NewAlgo = (TLAbsPasswordKdfAlgo)ObjectUtils.DeserializeObject(br);
             else
-                NewSalt = null;
+                NewAlgo = null;
 
             if ((Flags & 1) != 0)
                 NewPasswordHash = BytesUtil.Deserialize(br);
@@ -58,22 +54,28 @@ namespace TeleSharp.TL.Account
             else
                 Email = null;
 
+            if ((Flags & 4) != 0)
+                NewSecureSettings = (TLSecureSecretSettings)ObjectUtils.DeserializeObject(br);
+            else
+                NewSecureSettings = null;
+
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
             if ((Flags & 1) != 0)
-                BytesUtil.Serialize(NewSalt, bw);
+                ObjectUtils.SerializeObject(NewAlgo, bw);
             if ((Flags & 1) != 0)
                 BytesUtil.Serialize(NewPasswordHash, bw);
             if ((Flags & 1) != 0)
                 StringUtil.Serialize(Hint, bw);
             if ((Flags & 2) != 0)
                 StringUtil.Serialize(Email, bw);
+            if ((Flags & 4) != 0)
+                ObjectUtils.SerializeObject(NewSecureSettings, bw);
 
         }
     }

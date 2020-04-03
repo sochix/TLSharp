@@ -25,19 +25,14 @@ namespace TeleSharp.TL
         public bool EmailRequested { get; set; }
         public bool ShippingAddressRequested { get; set; }
         public bool Flexible { get; set; }
+        public bool PhoneToProvider { get; set; }
+        public bool EmailToProvider { get; set; }
         public string Currency { get; set; }
         public TLVector<TLLabeledPrice> Prices { get; set; }
 
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Test ? (Flags | 1) : (Flags & ~1);
-            Flags = NameRequested ? (Flags | 2) : (Flags & ~2);
-            Flags = PhoneRequested ? (Flags | 4) : (Flags & ~4);
-            Flags = EmailRequested ? (Flags | 8) : (Flags & ~8);
-            Flags = ShippingAddressRequested ? (Flags | 16) : (Flags & ~16);
-            Flags = Flexible ? (Flags | 32) : (Flags & ~32);
 
         }
 
@@ -50,6 +45,8 @@ namespace TeleSharp.TL
             EmailRequested = (Flags & 8) != 0;
             ShippingAddressRequested = (Flags & 16) != 0;
             Flexible = (Flags & 32) != 0;
+            PhoneToProvider = (Flags & 64) != 0;
+            EmailToProvider = (Flags & 128) != 0;
             Currency = StringUtil.Deserialize(br);
             Prices = (TLVector<TLLabeledPrice>)ObjectUtils.DeserializeVector<TLLabeledPrice>(br);
 
@@ -58,8 +55,9 @@ namespace TeleSharp.TL
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
+
+
 
 
 

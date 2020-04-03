@@ -7,19 +7,18 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Contacts
 {
-    [TLObject(-634342611)]
+    [TLObject(746589157)]
     public class TLRequestImportContacts : TLMethod
     {
         public override int Constructor
         {
             get
             {
-                return -634342611;
+                return 746589157;
             }
         }
 
         public TLVector<TLInputPhoneContact> Contacts { get; set; }
-        public bool Replace { get; set; }
         public Contacts.TLImportedContacts Response { get; set; }
 
 
@@ -31,7 +30,6 @@ namespace TeleSharp.TL.Contacts
         public override void DeserializeBody(BinaryReader br)
         {
             Contacts = (TLVector<TLInputPhoneContact>)ObjectUtils.DeserializeVector<TLInputPhoneContact>(br);
-            Replace = BoolUtil.Deserialize(br);
 
         }
 
@@ -39,7 +37,6 @@ namespace TeleSharp.TL.Contacts
         {
             bw.Write(Constructor);
             ObjectUtils.SerializeObject(Contacts, bw);
-            BoolUtil.Serialize(Replace, bw);
 
         }
         public override void DeserializeResponse(BinaryReader br)

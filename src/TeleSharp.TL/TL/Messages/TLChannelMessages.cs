@@ -19,6 +19,7 @@ namespace TeleSharp.TL.Messages
         }
 
         public int Flags { get; set; }
+        public bool Inexact { get; set; }
         public int Pts { get; set; }
         public int Count { get; set; }
         public TLVector<TLAbsMessage> Messages { get; set; }
@@ -28,13 +29,13 @@ namespace TeleSharp.TL.Messages
 
         public void ComputeFlags()
         {
-            Flags = 0;
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             Flags = br.ReadInt32();
+            Inexact = (Flags & 2) != 0;
             Pts = br.ReadInt32();
             Count = br.ReadInt32();
             Messages = (TLVector<TLAbsMessage>)ObjectUtils.DeserializeVector<TLAbsMessage>(br);
@@ -46,8 +47,8 @@ namespace TeleSharp.TL.Messages
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
+
             bw.Write(Pts);
             bw.Write(Count);
             ObjectUtils.SerializeObject(Messages, bw);

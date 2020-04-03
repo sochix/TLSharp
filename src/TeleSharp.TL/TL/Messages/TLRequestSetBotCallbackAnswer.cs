@@ -29,10 +29,6 @@ namespace TeleSharp.TL.Messages
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Alert ? (Flags | 2) : (Flags & ~2);
-            Flags = Message != null ? (Flags | 1) : (Flags & ~1);
-            Flags = Url != null ? (Flags | 4) : (Flags & ~4);
 
         }
 
@@ -58,7 +54,6 @@ namespace TeleSharp.TL.Messages
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
 
             bw.Write(QueryId);

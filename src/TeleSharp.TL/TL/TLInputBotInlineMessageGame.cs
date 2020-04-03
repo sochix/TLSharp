@@ -24,8 +24,6 @@ namespace TeleSharp.TL
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = ReplyMarkup != null ? (Flags | 4) : (Flags & ~4);
 
         }
 
@@ -43,7 +41,6 @@ namespace TeleSharp.TL
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
             if ((Flags & 4) != 0)
                 ObjectUtils.SerializeObject(ReplyMarkup, bw);

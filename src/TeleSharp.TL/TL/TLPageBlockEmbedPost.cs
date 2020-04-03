@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(690781161)]
+    [TLObject(-229005301)]
     public class TLPageBlockEmbedPost : TLAbsPageBlock
     {
         public override int Constructor
         {
             get
             {
-                return 690781161;
+                return -229005301;
             }
         }
 
@@ -24,7 +24,7 @@ namespace TeleSharp.TL
         public string Author { get; set; }
         public int Date { get; set; }
         public TLVector<TLAbsPageBlock> Blocks { get; set; }
-        public TLAbsRichText Caption { get; set; }
+        public TLPageCaption Caption { get; set; }
 
 
         public void ComputeFlags()
@@ -40,7 +40,7 @@ namespace TeleSharp.TL
             Author = StringUtil.Deserialize(br);
             Date = br.ReadInt32();
             Blocks = (TLVector<TLAbsPageBlock>)ObjectUtils.DeserializeVector<TLAbsPageBlock>(br);
-            Caption = (TLAbsRichText)ObjectUtils.DeserializeObject(br);
+            Caption = (TLPageCaption)ObjectUtils.DeserializeObject(br);
 
         }
 

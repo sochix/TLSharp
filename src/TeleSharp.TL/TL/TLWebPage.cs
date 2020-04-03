@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(1594340540)]
+    [TLObject(-392411726)]
     public class TLWebPage : TLAbsWebPage
     {
         public override int Constructor
         {
             get
             {
-                return 1594340540;
+                return -392411726;
             }
         }
 
@@ -35,25 +35,12 @@ namespace TeleSharp.TL
         public int? Duration { get; set; }
         public string Author { get; set; }
         public TLAbsDocument Document { get; set; }
-        public TLAbsPage CachedPage { get; set; }
+        public TLPage CachedPage { get; set; }
+        public TLVector<TLWebPageAttributeTheme> Attributes { get; set; }
 
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Type != null ? (Flags | 1) : (Flags & ~1);
-            Flags = SiteName != null ? (Flags | 2) : (Flags & ~2);
-            Flags = Title != null ? (Flags | 4) : (Flags & ~4);
-            Flags = Description != null ? (Flags | 8) : (Flags & ~8);
-            Flags = Photo != null ? (Flags | 16) : (Flags & ~16);
-            Flags = EmbedUrl != null ? (Flags | 32) : (Flags & ~32);
-            Flags = EmbedType != null ? (Flags | 32) : (Flags & ~32);
-            Flags = EmbedWidth != null ? (Flags | 64) : (Flags & ~64);
-            Flags = EmbedHeight != null ? (Flags | 64) : (Flags & ~64);
-            Flags = Duration != null ? (Flags | 128) : (Flags & ~128);
-            Flags = Author != null ? (Flags | 256) : (Flags & ~256);
-            Flags = Document != null ? (Flags | 512) : (Flags & ~512);
-            Flags = CachedPage != null ? (Flags | 1024) : (Flags & ~1024);
 
         }
 
@@ -125,9 +112,14 @@ namespace TeleSharp.TL
                 Document = null;
 
             if ((Flags & 1024) != 0)
-                CachedPage = (TLAbsPage)ObjectUtils.DeserializeObject(br);
+                CachedPage = (TLPage)ObjectUtils.DeserializeObject(br);
             else
                 CachedPage = null;
+
+            if ((Flags & 4096) != 0)
+                Attributes = (TLVector<TLWebPageAttributeTheme>)ObjectUtils.DeserializeVector<TLWebPageAttributeTheme>(br);
+            else
+                Attributes = null;
 
 
         }
@@ -135,7 +127,6 @@ namespace TeleSharp.TL
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
             bw.Write(Id);
             StringUtil.Serialize(Url, bw);
@@ -167,6 +158,8 @@ namespace TeleSharp.TL
                 ObjectUtils.SerializeObject(Document, bw);
             if ((Flags & 1024) != 0)
                 ObjectUtils.SerializeObject(CachedPage, bw);
+            if ((Flags & 4096) != 0)
+                ObjectUtils.SerializeObject(Attributes, bw);
 
         }
     }

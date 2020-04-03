@@ -7,20 +7,20 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Stickers
 {
-    [TLObject(1322714570)]
+    [TLObject(-4795190)]
     public class TLRequestChangeStickerPosition : TLMethod
     {
         public override int Constructor
         {
             get
             {
-                return 1322714570;
+                return -4795190;
             }
         }
 
         public TLAbsInputDocument Sticker { get; set; }
         public int Position { get; set; }
-        public bool Response { get; set; }
+        public Messages.TLStickerSet Response { get; set; }
 
 
         public void ComputeFlags()
@@ -44,7 +44,7 @@ namespace TeleSharp.TL.Stickers
         }
         public override void DeserializeResponse(BinaryReader br)
         {
-            Response = BoolUtil.Deserialize(br);
+            Response = (Messages.TLStickerSet)ObjectUtils.DeserializeObject(br);
 
         }
     }

@@ -29,8 +29,6 @@ namespace TeleSharp.TL.Stickers
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Masks ? (Flags | 1) : (Flags & ~1);
 
         }
 
@@ -48,7 +46,6 @@ namespace TeleSharp.TL.Stickers
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
 
             ObjectUtils.SerializeObject(UserId, bw);

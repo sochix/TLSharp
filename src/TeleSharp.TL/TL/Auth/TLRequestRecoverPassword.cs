@@ -19,7 +19,7 @@ namespace TeleSharp.TL.Auth
         }
 
         public string Code { get; set; }
-        public Auth.TLAuthorization Response { get; set; }
+        public Auth.TLAbsAuthorization Response { get; set; }
 
 
         public void ComputeFlags()
@@ -41,7 +41,7 @@ namespace TeleSharp.TL.Auth
         }
         public override void DeserializeResponse(BinaryReader br)
         {
-            Response = (Auth.TLAuthorization)ObjectUtils.DeserializeObject(br);
+            Response = (Auth.TLAbsAuthorization)ObjectUtils.DeserializeObject(br);
 
         }
     }

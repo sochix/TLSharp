@@ -23,6 +23,8 @@ namespace TeleSharp.TL.Contacts
         public bool BotsPm { get; set; }
         public bool BotsInline { get; set; }
         public bool PhoneCalls { get; set; }
+        public bool ForwardUsers { get; set; }
+        public bool ForwardChats { get; set; }
         public bool Groups { get; set; }
         public bool Channels { get; set; }
         public int Offset { get; set; }
@@ -33,13 +35,6 @@ namespace TeleSharp.TL.Contacts
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Correspondents ? (Flags | 1) : (Flags & ~1);
-            Flags = BotsPm ? (Flags | 2) : (Flags & ~2);
-            Flags = BotsInline ? (Flags | 4) : (Flags & ~4);
-            Flags = PhoneCalls ? (Flags | 8) : (Flags & ~8);
-            Flags = Groups ? (Flags | 1024) : (Flags & ~1024);
-            Flags = Channels ? (Flags | 32768) : (Flags & ~32768);
 
         }
 
@@ -50,6 +45,8 @@ namespace TeleSharp.TL.Contacts
             BotsPm = (Flags & 2) != 0;
             BotsInline = (Flags & 4) != 0;
             PhoneCalls = (Flags & 8) != 0;
+            ForwardUsers = (Flags & 16) != 0;
+            ForwardChats = (Flags & 32) != 0;
             Groups = (Flags & 1024) != 0;
             Channels = (Flags & 32768) != 0;
             Offset = br.ReadInt32();
@@ -61,8 +58,9 @@ namespace TeleSharp.TL.Contacts
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
+
+
 
 
 

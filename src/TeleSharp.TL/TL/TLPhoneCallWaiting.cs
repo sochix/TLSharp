@@ -19,6 +19,7 @@ namespace TeleSharp.TL
         }
 
         public int Flags { get; set; }
+        public bool Video { get; set; }
         public long Id { get; set; }
         public long AccessHash { get; set; }
         public int Date { get; set; }
@@ -30,14 +31,13 @@ namespace TeleSharp.TL
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = ReceiveDate != null ? (Flags | 1) : (Flags & ~1);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             Flags = br.ReadInt32();
+            Video = (Flags & 32) != 0;
             Id = br.ReadInt64();
             AccessHash = br.ReadInt64();
             Date = br.ReadInt32();
@@ -55,8 +55,8 @@ namespace TeleSharp.TL
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
+
             bw.Write(Id);
             bw.Write(AccessHash);
             bw.Write(Date);

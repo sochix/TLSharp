@@ -19,7 +19,6 @@ namespace TeleSharp.TL.Auth
         }
 
         public int Flags { get; set; }
-        public bool PhoneRegistered { get; set; }
         public Auth.TLAbsSentCodeType Type { get; set; }
         public string PhoneCodeHash { get; set; }
         public Auth.TLAbsCodeType NextType { get; set; }
@@ -28,17 +27,12 @@ namespace TeleSharp.TL.Auth
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = PhoneRegistered ? (Flags | 1) : (Flags & ~1);
-            Flags = NextType != null ? (Flags | 2) : (Flags & ~2);
-            Flags = Timeout != null ? (Flags | 4) : (Flags & ~4);
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             Flags = br.ReadInt32();
-            PhoneRegistered = (Flags & 1) != 0;
             Type = (Auth.TLAbsSentCodeType)ObjectUtils.DeserializeObject(br);
             PhoneCodeHash = StringUtil.Deserialize(br);
             if ((Flags & 2) != 0)
@@ -57,9 +51,7 @@ namespace TeleSharp.TL.Auth
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
-
             ObjectUtils.SerializeObject(Type, bw);
             StringUtil.Serialize(PhoneCodeHash, bw);
             if ((Flags & 2) != 0)

@@ -7,20 +7,21 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(342061462)]
+    [TLObject(-539317279)]
     public class TLInputFileLocation : TLAbsInputFileLocation
     {
         public override int Constructor
         {
             get
             {
-                return 342061462;
+                return -539317279;
             }
         }
 
         public long VolumeId { get; set; }
         public int LocalId { get; set; }
         public long Secret { get; set; }
+        public byte[] FileReference { get; set; }
 
 
         public void ComputeFlags()
@@ -33,6 +34,7 @@ namespace TeleSharp.TL
             VolumeId = br.ReadInt64();
             LocalId = br.ReadInt32();
             Secret = br.ReadInt64();
+            FileReference = BytesUtil.Deserialize(br);
 
         }
 
@@ -42,6 +44,7 @@ namespace TeleSharp.TL
             bw.Write(VolumeId);
             bw.Write(LocalId);
             bw.Write(Secret);
+            BytesUtil.Serialize(FileReference, bw);
 
         }
     }

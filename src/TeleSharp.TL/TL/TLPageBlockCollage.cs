@@ -7,19 +7,19 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(145955919)]
+    [TLObject(1705048653)]
     public class TLPageBlockCollage : TLAbsPageBlock
     {
         public override int Constructor
         {
             get
             {
-                return 145955919;
+                return 1705048653;
             }
         }
 
         public TLVector<TLAbsPageBlock> Items { get; set; }
-        public TLAbsRichText Caption { get; set; }
+        public TLPageCaption Caption { get; set; }
 
 
         public void ComputeFlags()
@@ -30,7 +30,7 @@ namespace TeleSharp.TL
         public override void DeserializeBody(BinaryReader br)
         {
             Items = (TLVector<TLAbsPageBlock>)ObjectUtils.DeserializeVector<TLAbsPageBlock>(br);
-            Caption = (TLAbsRichText)ObjectUtils.DeserializeObject(br);
+            Caption = (TLPageCaption)ObjectUtils.DeserializeObject(br);
 
         }
 

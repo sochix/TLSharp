@@ -7,17 +7,19 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Phone
 {
-    [TLObject(1536537556)]
+    [TLObject(1124046573)]
     public class TLRequestRequestCall : TLMethod
     {
         public override int Constructor
         {
             get
             {
-                return 1536537556;
+                return 1124046573;
             }
         }
 
+        public int Flags { get; set; }
+        public bool Video { get; set; }
         public TLAbsInputUser UserId { get; set; }
         public int RandomId { get; set; }
         public byte[] GAHash { get; set; }
@@ -32,6 +34,8 @@ namespace TeleSharp.TL.Phone
 
         public override void DeserializeBody(BinaryReader br)
         {
+            Flags = br.ReadInt32();
+            Video = (Flags & 1) != 0;
             UserId = (TLAbsInputUser)ObjectUtils.DeserializeObject(br);
             RandomId = br.ReadInt32();
             GAHash = BytesUtil.Deserialize(br);
@@ -42,6 +46,8 @@ namespace TeleSharp.TL.Phone
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
+            bw.Write(Flags);
+
             ObjectUtils.SerializeObject(UserId, bw);
             bw.Write(RandomId);
             BytesUtil.Serialize(GAHash, bw);

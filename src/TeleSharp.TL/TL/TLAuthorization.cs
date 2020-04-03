@@ -7,19 +7,22 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(2079516406)]
+    [TLObject(-1392388579)]
     public class TLAuthorization : TLObject
     {
         public override int Constructor
         {
             get
             {
-                return 2079516406;
+                return -1392388579;
             }
         }
 
-        public long Hash { get; set; }
         public int Flags { get; set; }
+        public bool Current { get; set; }
+        public bool OfficialApp { get; set; }
+        public bool PasswordPending { get; set; }
+        public long Hash { get; set; }
         public string DeviceModel { get; set; }
         public string Platform { get; set; }
         public string SystemVersion { get; set; }
@@ -35,14 +38,16 @@ namespace TeleSharp.TL
 
         public void ComputeFlags()
         {
-            Flags = 0;
 
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            Hash = br.ReadInt64();
             Flags = br.ReadInt32();
+            Current = (Flags & 1) != 0;
+            OfficialApp = (Flags & 2) != 0;
+            PasswordPending = (Flags & 4) != 0;
+            Hash = br.ReadInt64();
             DeviceModel = StringUtil.Deserialize(br);
             Platform = StringUtil.Deserialize(br);
             SystemVersion = StringUtil.Deserialize(br);
@@ -60,8 +65,10 @@ namespace TeleSharp.TL
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
+
+
+
             bw.Write(Hash);
             StringUtil.Serialize(DeviceModel, bw);
             StringUtil.Serialize(Platform, bw);

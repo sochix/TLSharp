@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(773059779)]
+    [TLObject(-1820043071)]
     public class TLUser : TLAbsUser
     {
         public override int Constructor
         {
             get
             {
-                return 773059779;
+                return -1820043071;
             }
         }
 
@@ -30,6 +30,8 @@ namespace TeleSharp.TL
         public bool Restricted { get; set; }
         public bool Min { get; set; }
         public bool BotInlineGeo { get; set; }
+        public bool Support { get; set; }
+        public bool Scam { get; set; }
         public int Id { get; set; }
         public long? AccessHash { get; set; }
         public string FirstName { get; set; }
@@ -39,36 +41,13 @@ namespace TeleSharp.TL
         public TLAbsUserProfilePhoto Photo { get; set; }
         public TLAbsUserStatus Status { get; set; }
         public int? BotInfoVersion { get; set; }
-        public string RestrictionReason { get; set; }
+        public TLVector<TLRestrictionReason> RestrictionReason { get; set; }
         public string BotInlinePlaceholder { get; set; }
         public string LangCode { get; set; }
 
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Self ? (Flags | 1024) : (Flags & ~1024);
-            Flags = Contact ? (Flags | 2048) : (Flags & ~2048);
-            Flags = MutualContact ? (Flags | 4096) : (Flags & ~4096);
-            Flags = Deleted ? (Flags | 8192) : (Flags & ~8192);
-            Flags = Bot ? (Flags | 16384) : (Flags & ~16384);
-            Flags = BotChatHistory ? (Flags | 32768) : (Flags & ~32768);
-            Flags = BotNochats ? (Flags | 65536) : (Flags & ~65536);
-            Flags = Verified ? (Flags | 131072) : (Flags & ~131072);
-            Flags = Restricted ? (Flags | 262144) : (Flags & ~262144);
-            Flags = Min ? (Flags | 1048576) : (Flags & ~1048576);
-            Flags = BotInlineGeo ? (Flags | 2097152) : (Flags & ~2097152);
-            Flags = AccessHash != null ? (Flags | 1) : (Flags & ~1);
-            Flags = FirstName != null ? (Flags | 2) : (Flags & ~2);
-            Flags = LastName != null ? (Flags | 4) : (Flags & ~4);
-            Flags = Username != null ? (Flags | 8) : (Flags & ~8);
-            Flags = Phone != null ? (Flags | 16) : (Flags & ~16);
-            Flags = Photo != null ? (Flags | 32) : (Flags & ~32);
-            Flags = Status != null ? (Flags | 64) : (Flags & ~64);
-            Flags = BotInfoVersion != null ? (Flags | 16384) : (Flags & ~16384);
-            Flags = RestrictionReason != null ? (Flags | 262144) : (Flags & ~262144);
-            Flags = BotInlinePlaceholder != null ? (Flags | 524288) : (Flags & ~524288);
-            Flags = LangCode != null ? (Flags | 4194304) : (Flags & ~4194304);
 
         }
 
@@ -86,6 +65,8 @@ namespace TeleSharp.TL
             Restricted = (Flags & 262144) != 0;
             Min = (Flags & 1048576) != 0;
             BotInlineGeo = (Flags & 2097152) != 0;
+            Support = (Flags & 8388608) != 0;
+            Scam = (Flags & 16777216) != 0;
             Id = br.ReadInt32();
             if ((Flags & 1) != 0)
                 AccessHash = br.ReadInt64();
@@ -128,7 +109,7 @@ namespace TeleSharp.TL
                 BotInfoVersion = null;
 
             if ((Flags & 262144) != 0)
-                RestrictionReason = StringUtil.Deserialize(br);
+                RestrictionReason = (TLVector<TLRestrictionReason>)ObjectUtils.DeserializeVector<TLRestrictionReason>(br);
             else
                 RestrictionReason = null;
 
@@ -148,8 +129,9 @@ namespace TeleSharp.TL
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
+
+
 
 
 
@@ -179,7 +161,7 @@ namespace TeleSharp.TL
             if ((Flags & 16384) != 0)
                 bw.Write(BotInfoVersion.Value);
             if ((Flags & 262144) != 0)
-                StringUtil.Serialize(RestrictionReason, bw);
+                ObjectUtils.SerializeObject(RestrictionReason, bw);
             if ((Flags & 524288) != 0)
                 StringUtil.Serialize(BotInlinePlaceholder, bw);
             if ((Flags & 4194304) != 0)

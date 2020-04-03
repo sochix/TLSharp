@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-840826671)]
+    [TLObject(-1468953147)]
     public class TLPageBlockEmbed : TLAbsPageBlock
     {
         public override int Constructor
         {
             get
             {
-                return -840826671;
+                return -1468953147;
             }
         }
 
@@ -24,19 +24,13 @@ namespace TeleSharp.TL
         public string Url { get; set; }
         public string Html { get; set; }
         public long? PosterPhotoId { get; set; }
-        public int W { get; set; }
-        public int H { get; set; }
-        public TLAbsRichText Caption { get; set; }
+        public int? W { get; set; }
+        public int? H { get; set; }
+        public TLPageCaption Caption { get; set; }
 
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = FullWidth ? (Flags | 1) : (Flags & ~1);
-            Flags = AllowScrolling ? (Flags | 8) : (Flags & ~8);
-            Flags = Url != null ? (Flags | 2) : (Flags & ~2);
-            Flags = Html != null ? (Flags | 4) : (Flags & ~4);
-            Flags = PosterPhotoId != null ? (Flags | 16) : (Flags & ~16);
 
         }
 
@@ -60,16 +54,23 @@ namespace TeleSharp.TL
             else
                 PosterPhotoId = null;
 
-            W = br.ReadInt32();
-            H = br.ReadInt32();
-            Caption = (TLAbsRichText)ObjectUtils.DeserializeObject(br);
+            if ((Flags & 32) != 0)
+                W = br.ReadInt32();
+            else
+                W = null;
+
+            if ((Flags & 32) != 0)
+                H = br.ReadInt32();
+            else
+                H = null;
+
+            Caption = (TLPageCaption)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
 
 
@@ -79,8 +80,10 @@ namespace TeleSharp.TL
                 StringUtil.Serialize(Html, bw);
             if ((Flags & 16) != 0)
                 bw.Write(PosterPhotoId.Value);
-            bw.Write(W);
-            bw.Write(H);
+            if ((Flags & 32) != 0)
+                bw.Write(W.Value);
+            if ((Flags & 32) != 0)
+                bw.Write(H.Value);
             ObjectUtils.SerializeObject(Caption, bw);
 
         }

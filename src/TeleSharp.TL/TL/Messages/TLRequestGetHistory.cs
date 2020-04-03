@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Messages
 {
-    [TLObject(-1347868602)]
+    [TLObject(-591691168)]
     public class TLRequestGetHistory : TLMethod
     {
         public override int Constructor
         {
             get
             {
-                return -1347868602;
+                return -591691168;
             }
         }
 
@@ -25,6 +25,7 @@ namespace TeleSharp.TL.Messages
         public int Limit { get; set; }
         public int MaxId { get; set; }
         public int MinId { get; set; }
+        public int Hash { get; set; }
         public Messages.TLAbsMessages Response { get; set; }
 
 
@@ -42,6 +43,7 @@ namespace TeleSharp.TL.Messages
             Limit = br.ReadInt32();
             MaxId = br.ReadInt32();
             MinId = br.ReadInt32();
+            Hash = br.ReadInt32();
 
         }
 
@@ -55,6 +57,7 @@ namespace TeleSharp.TL.Messages
             bw.Write(Limit);
             bw.Write(MaxId);
             bw.Write(MinId);
+            bw.Write(Hash);
 
         }
         public override void DeserializeResponse(BinaryReader br)

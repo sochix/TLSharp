@@ -29,9 +29,6 @@ namespace TeleSharp.TL
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Title != null ? (Flags | 2) : (Flags & ~2);
-            Flags = Description != null ? (Flags | 4) : (Flags & ~4);
 
         }
 
@@ -58,7 +55,6 @@ namespace TeleSharp.TL
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
             StringUtil.Serialize(Id, bw);
             StringUtil.Serialize(Type, bw);

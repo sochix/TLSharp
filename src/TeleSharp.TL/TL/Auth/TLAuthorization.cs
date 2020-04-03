@@ -8,7 +8,7 @@ using TeleSharp.TL;
 namespace TeleSharp.TL.Auth
 {
     [TLObject(-855308010)]
-    public class TLAuthorization : TLObject
+    public class TLAuthorization : TLAbsAuthorization
     {
         public override int Constructor
         {
@@ -25,8 +25,6 @@ namespace TeleSharp.TL.Auth
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = TmpSessions != null ? (Flags | 1) : (Flags & ~1);
 
         }
 
@@ -45,7 +43,6 @@ namespace TeleSharp.TL.Auth
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
             if ((Flags & 1) != 0)
                 bw.Write(TmpSessions.Value);

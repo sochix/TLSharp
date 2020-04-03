@@ -7,18 +7,19 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(524838915)]
+    [TLObject(1571494644)]
     public class TLExportedMessageLink : TLObject
     {
         public override int Constructor
         {
             get
             {
-                return 524838915;
+                return 1571494644;
             }
         }
 
         public string Link { get; set; }
+        public string Html { get; set; }
 
 
         public void ComputeFlags()
@@ -29,6 +30,7 @@ namespace TeleSharp.TL
         public override void DeserializeBody(BinaryReader br)
         {
             Link = StringUtil.Deserialize(br);
+            Html = StringUtil.Deserialize(br);
 
         }
 
@@ -36,6 +38,7 @@ namespace TeleSharp.TL
         {
             bw.Write(Constructor);
             StringUtil.Serialize(Link, bw);
+            StringUtil.Serialize(Html, bw);
 
         }
     }

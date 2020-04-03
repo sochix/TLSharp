@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Account
 {
-    [TLObject(-1131605573)]
+    [TLObject(-1663767815)]
     public class TLRequestGetPasswordSettings : TLMethod
     {
         public override int Constructor
         {
             get
             {
-                return -1131605573;
+                return -1663767815;
             }
         }
 
-        public byte[] CurrentPasswordHash { get; set; }
+        public TLAbsInputCheckPasswordSRP Password { get; set; }
         public Account.TLPasswordSettings Response { get; set; }
 
 
@@ -29,14 +29,14 @@ namespace TeleSharp.TL.Account
 
         public override void DeserializeBody(BinaryReader br)
         {
-            CurrentPasswordHash = BytesUtil.Deserialize(br);
+            Password = (TLAbsInputCheckPasswordSRP)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            BytesUtil.Serialize(CurrentPasswordHash, bw);
+            ObjectUtils.SerializeObject(Password, bw);
 
         }
         public override void DeserializeResponse(BinaryReader br)

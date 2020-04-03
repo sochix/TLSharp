@@ -30,9 +30,6 @@ namespace TeleSharp.TL
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Data != null ? (Flags | 1) : (Flags & ~1);
-            Flags = GameShortName != null ? (Flags | 2) : (Flags & ~2);
 
         }
 
@@ -60,7 +57,6 @@ namespace TeleSharp.TL
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
             bw.Write(QueryId);
             bw.Write(UserId);

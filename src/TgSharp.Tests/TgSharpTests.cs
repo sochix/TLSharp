@@ -139,13 +139,6 @@ namespace TgSharp.Tests
             {
                 user = await client.MakeAuthAsync(NumberToAuthenticate, hash, code);
             }
-            catch (CloudPasswordNeededException ex)
-            {
-                var passwordSetting = await client.GetPasswordSetting();
-                var password = PasswordToAuthenticate;
-
-                user = await client.MakeAuthWithPasswordAsync(passwordSetting, password);
-            }
             catch (InvalidPhoneCodeException ex)
             {
                 throw new Exception("CodeToAuthenticate is wrong in the app.config file, fill it with the code you just got now by SMS/Telegram",
@@ -192,7 +185,7 @@ namespace TgSharp.Tests
 
             await client.ConnectAsync();
 
-            var dialogs = (TLDialogs) await client.GetUserDialogsAsync();
+            var dialogs = (TLDialogs)await client.GetUserDialogsAsync();
             var chat = dialogs.Chats
                 .OfType<TLChannel>()
                 .FirstOrDefault(c => c.Title == "TestGroup");
@@ -213,7 +206,7 @@ namespace TgSharp.Tests
                 .FirstOrDefault(x => x.Phone == NumberToSendMessage);
 
             var fileResult = (TLInputFile)await client.UploadFile("cat.jpg", new StreamReader("data/cat.jpg"));
-            await client.SendUploadedPhoto(new TLInputPeerUser() { UserId = user.Id }, fileResult, "kitty");
+            await client.SendUploadedPhoto(new TLInputPeerUser() { UserId = user.Id }, fileResult);
         }
 
         public virtual async Task SendBigFileToContactTest()
@@ -233,7 +226,6 @@ namespace TgSharp.Tests
             await client.SendUploadedDocument(
                 new TLInputPeerUser() { UserId = user.Id },
                 fileResult,
-                "some zips",
                 "application/zip",
                 new TLVector<TLAbsDocumentAttribute>());
         }
@@ -266,10 +258,11 @@ namespace TgSharp.Tests
                 {
                     AccessHash = document.AccessHash,
                     Id = document.Id,
-                    Version = document.Version
+                    FileReference = document.FileReference,
+                    ThumbSize = "250x250"
                 },
                 document.Size);
-            
+
             Assert.IsTrue(resFile.Bytes.Length > 0);
         }
 
@@ -284,18 +277,19 @@ namespace TgSharp.Tests
             var user = result.Users
                 .OfType<TLUser>()
                 .FirstOrDefault(x => x.Id == 5880094);
-    
-            var photo = ((TLUserProfilePhoto)user.Photo);
-            var photoLocation = (TLFileLocation) photo.PhotoBig;
 
-            var resFile = await client.GetFile(new TLInputFileLocation()
+            var photo = ((TLUserProfilePhoto)user.Photo);
+            var photoLocation = (TLFileLocationToBeDeprecated)photo.PhotoBig;
+
+            var resFile = await client.GetFile(new TLInputPeerPhotoFileLocation()
             {
+                Big = true,
                 LocalId = photoLocation.LocalId,
-                Secret = photoLocation.Secret,
-                VolumeId = photoLocation.VolumeId
+                VolumeId = photoLocation.VolumeId,
+                Peer = new TLInputPeerUser { UserId = user.Id, AccessHash = user.AccessHash.Value }
             }, 1024);
 
-            var res = await client.GetUserDialogsAsync(); 
+            var res = await client.GetUserDialogsAsync();
 
             Assert.IsTrue(resFile.Bytes.Length > 0);
         }
@@ -308,37 +302,9 @@ namespace TgSharp.Tests
             var hash = await client.SendCodeRequestAsync(NotRegisteredNumberToSignUp);
             var code = "";
 
-            var registeredUser = await client.SignUpAsync(NotRegisteredNumberToSignUp, hash, code, "TgSharp", "User");
+            var registeredUser = await client.MakeAuthAsync(NotRegisteredNumberToSignUp, hash, code, "TgSharp", "User");
             Assert.IsNotNull(registeredUser);
             Assert.IsTrue(client.IsUserAuthorized());
-
-            var loggedInUser = await client.MakeAuthAsync(NotRegisteredNumberToSignUp, hash, code);
-            Assert.IsNotNull(loggedInUser);
-        }
-
-        public virtual async Task CheckPhones()
-        {
-            var client = NewClient();
-            await client.ConnectAsync();
-
-            var result = await client.IsPhoneRegisteredAsync(NumberToAuthenticate);
-            Assert.IsTrue(result);
-        }
-
-        public virtual async Task FloodExceptionShouldNotCauseCannotReadPackageLengthError()
-        {
-            for (int i = 0; i < 50; i++)
-            {
-                try
-                {
-                    await CheckPhones();
-                }
-                catch (FloodException floodException)
-                {
-                    Console.WriteLine($"FLOODEXCEPTION: {floodException}");
-                    Thread.Sleep(floodException.TimeToWait);
-                }
-            }
         }
 
         public virtual async Task SendMessageByUserNameTest()

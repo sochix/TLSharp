@@ -8,7 +8,7 @@ using TeleSharp.TL;
 namespace TeleSharp.TL
 {
     [TLObject(-1036396922)]
-    public class TLInputWebFileLocation : TLObject
+    public class TLInputWebFileLocation : TLAbsInputWebFileLocation
     {
         public override int Constructor
         {

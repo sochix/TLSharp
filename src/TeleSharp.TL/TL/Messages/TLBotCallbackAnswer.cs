@@ -21,6 +21,7 @@ namespace TeleSharp.TL.Messages
         public int Flags { get; set; }
         public bool Alert { get; set; }
         public bool HasUrl { get; set; }
+        public bool NativeUi { get; set; }
         public string Message { get; set; }
         public string Url { get; set; }
         public int CacheTime { get; set; }
@@ -28,11 +29,6 @@ namespace TeleSharp.TL.Messages
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Alert ? (Flags | 2) : (Flags & ~2);
-            Flags = HasUrl ? (Flags | 8) : (Flags & ~8);
-            Flags = Message != null ? (Flags | 1) : (Flags & ~1);
-            Flags = Url != null ? (Flags | 4) : (Flags & ~4);
 
         }
 
@@ -41,6 +37,7 @@ namespace TeleSharp.TL.Messages
             Flags = br.ReadInt32();
             Alert = (Flags & 2) != 0;
             HasUrl = (Flags & 8) != 0;
+            NativeUi = (Flags & 16) != 0;
             if ((Flags & 1) != 0)
                 Message = StringUtil.Deserialize(br);
             else
@@ -58,8 +55,8 @@ namespace TeleSharp.TL.Messages
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
+
 
 
             if ((Flags & 1) != 0)

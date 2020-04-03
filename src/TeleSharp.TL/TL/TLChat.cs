@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-652419756)]
+    [TLObject(1004149726)]
     public class TLChat : TLAbsChat
     {
         public override int Constructor
         {
             get
             {
-                return -652419756;
+                return 1004149726;
             }
         }
 
@@ -22,8 +22,6 @@ namespace TeleSharp.TL
         public bool Creator { get; set; }
         public bool Kicked { get; set; }
         public bool Left { get; set; }
-        public bool AdminsEnabled { get; set; }
-        public bool Admin { get; set; }
         public bool Deactivated { get; set; }
         public int Id { get; set; }
         public string Title { get; set; }
@@ -32,18 +30,12 @@ namespace TeleSharp.TL
         public int Date { get; set; }
         public int Version { get; set; }
         public TLAbsInputChannel MigratedTo { get; set; }
+        public TLChatAdminRights AdminRights { get; set; }
+        public TLChatBannedRights DefaultBannedRights { get; set; }
 
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Creator ? (Flags | 1) : (Flags & ~1);
-            Flags = Kicked ? (Flags | 2) : (Flags & ~2);
-            Flags = Left ? (Flags | 4) : (Flags & ~4);
-            Flags = AdminsEnabled ? (Flags | 8) : (Flags & ~8);
-            Flags = Admin ? (Flags | 16) : (Flags & ~16);
-            Flags = Deactivated ? (Flags | 32) : (Flags & ~32);
-            Flags = MigratedTo != null ? (Flags | 64) : (Flags & ~64);
 
         }
 
@@ -53,8 +45,6 @@ namespace TeleSharp.TL
             Creator = (Flags & 1) != 0;
             Kicked = (Flags & 2) != 0;
             Left = (Flags & 4) != 0;
-            AdminsEnabled = (Flags & 8) != 0;
-            Admin = (Flags & 16) != 0;
             Deactivated = (Flags & 32) != 0;
             Id = br.ReadInt32();
             Title = StringUtil.Deserialize(br);
@@ -67,16 +57,23 @@ namespace TeleSharp.TL
             else
                 MigratedTo = null;
 
+            if ((Flags & 16384) != 0)
+                AdminRights = (TLChatAdminRights)ObjectUtils.DeserializeObject(br);
+            else
+                AdminRights = null;
+
+            if ((Flags & 262144) != 0)
+                DefaultBannedRights = (TLChatBannedRights)ObjectUtils.DeserializeObject(br);
+            else
+                DefaultBannedRights = null;
+
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
-
-
 
 
 
@@ -89,6 +86,10 @@ namespace TeleSharp.TL
             bw.Write(Version);
             if ((Flags & 64) != 0)
                 ObjectUtils.SerializeObject(MigratedTo, bw);
+            if ((Flags & 16384) != 0)
+                ObjectUtils.SerializeObject(AdminRights, bw);
+            if ((Flags & 262144) != 0)
+                ObjectUtils.SerializeObject(DefaultBannedRights, bw);
 
         }
     }

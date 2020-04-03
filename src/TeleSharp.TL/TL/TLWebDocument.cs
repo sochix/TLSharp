@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-971322408)]
-    public class TLWebDocument : TLObject
+    [TLObject(475467473)]
+    public class TLWebDocument : TLAbsWebDocument
     {
         public override int Constructor
         {
             get
             {
-                return -971322408;
+                return 475467473;
             }
         }
 
@@ -23,7 +23,6 @@ namespace TeleSharp.TL
         public int Size { get; set; }
         public string MimeType { get; set; }
         public TLVector<TLAbsDocumentAttribute> Attributes { get; set; }
-        public int DcId { get; set; }
 
 
         public void ComputeFlags()
@@ -38,7 +37,6 @@ namespace TeleSharp.TL
             Size = br.ReadInt32();
             MimeType = StringUtil.Deserialize(br);
             Attributes = (TLVector<TLAbsDocumentAttribute>)ObjectUtils.DeserializeVector<TLAbsDocumentAttribute>(br);
-            DcId = br.ReadInt32();
 
         }
 
@@ -50,7 +48,6 @@ namespace TeleSharp.TL
             bw.Write(Size);
             StringUtil.Serialize(MimeType, bw);
             ObjectUtils.SerializeObject(Attributes, bw);
-            bw.Write(DcId);
 
         }
     }

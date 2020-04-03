@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Messages
 {
-    [TLObject(1109588596)]
+    [TLObject(1673946374)]
     public class TLRequestGetMessages : TLMethod
     {
         public override int Constructor
         {
             get
             {
-                return 1109588596;
+                return 1673946374;
             }
         }
 
-        public TLVector<int> Id { get; set; }
+        public TLVector<TLAbsInputMessage> Id { get; set; }
         public Messages.TLAbsMessages Response { get; set; }
 
 
@@ -29,7 +29,7 @@ namespace TeleSharp.TL.Messages
 
         public override void DeserializeBody(BinaryReader br)
         {
-            Id = (TLVector<int>)ObjectUtils.DeserializeVector<int>(br);
+            Id = (TLVector<TLAbsInputMessage>)ObjectUtils.DeserializeVector<TLAbsInputMessage>(br);
 
         }
 

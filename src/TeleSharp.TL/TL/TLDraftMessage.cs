@@ -28,10 +28,6 @@ namespace TeleSharp.TL
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = NoWebpage ? (Flags | 2) : (Flags & ~2);
-            Flags = ReplyToMsgId != null ? (Flags | 1) : (Flags & ~1);
-            Flags = Entities != null ? (Flags | 8) : (Flags & ~8);
 
         }
 
@@ -57,7 +53,6 @@ namespace TeleSharp.TL
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
 
             if ((Flags & 1) != 0)

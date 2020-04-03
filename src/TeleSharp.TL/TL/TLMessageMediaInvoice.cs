@@ -23,7 +23,7 @@ namespace TeleSharp.TL
         public bool Test { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public TLWebDocument Photo { get; set; }
+        public TLAbsWebDocument Photo { get; set; }
         public int? ReceiptMsgId { get; set; }
         public string Currency { get; set; }
         public long TotalAmount { get; set; }
@@ -32,11 +32,6 @@ namespace TeleSharp.TL
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = ShippingAddressRequested ? (Flags | 2) : (Flags & ~2);
-            Flags = Test ? (Flags | 8) : (Flags & ~8);
-            Flags = Photo != null ? (Flags | 1) : (Flags & ~1);
-            Flags = ReceiptMsgId != null ? (Flags | 4) : (Flags & ~4);
 
         }
 
@@ -48,7 +43,7 @@ namespace TeleSharp.TL
             Title = StringUtil.Deserialize(br);
             Description = StringUtil.Deserialize(br);
             if ((Flags & 1) != 0)
-                Photo = (TLWebDocument)ObjectUtils.DeserializeObject(br);
+                Photo = (TLAbsWebDocument)ObjectUtils.DeserializeObject(br);
             else
                 Photo = null;
 
@@ -66,7 +61,6 @@ namespace TeleSharp.TL
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
 
 

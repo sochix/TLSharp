@@ -19,7 +19,7 @@ namespace TeleSharp.TL.Account
         }
 
         public TLAbsInputNotifyPeer Peer { get; set; }
-        public TLAbsPeerNotifySettings Response { get; set; }
+        public TLPeerNotifySettings Response { get; set; }
 
 
         public void ComputeFlags()
@@ -41,7 +41,7 @@ namespace TeleSharp.TL.Account
         }
         public override void DeserializeResponse(BinaryReader br)
         {
-            Response = (TLAbsPeerNotifySettings)ObjectUtils.DeserializeObject(br);
+            Response = (TLPeerNotifySettings)ObjectUtils.DeserializeObject(br);
 
         }
     }

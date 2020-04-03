@@ -8,7 +8,7 @@ using TeleSharp.TL;
 namespace TeleSharp.TL.Channels
 {
     [TLObject(-177282392)]
-    public class TLChannelParticipants : TLObject
+    public class TLChannelParticipants : TLAbsChannelParticipants
     {
         public override int Constructor
         {

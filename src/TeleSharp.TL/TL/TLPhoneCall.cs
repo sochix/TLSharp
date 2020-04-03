@@ -7,17 +7,19 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-1660057)]
+    [TLObject(-2025673089)]
     public class TLPhoneCall : TLAbsPhoneCall
     {
         public override int Constructor
         {
             get
             {
-                return -1660057;
+                return -2025673089;
             }
         }
 
+        public int Flags { get; set; }
+        public bool P2pAllowed { get; set; }
         public long Id { get; set; }
         public long AccessHash { get; set; }
         public int Date { get; set; }
@@ -26,8 +28,7 @@ namespace TeleSharp.TL
         public byte[] GAOrB { get; set; }
         public long KeyFingerprint { get; set; }
         public TLPhoneCallProtocol Protocol { get; set; }
-        public TLPhoneConnection Connection { get; set; }
-        public TLVector<TLPhoneConnection> AlternativeConnections { get; set; }
+        public TLVector<TLPhoneConnection> Connections { get; set; }
         public int StartDate { get; set; }
 
 
@@ -38,6 +39,8 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
+            Flags = br.ReadInt32();
+            P2pAllowed = (Flags & 32) != 0;
             Id = br.ReadInt64();
             AccessHash = br.ReadInt64();
             Date = br.ReadInt32();
@@ -46,8 +49,7 @@ namespace TeleSharp.TL
             GAOrB = BytesUtil.Deserialize(br);
             KeyFingerprint = br.ReadInt64();
             Protocol = (TLPhoneCallProtocol)ObjectUtils.DeserializeObject(br);
-            Connection = (TLPhoneConnection)ObjectUtils.DeserializeObject(br);
-            AlternativeConnections = (TLVector<TLPhoneConnection>)ObjectUtils.DeserializeVector<TLPhoneConnection>(br);
+            Connections = (TLVector<TLPhoneConnection>)ObjectUtils.DeserializeVector<TLPhoneConnection>(br);
             StartDate = br.ReadInt32();
 
         }
@@ -55,6 +57,8 @@ namespace TeleSharp.TL
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
+            bw.Write(Flags);
+
             bw.Write(Id);
             bw.Write(AccessHash);
             bw.Write(Date);
@@ -63,8 +67,7 @@ namespace TeleSharp.TL
             BytesUtil.Serialize(GAOrB, bw);
             bw.Write(KeyFingerprint);
             ObjectUtils.SerializeObject(Protocol, bw);
-            ObjectUtils.SerializeObject(Connection, bw);
-            ObjectUtils.SerializeObject(AlternativeConnections, bw);
+            ObjectUtils.SerializeObject(Connections, bw);
             bw.Write(StartDate);
 
         }

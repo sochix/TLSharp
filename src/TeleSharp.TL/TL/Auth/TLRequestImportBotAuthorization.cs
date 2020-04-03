@@ -22,12 +22,11 @@ namespace TeleSharp.TL.Auth
         public int ApiId { get; set; }
         public string ApiHash { get; set; }
         public string BotAuthToken { get; set; }
-        public Auth.TLAuthorization Response { get; set; }
+        public Auth.TLAbsAuthorization Response { get; set; }
 
 
         public void ComputeFlags()
         {
-            Flags = 0;
 
         }
 
@@ -43,7 +42,6 @@ namespace TeleSharp.TL.Auth
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
             bw.Write(ApiId);
             StringUtil.Serialize(ApiHash, bw);
@@ -52,7 +50,7 @@ namespace TeleSharp.TL.Auth
         }
         public override void DeserializeResponse(BinaryReader br)
         {
-            Response = (Auth.TLAuthorization)ObjectUtils.DeserializeObject(br);
+            Response = (Auth.TLAbsAuthorization)ObjectUtils.DeserializeObject(br);
 
         }
     }

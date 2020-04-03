@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(-1844103547)]
+    [TLObject(-186607933)]
     public class TLInputMediaInvoice : TLAbsInputMedia
     {
         public override int Constructor
         {
             get
             {
-                return -1844103547;
+                return -186607933;
             }
         }
 
@@ -25,13 +25,12 @@ namespace TeleSharp.TL
         public TLInvoice Invoice { get; set; }
         public byte[] Payload { get; set; }
         public string Provider { get; set; }
+        public TLDataJSON ProviderData { get; set; }
         public string StartParam { get; set; }
 
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Photo != null ? (Flags | 1) : (Flags & ~1);
 
         }
 
@@ -48,6 +47,7 @@ namespace TeleSharp.TL
             Invoice = (TLInvoice)ObjectUtils.DeserializeObject(br);
             Payload = BytesUtil.Deserialize(br);
             Provider = StringUtil.Deserialize(br);
+            ProviderData = (TLDataJSON)ObjectUtils.DeserializeObject(br);
             StartParam = StringUtil.Deserialize(br);
 
         }
@@ -55,7 +55,6 @@ namespace TeleSharp.TL
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
             StringUtil.Serialize(Title, bw);
             StringUtil.Serialize(Description, bw);
@@ -64,6 +63,7 @@ namespace TeleSharp.TL
             ObjectUtils.SerializeObject(Invoice, bw);
             BytesUtil.Serialize(Payload, bw);
             StringUtil.Serialize(Provider, bw);
+            ObjectUtils.SerializeObject(ProviderData, bw);
             StringUtil.Serialize(StartParam, bw);
 
         }

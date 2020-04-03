@@ -7,19 +7,20 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Account
 {
-    [TLObject(1707432768)]
+    [TLObject(813089983)]
     public class TLRequestUnregisterDevice : TLMethod
     {
         public override int Constructor
         {
             get
             {
-                return 1707432768;
+                return 813089983;
             }
         }
 
         public int TokenType { get; set; }
         public string Token { get; set; }
+        public TLVector<int> OtherUids { get; set; }
         public bool Response { get; set; }
 
 
@@ -32,6 +33,7 @@ namespace TeleSharp.TL.Account
         {
             TokenType = br.ReadInt32();
             Token = StringUtil.Deserialize(br);
+            OtherUids = (TLVector<int>)ObjectUtils.DeserializeVector<int>(br);
 
         }
 
@@ -40,6 +42,7 @@ namespace TeleSharp.TL.Account
             bw.Write(Constructor);
             bw.Write(TokenType);
             StringUtil.Serialize(Token, bw);
+            ObjectUtils.SerializeObject(OtherUids, bw);
 
         }
         public override void DeserializeResponse(BinaryReader br)

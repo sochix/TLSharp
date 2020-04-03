@@ -7,19 +7,18 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(978896884)]
+    [TLObject(-454524911)]
     public class TLPageBlockList : TLAbsPageBlock
     {
         public override int Constructor
         {
             get
             {
-                return 978896884;
+                return -454524911;
             }
         }
 
-        public bool Ordered { get; set; }
-        public TLVector<TLAbsRichText> Items { get; set; }
+        public TLVector<TLAbsPageListItem> Items { get; set; }
 
 
         public void ComputeFlags()
@@ -29,15 +28,13 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            Ordered = BoolUtil.Deserialize(br);
-            Items = (TLVector<TLAbsRichText>)ObjectUtils.DeserializeVector<TLAbsRichText>(br);
+            Items = (TLVector<TLAbsPageListItem>)ObjectUtils.DeserializeVector<TLAbsPageListItem>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            BoolUtil.Serialize(Ordered, bw);
             ObjectUtils.SerializeObject(Items, bw);
 
         }

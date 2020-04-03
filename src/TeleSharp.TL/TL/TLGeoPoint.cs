@@ -7,19 +7,20 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(541710092)]
+    [TLObject(43446532)]
     public class TLGeoPoint : TLAbsGeoPoint
     {
         public override int Constructor
         {
             get
             {
-                return 541710092;
+                return 43446532;
             }
         }
 
         public double Long { get; set; }
         public double Lat { get; set; }
+        public long AccessHash { get; set; }
 
 
         public void ComputeFlags()
@@ -31,6 +32,7 @@ namespace TeleSharp.TL
         {
             Long = br.ReadDouble();
             Lat = br.ReadDouble();
+            AccessHash = br.ReadInt64();
 
         }
 
@@ -39,6 +41,7 @@ namespace TeleSharp.TL
             bw.Write(Constructor);
             bw.Write(Long);
             bw.Write(Lat);
+            bw.Write(AccessHash);
 
         }
     }

@@ -30,9 +30,6 @@ namespace TeleSharp.TL.Messages
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = EditMessage ? (Flags | 1) : (Flags & ~1);
-            Flags = Force ? (Flags | 2) : (Flags & ~2);
 
         }
 
@@ -51,7 +48,6 @@ namespace TeleSharp.TL.Messages
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
 
 

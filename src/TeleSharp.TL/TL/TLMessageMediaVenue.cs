@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(2031269663)]
+    [TLObject(784356159)]
     public class TLMessageMediaVenue : TLAbsMessageMedia
     {
         public override int Constructor
         {
             get
             {
-                return 2031269663;
+                return 784356159;
             }
         }
 
@@ -23,6 +23,7 @@ namespace TeleSharp.TL
         public string Address { get; set; }
         public string Provider { get; set; }
         public string VenueId { get; set; }
+        public string VenueType { get; set; }
 
 
         public void ComputeFlags()
@@ -37,6 +38,7 @@ namespace TeleSharp.TL
             Address = StringUtil.Deserialize(br);
             Provider = StringUtil.Deserialize(br);
             VenueId = StringUtil.Deserialize(br);
+            VenueType = StringUtil.Deserialize(br);
 
         }
 
@@ -48,6 +50,7 @@ namespace TeleSharp.TL
             StringUtil.Serialize(Address, bw);
             StringUtil.Serialize(Provider, bw);
             StringUtil.Serialize(VenueId, bw);
+            StringUtil.Serialize(VenueType, bw);
 
         }
     }

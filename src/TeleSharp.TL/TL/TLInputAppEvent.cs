@@ -7,21 +7,21 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(1996904104)]
+    [TLObject(488313413)]
     public class TLInputAppEvent : TLObject
     {
         public override int Constructor
         {
             get
             {
-                return 1996904104;
+                return 488313413;
             }
         }
 
         public double Time { get; set; }
         public string Type { get; set; }
         public long Peer { get; set; }
-        public string Data { get; set; }
+        public TLAbsJSONValue Data { get; set; }
 
 
         public void ComputeFlags()
@@ -34,7 +34,7 @@ namespace TeleSharp.TL
             Time = br.ReadDouble();
             Type = StringUtil.Deserialize(br);
             Peer = br.ReadInt64();
-            Data = StringUtil.Deserialize(br);
+            Data = (TLAbsJSONValue)ObjectUtils.DeserializeObject(br);
 
         }
 
@@ -44,7 +44,7 @@ namespace TeleSharp.TL
             bw.Write(Time);
             StringUtil.Serialize(Type, bw);
             bw.Write(Peer);
-            StringUtil.Serialize(Data, bw);
+            ObjectUtils.SerializeObject(Data, bw);
 
         }
     }

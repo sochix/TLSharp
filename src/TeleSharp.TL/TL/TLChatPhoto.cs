@@ -7,19 +7,20 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL
 {
-    [TLObject(1632839530)]
+    [TLObject(1197267925)]
     public class TLChatPhoto : TLAbsChatPhoto
     {
         public override int Constructor
         {
             get
             {
-                return 1632839530;
+                return 1197267925;
             }
         }
 
-        public TLAbsFileLocation PhotoSmall { get; set; }
-        public TLAbsFileLocation PhotoBig { get; set; }
+        public TLFileLocationToBeDeprecated PhotoSmall { get; set; }
+        public TLFileLocationToBeDeprecated PhotoBig { get; set; }
+        public int DcId { get; set; }
 
 
         public void ComputeFlags()
@@ -29,8 +30,9 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            PhotoSmall = (TLAbsFileLocation)ObjectUtils.DeserializeObject(br);
-            PhotoBig = (TLAbsFileLocation)ObjectUtils.DeserializeObject(br);
+            PhotoSmall = (TLFileLocationToBeDeprecated)ObjectUtils.DeserializeObject(br);
+            PhotoBig = (TLFileLocationToBeDeprecated)ObjectUtils.DeserializeObject(br);
+            DcId = br.ReadInt32();
 
         }
 
@@ -39,6 +41,7 @@ namespace TeleSharp.TL
             bw.Write(Constructor);
             ObjectUtils.SerializeObject(PhotoSmall, bw);
             ObjectUtils.SerializeObject(PhotoBig, bw);
+            bw.Write(DcId);
 
         }
     }

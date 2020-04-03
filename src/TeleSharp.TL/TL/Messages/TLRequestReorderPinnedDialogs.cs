@@ -7,27 +7,26 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Messages
 {
-    [TLObject(-1784678844)]
+    [TLObject(991616823)]
     public class TLRequestReorderPinnedDialogs : TLMethod
     {
         public override int Constructor
         {
             get
             {
-                return -1784678844;
+                return 991616823;
             }
         }
 
         public int Flags { get; set; }
         public bool Force { get; set; }
-        public TLVector<TLAbsInputPeer> Order { get; set; }
+        public int FolderId { get; set; }
+        public TLVector<TLAbsInputDialogPeer> Order { get; set; }
         public bool Response { get; set; }
 
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Force ? (Flags | 1) : (Flags & ~1);
 
         }
 
@@ -35,16 +34,17 @@ namespace TeleSharp.TL.Messages
         {
             Flags = br.ReadInt32();
             Force = (Flags & 1) != 0;
-            Order = (TLVector<TLAbsInputPeer>)ObjectUtils.DeserializeVector<TLAbsInputPeer>(br);
+            FolderId = br.ReadInt32();
+            Order = (TLVector<TLAbsInputDialogPeer>)ObjectUtils.DeserializeVector<TLAbsInputDialogPeer>(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
 
+            bw.Write(FolderId);
             ObjectUtils.SerializeObject(Order, bw);
 
         }

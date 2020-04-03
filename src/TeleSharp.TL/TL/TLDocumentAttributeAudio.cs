@@ -28,11 +28,6 @@ namespace TeleSharp.TL
 
         public void ComputeFlags()
         {
-            Flags = 0;
-            Flags = Voice ? (Flags | 1024) : (Flags & ~1024);
-            Flags = Title != null ? (Flags | 1) : (Flags & ~1);
-            Flags = Performer != null ? (Flags | 2) : (Flags & ~2);
-            Flags = Waveform != null ? (Flags | 4) : (Flags & ~4);
 
         }
 
@@ -62,7 +57,6 @@ namespace TeleSharp.TL
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
             bw.Write(Flags);
 
             bw.Write(Duration);

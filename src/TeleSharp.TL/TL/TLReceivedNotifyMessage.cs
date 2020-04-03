@@ -24,7 +24,6 @@ namespace TeleSharp.TL
 
         public void ComputeFlags()
         {
-            Flags = 0;
 
         }
 
@@ -38,9 +37,8 @@ namespace TeleSharp.TL
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            ComputeFlags();
-            bw.Write(Flags);
             bw.Write(Id);
+            bw.Write(Flags);
 
         }
     }

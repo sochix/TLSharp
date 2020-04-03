@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 using TeleSharp.TL;
 namespace TeleSharp.TL.Messages
 {
-    [TLObject(2106086025)]
+    [TLObject(234312524)]
     public class TLRequestExportChatInvite : TLMethod
     {
         public override int Constructor
         {
             get
             {
-                return 2106086025;
+                return 234312524;
             }
         }
 
-        public int ChatId { get; set; }
+        public TLAbsInputPeer Peer { get; set; }
         public TLAbsExportedChatInvite Response { get; set; }
 
 
@@ -29,14 +29,14 @@ namespace TeleSharp.TL.Messages
 
         public override void DeserializeBody(BinaryReader br)
         {
-            ChatId = br.ReadInt32();
+            Peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
 
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-            bw.Write(ChatId);
+            ObjectUtils.SerializeObject(Peer, bw);
 
         }
         public override void DeserializeResponse(BinaryReader br)
