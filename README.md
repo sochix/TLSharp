@@ -192,27 +192,25 @@ The only way is [Telegram API docs](https://core.telegram.org/methods). Yes, it'
 Latest scheme in JSON format you can find [here](https://gist.github.com/aarani/b22b7cda024973dff68e1672794b0298)
 
 
-## What things can I Implement (Project Roadmap)?
+## What things can I help on (Project Roadmap)?
 
-### Release 1.0.0
-
-* [DONE] Add PHONE_MIGRATE handling
-* [DONE] Add FILE_MIGRATE handling
-* Add Updates handling
-* [DONE] Add NuGet package
-* [DONE] Add wrappers for media uploading and downloading
-* Store user session as JSON
-
+* Add Updates handling via events (WIP PR: https://github.com/sochix/TLSharp/pull/892 )
+* GithubActions CI job for running tests
+* Removal of Zip-related dependencies (WIP PR: https://github.com/nblockchain/TgSharp/pull/4 )
+* Update to latest Layer
+* Upgrade to .NET 4.6 (WIP PR: https://github.com/nblockchain/TgSharp/pull/3) and later to .NETStandard 2.0.
 
 # FAQ
 
 #### What API layer is supported?
-The latest one - 66. Thanks to Afshin Arani for his TLGenerator
+
+Layer 66. Thanks to Afshin Arani for his TLGenerator
 
 
 #### I get a xxxMigrationException or a MIGRATE_X error!
 
 TgSharp library should automatically handle these errors. If you see such errors, please open a new Github issue with the details (include a stacktrace, etc.).
+
 
 #### I get an exception: System.IO.EndOfStreamException: Unable to read beyond the end of the stream. All test methos except that AuthenticationWorks and TestConnection return same error. I did every thing including setting api id and hash, and setting server address.-
 
@@ -220,6 +218,7 @@ You should create a Telegram session. See [configuration guide](#sending-message
 
 
 #### Why do I get a FloodException/FLOOD_WAIT error?
+
 It's likely [Telegram restrictions](https://core.telegram.org/api/errors#420-flood), or a bug in TgSharp (if you feel it's the latter, please open a Github issue). You can know the time to wait by accessing the FloodException::TimeToWait property.
 
 
@@ -238,7 +237,7 @@ If you just have questions about how to use TgSharp, use our Telegram channel (h
 * Expected outcome.
 * Current outcome: if it's a crash, attach the full exception details (to get this, just paste what you get from `ex.ToString()`, which gives you exception type, exception message, stacktrace, and inner exceptions recursively).
 
-Without information listen above your issue will be closed.
+Without information listed above your issue will be closed.
 
 
 # Donations
@@ -261,12 +260,15 @@ If you have troubles while using TgSharp, we may be able to help you; access our
 
 # License
 
-**Please, provide link to an author when you using library**
+**Please, provide link to the original authors when using library**
 
 The MIT License
 
+
 Copyright (c) 2015 Ilya Pirozhenko http://www.sochix.ru/
+
 Copyright (c) 2015-2020 TLSharp/TgSharp contributors
+
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
