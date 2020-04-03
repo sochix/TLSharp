@@ -407,6 +407,69 @@ namespace TLSharp.Core
         }
 
         /// <summary>
+        /// Authenticates a Bot 
+        /// </summary>
+        /// <param name="botAuthToken">The token of the bot to authenticate</param>
+        /// <param name="token"></param>
+        /// <returns>The TLUser descriptor</returns>
+        public async Task<TLUser> MakeAuthBotAsync(string botAuthToken, CancellationToken token = default(CancellationToken))
+        {
+            if (String.IsNullOrWhiteSpace(botAuthToken))
+            {
+                throw new ArgumentNullException(nameof(botAuthToken));
+            }
+
+            var request = new TLRequestImportBotAuthorization() { BotAuthToken = botAuthToken, ApiId = apiId, ApiHash = apiHash };
+
+            await RequestWithDcMigration(request, token).ConfigureAwait(false);
+
+            OnUserAuthenticated(((TLUser)request.Response.User));
+
+            return ((TLUser)request.Response.User);
+        }
+
+        /// <summary>
+        /// Gets the full information of a specified chat
+        /// </summary>
+        /// <param name="chatId">The ID of the chat we want the info of</param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public async Task<TeleSharp.TL.Messages.TLChatFull> GetFullChat(int chatId, CancellationToken token = default(CancellationToken))
+        {
+            var req = new TLRequestGetFullChat() { ChatId = chatId };
+            var fchat = await SendRequestAsync<TeleSharp.TL.Messages.TLChatFull>(req).ConfigureAwait(false);
+
+            return fchat;
+        }
+
+        /// <summary>
+        /// Gets the list of chats opened by the authenticated user. 
+        /// Throws an exception if the authenticated user is a bot.
+        /// </summary> 
+        /// <param name="token"></param>
+        /// <returns>The list of chats opened by the authenticated user</returns>
+        public async Task<TLChats> GetAllChats(CancellationToken token = default(CancellationToken))
+        {
+            return await GetAllChats(null, token);
+        }
+
+        /// <summary>
+        /// Gets the list of chats opened by the authenticated user except the passed ones.
+        /// Throws an exception if the authenticated user is a bot.
+        /// </summary> 
+        /// <param name="exceptIds">The IDs of the chats that we don't want to be returned</param>
+        /// <param name="token"></param>
+        /// <returns>The list of chats opened by the authenticated user</returns>
+        public async Task<TLChats> GetAllChats(int[] exceptIds = null, CancellationToken token = default(CancellationToken))
+        {
+            var ichats = new TeleSharp.TL.TLVector<int>(); // we can't pass a null argument to the TLRequestGetChats
+            if (exceptIds != null)
+                Array.ForEach(exceptIds, x => ichats.Add(x));
+            var chatInfo = await SendRequestAsync<TLChats>(new TLRequestGetChats() { Id = ichats }).ConfigureAwait(false);
+            return chatInfo;
+        }
+
+        /// <summary>
         /// Serch user or chat. API: contacts.search#11f812d8 q:string limit:int = contacts.Found;
         /// </summary>
         /// <param name="q">User or chat name</param>
