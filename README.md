@@ -185,15 +185,14 @@ Don't panic. You can call any method with help of `SendRequestAsync` function. F
 
 **Where can you find a list of requests and its parameters?**
 
-The only way is [Telegram API docs](https://core.telegram.org/methods). Yes, it's outdated. But there is no other source.
-Latest scheme in JSON format you can find [here](https://gist.github.com/aarani/b22b7cda024973dff68e1672794b0298)
+The only way is [Telegram API docs](https://core.telegram.org/methods). Yes, it's no longer outdated.
+Latest scheme in JSON format you can find [here](https://core.telegram.org/schema/json)
 
 
 ## What things can I help on (Project Roadmap)?
 
 * Add Updates handling via events (WIP PR: https://github.com/sochix/TLSharp/pull/892 )
 * GithubActions CI job for running tests
-* Update to latest Layer (WIP PR: https://github.com/nblockchain/TgSharp/pull/5 ).
 * Upgrade to .NETStandard 2.0.
 
 
