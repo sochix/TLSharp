@@ -104,7 +104,7 @@ namespace TgSharp.Core
                 SystemLangCode = "en",
                 LangPack = ""
             };
-            var invokewithLayer = new TLRequestInvokeWithLayer() { Layer = 66, Query = request };
+            var invokewithLayer = new TLRequestInvokeWithLayer() { Layer = 108, Query = request };
             await sender.Send(invokewithLayer, token).ConfigureAwait(false);
             await sender.Receive(invokewithLayer, token).ConfigureAwait(false);
 
