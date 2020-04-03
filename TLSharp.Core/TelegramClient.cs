@@ -67,7 +67,7 @@ namespace TLSharp.Core
             this.dcIpVersion = dcIpVersion;
 
             session = Session.TryLoadOrCreateNew(store, sessionUserId);
-            transport = new TcpTransport(session.DataCenter.Address, session.DataCenter.Port, this.handler);
+            transport = new TcpTransport (session.DataCenter.Address, session.DataCenter.Port, this.handler);
         }
 
         public async Task ConnectAsync(bool reconnect = false, CancellationToken token = default(CancellationToken))
@@ -151,7 +151,7 @@ namespace TLSharp.Core
                 throw new InvalidOperationException("Not connected!");
 
             var completed = false;
-            while (!completed)
+            while(!completed)
             {
                 try
                 {
@@ -159,7 +159,7 @@ namespace TLSharp.Core
                     await sender.Receive(request, token).ConfigureAwait(false);
                     completed = true;
                 }
-                catch (DataCenterMigrationException e)
+                catch(DataCenterMigrationException e)
                 {
                     if (session.DataCenter.DataCenterId.HasValue &&
                         session.DataCenter.DataCenterId.Value == e.DC)

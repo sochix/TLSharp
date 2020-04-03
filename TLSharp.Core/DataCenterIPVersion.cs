@@ -23,7 +23,7 @@
         /// </summary>
         PreferIPv4 = 3,
         /// <summary>
-        /// Connection to IPv6 addresses is preferred to IPv4 addresses
+        /// Connection to IPv6 addresses is preferred to IPv4 addresses 
         /// </summary>
         PreferIPv6 = 4,
     }
