@@ -126,7 +126,7 @@ namespace TLSharp.Core
             TLDcOption dc;
             if (dcIpVersion != DataCenterIPVersion.Default)
             {
-                if (dcs.Count() == 0)
+                if (!dcs.Any())
                     throw new Exception($"Telegram server didn't provide us with any IPAddress that matches your preferences. If you chose OnlyIPvX, try switch to PreferIPvX instead.");
                 dcs = dcs.OrderBy(d => d.Ipv6);
                 dc = dcIpVersion == DataCenterIPVersion.PreferIPv4 ? dcs.First() : dcs.Last(); // ipv4 addresses are at the beginning of the list because it was ordered
