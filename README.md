@@ -1,7 +1,7 @@
 TgSharp
 -------------------------------
 
-![Build status](https://github.com/nblockchain/TgSharp/workflows/CI/badge.svg)
+![Build status](https://github.com/nblockchain/TgSharp/workflows/CI/badge.svg?branch=master&event=push)
 [![NuGet version](https://badge.fury.io/nu/TgSharp.svg)](https://badge.fury.io/nu/TgSharp)
 
 _Unofficial_ Telegram (http://telegram.org) client library implemented in C#.
