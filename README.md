@@ -42,8 +42,8 @@ or build from source
 
 # Dependencies
 
-TgSharp has a few dependenices, most of functionality implemented from scratch.
-All dependencies listed in [package.conf file](https://github.com/nblockchain/TgSharp/blob/master/src/TgSharp.Core/packages.config).
+TgSharp has a few dependencies, but most of the functionality is implemented from scratch.
+All dependencies are listed in [packages.config file](https://github.com/nblockchain/TgSharp/blob/master/src/TgSharp.Core/packages.config).
 
 
 # Starter Guide
