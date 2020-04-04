@@ -23,6 +23,5 @@ It's a perfect fit for any developer who would like to send data directly to Tel
         <file src="bin\Debug\BigMath.dll" target="lib\net45\BigMath.dll" />
         <file src="bin\Debug\Ionic.ZLib.dll" target="lib\net45\Ionic.ZLib.dll" />
         <file src="bin\Debug\TeleSharp.TL.dll" target="lib\net45\TeleSharp.TL.dll" />
-        <file src="bin\Debug\TLSharp.Core.dll" target="lib\net45\TLSharp.Core.dll" />
     </files>
 </package>
