@@ -24,7 +24,13 @@ namespace TLSharp.Core.Network
                 var endpoint = new IPEndPoint(ipAddress, port);
 
                 tcpClient = new TcpClient(ipAddress.AddressFamily);
-                tcpClient.Connect(endpoint);
+
+                try {
+                    tcpClient.Connect (endpoint);
+                } catch (Exception ex) {
+                    throw new Exception ($"Problem when trying to connect to {endpoint}; either there's no internet connection or the IP address version is not compatible (if the latter, consider using DataCenterIPVersion enum)",
+                                         ex);
+                }
             }
             else
                 tcpClient = handler(address, port);

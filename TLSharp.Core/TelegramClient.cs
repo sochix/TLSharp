@@ -31,14 +31,25 @@ namespace TLSharp.Core
         private Session session;
         private List<TLDcOption> dcOptions;
         private TcpClientConnectionHandler handler;
+        private DataCenterIPVersion dcIpVersion;
 
         public Session Session
         {
             get { return session; }
         }
 
+        /// <summary>
+        /// Creates a new TelegramClient
+        /// </summary>
+        /// <param name="apiId">The API ID provided by Telegram. Get one at https://my.telegram.org </param>
+        /// <param name="apiHash">The API Hash provided by Telegram. Get one at https://my.telegram.org </param>
+        /// <param name="store">An ISessionStore object that will handle the session</param>
+        /// <param name="sessionUserId">The name of the session that tracks login info about this TelegramClient connection</param>
+        /// <param name="handler">A delegate to invoke when a connection is needed and that will return a TcpClient that will be used to connect</param>
+        /// <param name="dcIpVersion">Indicates the preferred IpAddress version to use to connect to a Telegram server</param>
         public TelegramClient(int apiId, string apiHash,
-            ISessionStore store = null, string sessionUserId = "session", TcpClientConnectionHandler handler = null)
+            ISessionStore store = null, string sessionUserId = "session", TcpClientConnectionHandler handler = null,
+            DataCenterIPVersion dcIpVersion = DataCenterIPVersion.Default)
         {
             if (apiId == default(int))
                 throw new MissingApiConfigurationException("API_ID");
@@ -51,6 +62,7 @@ namespace TLSharp.Core
             this.apiHash = apiHash;
             this.apiId = apiId;
             this.handler = handler;
+            this.dcIpVersion = dcIpVersion;
 
             session = Session.TryLoadOrCreateNew(store, sessionUserId);
             transport = new TcpTransport (session.DataCenter.Address, session.DataCenter.Port, this.handler);
@@ -101,7 +113,25 @@ namespace TLSharp.Core
                 exported = await SendRequestAsync<TLExportedAuthorization>(exportAuthorization, token).ConfigureAwait(false);
             }
 
-            var dc = dcOptions.First(d => d.Id == dcId);
+            IEnumerable<TLDcOption> dcs;
+            if (dcIpVersion == DataCenterIPVersion.OnlyIPv6)
+                dcs = dcOptions.Where(d => d.Id == dcId && d.Ipv6); // selects only ipv6 addresses 	
+            else if (dcIpVersion == DataCenterIPVersion.OnlyIPv4)
+                dcs = dcOptions.Where(d => d.Id == dcId && !d.Ipv6); // selects only ipv4 addresses
+            else
+                dcs = dcOptions.Where(d => d.Id == dcId); // any
+
+            TLDcOption dc;
+            if (dcIpVersion != DataCenterIPVersion.Default)
+            {
+                if (!dcs.Any())
+                    throw new Exception($"Telegram server didn't provide us with any IPAddress that matches your preferences. If you chose OnlyIPvX, try switch to PreferIPvX instead.");
+                dcs = dcs.OrderBy(d => d.Ipv6);
+                dc = dcIpVersion == DataCenterIPVersion.PreferIPv4 ? dcs.First() : dcs.Last(); // ipv4 addresses are at the beginning of the list because it was ordered
+            }
+            else
+                dc = dcs.First();
+            
             var dataCenter = new DataCenter (dcId, dc.IpAddress, dc.Port);
 
             transport = new TcpTransport(dc.IpAddress, dc.Port, handler);
