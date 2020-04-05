@@ -436,7 +436,7 @@ namespace TLSharp.Core
         {
             get
             {
-                if (transport == null)
+                if (transport == null || sender == null)
                     return false;
                 return transport.IsConnected;
             }
