@@ -15,7 +15,6 @@ It's a perfect fit for any developer who would like to send data directly to Tel
 # Table of contents
 
 - [How do I add this to my project?](#how-do-i-add-this-to-my-project)
-- [Dependencies](#dependencies)
 - [Starter Guide](#starter-guide)
   - [Quick configuration](#quick-configuration)
   - [First requests](#first-requests)
@@ -40,11 +39,6 @@ or build from source
 1. Clone TLSharp from GitHub
 1. Compile source with VS2015 or MonoDevelop
 1. Add reference to ```TLSharp.Core.dll``` to your awesome project.
-
-# Dependencies
-
-TLSharp has a few dependenices, most of functionality implemented from scratch.
-All dependencies listed in [package.conf file](https://github.com/sochix/TLSharp/blob/master/TLSharp.Core/packages.config).
 
 # Starter Guide
 

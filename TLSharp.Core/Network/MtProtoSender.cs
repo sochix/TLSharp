@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Ionic.Zlib;
 using TeleSharp.TL;
 using TLSharp.Core.Exceptions;
 using TLSharp.Core.MTProto;
@@ -251,11 +251,20 @@ namespace TLSharp.Core.Network
             token.ThrowIfCancellationRequested();
 
             uint code = messageReader.ReadUInt32();
-            byte[] packedData = GZipStream.UncompressBuffer(Serializers.Bytes.Read(messageReader));
-            using (MemoryStream packedStream = new MemoryStream(packedData, false))
-            using (BinaryReader compressedReader = new BinaryReader(packedStream))
+
+            byte[] packedData = Serializers.Bytes.Read(messageReader);
+            using (var ms = new MemoryStream())
             {
-                processMessage(messageId, sequence, compressedReader, request, token);
+                using (var packedStream = new MemoryStream(packedData, false))
+                using (var zipStream = new GZipStream(packedStream, CompressionMode.Decompress))
+                {
+                    zipStream.CopyTo(ms);
+                    ms.Position = 0;
+                }
+                using (BinaryReader compressedReader = new BinaryReader(ms))
+                {
+                    processMessage(messageId, sequence, compressedReader, request, token);
+                }
             }
 
             return true;
@@ -337,27 +346,20 @@ namespace TLSharp.Core.Network
             }
             else if (innerCode == 0x3072cfa1)
             {
-                try
+                // gzip_packed
+                byte[] packedData = Serializers.Bytes.Read(messageReader);
+                using (var ms = new MemoryStream())
                 {
-                    // gzip_packed
-                    byte[] packedData = Serializers.Bytes.Read(messageReader);
-                    using (var ms = new MemoryStream())
+                    using (var packedStream = new MemoryStream(packedData, false))
+                    using (var zipStream = new GZipStream(packedStream, CompressionMode.Decompress))
                     {
-                        using (var packedStream = new MemoryStream(packedData, false))
-                        using (var zipStream = new GZipStream(packedStream, CompressionMode.Decompress))
-                        {
-                            zipStream.CopyTo(ms);
-                            ms.Position = 0;
-                        }
-                        using (var compressedReader = new BinaryReader(ms))
-                        {
-                            request.DeserializeResponse(compressedReader);
-                        }
+                        zipStream.CopyTo(ms);
+                        ms.Position = 0;
                     }
-                }
-                catch (ZlibException ex)
-                {
-
+                    using (var compressedReader = new BinaryReader(ms))
+                    {
+                        request.DeserializeResponse(compressedReader);
+                    }
                 }
             }
             else

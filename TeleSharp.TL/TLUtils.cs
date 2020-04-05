@@ -1,5 +1,4 @@
-﻿using BigMath;
-using BigMath.Utils;
+﻿
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -157,28 +156,6 @@ namespace TeleSharp.TL
         public static void Serialize(long src, BinaryWriter writer)
         {
             writer.Write(src);
-        }
-    }
-    public class Int128Util
-    {
-        public static Int128 Deserialize(BinaryReader reader)
-        {
-            return reader.ReadBytes(16).ToInt128(0, true);
-        }
-        public static void Serialize(Int128 src, BinaryWriter writer)
-        {
-            writer.Write(src.ToBytes(true));
-        }
-    }
-    public class Int256Util
-    {
-        public static Int256 Deserialize(BinaryReader reader)
-        {
-            return reader.ReadBytes(32).ToInt256(0, true);
-        }
-        public static void Serialize(Int256 src, BinaryWriter writer)
-        {
-            writer.Write(src.ToBytes(true));
         }
     }
 }
