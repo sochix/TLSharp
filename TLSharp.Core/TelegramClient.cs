@@ -18,13 +18,18 @@ using TLSharp.Core.Exceptions;
 using TLSharp.Core.MTProto.Crypto;
 using TLSharp.Core.Network;
 using TLSharp.Core.Network.Exceptions;
+using TLSharp.Core.Types;
 using TLSharp.Core.Utils;
 using TLAuthorization = TeleSharp.TL.Auth.TLAuthorization;
+using TLRequestUpdateUsername = TeleSharp.TL.Account.TLRequestUpdateUsername;
 
 namespace TLSharp.Core
 {
     public class TelegramClient : IDisposable
     {
+        /// <summary>
+        /// When pagination is needed, this is the default page size
+        /// </summary> 
         public const int DEFAULT_PAGE_SIZE = 200;
 
         private MtProtoSender sender;
@@ -265,7 +270,7 @@ namespace TLSharp.Core
 
         public async Task<bool> CheckUsernameAsync(string username, CancellationToken token = default(CancellationToken))
         {
-            var req = new TLRequestCheckUsername { Username = username };
+            var req = new TeleSharp.TL.Account.TLRequestCheckUsername { Username = username };
 
             return await SendAuthenticatedRequestAsync<bool>(req, token)
                 .ConfigureAwait(false);
