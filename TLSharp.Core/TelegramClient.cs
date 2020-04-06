@@ -581,8 +581,7 @@ namespace TLSharp.Core
             int total = 0;
             int found = stIdx < 0 ? 0 : stIdx;
             pageSize = pageSize < 0 ? DEFAULT_PAGE_SIZE : pageSize;
-
-            List<TLChannelParticipants> results = new List<TLChannelParticipants>();
+            
             TLChannelParticipants ret = new TLChannelParticipants();
             ret.Participants = new TLVector<TLAbsChannelParticipant>();
             ret.Users = new TLVector<TLAbsUser>();
@@ -603,7 +602,6 @@ namespace TLSharp.Core
                 var fchat = await SendRequestAsync<TLChannelParticipants>(req, token).ConfigureAwait(false);
                 total = fchat.Count;
                 found += fchat.Participants.Count;
-                results.Add(fchat);
                 foreach (var p in fchat.Participants)
                     ret.Participants.Add(p);
                 foreach (var u in fchat.Users)
