@@ -435,6 +435,7 @@ namespace TLSharp.Core
 
             return ((TLUser)request.Response.User);
         }
+
         /// <summary>
         /// Gets the full information of a specified chat
         /// </summary>
@@ -448,6 +449,7 @@ namespace TLSharp.Core
 
             return fchat;
         }
+
         /// <summary>
         /// Gets the list of chats and channels opened by the authenticated user. 
         /// Throws an exception if the authenticated user is a bot.
@@ -458,6 +460,7 @@ namespace TLSharp.Core
         {
             return await GetAllChats(null, token);
         }
+
         /// <summary>
         /// Gets the list of chats and channels opened by the authenticated user except the passed ones. 
         /// Throws an exception if the authenticated user is a bot.
@@ -473,6 +476,7 @@ namespace TLSharp.Core
             var chats = await SendRequestAsync<TLChats>(new TLRequestGetAllChats() { ExceptIds = ichats }, token).ConfigureAwait(false);
             return chats;
         }
+
         /// <summary>
         /// Gets the information about a channel
         /// </summary>
@@ -484,6 +488,7 @@ namespace TLSharp.Core
             if (channel == null) return null;
             return await GetFullChannel(channel.Id, (long)channel.AccessHash, token).ConfigureAwait(false);
         }
+
         /// <summary>
         /// Gets the information about a channel
         /// </summary>
@@ -497,6 +502,7 @@ namespace TLSharp.Core
 
             return fchat;
         }
+
         /// <summary>
         /// Gets the channels having the supplied IDs
         /// </summary>
@@ -513,6 +519,7 @@ namespace TLSharp.Core
 
             return fchat;
         }
+
         /// <summary>
         /// Gets the participants of the channel having the supplied type.
         /// The method will auto-paginate results and return all the participants
@@ -524,11 +531,12 @@ namespace TLSharp.Core
         /// <param name="partType">The type of the participants to get. Choose Recents not to filter</param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public async Task<TLChannelParticipants> GetParticipants(TLChannel channel, int stIdx = -1, int pageSize = -1, ParticipantTypes partType = ParticipantTypes.Recents, CancellationToken token = default(CancellationToken))
+        public async Task<TLChannelParticipants> GetParticipants(TLChannel channel, int stIdx = -1, int pageSize = -1, ParticipantFilterTypes partType = ParticipantFilterTypes.Recents, CancellationToken token = default(CancellationToken))
         {
             if (channel == null) return null;
             return await GetParticipants(channel.Id, (long)channel.AccessHash, stIdx, pageSize, partType, token).ConfigureAwait(false);
         }
+
         /// <summary>
         /// Gets the participants of the channel having the supplied type.
         /// The method will auto-paginate results and return all the participants
@@ -541,31 +549,31 @@ namespace TLSharp.Core
         /// <param name="partType">The type of the participants to get. Choose Recents not to filter</param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public async Task<TLChannelParticipants> GetParticipants(int channelId, long accessHash, int stIdx = -1, int pageSize = -1, ParticipantTypes partType = ParticipantTypes.Recents, CancellationToken token = default(CancellationToken))
+        public async Task<TLChannelParticipants> GetParticipants(int channelId, long accessHash, int stIdx = -1, int pageSize = -1, ParticipantFilterTypes partType = ParticipantFilterTypes.Recents, CancellationToken token = default(CancellationToken))
         {
             TLAbsChannelParticipantsFilter filter;
             switch (partType)
             {
-                case ParticipantTypes.Admins:
+                case ParticipantFilterTypes.Admins:
                     filter = new TLChannelParticipantsAdmins();
                     break;
 
-                case ParticipantTypes.Kicked:
+                case ParticipantFilterTypes.Kicked:
                     filter = new TLChannelParticipantsKicked();
                     break;
 
-                case ParticipantTypes.Bots:
+                case ParticipantFilterTypes.Bots:
                     filter = new TLChannelParticipantsBots();
                     break;
 
-                case ParticipantTypes.Recents:
+                case ParticipantFilterTypes.Recents:
                     filter = new TLChannelParticipantsRecent();
                     break;
 
-                case ParticipantTypes.Banned:
-                case ParticipantTypes.Restricted:
-                case ParticipantTypes.Contacts:
-                case ParticipantTypes.Search:
+                case ParticipantFilterTypes.Banned:
+                case ParticipantFilterTypes.Restricted:
+                case ParticipantFilterTypes.Contacts:
+                case ParticipantFilterTypes.Search:
                 default:
                     throw new NotImplementedException($"{partType} not implemented yet");
             }
@@ -588,7 +596,7 @@ namespace TLSharp.Core
                         ChannelId = channelId,
                         AccessHash = accessHash
                     },
-                    Filter = new TLChannelParticipantsRecent(),
+                    Filter = filter,
                     Offset = found,
                     Limit = pageSize
                 };
@@ -604,6 +612,18 @@ namespace TLSharp.Core
             ret.Count = ret.Participants.Count;
             return ret;
         }
+
+        /// <summary>
+        /// Invites the passed users to the specified channel
+        /// </summary>
+        /// <param name="channel">The descriptor of the channel to invite the users to</param>
+        /// <param name="users"></param>
+        /// <returns></returns>       
+        public async Task<TLUpdates> InviteToChannel(TLChannel channel, int[] users, CancellationToken token = default(CancellationToken))
+        {
+            return await InviteToChannel(channel.Id, (long)channel.AccessHash, users, token);
+        }
+
         /// <summary>
         /// Invites the passed users to the specified channel
         /// </summary>
