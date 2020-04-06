@@ -1,6 +1,6 @@
 ﻿namespace TLSharp.Core.Types
 {
-    public enum ParticipantFilterTypes
+    public enum ParticipantTypes
     { 
         Recents, 
         Restricted,
