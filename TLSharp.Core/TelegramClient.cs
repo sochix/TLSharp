@@ -61,7 +61,7 @@ namespace TLSharp.Core
             this.handler = handler;
 
             session = Session.TryLoadOrCreateNew(store, sessionUserId);
-            transport = new TcpTransport (session.DataCenter.Address, session.DataCenter.Port, this.handler);
+            transport = new TcpTransport(session.DataCenter.Address, session.DataCenter.Port, this.handler);
         }
 
         public async Task ConnectAsync(bool reconnect = false, CancellationToken token = default(CancellationToken))
@@ -110,7 +110,7 @@ namespace TLSharp.Core
             }
 
             var dc = dcOptions.First(d => d.Id == dcId);
-            var dataCenter = new DataCenter (dcId, dc.IpAddress, dc.Port);
+            var dataCenter = new DataCenter(dcId, dc.IpAddress, dc.Port);
 
             transport = new TcpTransport(dc.IpAddress, dc.Port, handler);
             session.DataCenter = dataCenter;
@@ -131,7 +131,7 @@ namespace TLSharp.Core
                 throw new InvalidOperationException("Not connected!");
 
             var completed = false;
-            while(!completed)
+            while (!completed)
             {
                 try
                 {
@@ -139,7 +139,7 @@ namespace TLSharp.Core
                     await sender.Receive(request, token).ConfigureAwait(false);
                     completed = true;
                 }
-                catch(DataCenterMigrationException e)
+                catch (DataCenterMigrationException e)
                 {
                     if (session.DataCenter.DataCenterId.HasValue &&
                         session.DataCenter.DataCenterId.Value == e.DC)
@@ -193,7 +193,7 @@ namespace TLSharp.Core
 
             if (String.IsNullOrWhiteSpace(code))
                 throw new ArgumentNullException(nameof(code));
-            
+
             var request = new TLRequestSignIn() { PhoneNumber = phoneNumber, PhoneCodeHash = phoneCodeHash, PhoneCode = code };
 
             await RequestWithDcMigration(request, token).ConfigureAwait(false);
@@ -202,7 +202,7 @@ namespace TLSharp.Core
 
             return ((TLUser)request.Response.User);
         }
-        
+
         public async Task<TLPassword> GetPasswordSetting(CancellationToken token = default(CancellationToken))
         {
             var request = new TLRequestGetPassword();
@@ -234,7 +234,7 @@ namespace TLSharp.Core
         public async Task<TLUser> SignUpAsync(string phoneNumber, string phoneCodeHash, string code, string firstName, string lastName, CancellationToken token = default(CancellationToken))
         {
             var request = new TLRequestSignUp() { PhoneNumber = phoneNumber, PhoneCode = code, PhoneCodeHash = phoneCodeHash, FirstName = firstName, LastName = lastName };
-            
+
             await RequestWithDcMigration(request, token).ConfigureAwait(false);
 
             OnUserAuthenticated((TLUser)request.Response.User);
@@ -251,7 +251,7 @@ namespace TLSharp.Core
             return (T)result;
         }
 
-        internal async Task<T> SendAuthenticatedRequestAsync<T> (TLMethod methodToExecute, CancellationToken token = default(CancellationToken))
+        internal async Task<T> SendAuthenticatedRequestAsync<T>(TLMethod methodToExecute, CancellationToken token = default(CancellationToken))
         {
             if (!IsUserAuthorized())
                 throw new InvalidOperationException("Authorize user first!");
@@ -278,7 +278,7 @@ namespace TLSharp.Core
 
         public async Task<TLImportedContacts> ImportContactsAsync(IReadOnlyList<TLInputPhoneContact> contacts, CancellationToken token = default(CancellationToken))
         {
-            var req = new TLRequestImportContacts { Contacts = new TLVector<TLInputPhoneContact>(contacts)};
+            var req = new TLRequestImportContacts { Contacts = new TLVector<TLInputPhoneContact>(contacts) };
 
             return await SendAuthenticatedRequestAsync<TLImportedContacts>(req, token)
                 .ConfigureAwait(false);
@@ -286,7 +286,7 @@ namespace TLSharp.Core
 
         public async Task<bool> DeleteContactsAsync(IReadOnlyList<TLAbsInputUser> users, CancellationToken token = default(CancellationToken))
         {
-            var req = new TLRequestDeleteContacts {Id = new TLVector<TLAbsInputUser>(users)};
+            var req = new TLRequestDeleteContacts { Id = new TLVector<TLAbsInputUser>(users) };
 
             return await SendAuthenticatedRequestAsync<bool>(req, token)
                 .ConfigureAwait(false);
@@ -294,7 +294,7 @@ namespace TLSharp.Core
 
         public async Task<TLLink> DeleteContactAsync(TLAbsInputUser user, CancellationToken token = default(CancellationToken))
         {
-            var req = new TLRequestDeleteContact {Id = user};
+            var req = new TLRequestDeleteContact { Id = user };
 
             return await SendAuthenticatedRequestAsync<TLLink>(req, token)
                 .ConfigureAwait(false);
@@ -337,10 +337,10 @@ namespace TLSharp.Core
                 offsetPeer = new TLInputPeerSelf();
 
             var req = new TLRequestGetDialogs()
-            { 
-                OffsetDate = offsetDate, 
-                OffsetId = offsetId, 
-                OffsetPeer = offsetPeer, 
+            {
+                OffsetDate = offsetDate,
+                OffsetId = offsetId,
+                OffsetPeer = offsetPeer,
                 Limit = limit
             };
             return await SendAuthenticatedRequestAsync<TLAbsDialogs>(req, token)
@@ -350,13 +350,13 @@ namespace TLSharp.Core
         public async Task<TLAbsUpdates> SendUploadedPhoto(TLAbsInputPeer peer, TLAbsInputFile file, string caption, CancellationToken token = default(CancellationToken))
         {
             return await SendAuthenticatedRequestAsync<TLAbsUpdates>(new TLRequestSendMedia()
-                {
-                    RandomId = Helpers.GenerateRandomLong(),
-                    Background = false,
-                    ClearDraft = false,
-                    Media = new TLInputMediaUploadedPhoto() { File = file, Caption = caption },
-                    Peer = peer
-                }, token)
+            {
+                RandomId = Helpers.GenerateRandomLong(),
+                Background = false,
+                ClearDraft = false,
+                Media = new TLInputMediaUploadedPhoto() { File = file, Caption = caption },
+                Peer = peer
+            }, token)
                 .ConfigureAwait(false);
         }
 
@@ -364,30 +364,30 @@ namespace TLSharp.Core
             TLAbsInputPeer peer, TLAbsInputFile file, string caption, string mimeType, TLVector<TLAbsDocumentAttribute> attributes, CancellationToken token = default(CancellationToken))
         {
             return await SendAuthenticatedRequestAsync<TLAbsUpdates>(new TLRequestSendMedia()
+            {
+                RandomId = Helpers.GenerateRandomLong(),
+                Background = false,
+                ClearDraft = false,
+                Media = new TLInputMediaUploadedDocument()
                 {
-                    RandomId = Helpers.GenerateRandomLong(),
-                    Background = false,
-                    ClearDraft = false,
-                    Media = new TLInputMediaUploadedDocument()
-                    {
-                        File = file,
-                        Caption = caption,
-                        MimeType = mimeType,
-                        Attributes = attributes
-                    },
-                    Peer = peer
-                }, token)
+                    File = file,
+                    Caption = caption,
+                    MimeType = mimeType,
+                    Attributes = attributes
+                },
+                Peer = peer
+            }, token)
                 .ConfigureAwait(false);
         }
 
         public async Task<TLFile> GetFile(TLAbsInputFileLocation location, int filePartSize, int offset = 0, CancellationToken token = default(CancellationToken))
         {
             TLFile result = await SendAuthenticatedRequestAsync<TLFile>(new TLRequestGetFile
-                {
-                    Location = location,
-                    Limit = filePartSize,
-                    Offset = offset
-                }, token)
+            {
+                Location = location,
+                Limit = filePartSize,
+                Offset = offset
+            }, token)
                 .ConfigureAwait(false);
             return result;
         }
@@ -524,7 +524,7 @@ namespace TLSharp.Core
         /// <param name="partType">The type of the participants to get. Choose Recents not to filter</param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public async Task<TLChannelParticipants> GetParticipants(TLChannel channel, int stIdx = -1, int pageSize = -1, ParticipantTypes partType = ParticipantTypes.Recents, CancellationToken token = default(CancellationToken))
+        public async Task<TLChannelParticipants> GetParticipants(TLChannel channel, int stIdx = -1, int pageSize = -1, ParticipantFilterTypes partType = ParticipantFilterTypes.Recents, CancellationToken token = default(CancellationToken))
         {
             if (channel == null) return null;
             return await GetParticipants(channel.Id, (long)channel.AccessHash, stIdx, pageSize, partType, token).ConfigureAwait(false);
@@ -541,31 +541,31 @@ namespace TLSharp.Core
         /// <param name="partType">The type of the participants to get. Choose Recents not to filter</param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public async Task<TLChannelParticipants> GetParticipants(int channelId, long accessHash, int stIdx = -1, int pageSize = -1, ParticipantTypes partType = ParticipantTypes.Recents, CancellationToken token = default(CancellationToken))
+        public async Task<TLChannelParticipants> GetParticipants(int channelId, long accessHash, int stIdx = -1, int pageSize = -1, ParticipantFilterTypes partType = ParticipantFilterTypes.Recents, CancellationToken token = default(CancellationToken))
         {
             TLAbsChannelParticipantsFilter filter;
             switch (partType)
             {
-                case ParticipantTypes.Admins:
+                case ParticipantFilterTypes.Admins:
                     filter = new TLChannelParticipantsAdmins();
                     break;
 
-                case ParticipantTypes.Kicked:
+                case ParticipantFilterTypes.Kicked:
                     filter = new TLChannelParticipantsKicked();
                     break;
 
-                case ParticipantTypes.Bots:
+                case ParticipantFilterTypes.Bots:
                     filter = new TLChannelParticipantsBots();
                     break;
 
-                case ParticipantTypes.Recents:
+                case ParticipantFilterTypes.Recents:
                     filter = new TLChannelParticipantsRecent();
                     break;
 
-                case ParticipantTypes.Banned:
-                case ParticipantTypes.Restricted:
-                case ParticipantTypes.Contacts:
-                case ParticipantTypes.Search:
+                case ParticipantFilterTypes.Banned:
+                case ParticipantFilterTypes.Restricted:
+                case ParticipantFilterTypes.Contacts:
+                case ParticipantFilterTypes.Search:
                 default:
                     throw new NotImplementedException($"{partType} not implemented yet");
             }
@@ -588,7 +588,7 @@ namespace TLSharp.Core
                         ChannelId = channelId,
                         AccessHash = accessHash
                     },
-                    Filter = new TLChannelParticipantsRecent(),
+                    Filter = filter,
                     Offset = found,
                     Limit = pageSize
                 };
@@ -603,6 +603,16 @@ namespace TLSharp.Core
             } while (found < total && stIdx == -1);
             ret.Count = ret.Participants.Count;
             return ret;
+        }
+        /// <summary>
+        /// Invites the passed users to the specified channel
+        /// </summary>
+        /// <param name="channel">The descriptor of the channel to invite the users to</param>
+        /// <param name="users"></param>
+        /// <returns></returns>       
+        public async Task<TLUpdates> InviteToChannel(TLChannel channel, int[] users, CancellationToken token = default(CancellationToken))
+        {
+            return await InviteToChannel(channel.Id, (long)channel.AccessHash, users, token);
         }
         /// <summary>
         /// Invites the passed users to the specified channel
