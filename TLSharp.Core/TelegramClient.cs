@@ -72,6 +72,11 @@ namespace TLSharp.Core
         {
             token.ThrowIfCancellationRequested();
 
+            if (!transport.IsConnected)
+                await transport.Connect();
+            if (!transport.IsConnected)
+                throw new Exception("Connection to Telegram failed");
+
             if (session.AuthKey == null || reconnect)
             {
                 var result = await Authenticator.DoAuthentication(transport, token).ConfigureAwait(false);

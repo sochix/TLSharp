@@ -12,23 +12,36 @@ namespace TLSharp.Core.Network
 
     public class TcpTransport : IDisposable
     {
-        private readonly TcpClient tcpClient;
-        private readonly NetworkStream stream;
+        private TcpClient tcpClient;
+        private NetworkStream stream;
         private int sendCounter = 0;
+        TcpClientConnectionHandler handler;
+        string address;
+        int port;
+        IPAddress ipAddress; 
 
         public TcpTransport(string address, int port, TcpClientConnectionHandler handler = null)
         {
+            this.handler = handler;
+            this.address = address;
+            this.port = port;
+            ipAddress = IPAddress.Parse(address);
+        }
+
+        public async Task Connect()
+        {
             if (handler == null)
             {
-                var ipAddress = IPAddress.Parse(address);
-                var endpoint = new IPEndPoint(ipAddress, port);
-
+                if (tcpClient != null)
+                {
+                    tcpClient.Close();
+                }
                 tcpClient = new TcpClient(ipAddress.AddressFamily);
 
                 try {
-                    tcpClient.Connect (endpoint);
+                    await tcpClient.ConnectAsync(ipAddress, port);
                 } catch (Exception ex) {
-                    throw new Exception ($"Problem when trying to connect to {endpoint}; either there's no internet connection or the IP address version is not compatible (if the latter, consider using DataCenterIPVersion enum)",
+                    throw new Exception ($"Problem when trying to connect to {ipAddress}:{port}; either there's no internet connection or the IP address version is not compatible (if the latter, consider using DataCenterIPVersion enum)",
                                          ex);
                 }
             }
@@ -102,7 +115,7 @@ namespace TLSharp.Core.Network
         {
             get
             {
-                return this.tcpClient.Connected;
+                return this.tcpClient != null && this.tcpClient.Connected;
             }
         }
 
