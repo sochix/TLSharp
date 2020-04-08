@@ -10,19 +10,28 @@ namespace TLSharp.Core.Network
 
     public class TcpTransport : IDisposable
     {
-        private readonly TcpClient tcpClient;
-        private readonly NetworkStream stream;
+        private TcpClient tcpClient;
+        private NetworkStream stream;
         private int sendCounter = 0;
+        TcpClientConnectionHandler handler;
+        string address;
+        int port;
+        IPAddress ipAddress;
 
         public TcpTransport(string address, int port, TcpClientConnectionHandler handler = null)
         {
+            this.handler = handler;
+            this.address = address;
+            this.port = port;
+            ipAddress = IPAddress.Parse(address);
+            tcpClient = new TcpClient(ipAddress.AddressFamily);
+        }
+
+        public async Task Connect()
+        {
             if (handler == null)
             {
-                var ipAddress = IPAddress.Parse(address);
-                var endpoint = new IPEndPoint(ipAddress, port);
-
-                tcpClient = new TcpClient(ipAddress.AddressFamily);
-                tcpClient.Connect(endpoint);
+                await tcpClient.ConnectAsync(ipAddress, port);
             }
             else
                 tcpClient = handler(address, port);
@@ -31,8 +40,9 @@ namespace TLSharp.Core.Network
             {
                 stream = tcpClient.GetStream();
             }
+            else
+                stream = null;
         }
-
         public async Task Send(byte[] packet, CancellationToken token = default(CancellationToken))
         {
             if (!tcpClient.Connected)
