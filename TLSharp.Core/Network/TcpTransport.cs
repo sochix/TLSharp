@@ -16,9 +16,9 @@ namespace TLSharp.Core.Network
         private NetworkStream stream;
         private int sendCounter = 0;
         TcpClientConnectionHandler handler;
-        string address;
-        int port;
-        IPAddress ipAddress; 
+        readonly string address;
+        readonly int port;
+        readonly IPAddress ipAddress; 
 
         public TcpTransport(string address, int port, TcpClientConnectionHandler handler = null)
         {

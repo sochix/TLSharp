@@ -81,8 +81,6 @@ namespace TLSharp.Core
                 session = Session.TryLoadOrCreateNew(store, sessionUserId);
                 await transport.Connect();
             }
-            if (!transport.IsConnected)
-                throw new Exception("Connection to Telegram failed");
 
             if (session.AuthKey == null || reconnect)
             {
