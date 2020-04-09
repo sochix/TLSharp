@@ -49,11 +49,12 @@ namespace TLSharp.Core.Network
             else
                 tcpClient = handler(address, port);
 
+            sendCounter = 0;
+
             if (tcpClient.Connected)
             {
                 stream = tcpClient.GetStream();
             }
-            sendCounter = 0;
         }
 
         public async Task Send(byte[] packet, CancellationToken token = default(CancellationToken))
