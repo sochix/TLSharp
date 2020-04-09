@@ -37,8 +37,10 @@ namespace TLSharp.Core.Network
                     tcpClient.Close();
                 }
                 tcpClient = new TcpClient(ipAddress.AddressFamily);
+                sendCounter = 0;
 
-                try {
+                try
+                {
                     await tcpClient.ConnectAsync(ipAddress, port);
                 } catch (Exception ex) {
                     throw new Exception ($"Problem when trying to connect to {ipAddress}:{port}; either there's no internet connection or the IP address version is not compatible (if the latter, consider using DataCenterIPVersion enum)",

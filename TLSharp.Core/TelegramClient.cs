@@ -32,6 +32,8 @@ namespace TLSharp.Core
         private List<TLDcOption> dcOptions;
         private TcpClientConnectionHandler handler;
         private DataCenterIPVersion dcIpVersion;
+        private ISessionStore store;
+        string sessionUserId;
 
         public Session Session
         {
@@ -56,15 +58,15 @@ namespace TLSharp.Core
             if (string.IsNullOrEmpty(apiHash))
                 throw new MissingApiConfigurationException("API_HASH");
 
-            if (store == null)
-                store = new FileSessionStore();
+            this.store = store ?? new FileSessionStore();
+            this.sessionUserId = sessionUserId;
 
             this.apiHash = apiHash;
             this.apiId = apiId;
             this.handler = handler;
             this.dcIpVersion = dcIpVersion;
 
-            session = Session.TryLoadOrCreateNew(store, sessionUserId);
+            session = Session.TryLoadOrCreateNew(this.store, sessionUserId);
             transport = new TcpTransport (session.DataCenter.Address, session.DataCenter.Port, this.handler);
         }
 
@@ -73,7 +75,12 @@ namespace TLSharp.Core
             token.ThrowIfCancellationRequested();
 
             if (!transport.IsConnected)
+            {
+                // we must recreate the session because it might track dirty information 
+                // of a connection that maybe was disconnected, reusing that session will cause errors
+                session = Session.TryLoadOrCreateNew(store, sessionUserId);
                 await transport.Connect();
+            }
             if (!transport.IsConnected)
                 throw new Exception("Connection to Telegram failed");
 
