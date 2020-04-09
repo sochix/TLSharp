@@ -37,7 +37,6 @@ namespace TLSharp.Core.Network
                     tcpClient.Close();
                 }
                 tcpClient = new TcpClient(ipAddress.AddressFamily);
-                sendCounter = 0;
 
                 try
                 {
@@ -54,6 +53,7 @@ namespace TLSharp.Core.Network
             {
                 stream = tcpClient.GetStream();
             }
+            sendCounter = 0;
         }
 
         public async Task Send(byte[] packet, CancellationToken token = default(CancellationToken))
