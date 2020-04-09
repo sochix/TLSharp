@@ -28,7 +28,7 @@ namespace TLSharp.Core.Network
             ipAddress = IPAddress.Parse(address);
         }
 
-        public async Task Connect()
+        public async Task ConnectAsync()
         {
             if (handler == null)
             {

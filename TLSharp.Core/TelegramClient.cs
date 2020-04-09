@@ -79,7 +79,7 @@ namespace TLSharp.Core
                 // we must recreate the session because it might track dirty information 
                 // of a connection that maybe was disconnected, reusing that session will cause errors
                 session = Session.TryLoadOrCreateNew(store, sessionUserId);
-                await transport.Connect();
+                await transport.ConnectAsync();
             }
 
             if (session.AuthKey == null || reconnect)
