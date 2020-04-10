@@ -237,7 +237,7 @@ My pricing is **219$/hour**. I accept PayPal. To request a paid support write me
 
 # Contributors
 * [Afshin Arani](http://aarani.ir) - TLGenerator, and a lot of other usefull things
-* [Knocte](https://github.com/knocte)
+* [knocte](https://github.com/knocte)
 
 # License
 
