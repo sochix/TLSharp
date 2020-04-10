@@ -192,7 +192,7 @@ Latest scheme in JSON format you can find [here](https://gist.github.com/aarani/
 # FAQ
 
 #### What API layer is supported?
-The latest one - 66. Thanks to Afshin Arani for his TLGenerator
+The latest layer supported by TLSharp is 66. If you need a higher layer, we're working on it in this PullRequest: https://github.com/nblockchain/TgSharp/pull/5 (your feedback is welcome!)
 
 #### I get a xxxMigrationException or a MIGRATE_X error!
 
