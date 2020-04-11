@@ -188,9 +188,9 @@ Latest scheme in JSON format you can find [here](https://gist.github.com/aarani/
 
 * Add Updates handling via events (WIP PR: https://github.com/sochix/TLSharp/pull/892 )
 * GithubActions CI job for running tests
-* Removal of Zip-related dependencies (WIP PR: https://github.com/nblockchain/TgSharp/pull/4 )
-* Update to latest Layer
-* Upgrade to .NET 4.6 (WIP PR: https://github.com/nblockchain/TgSharp/pull/3) and later to .NETStandard 2.0.
+* Update to latest Layer (WIP PR: https://github.com/nblockchain/TgSharp/pull/5 ).
+* Upgrade to .NETStandard 2.0.
+
 
 # FAQ
 
