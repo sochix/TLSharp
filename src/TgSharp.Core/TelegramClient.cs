@@ -28,6 +28,8 @@ namespace TgSharp.Core
         private TcpTransport transport;
         private string apiHash = String.Empty;
         private int apiId = 0;
+        private string sessionUserId;
+        private ISessionStore store;
         private Session session;
         private List<TLDcOption> dcOptions;
         private TcpClientConnectionHandler handler;
@@ -58,19 +60,22 @@ namespace TgSharp.Core
 
             if (store == null)
                 store = new FileSessionStore();
+            this.store = store;
 
             this.apiHash = apiHash;
             this.apiId = apiId;
             this.handler = handler;
             this.dcIpVersion = dcIpVersion;
 
-            session = Session.TryLoadOrCreateNew(store, sessionUserId);
-            transport = new TcpTransport (session.DataCenter.Address, session.DataCenter.Port, this.handler);
+            this.sessionUserId = sessionUserId;
         }
 
         public async Task ConnectAsync(bool reconnect = false, CancellationToken token = default(CancellationToken))
         {
             token.ThrowIfCancellationRequested();
+
+            session = Session.TryLoadOrCreateNew (store, sessionUserId);
+            transport = new TcpTransport (session.DataCenter.Address, session.DataCenter.Port, this.handler);
 
             if (session.AuthKey == null || reconnect)
             {
@@ -135,9 +140,8 @@ namespace TgSharp.Core
                 dc = dcs.First();
             
             var dataCenter = new DataCenter (dcId, dc.IpAddress, dc.Port);
-
-            transport = new TcpTransport(dc.IpAddress, dc.Port, handler);
             session.DataCenter = dataCenter;
+            session.Save();
 
             await ConnectAsync(true, token).ConfigureAwait(false);
 
