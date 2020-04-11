@@ -211,7 +211,11 @@ You should create a Telegram session. See [configuration guide](#sending-message
 
 #### Why do I get a FloodException/FLOOD_WAIT error?
 
-It's likely [Telegram restrictions](https://core.telegram.org/api/errors#420-flood), or a bug in TgSharp (if you feel it's the latter, please open a Github issue). You can know the time to wait by accessing the FloodException::TimeToWait property.
+After you get this, you cannot use Telegram's API for a while. You can know the time to wait by accessing the FloodException::TimeToWait property.
+
+If this happens too often and/or the TimeToWait value is too long, there may be something odd going on. First and foremost, are you using TgSharp to manage more than one telegram account from the same host? If yes, it's likely that you're hitting [Telegram restrictions](https://core.telegram.org/api/errors#420-flood). We recommend that you use TgSharp in a standalone-device app (so that each instance of your program only uses one telegram account), so for example a mobile app, not a web app.
+
+If, on the other hand, you're completely sure that you found a bug in TgSharp about this, please open a Github issue.
 
 
 #### Why does TgSharp lacks feature XXXX?
