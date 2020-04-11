@@ -121,6 +121,8 @@ namespace TLSharp.Core
             else
                 dcs = dcOptions.Where(d => d.Id == dcId); // any
 
+            dcs = dcs.Where(d => !d.MediaOnly);
+
             TLDcOption dc;
             if (dcIpVersion != DataCenterIPVersion.Default)
             {
