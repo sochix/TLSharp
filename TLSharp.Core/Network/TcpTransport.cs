@@ -18,38 +18,29 @@ namespace TLSharp.Core.Network
         TcpClientConnectionHandler handler;
         readonly string address;
         readonly int port;
-        readonly IPAddress ipAddress; 
+        readonly IPAddress ipAddress;
 
         public TcpTransport(string address, int port, TcpClientConnectionHandler handler = null)
         {
-            this.handler = handler;
-            this.address = address;
-            this.port = port;
-            ipAddress = IPAddress.Parse(address);
-        }
-
-        public async Task ConnectAsync()
-        {
             if (handler == null)
             {
-                if (tcpClient != null)
-                {
-                    tcpClient.Close();
-                }
+                var ipAddress = IPAddress.Parse(address);
+                var endpoint = new IPEndPoint(ipAddress, port);
+
                 tcpClient = new TcpClient(ipAddress.AddressFamily);
 
                 try
                 {
-                    await tcpClient.ConnectAsync(ipAddress, port);
-                } catch (Exception ex) {
-                    throw new Exception ($"Problem when trying to connect to {ipAddress}:{port}; either there's no internet connection or the IP address version is not compatible (if the latter, consider using DataCenterIPVersion enum)",
+                    tcpClient.Connect(endpoint);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Problem when trying to connect to {endpoint}; either there's no internet connection or the IP address version is not compatible (if the latter, consider using DataCenterIPVersion enum)",
                                          ex);
                 }
             }
             else
                 tcpClient = handler(address, port);
-
-            sendCounter = 0;
 
             if (tcpClient.Connected)
             {

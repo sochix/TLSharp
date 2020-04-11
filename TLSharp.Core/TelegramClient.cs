@@ -65,22 +65,22 @@ namespace TLSharp.Core
             this.apiId = apiId;
             this.handler = handler;
             this.dcIpVersion = dcIpVersion;
-
-            session = Session.TryLoadOrCreateNew(this.store, sessionUserId);
-            transport = new TcpTransport (session.DataCenter.Address, session.DataCenter.Port, this.handler);
         }
 
         public async Task ConnectAsync(bool reconnect = false, CancellationToken token = default(CancellationToken))
         {
             token.ThrowIfCancellationRequested();
 
-            if (!transport.IsConnected)
-            {
-                // we must recreate the session because it might track dirty information 
-                // of a connection that maybe was disconnected, reusing that session will cause errors
-                session = Session.TryLoadOrCreateNew(store, sessionUserId);
-                await transport.ConnectAsync();
-            }
+            //if (!transport.IsConnected)
+            //{
+            //    // we must recreate the session because it might track dirty information 
+            //    // of a connection that maybe was disconnected, reusing that session will cause errors
+            //    session = Session.TryLoadOrCreateNew(store, sessionUserId);
+            //    await transport.ConnectAsync();
+            //}
+
+            session = Session.TryLoadOrCreateNew(store, sessionUserId);
+            transport = new TcpTransport(session.DataCenter.Address, session.DataCenter.Port, this.handler);
 
             if (session.AuthKey == null || reconnect)
             {
@@ -131,6 +131,8 @@ namespace TLSharp.Core
             else
                 dcs = dcOptions.Where(d => d.Id == dcId); // any
 
+            dcs = dcs.Where(d => !d.MediaOnly);//.AsEnumerable();
+
             TLDcOption dc;
             if (dcIpVersion != DataCenterIPVersion.Default)
             {
@@ -144,8 +146,9 @@ namespace TLSharp.Core
             
             var dataCenter = new DataCenter (dcId, dc.IpAddress, dc.Port);
 
-            transport = new TcpTransport(dc.IpAddress, dc.Port, handler);
+            //transport = new TcpTransport(dc.IpAddress, dc.Port, handler);
             session.DataCenter = dataCenter;
+            session.Save();
 
             await ConnectAsync(true, token).ConfigureAwait(false);
 
