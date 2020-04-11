@@ -70,7 +70,12 @@ namespace TgSharp.Core
             this.sessionUserId = sessionUserId;
         }
 
-        public async Task ConnectAsync(bool reconnect = false, CancellationToken token = default(CancellationToken))
+        public async Task ConnectAsync (CancellationToken token = default (CancellationToken))
+        {
+            await ConnectInternalAsync(false, token);
+        }
+
+        private async Task ConnectInternalAsync (bool reconnect = false, CancellationToken token = default (CancellationToken))
         {
             token.ThrowIfCancellationRequested();
 
@@ -143,7 +148,7 @@ namespace TgSharp.Core
             session.DataCenter = dataCenter;
             session.Save();
 
-            await ConnectAsync(true, token).ConfigureAwait(false);
+            await ConnectInternalAsync(true, token).ConfigureAwait(false);
 
             if (session.TLUser != null)
             {
