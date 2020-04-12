@@ -20,10 +20,21 @@ namespace TeleSharp.Generator
             string MethodStyle = File.ReadAllText("Method.tmp");
             //string method = File.ReadAllText("constructor.tt");
             string Json = "";
-            string url;
-            if (args.Count() == 0) url = "tl-schema.json"; else url = args[0];
 
-            Json = File.ReadAllText(url);
+            string url;
+            if (!args.Any())
+                url = "json";
+            else
+                url = args[0];
+
+            try
+            {
+                Json = File.ReadAllText(url);
+            }
+            catch (FileNotFoundException ex)
+            {
+                throw new Exception ("Couldn't find schema JSON file, did you download it first e.g. with `wget https://core.telegram.org/schema/json`?", ex);
+            }
             FileStream file = File.OpenWrite("Result.cs");
             StreamWriter sw = new StreamWriter(file);
             TlSchema schema = JsonConvert.DeserializeObject<TlSchema>(Json);
