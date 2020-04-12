@@ -26,14 +26,14 @@ namespace TgSharp.Core
     {
         private MtProtoSender sender;
         private TcpTransport transport;
-        private string apiHash = String.Empty;
-        private int apiId = 0;
-        private string sessionUserId;
-        private ISessionStore store;
+        private readonly string apiHash;
+        private readonly int apiId;
+        private readonly string sessionUserId;
+        private readonly ISessionStore store;
         private Session session;
         private List<TLDcOption> dcOptions;
-        private TcpClientConnectionHandler handler;
-        private DataCenterIPVersion dcIpVersion;
+        private readonly TcpClientConnectionHandler handler;
+        private readonly DataCenterIPVersion dcIpVersion;
 
         public Session Session
         {
