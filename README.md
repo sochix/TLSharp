@@ -81,8 +81,7 @@ You can call any method on authenticated users. For example, let's send message 
 
     //find recipient in contacts
     var user = result.Users
-                     .Where(x => x.GetType() == typeof (TLUser))
-                     .Cast<TLUser>()
+                     .OfType<TLUser>()
                      .FirstOrDefault(x => x.Phone == "<recipient_phone>");
 
     //send message
@@ -99,8 +98,7 @@ To send a message to a channel you could use the following code:
 
     //find channel by title
     var chat = dialogs.Chats
-                      .Where(c => c.GetType() == typeof(TLChannel))
-                      .Cast<TLChannel>()
+                      .OfType<TLChannel>()
                       .FirstOrDefault(c => c.Title == "<channel_title>");
 
     //send message
