@@ -49,95 +49,105 @@ Telegram API isn't that easy to start. You need to do some configuration first.
 
 ## First requests
 
-To start work, create an instance of TelegramClient and establish connection
+To start work, create an instance of TelegramClient and establish connection:
 
 ```csharp 
-   var client = new TelegramClient(apiId, apiHash);
-   await client.ConnectAsync();
+    var client = new TelegramClient(apiId, apiHash);
+    await client.ConnectAsync();
 ```
+
 Now you can work with Telegram API, but ->
+
 > Only a small portion of the API methods are available to unauthorized users. ([full description](https://core.telegram.org/api/auth)) 
 
-For authentication you need to run following code
-```csharp
-  var hash = await client.SendCodeRequestAsync("<user_number>");
-  var code = "<code_from_telegram>"; // you can change code in debugger
+For authentication you need to run following code:
 
-  var user = await client.MakeAuthAsync("<user_number>", hash, code);
+```csharp
+    var hash = await client.SendCodeRequestAsync("<user_number>");
+    var code = "<code_from_telegram>"; // you can change code in debugger
+
+    var user = await client.MakeAuthAsync("<user_number>", hash, code);
 ``` 
 
-Full code you can see at [AuthUser test](https://github.com/nblockchain/TgSharp/blob/master/src/TgSharp.Tests/TgSharpTests.cs#L70)
+You can see the full code at [AuthUser test](https://github.com/nblockchain/TgSharp/blob/master/src/TgSharp.Tests/TgSharpTests.cs#L70)
 
-When user is authenticated, TgSharp creates special file called _session.dat_. In this file TgSharp stores all information needed for user session. So you need to authenticate user every time the _session.dat_ file is corrupted or removed.
+When the user is authenticated, TgSharp creates special file called _session.dat_. In this file TgSharp stores all information needed for the user's session. So you need to authenticate user every time the _session.dat_ file is corrupted or removed.
 
-You can call any method on authenticated user. For example, let's send message to a friend by his phone number:
+You can call any method on authenticated users. For example, let's send message to a friend by his phone number:
 
 ```csharp
-  //get available contacts
-  var result = await client.GetContactsAsync();
+    //get available contacts
+    var result = await client.GetContactsAsync();
 
-  //find recipient in contacts
-  var user = result.Users
-	  .Where(x => x.GetType() == typeof (TLUser))
-	  .Cast<TLUser>()
-	  .FirstOrDefault(x => x.Phone == "<recipient_phone>");
-	
-  //send message
-  await client.SendMessageAsync(new TLInputPeerUser() {UserId = user.Id}, "OUR_MESSAGE");
+    //find recipient in contacts
+    var user = result.Users
+                     .Where(x => x.GetType() == typeof (TLUser))
+                     .Cast<TLUser>()
+                     .FirstOrDefault(x => x.Phone == "<recipient_phone>");
+
+    //send message
+    await client.SendMessageAsync(new TLInputPeerUser() { UserId = user.Id }, "OUR_MESSAGE");
 ```
 
-Full code you can see at [SendMessage test](https://github.com/nblockchain/TgSharp/blob/master/src/TgSharp.Tests/TgSharpTests.cs#L87)
+You can see the full code at [SendMessage test](https://github.com/nblockchain/TgSharp/blob/master/src/TgSharp.Tests/TgSharpTests.cs#L87)
 
-To send message to channel you could use the following code:
+To send a message to a channel you could use the following code:
+
 ```csharp
-  //get user dialogs
-  var dialogs = (TLDialogsSlice) await client.GetUserDialogsAsync();
+    //get user dialogs
+    var dialogs = (TLDialogsSlice) await client.GetUserDialogsAsync();
 
-  //find channel by title
-  var chat = dialogs.Chats
-    .Where(c => c.GetType() == typeof(TLChannel))
-    .Cast<TLChannel>()
-    .FirstOrDefault(c => c.Title == "<channel_title>");
+    //find channel by title
+    var chat = dialogs.Chats
+                      .Where(c => c.GetType() == typeof(TLChannel))
+                      .Cast<TLChannel>()
+                      .FirstOrDefault(c => c.Title == "<channel_title>");
 
-  //send message
-  await client.SendMessageAsync(new TLInputPeerChannel() { ChannelId = chat.Id, AccessHash = chat.AccessHash.Value }, "OUR_MESSAGE");
+    //send message
+    await client.SendMessageAsync(new TLInputPeerChannel() { ChannelId = chat.Id, AccessHash = chat.AccessHash.Value }, "OUR_MESSAGE");
 ```
-Full code you can see at [SendMessageToChannel test](https://github.com/nblockchain/TgSharp/blob/master/src/TgSharp.Tests/TgSharpTests.cs#L107)
+
+You can see the full code at [SendMessageToChannel test](https://github.com/nblockchain/TgSharp/blob/master/src/TgSharp.Tests/TgSharpTests.cs#L107)
 
 
 ## Working with files
+
 Telegram separate files to two categories -> big file and small file. File is Big if its size more than 10 Mb. TgSharp tries to hide this complexity from you, thats why we provide one method to upload files **UploadFile**.
 
 ```csharp
-	var fileResult = await client.UploadFile("cat.jpg", new StreamReader("data/cat.jpg"));
+    var fileResult = await client.UploadFile("cat.jpg", new StreamReader("data/cat.jpg"));
 ```
 
-TgSharp provides two wrappers for sending photo and document
+TgSharp provides two wrappers for sending photo and document:
 
 ```csharp
-	await client.SendUploadedPhoto(new TLInputPeerUser() { UserId = user.Id }, fileResult, "kitty");
-	await client.SendUploadedDocument(
-                new TLInputPeerUser() { UserId = user.Id },
-                fileResult,
-                "some zips", //caption
-                "application/zip", //mime-type
-                new TLVector<TLAbsDocumentAttribute>()); //document attributes, such as file name
-```
-Full code you can see at [SendPhotoToContactTest](https://github.com/nblockchain/TgSharp/blob/master/src/TgSharp.Tests/TgSharpTests.cs#L125) and [SendBigFileToContactTest](https://github.com/nblockchain/TgSharp/blob/master/src/TgSharp.Tests/TgSharpTests.cs#L143)
+    await client.SendUploadedPhoto(new TLInputPeerUser() { UserId = user.Id }, fileResult, "kitty");
+    await client.SendUploadedDocument(new TLInputPeerUser() { UserId = user.Id },
+                                      fileResult,
+                                      "some zips", //caption
+                                      "application/zip", //mime-type
 
-To download file you should call **GetFile** method
+                                      //document attributes, such as file name
+                                      new TLVector<TLAbsDocumentAttribute>());
+```
+
+You can see the Full code at [SendPhotoToContactTest](https://github.com/nblockchain/TgSharp/blob/master/src/TgSharp.Tests/TgSharpTests.cs#L125) and [SendBigFileToContactTest](https://github.com/nblockchain/TgSharp/blob/master/src/TgSharp.Tests/TgSharpTests.cs#L143)
+
+To download a file you should call the **GetFile** method:
+
 ```csharp
-	await client.GetFile(
-                new TLInputDocumentFileLocation()
-                {
-                    AccessHash = document.AccessHash,
-                    Id = document.Id,
-                    Version = document.Version
-                },
-                document.Size); //size of fileChunk you want to retrieve
+    await client.GetFile(new TLInputDocumentFileLocation()
+                         {
+                             AccessHash = document.AccessHash,
+                             Id = document.Id,
+                             Version = document.Version
+                         },
+
+                         //size of fileChunk you want to retrieve
+                         document.Size);
 ```
 
-Full code you can see at [DownloadFileFromContactTest](https://github.com/nblockchain/TgSharp/blob/master/src/TgSharp.Tests/TgSharpTests.cs#L167)
+You can see the Full code at [DownloadFileFromContactTest](https://github.com/nblockchain/TgSharp/blob/master/src/TgSharp.Tests/TgSharpTests.cs#L167)
 
 
 # Available Methods
@@ -162,23 +172,22 @@ For your convenience TgSharp have wrappers for several Telegram API methods. You
 
 **What if you can't find needed method at the list?**
 
-Don't panic. You can call any method with help of `SendRequestAsync` function. For example, send user typing method: 
+Don't panic. You can call any method with help of `SendRequestAsync` function. For example, send user typing method:
 
 ```csharp
+    //Create request
+    var req = new TLRequestSetTyping()
+    {
+        Action = new TLSendMessageTypingAction(),
+        Peer = new TLInputPeerUser() { UserId = user.Id }
+    };
 
-  //Create request 
-  var req = new TLRequestSetTyping()
-  {
-    Action = new TLSendMessageTypingAction(),
-    Peer = new TLInputPeerUser() { UserId = user.Id }
-  };
-
-  //run request, and deserialize response to Boolean
-  return await client.SendRequestAsync<Boolean>(req);
+    //run request, and deserialize response to Boolean
+    return await client.SendRequestAsync<Boolean>(req);
 ``` 
 
 
-**Where you can find a list of requests and its params?**
+**Where can you find a list of requests and its parameters?**
 
 The only way is [Telegram API docs](https://core.telegram.org/methods). Yes, it's outdated. But there is no other source.
 Latest scheme in JSON format you can find [here](https://gist.github.com/aarani/b22b7cda024973dff68e1672794b0298)
