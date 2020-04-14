@@ -29,7 +29,7 @@ jobs:
         }
         Else {
             $baseVersion = "0.1.1"
-            $version = "$baseVersion--date$date.git$hash"
+            $version = "$baseVersion--date$date.git-$hash"
         }
 
         ./Nuget.exe pack src/TgSharp.Core/TgSharp.Core.csproj -Version $version -Build -Properties Configuration=Release
