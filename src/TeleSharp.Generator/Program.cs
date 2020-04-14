@@ -12,13 +12,64 @@ namespace TeleSharp.Generator
         static List<string> keywords = new List<string>(new string[] { "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked", "class", "const", "continue", "decimal", "default", "delegate", "do", "double", "else", "enum", "event", "explicit", "extern", "false", "finally", "fixed", "float", "for", "foreach", "goto", "if", "implicit", "in", "in", "int", "interface", "internal", "is", "lock", "long", "namespace", "new", "null", "object", "operator", "out", "out", "override", "params", "private", "protected", "public", "readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string", "struct", "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort", "using", "virtual", "void", "volatile", "while", "add", "alias", "ascending", "async", "await", "descending", "dynamic", "from", "get", "global", "group", "into", "join", "let", "orderby", "partial", "partial", "remove", "select", "set", "value", "var", "where", "where", "yield" });
         static List<string> interfacesList = new List<string>();
         static List<string> classesList = new List<string>();
+
+        static string constructorAbsTemplate = "ConstructorAbs.tmp";
+        static string constructorTemplate = "ConstructorAbs.tmp";
+        static string methodTemplate = "Method.tmp";
+
+        static List<string> templateFiles = new List<string> (new [] {
+            constructorAbsTemplate,
+            constructorTemplate,
+            methodTemplate,
+        });
+
+        static bool IsRoot(DirectoryInfo dir)
+        {
+            return dir.FullName == dir.Root.FullName;
+        }
+
+        static DirectoryInfo FindTemplatesDir(DirectoryInfo dir)
+        {
+            if (templateFiles.All(templateFileName =>
+                new FileInfo(Path.Combine(dir.FullName, templateFileName))
+                    .Exists)) {
+                return dir;
+            }
+
+            if (IsRoot(dir))
+                return null;
+
+            var folderUp = new DirectoryInfo(Path.Combine(dir.FullName, ".."));
+            return FindTemplatesDir(folderUp);
+        }
+
         static void Main(string[] args)
         {
+            var currentDir = new DirectoryInfo(Directory.GetCurrentDirectory());
+            var possibleTemplatesDir = FindTemplatesDir(currentDir);
+            if (possibleTemplatesDir == null) {
+                var assDir =
+                    System.Reflection.Assembly.GetExecutingAssembly().Location;
+                possibleTemplatesDir = FindTemplatesDir(new DirectoryInfo(assDir));
+            }
+            if (possibleTemplatesDir == null) {
+                Console.Error.WriteLine("Couldn't find template *.tmp files");
+                Environment.Exit(1);
+            }
 
-            string AbsStyle = File.ReadAllText("ConstructorAbs.tmp");
-            string NormalStyle = File.ReadAllText("Constructor.tmp");
-            string MethodStyle = File.ReadAllText("Method.tmp");
-            //string method = File.ReadAllText("constructor.tt");
+            string absStyle = File.ReadAllText(
+                                  Path.Combine(possibleTemplatesDir.FullName,
+                                               constructorAbsTemplate)
+                              );
+            string normalStyle = File.ReadAllText(
+                                     Path.Combine (possibleTemplatesDir.FullName,
+                                                   constructorTemplate)
+                                 );
+            string methodStyle = File.ReadAllText (
+                                     Path.Combine (possibleTemplatesDir.FullName,
+                                                   methodTemplate)
+                                 );
+
             string Json = "";
 
             string url;
@@ -65,7 +116,7 @@ namespace TeleSharp.Generator
                             .Replace(Path.DirectorySeparatorChar, '.');
                         if (nspace.EndsWith("."))
                             nspace = nspace.Remove(nspace.Length - 1, 1);
-                        string temp = AbsStyle.Replace("/* NAMESPACE */", "TeleSharp." + nspace);
+                        string temp = absStyle.Replace("/* NAMESPACE */", "TeleSharp." + nspace);
                         temp = temp.Replace("/* NAME */", GetNameofClass(c.Type, true));
                         writer.Write(temp);
                         writer.Close();
@@ -98,7 +149,7 @@ namespace TeleSharp.Generator
                         .Replace(Path.DirectorySeparatorChar, '.');
                     if (nspace.EndsWith("."))
                         nspace = nspace.Remove(nspace.Length - 1, 1);
-                    string temp = NormalStyle.Replace("/* NAMESPACE */", "TeleSharp." + nspace);
+                    string temp = normalStyle.Replace("/* NAMESPACE */", "TeleSharp." + nspace);
                     temp = (c.Type == "himself") ? temp.Replace("/* PARENT */", "TLObject") : temp.Replace("/* PARENT */", GetNameofClass(c.Type, true));
                     temp = temp.Replace("/*Constructor*/", c.Id.ToString());
                     temp = temp.Replace("/* NAME */", GetNameofClass(c.Predicate, false));
@@ -174,7 +225,7 @@ namespace TeleSharp.Generator
                         .Replace(Path.DirectorySeparatorChar, '.');
                     if (nspace.EndsWith("."))
                         nspace = nspace.Remove(nspace.Length - 1, 1);
-                    string temp = MethodStyle.Replace("/* NAMESPACE */", "TeleSharp." + nspace);
+                    string temp = methodStyle.Replace("/* NAMESPACE */", "TeleSharp." + nspace);
                     temp = temp.Replace("/* PARENT */", "TLMethod");
                     temp = temp.Replace("/*Constructor*/", c.Id.ToString());
                     temp = temp.Replace("/* NAME */", GetNameofClass(c.Method, false, true));
