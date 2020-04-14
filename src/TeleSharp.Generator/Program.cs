@@ -48,11 +48,21 @@ namespace TeleSharp.Generator
                 var list = schema.Constructors.Where(x => x.Type == c.Type);
                 if (list.Count() > 1)
                 {
-                    string path = (GetNameSpace(c.Type).Replace("TeleSharp.TL", "TL\\").Replace(".", "") + "\\" + GetNameofClass(c.Type, true) + ".cs").Replace("\\\\", "\\");
+                    string path =
+                        (GetNameSpace(c.Type)
+                            .Replace("TeleSharp.TL", "TL" + Path.DirectorySeparatorChar)
+                            .Replace(".", "") + Path.DirectorySeparatorChar +
+                            GetNameofClass(c.Type, true) + ".cs")
+                                .Replace("\\\\", Path.DirectorySeparatorChar.ToString());
                     FileStream classFile = MakeFile(path);
                     using (StreamWriter writer = new StreamWriter(classFile))
                     {
-                        string nspace = (GetNameSpace(c.Type).Replace("TeleSharp.TL", "TL\\").Replace(".", "")).Replace("\\\\", "\\").Replace("\\", ".");
+                        string nspace =
+                            (GetNameSpace(c.Type)
+                                .Replace("TeleSharp.TL", "TL" + Path.DirectorySeparatorChar)
+                                .Replace(".", ""))
+                            .Replace("\\\\", Path.DirectorySeparatorChar.ToString())
+                            .Replace(Path.DirectorySeparatorChar, '.');
                         if (nspace.EndsWith("."))
                             nspace = nspace.Remove(nspace.Length - 1, 1);
                         string temp = AbsStyle.Replace("/* NAMESPACE */", "TeleSharp." + nspace);
@@ -70,12 +80,22 @@ namespace TeleSharp.Generator
             }
             foreach (var c in schema.Constructors)
             {
-                string path = (GetNameSpace(c.Predicate).Replace("TeleSharp.TL", "TL\\").Replace(".", "") + "\\" + GetNameofClass(c.Predicate, false) + ".cs").Replace("\\\\", "\\");
+                string path =
+                    (GetNameSpace(c.Predicate)
+                        .Replace("TeleSharp.TL", "TL" + Path.DirectorySeparatorChar)
+                        .Replace(".", "") + Path.DirectorySeparatorChar +
+                        GetNameofClass(c.Predicate, false) + ".cs")
+                    .Replace("\\\\", Path.DirectorySeparatorChar.ToString());
                 FileStream classFile = MakeFile(path);
                 using (StreamWriter writer = new StreamWriter(classFile))
                 {
                     #region About Class
-                    string nspace = (GetNameSpace(c.Predicate).Replace("TeleSharp.TL", "TL\\").Replace(".", "")).Replace("\\\\", "\\").Replace("\\", ".");
+                    string nspace =
+                        (GetNameSpace(c.Predicate)
+                            .Replace("TeleSharp.TL", "TL" + Path.DirectorySeparatorChar)
+                            .Replace(".", ""))
+                        .Replace("\\\\", Path.DirectorySeparatorChar.ToString())
+                        .Replace(Path.DirectorySeparatorChar, '.');
                     if (nspace.EndsWith("."))
                         nspace = nspace.Remove(nspace.Length - 1, 1);
                     string temp = NormalStyle.Replace("/* NAMESPACE */", "TeleSharp." + nspace);
@@ -136,12 +156,22 @@ namespace TeleSharp.Generator
             }
             foreach (var c in schema.Methods)
             {
-                string path = (GetNameSpace(c.Method).Replace("TeleSharp.TL", "TL\\").Replace(".", "") + "\\" + GetNameofClass(c.Method, false, true) + ".cs").Replace("\\\\", "\\");
+                string path =
+                    (GetNameSpace(c.Method)
+                        .Replace("TeleSharp.TL", "TL" + Path.DirectorySeparatorChar)
+                        .Replace(".", "") + Path.DirectorySeparatorChar +
+                        GetNameofClass(c.Method, false, true) + ".cs")
+                            .Replace("\\\\", Path.DirectorySeparatorChar.ToString());
                 FileStream classFile = MakeFile(path);
                 using (StreamWriter writer = new StreamWriter(classFile))
                 {
                     #region About Class
-                    string nspace = (GetNameSpace(c.Method).Replace("TeleSharp.TL", "TL\\").Replace(".", "")).Replace("\\\\", "\\").Replace("\\", ".");
+                    string nspace =
+                        (GetNameSpace(c.Method)
+                            .Replace("TeleSharp.TL", "TL" + Path.DirectorySeparatorChar)
+                            .Replace(".", ""))
+                        .Replace("\\\\", Path.DirectorySeparatorChar.ToString())
+                        .Replace(Path.DirectorySeparatorChar, '.');
                     if (nspace.EndsWith("."))
                         nspace = nspace.Remove(nspace.Length - 1, 1);
                     string temp = MethodStyle.Replace("/* NAMESPACE */", "TeleSharp." + nspace);
