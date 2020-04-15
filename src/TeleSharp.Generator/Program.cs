@@ -14,7 +14,7 @@ namespace TeleSharp.Generator
         static List<string> classesList = new List<string>();
 
         static string constructorAbsTemplate = "ConstructorAbs.tmp";
-        static string constructorTemplate = "ConstructorAbs.tmp";
+        static string constructorTemplate = "Constructor.tmp";
         static string methodTemplate = "Method.tmp";
 
         static List<string> templateFiles = new List<string> (new [] {
