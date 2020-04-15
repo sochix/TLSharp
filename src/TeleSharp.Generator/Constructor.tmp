@@ -4,10 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace /* NAMESPACE */
 {
-	[TLObject(/*Constructor*/)]
+    [TLObject(/*Constructor*/)]
     public class /* NAME */ : /* PARENT */
     {
         public override int Constructor
@@ -20,10 +22,10 @@ namespace /* NAMESPACE */
 
         /* PARAMS */
 
-		public void ComputeFlags()
-		{
-			/* COMPUTE */
-		}
+        public void ComputeFlags()
+        {
+            /* COMPUTE */
+        }
 
         public override void DeserializeBody(BinaryReader br)
         {
@@ -32,7 +34,7 @@ namespace /* NAMESPACE */
 
         public override void SerializeBody(BinaryWriter bw)
         {
-			bw.Write(Constructor);
+            bw.Write(Constructor);
             /* SERIALIZE */
         }
     }

@@ -155,15 +155,23 @@ namespace TeleSharp.Generator
                     temp = temp.Replace("/* NAME */", GetNameofClass(c.Predicate, false));
                     #endregion
                     #region Fields
-                    string fields = "";
+                    string fields = String.Empty;
+                    bool first = true;
                     foreach (var tmp in c.Params)
                     {
-                        fields += $"     public {CheckForFlagBase(tmp.Type, GetTypeName(tmp.Type))} {CheckForKeywordAndPascalCase(tmp.Name)} " + "{get;set;}" + Environment.NewLine;
+                        if (!first) {
+                            fields += Environment.NewLine + "        ";
+                        } else {
+                            first = false;
+                        }
+                        fields += $"public {CheckForFlagBase (tmp.Type, GetTypeName (tmp.Type))} {CheckForKeywordAndPascalCase (tmp.Name)}" + " { get; set; }";
                     }
+                    if (fields == String.Empty)
+                        fields = "// no fields";
                     temp = temp.Replace("/* PARAMS */", fields);
                     #endregion
                     #region ComputeFlagFunc
-                    if (!c.Params.Any(x => x.Name == "Flags")) temp = temp.Replace("/* COMPUTE */", "");
+                    if (!c.Params.Any(x => x.Name == "Flags")) temp = temp.Replace("/* COMPUTE */", "// do nothing");
                     else
                     {
                         var compute = "Flags = 0;" + Environment.NewLine;
@@ -182,22 +190,45 @@ namespace TeleSharp.Generator
                     }
                     #endregion
                     #region SerializeFunc
-                    var serialize = "";
-
-                    if (c.Params.Any(x => x.Name == "Flags")) serialize += "ComputeFlags();" + Environment.NewLine + "bw.Write(Flags);" + Environment.NewLine;
+                    var serialize = String.Empty;
+                    first = true;
+                    if (c.Params.Any (x => x.Name == "Flags")) {
+                        serialize += "ComputeFlags();" +
+                                    Environment.NewLine + "            " +
+                                     "bw.Write(Flags);";
+                        first = false;
+                    }
                     foreach (var p in c.Params.Where(x => x.Name != "Flags"))
                     {
-                        serialize += WriteWriteCode(p) + Environment.NewLine;
+                        var code = WriteWriteCode (p);
+                        if (String.IsNullOrEmpty(code))
+                            continue;
+
+                        if (!first) {
+                            serialize += Environment.NewLine + "            ";
+                        } else {
+                            first = false;
+                        }
+                        serialize += code;
                     }
+                    if (serialize == String.Empty)
+                        serialize = "// do nothing";
                     temp = temp.Replace("/* SERIALIZE */", serialize);
                     #endregion
                     #region DeSerializeFunc
-                    var deserialize = "";
-
+                    var deserialize = String.Empty;
+                    first = true;
                     foreach (var p in c.Params)
                     {
-                        deserialize += WriteReadCode(p) + Environment.NewLine;
+                        if (!first) {
+                            deserialize += Environment.NewLine + "            ";
+                        } else {
+                            first = false;
+                        }
+                        deserialize += WriteReadCode(p);
                     }
+                    if (deserialize == String.Empty)
+                        deserialize = "// do nothing";
                     temp = temp.Replace("/* DESERIALIZE */", deserialize);
                     #endregion
                     writer.Write(temp);
@@ -232,15 +263,26 @@ namespace TeleSharp.Generator
                     #endregion
                     #region Fields
                     string fields = "";
+                    bool first = true;
                     foreach (var tmp in c.Params)
                     {
-                        fields += $"        public {CheckForFlagBase(tmp.Type, GetTypeName(tmp.Type))} {CheckForKeywordAndPascalCase(tmp.Name)} " + "{get;set;}" + Environment.NewLine;
+                        if (!first) {
+                            fields += Environment.NewLine + "        ";
+                        } else {
+                            first = false;
+                        }
+                        fields += $"public {CheckForFlagBase(tmp.Type, GetTypeName(tmp.Type))} {CheckForKeywordAndPascalCase(tmp.Name)}" + " { get; set; }";
                     }
-                    fields += $"        public {CheckForFlagBase(c.Type, GetTypeName(c.Type))} Response" + "{ get; set;}" + Environment.NewLine;
+                    if (!first) {
+                        fields += Environment.NewLine + "        ";
+                    } else {
+                        first = false;
+                    }
+                    fields += $"public {CheckForFlagBase(c.Type, GetTypeName(c.Type))} Response" + " { get; set; }";
                     temp = temp.Replace("/* PARAMS */", fields);
                     #endregion
                     #region ComputeFlagFunc
-                    if (!c.Params.Any(x => x.Name == "Flags")) temp = temp.Replace("/* COMPUTE */", "");
+                    if (!c.Params.Any(x => x.Name == "Flags")) temp = temp.Replace("/* COMPUTE */", "// do nothing");
                     else
                     {
                         var compute = "Flags = 0;" + Environment.NewLine;
@@ -259,28 +301,50 @@ namespace TeleSharp.Generator
                     }
                     #endregion
                     #region SerializeFunc
-                    var serialize = "";
-
-                    if (c.Params.Any(x => x.Name == "Flags")) serialize += "ComputeFlags();" + Environment.NewLine + "bw.Write(Flags);" + Environment.NewLine;
+                    var serialize = String.Empty;
+                    first = true;
+                    if (c.Params.Any (x => x.Name == "Flags")) {
+                        serialize += "ComputeFlags();" + Environment.NewLine +
+                                     "            " + "bw.Write(Flags);";
+                        first = false;
+                    }
                     foreach (var p in c.Params.Where(x => x.Name != "Flags"))
                     {
-                        serialize += WriteWriteCode(p) + Environment.NewLine;
+                        var code = WriteWriteCode (p);
+                        if (String.IsNullOrEmpty (code))
+                            continue;
+
+                        if (!first) {
+                            serialize += Environment.NewLine + "            ";
+                        } else {
+                            first = false;
+                        }
+                        serialize += code;
                     }
+                    if (serialize == String.Empty)
+                        serialize = "// do nothing else";
                     temp = temp.Replace("/* SERIALIZE */", serialize);
                     #endregion
                     #region DeSerializeFunc
-                    var deserialize = "";
-
+                    var deserialize = String.Empty;
+                    first = true;
                     foreach (var p in c.Params)
                     {
-                        deserialize += WriteReadCode(p) + Environment.NewLine;
+                        if (!first) {
+                            deserialize += Environment.NewLine + "            ";
+                        } else {
+                            first = false;
+                        }
+                        deserialize += WriteReadCode (p);
                     }
+                    if (deserialize == String.Empty)
+                        deserialize = "// do nothing";
                     temp = temp.Replace("/* DESERIALIZE */", deserialize);
                     #endregion
                     #region DeSerializeRespFunc
                     var deserializeResp = "";
                     TlParam p2 = new TlParam() { Name = "Response", Type = c.Type };
-                    deserializeResp += WriteReadCode(p2) + Environment.NewLine;
+                    deserializeResp += WriteReadCode(p2);
                     temp = temp.Replace("/* DESERIALIZEResp */", deserializeResp);
                     #endregion
                     writer.Write(temp);
@@ -289,6 +353,7 @@ namespace TeleSharp.Generator
                 }
             }
         }
+
         public static string FormatName(string input)
         {
             if (string.IsNullOrEmpty(input))
@@ -305,6 +370,7 @@ namespace TeleSharp.Generator
             }
             return input.First().ToString().ToUpper() + input.Substring(1);
         }
+
         public static string CheckForKeywordAndPascalCase(string name)
         {
             name = name.Replace("_", " ");
@@ -314,6 +380,7 @@ namespace TeleSharp.Generator
             if (keywords.Contains(name)) return "@" + name;
             return name;
         }
+
         public static string GetNameofClass(string type, bool isinterface = false, bool ismethod = false)
         {
             if (!ismethod)
@@ -335,18 +402,22 @@ namespace TeleSharp.Generator
                     return "TLRequest" + FormatName(type);
             }
         }
+
         private static bool IsFlagBase(string type)
         {
             return type.IndexOf("?") != -1;
         }
+
         private static int GetBitMask(string type)
         {
             return (int)Math.Pow((double)2, (double)int.Parse(type.Split('?')[0].Split('.')[1]));
         }
+
         private static bool IsTrueFlag(string type)
         {
             return type.Split('?')[1] == "true";
         }
+
         public static string GetNameSpace(string type)
         {
             if (type.IndexOf('.') != -1)
@@ -354,6 +425,7 @@ namespace TeleSharp.Generator
             else
                 return "TeleSharp.TL";
         }
+
         public static string CheckForFlagBase(string type, string result)
         {
             if (type.IndexOf('?') == -1)
@@ -366,6 +438,7 @@ namespace TeleSharp.Generator
                 else return result;
             }
         }
+
         public static string GetTypeName(string type)
         {
             switch (type.ToLower())
@@ -401,7 +474,6 @@ namespace TeleSharp.Generator
 
             if (type.IndexOf('.') != -1 && type.IndexOf('?') == -1)
             {
-
                 if (interfacesList.Any(x => x.ToLower() == (type).ToLower()))
                     return FormatName(type.Split('.')[0]) + "." + "TLAbs" + type.Split('.')[1];
                 else if (classesList.Any(x => x.ToLower() == (type).ToLower()))
@@ -422,9 +494,8 @@ namespace TeleSharp.Generator
             {
                 return GetTypeName(type.Split('?')[1]);
             }
-
-
         }
+
         public static string LookTypeInLists(string src)
         {
             if (interfacesList.Any(x => x.ToLower() == src.ToLower()))
@@ -434,6 +505,7 @@ namespace TeleSharp.Generator
             else
                 return src;
         }
+
         public static string WriteWriteCode(TlParam p, bool flag = false)
         {
             switch (p.Type.ToLower())
@@ -444,18 +516,18 @@ namespace TeleSharp.Generator
                 case "long":
                     return flag ? $"bw.Write({CheckForKeywordAndPascalCase(p.Name)}.Value);" : $"bw.Write({CheckForKeywordAndPascalCase(p.Name)});";
                 case "string":
-                    return $"StringUtil.Serialize({CheckForKeywordAndPascalCase(p.Name)},bw);";
+                    return $"StringUtil.Serialize({CheckForKeywordAndPascalCase(p.Name)}, bw);";
                 case "bool":
-                    return flag ? $"BoolUtil.Serialize({CheckForKeywordAndPascalCase(p.Name)}.Value,bw);" : $"BoolUtil.Serialize({CheckForKeywordAndPascalCase(p.Name)},bw);";
+                    return flag ? $"BoolUtil.Serialize({CheckForKeywordAndPascalCase(p.Name)}.Value, bw);" : $"BoolUtil.Serialize({CheckForKeywordAndPascalCase(p.Name)}, bw);";
                 case "true":
-                    return $"BoolUtil.Serialize({CheckForKeywordAndPascalCase(p.Name)},bw);";
+                    return $"BoolUtil.Serialize({CheckForKeywordAndPascalCase(p.Name)}, bw);";
                 case "bytes":
-                    return $"BytesUtil.Serialize({CheckForKeywordAndPascalCase(p.Name)},bw);";
+                    return $"BytesUtil.Serialize({CheckForKeywordAndPascalCase(p.Name)}, bw);";
                 case "double":
                     return flag ? $"bw.Write({CheckForKeywordAndPascalCase(p.Name)}.Value);" : $"bw.Write({CheckForKeywordAndPascalCase(p.Name)});";
                 default:
                     if (!IsFlagBase(p.Type))
-                        return $"ObjectUtils.SerializeObject({CheckForKeywordAndPascalCase(p.Name)},bw);";
+                        return $"ObjectUtils.SerializeObject({CheckForKeywordAndPascalCase(p.Name)}, bw);";
                     else
                     {
                         if (IsTrueFlag(p.Type))
@@ -463,7 +535,8 @@ namespace TeleSharp.Generator
                         else
                         {
                             TlParam p2 = new TlParam() { Name = p.Name, Type = p.Type.Split('?')[1] };
-                            return $"if ((Flags & {GetBitMask(p.Type).ToString()}) != 0)" + Environment.NewLine +
+                            return $"if ((Flags & {GetBitMask(p.Type).ToString()}) != 0)" +
+                                Environment.NewLine + "                " +
                                 WriteWriteCode(p2, true);
                         }
                     }
@@ -503,9 +576,10 @@ namespace TeleSharp.Generator
                         else
                         {
                             TlParam p2 = new TlParam() { Name = p.Name, Type = p.Type.Split('?')[1] };
-                            return $"if ((Flags & {GetBitMask(p.Type).ToString()}) != 0)" + Environment.NewLine +
-                                WriteReadCode(p2) + Environment.NewLine +
-                            "else" + Environment.NewLine +
+                            return $"if ((Flags & {GetBitMask(p.Type).ToString()}) != 0)" +
+                                Environment.NewLine + "                " +
+                                WriteReadCode(p2) + Environment.NewLine + "            " +
+                                "else" + Environment.NewLine + "                " +
                                 $"{CheckForKeywordAndPascalCase(p.Name)} = null;" + Environment.NewLine;
                         }
                     }
