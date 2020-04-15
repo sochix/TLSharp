@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(1530447553)]
@@ -27,10 +29,9 @@ namespace TeleSharp.TL
         public TLVector<TLAbsInputDocument> Stickers { get; set; }
         public int? TtlSeconds { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -55,14 +56,12 @@ namespace TeleSharp.TL
             else
                 TtlSeconds = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
             ObjectUtils.SerializeObject(File, bw);
             if ((Flags & 4) != 0)
                 ObjectUtils.SerializeObject(Thumb, bw);
@@ -72,7 +71,6 @@ namespace TeleSharp.TL
                 ObjectUtils.SerializeObject(Stickers, bw);
             if ((Flags & 2) != 0)
                 bw.Write(TtlSeconds.Value);
-
         }
     }
 }

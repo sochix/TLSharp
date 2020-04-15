@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Account
 {
     [TLObject(1754754159)]
@@ -27,10 +29,9 @@ namespace TeleSharp.TL.Account
         public TLVector<int> OtherUids { get; set; }
         public bool Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -42,25 +43,22 @@ namespace TeleSharp.TL.Account
             AppSandbox = BoolUtil.Deserialize(br);
             Secret = BytesUtil.Deserialize(br);
             OtherUids = (TLVector<int>)ObjectUtils.DeserializeVector<int>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
             bw.Write(TokenType);
             StringUtil.Serialize(Token, bw);
             BoolUtil.Serialize(AppSandbox, bw);
             BytesUtil.Serialize(Secret, bw);
             ObjectUtils.SerializeObject(OtherUids, bw);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = BoolUtil.Deserialize(br);
-
         }
     }
 }

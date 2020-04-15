@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(904138920)]
@@ -20,23 +22,20 @@ namespace TeleSharp.TL.Messages
 
         public TLVector<TLAbsStickerSetCovered> Sets { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             Sets = (TLVector<TLAbsStickerSetCovered>)ObjectUtils.DeserializeVector<TLAbsStickerSetCovered>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             ObjectUtils.SerializeObject(Sets, bw);
-
         }
     }
 }

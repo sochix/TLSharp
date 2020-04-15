@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Channels
 {
     [TLObject(1920559378)]
@@ -23,10 +25,9 @@ namespace TeleSharp.TL.Channels
         public TLChatBannedRights BannedRights { get; set; }
         public TLAbsUpdates Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -34,7 +35,6 @@ namespace TeleSharp.TL.Channels
             Channel = (TLAbsInputChannel)ObjectUtils.DeserializeObject(br);
             UserId = (TLAbsInputUser)ObjectUtils.DeserializeObject(br);
             BannedRights = (TLChatBannedRights)ObjectUtils.DeserializeObject(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -43,12 +43,11 @@ namespace TeleSharp.TL.Channels
             ObjectUtils.SerializeObject(Channel, bw);
             ObjectUtils.SerializeObject(UserId, bw);
             ObjectUtils.SerializeObject(BannedRights, bw);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLAbsUpdates)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

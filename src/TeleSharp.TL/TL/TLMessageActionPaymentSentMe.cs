@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1892568281)]
@@ -26,10 +28,9 @@ namespace TeleSharp.TL
         public string ShippingOptionId { get; set; }
         public TLPaymentCharge Charge { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -49,7 +50,6 @@ namespace TeleSharp.TL
                 ShippingOptionId = null;
 
             Charge = (TLPaymentCharge)ObjectUtils.DeserializeObject(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -64,7 +64,6 @@ namespace TeleSharp.TL
             if ((Flags & 2) != 0)
                 StringUtil.Serialize(ShippingOptionId, bw);
             ObjectUtils.SerializeObject(Charge, bw);
-
         }
     }
 }

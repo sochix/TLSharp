@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Account
 {
     [TLObject(307276766)]
@@ -20,23 +22,20 @@ namespace TeleSharp.TL.Account
 
         public TLVector<TLAuthorization> Authorizations { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             Authorizations = (TLVector<TLAuthorization>)ObjectUtils.DeserializeVector<TLAuthorization>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             ObjectUtils.SerializeObject(Authorizations, bw);
-
         }
     }
 }

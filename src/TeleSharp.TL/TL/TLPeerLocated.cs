@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-901375139)]
@@ -22,10 +24,9 @@ namespace TeleSharp.TL
         public int Expires { get; set; }
         public int Distance { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -33,7 +34,6 @@ namespace TeleSharp.TL
             Peer = (TLAbsPeer)ObjectUtils.DeserializeObject(br);
             Expires = br.ReadInt32();
             Distance = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -42,7 +42,6 @@ namespace TeleSharp.TL
             ObjectUtils.SerializeObject(Peer, bw);
             bw.Write(Expires);
             bw.Write(Distance);
-
         }
     }
 }

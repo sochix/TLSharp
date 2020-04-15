@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Account
 {
     [TLObject(-2128640689)]
@@ -21,17 +23,15 @@ namespace TeleSharp.TL.Account
         public string EmailPattern { get; set; }
         public int Length { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             EmailPattern = StringUtil.Deserialize(br);
             Length = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -39,7 +39,6 @@ namespace TeleSharp.TL.Account
             bw.Write(Constructor);
             StringUtil.Serialize(EmailPattern, bw);
             bw.Write(Length);
-
         }
     }
 }

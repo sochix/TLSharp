@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Help
 {
     [TLObject(-1877938321)]
@@ -21,28 +23,25 @@ namespace TeleSharp.TL.Help
         public string PrevAppVersion { get; set; }
         public TLAbsUpdates Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             PrevAppVersion = StringUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             StringUtil.Serialize(PrevAppVersion, bw);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLAbsUpdates)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

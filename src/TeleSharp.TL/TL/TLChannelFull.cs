@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(763976820)]
@@ -52,10 +54,9 @@ namespace TeleSharp.TL
         public int? SlowmodeNextSendDate { get; set; }
         public int Pts { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -153,20 +154,12 @@ namespace TeleSharp.TL
                 SlowmodeNextSendDate = null;
 
             Pts = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
-
-
-
-
-
             bw.Write(Id);
             StringUtil.Serialize(About, bw);
             if ((Flags & 1) != 0)
@@ -207,7 +200,6 @@ namespace TeleSharp.TL
             if ((Flags & 262144) != 0)
                 bw.Write(SlowmodeNextSendDate.Value);
             bw.Write(Pts);
-
         }
     }
 }

@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(586395571)]
@@ -23,10 +25,9 @@ namespace TeleSharp.TL.Messages
         public TLVector<TLAbsDocument> Stickers { get; set; }
         public TLVector<int> Dates { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -35,7 +36,6 @@ namespace TeleSharp.TL.Messages
             Packs = (TLVector<TLStickerPack>)ObjectUtils.DeserializeVector<TLStickerPack>(br);
             Stickers = (TLVector<TLAbsDocument>)ObjectUtils.DeserializeVector<TLAbsDocument>(br);
             Dates = (TLVector<int>)ObjectUtils.DeserializeVector<int>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -45,7 +45,6 @@ namespace TeleSharp.TL.Messages
             ObjectUtils.SerializeObject(Packs, bw);
             ObjectUtils.SerializeObject(Stickers, bw);
             ObjectUtils.SerializeObject(Dates, bw);
-
         }
     }
 }

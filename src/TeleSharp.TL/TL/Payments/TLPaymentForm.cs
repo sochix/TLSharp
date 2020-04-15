@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Payments
 {
     [TLObject(1062645411)]
@@ -28,13 +30,12 @@ namespace TeleSharp.TL.Payments
         public string NativeProvider { get; set; }
         public TLDataJSON NativeParams { get; set; }
         public TLPaymentRequestedInfo SavedInfo { get; set; }
-        public TLPaymentSavedCredentialsCard SavedCredentials { get; set; }
+        public PaymentSavedCredentials SavedCredentials { get; set; }
         public TLVector<TLAbsUser> Users { get; set; }
-
 
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -62,20 +63,17 @@ namespace TeleSharp.TL.Payments
                 SavedInfo = null;
 
             if ((Flags & 2) != 0)
-                SavedCredentials = (TLPaymentSavedCredentialsCard)ObjectUtils.DeserializeObject(br);
+                SavedCredentials = (PaymentSavedCredentials)ObjectUtils.DeserializeObject(br);
             else
                 SavedCredentials = null;
 
             Users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
             bw.Write(BotId);
             ObjectUtils.SerializeObject(Invoice, bw);
             bw.Write(ProviderId);
@@ -89,7 +87,6 @@ namespace TeleSharp.TL.Payments
             if ((Flags & 2) != 0)
                 ObjectUtils.SerializeObject(SavedCredentials, bw);
             ObjectUtils.SerializeObject(Users, bw);
-
         }
     }
 }

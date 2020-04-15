@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1642487306)]
@@ -32,10 +34,9 @@ namespace TeleSharp.TL
         public int Date { get; set; }
         public TLAbsMessageAction Action { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -61,19 +62,12 @@ namespace TeleSharp.TL
 
             Date = br.ReadInt32();
             Action = (TLAbsMessageAction)ObjectUtils.DeserializeObject(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
-
-
-
-
             bw.Write(Id);
             if ((Flags & 256) != 0)
                 bw.Write(FromId.Value);
@@ -82,7 +76,6 @@ namespace TeleSharp.TL
                 bw.Write(ReplyToMsgId.Value);
             bw.Write(Date);
             ObjectUtils.SerializeObject(Action, bw);
-
         }
     }
 }

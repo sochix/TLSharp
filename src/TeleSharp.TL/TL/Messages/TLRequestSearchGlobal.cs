@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(-1083038300)]
@@ -27,10 +29,9 @@ namespace TeleSharp.TL.Messages
         public int Limit { get; set; }
         public Messages.TLAbsMessages Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -46,7 +47,6 @@ namespace TeleSharp.TL.Messages
             OffsetPeer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
             OffsetId = br.ReadInt32();
             Limit = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -60,12 +60,11 @@ namespace TeleSharp.TL.Messages
             ObjectUtils.SerializeObject(OffsetPeer, bw);
             bw.Write(OffsetId);
             bw.Write(Limit);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Messages.TLAbsMessages)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

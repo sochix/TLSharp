@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(-1058912715)]
@@ -20,23 +22,20 @@ namespace TeleSharp.TL.Messages
 
         public byte[] Random { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             Random = BytesUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             BytesUtil.Serialize(Random, bw);
-
         }
     }
 }

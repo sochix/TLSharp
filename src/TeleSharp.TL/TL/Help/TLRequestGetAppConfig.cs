@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Help
 {
     [TLObject(-1735311088)]
@@ -20,26 +22,25 @@ namespace TeleSharp.TL.Help
 
         public TLAbsJSONValue Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-
+            // do nothing
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-
+            // do nothing else
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLAbsJSONValue)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

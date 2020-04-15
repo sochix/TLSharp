@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-716006138)]
@@ -27,10 +29,9 @@ namespace TeleSharp.TL
         public string Question { get; set; }
         public TLVector<TLPollAnswer> Answers { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -43,7 +44,6 @@ namespace TeleSharp.TL
             Quiz = (Flags & 8) != 0;
             Question = StringUtil.Deserialize(br);
             Answers = (TLVector<TLPollAnswer>)ObjectUtils.DeserializeVector<TLPollAnswer>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -51,13 +51,8 @@ namespace TeleSharp.TL
             bw.Write(Constructor);
             bw.Write(Id);
             bw.Write(Flags);
-
-
-
-
             StringUtil.Serialize(Question, bw);
             ObjectUtils.SerializeObject(Answers, bw);
-
         }
     }
 }

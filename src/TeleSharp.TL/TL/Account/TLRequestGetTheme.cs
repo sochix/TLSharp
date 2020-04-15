@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Account
 {
     [TLObject(-1919060949)]
@@ -23,10 +25,9 @@ namespace TeleSharp.TL.Account
         public long DocumentId { get; set; }
         public TLTheme Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -34,7 +35,6 @@ namespace TeleSharp.TL.Account
             Format = StringUtil.Deserialize(br);
             Theme = (TLAbsInputTheme)ObjectUtils.DeserializeObject(br);
             DocumentId = br.ReadInt64();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -43,12 +43,11 @@ namespace TeleSharp.TL.Account
             StringUtil.Serialize(Format, bw);
             ObjectUtils.SerializeObject(Theme, bw);
             bw.Write(DocumentId);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLTheme)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

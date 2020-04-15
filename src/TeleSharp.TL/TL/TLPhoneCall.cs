@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-2025673089)]
@@ -31,10 +33,9 @@ namespace TeleSharp.TL
         public TLVector<TLPhoneConnection> Connections { get; set; }
         public int StartDate { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -51,14 +52,12 @@ namespace TeleSharp.TL
             Protocol = (TLPhoneCallProtocol)ObjectUtils.DeserializeObject(br);
             Connections = (TLVector<TLPhoneConnection>)ObjectUtils.DeserializeVector<TLPhoneConnection>(br);
             StartDate = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
             bw.Write(Id);
             bw.Write(AccessHash);
             bw.Write(Date);
@@ -69,7 +68,6 @@ namespace TeleSharp.TL
             ObjectUtils.SerializeObject(Protocol, bw);
             ObjectUtils.SerializeObject(Connections, bw);
             bw.Write(StartDate);
-
         }
     }
 }

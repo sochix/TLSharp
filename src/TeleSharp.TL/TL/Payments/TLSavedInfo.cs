@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Payments
 {
     [TLObject(-74456004)]
@@ -22,10 +24,9 @@ namespace TeleSharp.TL.Payments
         public bool HasSavedCredentials { get; set; }
         public TLPaymentRequestedInfo SavedInfo { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -37,17 +38,14 @@ namespace TeleSharp.TL.Payments
             else
                 SavedInfo = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
             if ((Flags & 1) != 0)
                 ObjectUtils.SerializeObject(SavedInfo, bw);
-
         }
     }
 }

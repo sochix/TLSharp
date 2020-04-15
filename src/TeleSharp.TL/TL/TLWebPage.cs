@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-392411726)]
@@ -36,12 +38,11 @@ namespace TeleSharp.TL
         public string Author { get; set; }
         public TLAbsDocument Document { get; set; }
         public TLPage CachedPage { get; set; }
-        public TLVector<TLWebPageAttributeTheme> Attributes { get; set; }
-
+        public TLVector<WebPageAttribute> Attributes { get; set; }
 
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -117,10 +118,9 @@ namespace TeleSharp.TL
                 CachedPage = null;
 
             if ((Flags & 4096) != 0)
-                Attributes = (TLVector<TLWebPageAttributeTheme>)ObjectUtils.DeserializeVector<TLWebPageAttributeTheme>(br);
+                Attributes = (TLVector<WebPageAttribute>)ObjectUtils.DeserializeVector<WebPageAttribute>(br);
             else
                 Attributes = null;
-
 
         }
 
@@ -160,7 +160,6 @@ namespace TeleSharp.TL
                 ObjectUtils.SerializeObject(CachedPage, bw);
             if ((Flags & 4096) != 0)
                 ObjectUtils.SerializeObject(Attributes, bw);
-
         }
     }
 }

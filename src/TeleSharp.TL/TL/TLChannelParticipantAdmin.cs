@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-859915345)]
@@ -28,10 +30,9 @@ namespace TeleSharp.TL
         public TLChatAdminRights AdminRights { get; set; }
         public string Rank { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -53,15 +54,12 @@ namespace TeleSharp.TL
             else
                 Rank = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
             bw.Write(UserId);
             if ((Flags & 2) != 0)
                 bw.Write(InviterId.Value);
@@ -70,7 +68,6 @@ namespace TeleSharp.TL
             ObjectUtils.SerializeObject(AdminRights, bw);
             if ((Flags & 4) != 0)
                 StringUtil.Serialize(Rank, bw);
-
         }
     }
 }

@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1676371894)]
@@ -25,10 +27,9 @@ namespace TeleSharp.TL
         public int? MessageBottomColor { get; set; }
         public TLAbsWallPaper Wallpaper { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -51,7 +52,6 @@ namespace TeleSharp.TL
             else
                 Wallpaper = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -66,7 +66,6 @@ namespace TeleSharp.TL
                 bw.Write(MessageBottomColor.Value);
             if ((Flags & 2) != 0)
                 ObjectUtils.SerializeObject(Wallpaper, bw);
-
         }
     }
 }

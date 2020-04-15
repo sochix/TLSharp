@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-540871282)]
@@ -28,10 +30,9 @@ namespace TeleSharp.TL
         public int ParticipantsCount { get; set; }
         public TLVector<TLAbsUser> Participants { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -49,23 +50,17 @@ namespace TeleSharp.TL
             else
                 Participants = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
-
-
             StringUtil.Serialize(Title, bw);
             ObjectUtils.SerializeObject(Photo, bw);
             bw.Write(ParticipantsCount);
             if ((Flags & 16) != 0)
                 ObjectUtils.SerializeObject(Participants, bw);
-
         }
     }
 }

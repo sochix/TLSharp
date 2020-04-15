@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Channels
 {
     [TLObject(176122811)]
@@ -21,28 +23,25 @@ namespace TeleSharp.TL.Channels
         public TLVector<TLAbsInputChannel> Id { get; set; }
         public Messages.TLAbsChats Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             Id = (TLVector<TLAbsInputChannel>)ObjectUtils.DeserializeVector<TLAbsInputChannel>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             ObjectUtils.SerializeObject(Id, bw);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Messages.TLAbsChats)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

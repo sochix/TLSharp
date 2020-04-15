@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1539849235)]
@@ -29,10 +31,9 @@ namespace TeleSharp.TL
         public TLAbsDocument Document { get; set; }
         public TLWallPaperSettings Settings { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -51,7 +52,6 @@ namespace TeleSharp.TL
             else
                 Settings = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -59,16 +59,11 @@ namespace TeleSharp.TL
             bw.Write(Constructor);
             bw.Write(Id);
             bw.Write(Flags);
-
-
-
-
             bw.Write(AccessHash);
             StringUtil.Serialize(Slug, bw);
             ObjectUtils.SerializeObject(Document, bw);
             if ((Flags & 4) != 0)
                 ObjectUtils.SerializeObject(Settings, bw);
-
         }
     }
 }

@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(856380452)]
@@ -25,10 +27,9 @@ namespace TeleSharp.TL
         public int StillUnreadCount { get; set; }
         public int Pts { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -43,7 +44,6 @@ namespace TeleSharp.TL
             MaxId = br.ReadInt32();
             StillUnreadCount = br.ReadInt32();
             Pts = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -56,7 +56,6 @@ namespace TeleSharp.TL
             bw.Write(MaxId);
             bw.Write(StillUnreadCount);
             bw.Write(Pts);
-
         }
     }
 }

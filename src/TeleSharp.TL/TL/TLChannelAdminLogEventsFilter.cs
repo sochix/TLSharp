@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-368018716)]
@@ -34,10 +36,9 @@ namespace TeleSharp.TL
         public bool Edit { get; set; }
         public bool Delete { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -57,28 +58,12 @@ namespace TeleSharp.TL
             Pinned = (Flags & 2048) != 0;
             Edit = (Flags & 4096) != 0;
             Delete = (Flags & 8192) != 0;
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         }
     }
 }

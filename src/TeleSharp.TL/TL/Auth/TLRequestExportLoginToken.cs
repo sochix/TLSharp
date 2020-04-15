@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Auth
 {
     [TLObject(-1313598185)]
@@ -23,10 +25,9 @@ namespace TeleSharp.TL.Auth
         public TLVector<int> ExceptIds { get; set; }
         public Auth.TLAbsLoginToken Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -34,7 +35,6 @@ namespace TeleSharp.TL.Auth
             ApiId = br.ReadInt32();
             ApiHash = StringUtil.Deserialize(br);
             ExceptIds = (TLVector<int>)ObjectUtils.DeserializeVector<int>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -43,12 +43,11 @@ namespace TeleSharp.TL.Auth
             bw.Write(ApiId);
             StringUtil.Serialize(ApiHash, bw);
             ObjectUtils.SerializeObject(ExceptIds, bw);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Auth.TLAbsLoginToken)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

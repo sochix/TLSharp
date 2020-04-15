@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Updates
 {
     [TLObject(-1519637954)]
@@ -24,10 +26,9 @@ namespace TeleSharp.TL.Updates
         public int Seq { get; set; }
         public int UnreadCount { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -37,7 +38,6 @@ namespace TeleSharp.TL.Updates
             Date = br.ReadInt32();
             Seq = br.ReadInt32();
             UnreadCount = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -48,7 +48,6 @@ namespace TeleSharp.TL.Updates
             bw.Write(Date);
             bw.Write(Seq);
             bw.Write(UnreadCount);
-
         }
     }
 }

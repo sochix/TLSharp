@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(878078826)]
@@ -28,10 +30,9 @@ namespace TeleSharp.TL
         public int? Colspan { get; set; }
         public int? Rowspan { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -57,25 +58,18 @@ namespace TeleSharp.TL
             else
                 Rowspan = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
-
-
-
             if ((Flags & 128) != 0)
                 ObjectUtils.SerializeObject(Text, bw);
             if ((Flags & 2) != 0)
                 bw.Write(Colspan.Value);
             if ((Flags & 4) != 0)
                 bw.Write(Rowspan.Value);
-
         }
     }
 }

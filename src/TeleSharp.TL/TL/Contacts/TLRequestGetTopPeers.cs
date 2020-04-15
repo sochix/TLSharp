@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Contacts
 {
     [TLObject(-728224331)]
@@ -32,10 +34,9 @@ namespace TeleSharp.TL.Contacts
         public int Hash { get; set; }
         public Contacts.TLAbsTopPeers Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -52,30 +53,20 @@ namespace TeleSharp.TL.Contacts
             Offset = br.ReadInt32();
             Limit = br.ReadInt32();
             Hash = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
-
-
-
-
-
-
             bw.Write(Offset);
             bw.Write(Limit);
             bw.Write(Hash);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Contacts.TLAbsTopPeers)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(889353612)]
@@ -24,10 +26,9 @@ namespace TeleSharp.TL
         public bool Selective { get; set; }
         public TLVector<TLKeyboardButtonRow> Rows { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -37,18 +38,13 @@ namespace TeleSharp.TL
             SingleUse = (Flags & 2) != 0;
             Selective = (Flags & 4) != 0;
             Rows = (TLVector<TLKeyboardButtonRow>)ObjectUtils.DeserializeVector<TLKeyboardButtonRow>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
-
             ObjectUtils.SerializeObject(Rows, bw);
-
         }
     }
 }

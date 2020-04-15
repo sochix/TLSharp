@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-302941166)]
@@ -34,10 +36,9 @@ namespace TeleSharp.TL
         public int CommonChatsCount { get; set; }
         public int? FolderId { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -77,18 +78,12 @@ namespace TeleSharp.TL
             else
                 FolderId = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
-
-
-
             ObjectUtils.SerializeObject(User, bw);
             if ((Flags & 2) != 0)
                 StringUtil.Serialize(About, bw);
@@ -103,7 +98,6 @@ namespace TeleSharp.TL
             bw.Write(CommonChatsCount);
             if ((Flags & 2048) != 0)
                 bw.Write(FolderId.Value);
-
         }
     }
 }

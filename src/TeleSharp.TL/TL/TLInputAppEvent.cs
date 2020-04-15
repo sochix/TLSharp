@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(488313413)]
@@ -23,10 +25,9 @@ namespace TeleSharp.TL
         public long Peer { get; set; }
         public TLAbsJSONValue Data { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -35,7 +36,6 @@ namespace TeleSharp.TL
             Type = StringUtil.Deserialize(br);
             Peer = br.ReadInt64();
             Data = (TLAbsJSONValue)ObjectUtils.DeserializeObject(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -45,7 +45,6 @@ namespace TeleSharp.TL
             StringUtil.Serialize(Type, bw);
             bw.Write(Peer);
             ObjectUtils.SerializeObject(Data, bw);
-
         }
     }
 }

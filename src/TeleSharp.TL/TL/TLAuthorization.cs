@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1392388579)]
@@ -35,10 +37,9 @@ namespace TeleSharp.TL
         public string Country { get; set; }
         public string Region { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -59,16 +60,12 @@ namespace TeleSharp.TL
             Ip = StringUtil.Deserialize(br);
             Country = StringUtil.Deserialize(br);
             Region = StringUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
-
             bw.Write(Hash);
             StringUtil.Serialize(DeviceModel, bw);
             StringUtil.Serialize(Platform, bw);
@@ -81,7 +78,6 @@ namespace TeleSharp.TL
             StringUtil.Serialize(Ip, bw);
             StringUtil.Serialize(Country, bw);
             StringUtil.Serialize(Region, bw);
-
         }
     }
 }

@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(1563376297)]
@@ -27,10 +29,9 @@ namespace TeleSharp.TL
         public string Currency { get; set; }
         public long TotalAmount { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -51,7 +52,6 @@ namespace TeleSharp.TL
 
             Currency = StringUtil.Deserialize(br);
             TotalAmount = br.ReadInt64();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -67,7 +67,6 @@ namespace TeleSharp.TL
                 StringUtil.Serialize(ShippingOptionId, bw);
             StringUtil.Serialize(Currency, bw);
             bw.Write(TotalAmount);
-
         }
     }
 }

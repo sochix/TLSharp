@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Channels
 {
     [TLObject(-122669393)]
@@ -23,10 +25,9 @@ namespace TeleSharp.TL.Channels
         public bool CheckLimit { get; set; }
         public Messages.TLAbsChats Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -34,21 +35,17 @@ namespace TeleSharp.TL.Channels
             Flags = br.ReadInt32();
             ByLocation = (Flags & 1) != 0;
             CheckLimit = (Flags & 2) != 0;
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Messages.TLAbsChats)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

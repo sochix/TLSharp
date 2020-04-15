@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Account
 {
     [TLObject(-1705233435)]
@@ -22,10 +24,9 @@ namespace TeleSharp.TL.Account
         public string Email { get; set; }
         public TLSecureSecretSettings SecureSettings { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -41,7 +42,6 @@ namespace TeleSharp.TL.Account
             else
                 SecureSettings = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -52,7 +52,6 @@ namespace TeleSharp.TL.Account
                 StringUtil.Serialize(Email, bw);
             if ((Flags & 2) != 0)
                 ObjectUtils.SerializeObject(SecureSettings, bw);
-
         }
     }
 }

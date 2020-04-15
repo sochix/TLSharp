@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1683841855)]
@@ -29,10 +31,9 @@ namespace TeleSharp.TL
         public int DcId { get; set; }
         public TLVector<TLAbsDocumentAttribute> Attributes { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -51,7 +52,6 @@ namespace TeleSharp.TL
 
             DcId = br.ReadInt32();
             Attributes = (TLVector<TLAbsDocumentAttribute>)ObjectUtils.DeserializeVector<TLAbsDocumentAttribute>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -68,7 +68,6 @@ namespace TeleSharp.TL
                 ObjectUtils.SerializeObject(Thumbs, bw);
             bw.Write(DcId);
             ObjectUtils.SerializeObject(Attributes, bw);
-
         }
     }
 }

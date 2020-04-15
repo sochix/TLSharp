@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-290164953)]
@@ -33,10 +35,9 @@ namespace TeleSharp.TL
         public int Count { get; set; }
         public int Hash { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -67,17 +68,12 @@ namespace TeleSharp.TL
 
             Count = br.ReadInt32();
             Hash = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
-
-
             if ((Flags & 1) != 0)
                 bw.Write(InstalledDate.Value);
             bw.Write(Id);
@@ -90,7 +86,6 @@ namespace TeleSharp.TL
                 bw.Write(ThumbDcId.Value);
             bw.Write(Count);
             bw.Write(Hash);
-
         }
     }
 }

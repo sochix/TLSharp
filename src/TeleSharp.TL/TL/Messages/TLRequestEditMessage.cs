@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(1224152952)]
@@ -29,10 +31,9 @@ namespace TeleSharp.TL.Messages
         public int? ScheduleDate { get; set; }
         public TLAbsUpdates Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -66,14 +67,12 @@ namespace TeleSharp.TL.Messages
             else
                 ScheduleDate = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
             ObjectUtils.SerializeObject(Peer, bw);
             bw.Write(Id);
             if ((Flags & 2048) != 0)
@@ -86,12 +85,11 @@ namespace TeleSharp.TL.Messages
                 ObjectUtils.SerializeObject(Entities, bw);
             if ((Flags & 32768) != 0)
                 bw.Write(ScheduleDate.Value);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLAbsUpdates)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

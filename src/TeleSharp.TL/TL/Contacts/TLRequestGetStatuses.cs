@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Contacts
 {
     [TLObject(-995929106)]
@@ -20,26 +22,25 @@ namespace TeleSharp.TL.Contacts
 
         public TLVector<TLContactStatus> Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-
+            // do nothing
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-
+            // do nothing else
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLVector<TLContactStatus>)ObjectUtils.DeserializeVector<TLContactStatus>(br);
-
         }
     }
 }

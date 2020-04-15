@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(414687501)]
@@ -29,10 +31,9 @@ namespace TeleSharp.TL
         public int Port { get; set; }
         public byte[] Secret { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -51,24 +52,17 @@ namespace TeleSharp.TL
             else
                 Secret = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
-
-
-
             bw.Write(Id);
             StringUtil.Serialize(IpAddress, bw);
             bw.Write(Port);
             if ((Flags & 1024) != 0)
                 BytesUtil.Serialize(Secret, bw);
-
         }
     }
 }

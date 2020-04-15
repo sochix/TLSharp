@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1667893317)]
@@ -22,10 +24,9 @@ namespace TeleSharp.TL
         public int MsgId { get; set; }
         public int ChannelId { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -33,7 +34,6 @@ namespace TeleSharp.TL
             Peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
             MsgId = br.ReadInt32();
             ChannelId = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -42,7 +42,6 @@ namespace TeleSharp.TL
             ObjectUtils.SerializeObject(Peer, bw);
             bw.Write(MsgId);
             bw.Write(ChannelId);
-
         }
     }
 }

@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(681420594)]
@@ -26,10 +28,9 @@ namespace TeleSharp.TL
         public string Title { get; set; }
         public int? UntilDate { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -45,21 +46,17 @@ namespace TeleSharp.TL
             else
                 UntilDate = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
             bw.Write(Id);
             bw.Write(AccessHash);
             StringUtil.Serialize(Title, bw);
             if ((Flags & 65536) != 0)
                 bw.Write(UntilDate.Value);
-
         }
     }
 }

@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Account
 {
     [TLObject(1474462241)]
@@ -22,10 +24,9 @@ namespace TeleSharp.TL.Account
         public bool SensitiveEnabled { get; set; }
         public bool SensitiveCanChange { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -33,16 +34,12 @@ namespace TeleSharp.TL.Account
             Flags = br.ReadInt32();
             SensitiveEnabled = (Flags & 1) != 0;
             SensitiveCanChange = (Flags & 2) != 0;
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
-
         }
     }
 }

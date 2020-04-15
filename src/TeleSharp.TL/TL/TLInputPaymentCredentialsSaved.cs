@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1056001329)]
@@ -21,17 +23,15 @@ namespace TeleSharp.TL
         public string Id { get; set; }
         public byte[] TmpPassword { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             Id = StringUtil.Deserialize(br);
             TmpPassword = BytesUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -39,7 +39,6 @@ namespace TeleSharp.TL
             bw.Write(Constructor);
             StringUtil.Serialize(Id, bw);
             BytesUtil.Serialize(TmpPassword, bw);
-
         }
     }
 }

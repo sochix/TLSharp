@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Upload
 {
     [TLObject(-242427324)]
@@ -24,10 +26,9 @@ namespace TeleSharp.TL.Upload
         public byte[] EncryptionIv { get; set; }
         public TLVector<TLFileHash> FileHashes { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -37,7 +38,6 @@ namespace TeleSharp.TL.Upload
             EncryptionKey = BytesUtil.Deserialize(br);
             EncryptionIv = BytesUtil.Deserialize(br);
             FileHashes = (TLVector<TLFileHash>)ObjectUtils.DeserializeVector<TLFileHash>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -48,7 +48,6 @@ namespace TeleSharp.TL.Upload
             BytesUtil.Serialize(EncryptionKey, bw);
             BytesUtil.Serialize(EncryptionIv, bw);
             ObjectUtils.SerializeObject(FileHashes, bw);
-
         }
     }
 }

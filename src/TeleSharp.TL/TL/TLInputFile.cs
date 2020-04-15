@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-181407105)]
@@ -23,10 +25,9 @@ namespace TeleSharp.TL
         public string Name { get; set; }
         public string Md5Checksum { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -35,7 +36,6 @@ namespace TeleSharp.TL
             Parts = br.ReadInt32();
             Name = StringUtil.Deserialize(br);
             Md5Checksum = StringUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -45,7 +45,6 @@ namespace TeleSharp.TL
             bw.Write(Parts);
             StringUtil.Serialize(Name, bw);
             StringUtil.Serialize(Md5Checksum, bw);
-
         }
     }
 }

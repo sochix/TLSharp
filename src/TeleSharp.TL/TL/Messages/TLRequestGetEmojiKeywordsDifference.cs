@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(352892591)]
@@ -22,17 +24,15 @@ namespace TeleSharp.TL.Messages
         public int FromVersion { get; set; }
         public TLEmojiKeywordsDifference Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             LangCode = StringUtil.Deserialize(br);
             FromVersion = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -40,12 +40,11 @@ namespace TeleSharp.TL.Messages
             bw.Write(Constructor);
             StringUtil.Serialize(LangCode, bw);
             bw.Write(FromVersion);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLEmojiKeywordsDifference)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

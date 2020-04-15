@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1366746132)]
@@ -27,10 +29,9 @@ namespace TeleSharp.TL
         public TLVector<TLAbsPhoto> Photos { get; set; }
         public TLVector<TLAbsDocument> Documents { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -43,21 +44,16 @@ namespace TeleSharp.TL
             Blocks = (TLVector<TLAbsPageBlock>)ObjectUtils.DeserializeVector<TLAbsPageBlock>(br);
             Photos = (TLVector<TLAbsPhoto>)ObjectUtils.DeserializeVector<TLAbsPhoto>(br);
             Documents = (TLVector<TLAbsDocument>)ObjectUtils.DeserializeVector<TLAbsDocument>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
-
             StringUtil.Serialize(Url, bw);
             ObjectUtils.SerializeObject(Blocks, bw);
             ObjectUtils.SerializeObject(Photos, bw);
             ObjectUtils.SerializeObject(Documents, bw);
-
         }
     }
 }

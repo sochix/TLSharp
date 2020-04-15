@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Account
 {
     [TLObject(313765169)]
@@ -21,28 +23,25 @@ namespace TeleSharp.TL.Account
         public TLAbsInputNotifyPeer Peer { get; set; }
         public TLPeerNotifySettings Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             Peer = (TLAbsInputNotifyPeer)ObjectUtils.DeserializeObject(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             ObjectUtils.SerializeObject(Peer, bw);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLPeerNotifySettings)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

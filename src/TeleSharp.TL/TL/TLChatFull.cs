@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(461151667)]
@@ -31,10 +33,9 @@ namespace TeleSharp.TL
         public int? PinnedMsgId { get; set; }
         public int? FolderId { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -67,15 +68,12 @@ namespace TeleSharp.TL
             else
                 FolderId = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
             bw.Write(Id);
             StringUtil.Serialize(About, bw);
             ObjectUtils.SerializeObject(Participants, bw);
@@ -89,7 +87,6 @@ namespace TeleSharp.TL
                 bw.Write(PinnedMsgId.Value);
             if ((Flags & 2048) != 0)
                 bw.Write(FolderId.Value);
-
         }
     }
 }

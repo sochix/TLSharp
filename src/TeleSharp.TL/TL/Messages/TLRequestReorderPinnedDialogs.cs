@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(991616823)]
@@ -24,10 +26,9 @@ namespace TeleSharp.TL.Messages
         public TLVector<TLAbsInputDialogPeer> Order { get; set; }
         public bool Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -36,22 +37,19 @@ namespace TeleSharp.TL.Messages
             Force = (Flags & 1) != 0;
             FolderId = br.ReadInt32();
             Order = (TLVector<TLAbsInputDialogPeer>)ObjectUtils.DeserializeVector<TLAbsInputDialogPeer>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
             bw.Write(FolderId);
             ObjectUtils.SerializeObject(Order, bw);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = BoolUtil.Deserialize(br);
-
         }
     }
 }

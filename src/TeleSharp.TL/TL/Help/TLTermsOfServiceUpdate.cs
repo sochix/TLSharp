@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Help
 {
     [TLObject(686618977)]
@@ -21,17 +23,15 @@ namespace TeleSharp.TL.Help
         public int Expires { get; set; }
         public Help.TLTermsOfService TermsOfService { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             Expires = br.ReadInt32();
             TermsOfService = (Help.TLTermsOfService)ObjectUtils.DeserializeObject(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -39,7 +39,6 @@ namespace TeleSharp.TL.Help
             bw.Write(Constructor);
             bw.Write(Expires);
             ObjectUtils.SerializeObject(TermsOfService, bw);
-
         }
     }
 }

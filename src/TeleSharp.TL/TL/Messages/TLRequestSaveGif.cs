@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(846868683)]
@@ -22,17 +24,15 @@ namespace TeleSharp.TL.Messages
         public bool Unsave { get; set; }
         public bool Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             Id = (TLAbsInputDocument)ObjectUtils.DeserializeObject(br);
             Unsave = BoolUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -40,12 +40,11 @@ namespace TeleSharp.TL.Messages
             bw.Write(Constructor);
             ObjectUtils.SerializeObject(Id, bw);
             BoolUtil.Serialize(Unsave, bw);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = BoolUtil.Deserialize(br);
-
         }
     }
 }

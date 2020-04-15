@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(1987480557)]
@@ -23,10 +25,9 @@ namespace TeleSharp.TL
         public TLVector<TLAbsPageBlock> Blocks { get; set; }
         public TLAbsRichText Title { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -35,17 +36,14 @@ namespace TeleSharp.TL
             Open = (Flags & 1) != 0;
             Blocks = (TLVector<TLAbsPageBlock>)ObjectUtils.DeserializeVector<TLAbsPageBlock>(br);
             Title = (TLAbsRichText)ObjectUtils.DeserializeObject(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
             ObjectUtils.SerializeObject(Blocks, bw);
             ObjectUtils.SerializeObject(Title, bw);
-
         }
     }
 }

@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Users
 {
     [TLObject(-1865902923)]
@@ -22,17 +24,15 @@ namespace TeleSharp.TL.Users
         public TLVector<TLAbsSecureValueError> Errors { get; set; }
         public bool Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             Id = (TLAbsInputUser)ObjectUtils.DeserializeObject(br);
             Errors = (TLVector<TLAbsSecureValueError>)ObjectUtils.DeserializeVector<TLAbsSecureValueError>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -40,12 +40,11 @@ namespace TeleSharp.TL.Users
             bw.Write(Constructor);
             ObjectUtils.SerializeObject(Id, bw);
             ObjectUtils.SerializeObject(Errors, bw);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = BoolUtil.Deserialize(br);
-
         }
     }
 }

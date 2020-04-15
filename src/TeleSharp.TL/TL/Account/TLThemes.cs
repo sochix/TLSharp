@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Account
 {
     [TLObject(2137482273)]
@@ -21,17 +23,15 @@ namespace TeleSharp.TL.Account
         public int Hash { get; set; }
         public TLVector<TLTheme> Themes { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             Hash = br.ReadInt32();
             Themes = (TLVector<TLTheme>)ObjectUtils.DeserializeVector<TLTheme>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -39,7 +39,6 @@ namespace TeleSharp.TL.Account
             bw.Write(Constructor);
             bw.Write(Hash);
             ObjectUtils.SerializeObject(Themes, bw);
-
         }
     }
 }

@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(997055186)]
@@ -24,10 +26,9 @@ namespace TeleSharp.TL
         public byte[] Option { get; set; }
         public int Voters { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -37,18 +38,14 @@ namespace TeleSharp.TL
             Correct = (Flags & 2) != 0;
             Option = BytesUtil.Deserialize(br);
             Voters = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
             BytesUtil.Serialize(Option, bw);
             bw.Write(Voters);
-
         }
     }
 }

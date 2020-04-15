@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-332168592)]
@@ -28,10 +30,9 @@ namespace TeleSharp.TL
         public TLAbsPeer SavedFromPeer { get; set; }
         public int? SavedFromMsgId { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -73,7 +74,6 @@ namespace TeleSharp.TL
             else
                 SavedFromMsgId = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -95,7 +95,6 @@ namespace TeleSharp.TL
                 ObjectUtils.SerializeObject(SavedFromPeer, bw);
             if ((Flags & 16) != 0)
                 bw.Write(SavedFromMsgId.Value);
-
         }
     }
 }

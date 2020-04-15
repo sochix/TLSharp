@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-2132731265)]
@@ -24,10 +26,9 @@ namespace TeleSharp.TL
         public TLAbsPhoneCallDiscardReason Reason { get; set; }
         public int? Duration { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -45,20 +46,17 @@ namespace TeleSharp.TL
             else
                 Duration = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
             bw.Write(CallId);
             if ((Flags & 1) != 0)
                 ObjectUtils.SerializeObject(Reason, bw);
             if ((Flags & 2) != 0)
                 bw.Write(Duration.Value);
-
         }
     }
 }

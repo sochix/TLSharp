@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Payments
 {
     [TLObject(1342771681)]
@@ -30,10 +32,9 @@ namespace TeleSharp.TL.Payments
         public string CredentialsTitle { get; set; }
         public TLVector<TLAbsUser> Users { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -57,7 +58,6 @@ namespace TeleSharp.TL.Payments
             TotalAmount = br.ReadInt64();
             CredentialsTitle = StringUtil.Deserialize(br);
             Users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -76,7 +76,6 @@ namespace TeleSharp.TL.Payments
             bw.Write(TotalAmount);
             StringUtil.Serialize(CredentialsTitle, bw);
             ObjectUtils.SerializeObject(Users, bw);
-
         }
     }
 }

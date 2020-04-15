@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(1908216652)]
@@ -28,10 +30,9 @@ namespace TeleSharp.TL
         public int UnreadMutedMessagesCount { get; set; }
         public int UnreadUnmutedMessagesCount { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -45,14 +46,12 @@ namespace TeleSharp.TL
             UnreadUnmutedPeersCount = br.ReadInt32();
             UnreadMutedMessagesCount = br.ReadInt32();
             UnreadUnmutedMessagesCount = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
             ObjectUtils.SerializeObject(Folder, bw);
             ObjectUtils.SerializeObject(Peer, bw);
             bw.Write(TopMessage);
@@ -60,7 +59,6 @@ namespace TeleSharp.TL
             bw.Write(UnreadUnmutedPeersCount);
             bw.Write(UnreadMutedMessagesCount);
             bw.Write(UnreadUnmutedMessagesCount);
-
         }
     }
 }

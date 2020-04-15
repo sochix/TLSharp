@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Account
 {
     [TLObject(-1200903967)]
@@ -23,10 +25,9 @@ namespace TeleSharp.TL.Account
         public string PublicKey { get; set; }
         public Account.TLAuthorizationForm Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -34,7 +35,6 @@ namespace TeleSharp.TL.Account
             BotId = br.ReadInt32();
             Scope = StringUtil.Deserialize(br);
             PublicKey = StringUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -43,12 +43,11 @@ namespace TeleSharp.TL.Account
             bw.Write(BotId);
             StringUtil.Serialize(Scope, bw);
             StringUtil.Serialize(PublicKey, bw);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Account.TLAuthorizationForm)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

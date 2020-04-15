@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(280464681)]
@@ -24,10 +26,9 @@ namespace TeleSharp.TL
         public string Url { get; set; }
         public int ButtonId { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -41,7 +42,6 @@ namespace TeleSharp.TL
 
             Url = StringUtil.Deserialize(br);
             ButtonId = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -53,7 +53,6 @@ namespace TeleSharp.TL
                 StringUtil.Serialize(FwdText, bw);
             StringUtil.Serialize(Url, bw);
             bw.Write(ButtonId);
-
         }
     }
 }

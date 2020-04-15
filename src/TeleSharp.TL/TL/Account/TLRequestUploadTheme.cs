@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Account
 {
     [TLObject(473805619)]
@@ -25,10 +27,9 @@ namespace TeleSharp.TL.Account
         public string MimeType { get; set; }
         public TLAbsDocument Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -42,7 +43,6 @@ namespace TeleSharp.TL.Account
 
             FileName = StringUtil.Deserialize(br);
             MimeType = StringUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -54,12 +54,11 @@ namespace TeleSharp.TL.Account
                 ObjectUtils.SerializeObject(Thumb, bw);
             StringUtil.Serialize(FileName, bw);
             StringUtil.Serialize(MimeType, bw);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLAbsDocument)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

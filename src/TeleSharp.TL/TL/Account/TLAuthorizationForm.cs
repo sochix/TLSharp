@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Account
 {
     [TLObject(-1389486888)]
@@ -25,10 +27,9 @@ namespace TeleSharp.TL.Account
         public TLVector<TLAbsUser> Users { get; set; }
         public string PrivacyPolicyUrl { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -43,7 +44,6 @@ namespace TeleSharp.TL.Account
             else
                 PrivacyPolicyUrl = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -56,7 +56,6 @@ namespace TeleSharp.TL.Account
             ObjectUtils.SerializeObject(Users, bw);
             if ((Flags & 1) != 0)
                 StringUtil.Serialize(PrivacyPolicyUrl, bw);
-
         }
     }
 }

@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-317144808)]
@@ -24,10 +26,9 @@ namespace TeleSharp.TL
         public byte[] Bytes { get; set; }
         public TLAbsEncryptedFile File { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -37,7 +38,6 @@ namespace TeleSharp.TL
             Date = br.ReadInt32();
             Bytes = BytesUtil.Deserialize(br);
             File = (TLAbsEncryptedFile)ObjectUtils.DeserializeObject(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -48,7 +48,6 @@ namespace TeleSharp.TL
             bw.Write(Date);
             BytesUtil.Serialize(Bytes, bw);
             ObjectUtils.SerializeObject(File, bw);
-
         }
     }
 }

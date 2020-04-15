@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-797637467)]
@@ -27,10 +29,9 @@ namespace TeleSharp.TL
         public TLVector<TLAbsPhotoSize> Sizes { get; set; }
         public int DcId { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -43,21 +44,18 @@ namespace TeleSharp.TL
             Date = br.ReadInt32();
             Sizes = (TLVector<TLAbsPhotoSize>)ObjectUtils.DeserializeVector<TLAbsPhotoSize>(br);
             DcId = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
             bw.Write(Id);
             bw.Write(AccessHash);
             BytesUtil.Serialize(FileReference, bw);
             bw.Write(Date);
             ObjectUtils.SerializeObject(Sizes, bw);
             bw.Write(DcId);
-
         }
     }
 }

@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Upload
 {
     [TLObject(-562337987)]
@@ -24,10 +26,9 @@ namespace TeleSharp.TL.Upload
         public byte[] Bytes { get; set; }
         public bool Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -36,7 +37,6 @@ namespace TeleSharp.TL.Upload
             FilePart = br.ReadInt32();
             FileTotalParts = br.ReadInt32();
             Bytes = BytesUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -46,12 +46,11 @@ namespace TeleSharp.TL.Upload
             bw.Write(FilePart);
             bw.Write(FileTotalParts);
             BytesUtil.Serialize(Bytes, bw);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = BoolUtil.Deserialize(br);
-
         }
     }
 }

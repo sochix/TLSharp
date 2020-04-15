@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-905587442)]
@@ -21,17 +23,15 @@ namespace TeleSharp.TL
         public TLDataJSON PaymentToken { get; set; }
         public string GoogleTransactionId { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             PaymentToken = (TLDataJSON)ObjectUtils.DeserializeObject(br);
             GoogleTransactionId = StringUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -39,7 +39,6 @@ namespace TeleSharp.TL
             bw.Write(Constructor);
             ObjectUtils.SerializeObject(PaymentToken, bw);
             StringUtil.Serialize(GoogleTransactionId, bw);
-
         }
     }
 }

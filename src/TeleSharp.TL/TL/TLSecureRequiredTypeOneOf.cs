@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(41187252)]
@@ -20,23 +22,20 @@ namespace TeleSharp.TL
 
         public TLVector<TLAbsSecureRequiredType> Types { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             Types = (TLVector<TLAbsSecureRequiredType>)ObjectUtils.DeserializeVector<TLAbsSecureRequiredType>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             ObjectUtils.SerializeObject(Types, bw);
-
         }
     }
 }

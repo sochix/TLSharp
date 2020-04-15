@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-200242528)]
@@ -22,10 +24,9 @@ namespace TeleSharp.TL
         public bool SingleUse { get; set; }
         public bool Selective { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -33,16 +34,12 @@ namespace TeleSharp.TL
             Flags = br.ReadInt32();
             SingleUse = (Flags & 2) != 0;
             Selective = (Flags & 4) != 0;
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
-
         }
     }
 }

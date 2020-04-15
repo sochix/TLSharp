@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1820043071)]
@@ -45,10 +47,9 @@ namespace TeleSharp.TL
         public string BotInlinePlaceholder { get; set; }
         public string LangCode { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -123,26 +124,12 @@ namespace TeleSharp.TL
             else
                 LangCode = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
-
-
-
-
-
-
-
-
-
-
-
             bw.Write(Id);
             if ((Flags & 1) != 0)
                 bw.Write(AccessHash.Value);
@@ -166,7 +153,6 @@ namespace TeleSharp.TL
                 StringUtil.Serialize(BotInlinePlaceholder, bw);
             if ((Flags & 4194304) != 0)
                 StringUtil.Serialize(LangCode, bw);
-
         }
     }
 }

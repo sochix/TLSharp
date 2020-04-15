@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Phone
 {
     [TLObject(788404002)]
@@ -24,10 +26,9 @@ namespace TeleSharp.TL.Phone
         public TLPhoneCallProtocol Protocol { get; set; }
         public Phone.TLPhoneCall Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -36,7 +37,6 @@ namespace TeleSharp.TL.Phone
             GA = BytesUtil.Deserialize(br);
             KeyFingerprint = br.ReadInt64();
             Protocol = (TLPhoneCallProtocol)ObjectUtils.DeserializeObject(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -46,12 +46,11 @@ namespace TeleSharp.TL.Phone
             BytesUtil.Serialize(GA, bw);
             bw.Write(KeyFingerprint);
             ObjectUtils.SerializeObject(Protocol, bw);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Phone.TLPhoneCall)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

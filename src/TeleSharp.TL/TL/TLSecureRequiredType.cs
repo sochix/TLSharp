@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-2103600678)]
@@ -24,10 +26,9 @@ namespace TeleSharp.TL
         public bool TranslationRequired { get; set; }
         public TLAbsSecureValueType Type { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -37,18 +38,13 @@ namespace TeleSharp.TL
             SelfieRequired = (Flags & 2) != 0;
             TranslationRequired = (Flags & 4) != 0;
             Type = (TLAbsSecureValueType)ObjectUtils.DeserializeObject(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
-
             ObjectUtils.SerializeObject(Type, bw);
-
         }
     }
 }

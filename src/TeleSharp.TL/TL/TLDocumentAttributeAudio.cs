@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1739392570)]
@@ -25,10 +27,9 @@ namespace TeleSharp.TL
         public string Performer { get; set; }
         public byte[] Waveform { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -51,14 +52,12 @@ namespace TeleSharp.TL
             else
                 Waveform = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
             bw.Write(Duration);
             if ((Flags & 1) != 0)
                 StringUtil.Serialize(Title, bw);
@@ -66,7 +65,6 @@ namespace TeleSharp.TL
                 StringUtil.Serialize(Performer, bw);
             if ((Flags & 4) != 0)
                 BytesUtil.Serialize(Waveform, bw);
-
         }
     }
 }

@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(-1594999949)]
@@ -28,10 +30,9 @@ namespace TeleSharp.TL.Messages
         public int Hash { get; set; }
         public Messages.TLAbsDialogs Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -48,14 +49,12 @@ namespace TeleSharp.TL.Messages
             OffsetPeer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
             Limit = br.ReadInt32();
             Hash = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
             if ((Flags & 2) != 0)
                 bw.Write(FolderId.Value);
             bw.Write(OffsetDate);
@@ -63,12 +62,11 @@ namespace TeleSharp.TL.Messages
             ObjectUtils.SerializeObject(OffsetPeer, bw);
             bw.Write(Limit);
             bw.Write(Hash);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Messages.TLAbsDialogs)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

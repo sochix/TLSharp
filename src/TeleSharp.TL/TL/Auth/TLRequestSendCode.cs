@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Auth
 {
     [TLObject(-1502141361)]
@@ -24,10 +26,9 @@ namespace TeleSharp.TL.Auth
         public TLCodeSettings Settings { get; set; }
         public Auth.TLSentCode Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -36,7 +37,6 @@ namespace TeleSharp.TL.Auth
             ApiId = br.ReadInt32();
             ApiHash = StringUtil.Deserialize(br);
             Settings = (TLCodeSettings)ObjectUtils.DeserializeObject(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -46,12 +46,11 @@ namespace TeleSharp.TL.Auth
             bw.Write(ApiId);
             StringUtil.Serialize(ApiHash, bw);
             ObjectUtils.SerializeObject(Settings, bw);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Auth.TLSentCode)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1868808300)]
@@ -24,10 +26,9 @@ namespace TeleSharp.TL
         public string Email { get; set; }
         public TLPostAddress ShippingAddress { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -53,7 +54,6 @@ namespace TeleSharp.TL
             else
                 ShippingAddress = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -68,7 +68,6 @@ namespace TeleSharp.TL
                 StringUtil.Serialize(Email, bw);
             if ((Flags & 8) != 0)
                 ObjectUtils.SerializeObject(ShippingAddress, bw);
-
         }
     }
 }

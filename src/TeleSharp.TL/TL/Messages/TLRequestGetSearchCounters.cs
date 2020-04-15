@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(1932455680)]
@@ -22,17 +24,15 @@ namespace TeleSharp.TL.Messages
         public TLVector<TLAbsMessagesFilter> Filters { get; set; }
         public TLVector<Messages.TLSearchCounter> Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             Peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
             Filters = (TLVector<TLAbsMessagesFilter>)ObjectUtils.DeserializeVector<TLAbsMessagesFilter>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -40,12 +40,11 @@ namespace TeleSharp.TL.Messages
             bw.Write(Constructor);
             ObjectUtils.SerializeObject(Peer, bw);
             ObjectUtils.SerializeObject(Filters, bw);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLVector<Messages.TLSearchCounter>)ObjectUtils.DeserializeVector<Messages.TLSearchCounter>(br);
-
         }
     }
 }

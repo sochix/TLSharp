@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-288727837)]
@@ -31,10 +33,9 @@ namespace TeleSharp.TL
         public int TranslatedCount { get; set; }
         public string TranslationsUrl { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -55,16 +56,12 @@ namespace TeleSharp.TL
             StringsCount = br.ReadInt32();
             TranslatedCount = br.ReadInt32();
             TranslationsUrl = StringUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
-
             StringUtil.Serialize(Name, bw);
             StringUtil.Serialize(NativeName, bw);
             StringUtil.Serialize(LangCode, bw);
@@ -74,7 +71,6 @@ namespace TeleSharp.TL
             bw.Write(StringsCount);
             bw.Write(TranslatedCount);
             StringUtil.Serialize(TranslationsUrl, bw);
-
         }
     }
 }

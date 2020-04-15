@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Help
 {
     [TLObject(2013922064)]
@@ -25,10 +27,9 @@ namespace TeleSharp.TL.Help
         public TLVector<TLAbsMessageEntity> Entities { get; set; }
         public int? MinAgeConfirm { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -43,20 +44,17 @@ namespace TeleSharp.TL.Help
             else
                 MinAgeConfirm = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
             ObjectUtils.SerializeObject(Id, bw);
             StringUtil.Serialize(Text, bw);
             ObjectUtils.SerializeObject(Entities, bw);
             if ((Flags & 2) != 0)
                 bw.Write(MinAgeConfirm.Value);
-
         }
     }
 }

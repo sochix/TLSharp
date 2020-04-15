@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(1001634122)]
@@ -22,10 +24,9 @@ namespace TeleSharp.TL
         public long AccessHash { get; set; }
         public byte[] FileReference { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -33,7 +34,6 @@ namespace TeleSharp.TL
             Id = br.ReadInt64();
             AccessHash = br.ReadInt64();
             FileReference = BytesUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -42,7 +42,6 @@ namespace TeleSharp.TL
             bw.Write(Id);
             bw.Write(AccessHash);
             BytesUtil.Serialize(FileReference, bw);
-
         }
     }
 }

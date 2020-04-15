@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Account
 {
     [TLObject(-1390001672)]
@@ -31,10 +33,9 @@ namespace TeleSharp.TL.Account
         public TLAbsSecurePasswordKdfAlgo NewSecureAlgo { get; set; }
         public byte[] SecureRandom { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -71,16 +72,12 @@ namespace TeleSharp.TL.Account
             NewAlgo = (TLAbsPasswordKdfAlgo)ObjectUtils.DeserializeObject(br);
             NewSecureAlgo = (TLAbsSecurePasswordKdfAlgo)ObjectUtils.DeserializeObject(br);
             SecureRandom = BytesUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
-
             if ((Flags & 4) != 0)
                 ObjectUtils.SerializeObject(CurrentAlgo, bw);
             if ((Flags & 4) != 0)
@@ -94,7 +91,6 @@ namespace TeleSharp.TL.Account
             ObjectUtils.SerializeObject(NewAlgo, bw);
             ObjectUtils.SerializeObject(NewSecureAlgo, bw);
             BytesUtil.Serialize(SecureRandom, bw);
-
         }
     }
 }

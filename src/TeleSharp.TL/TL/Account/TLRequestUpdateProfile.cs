@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Account
 {
     [TLObject(2018596725)]
@@ -24,10 +26,9 @@ namespace TeleSharp.TL.Account
         public string About { get; set; }
         public TLAbsUser Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -48,7 +49,6 @@ namespace TeleSharp.TL.Account
             else
                 About = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -61,12 +61,11 @@ namespace TeleSharp.TL.Account
                 StringUtil.Serialize(LastName, bw);
             if ((Flags & 4) != 0)
                 StringUtil.Serialize(About, bw);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLAbsUser)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

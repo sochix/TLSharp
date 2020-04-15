@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Stickers
 {
     [TLObject(-1680314774)]
@@ -26,10 +28,9 @@ namespace TeleSharp.TL.Stickers
         public TLVector<TLInputStickerSetItem> Stickers { get; set; }
         public Messages.TLStickerSet Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -40,24 +41,21 @@ namespace TeleSharp.TL.Stickers
             Title = StringUtil.Deserialize(br);
             ShortName = StringUtil.Deserialize(br);
             Stickers = (TLVector<TLInputStickerSetItem>)ObjectUtils.DeserializeVector<TLInputStickerSetItem>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
             ObjectUtils.SerializeObject(UserId, bw);
             StringUtil.Serialize(Title, bw);
             StringUtil.Serialize(ShortName, bw);
             ObjectUtils.SerializeObject(Stickers, bw);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Messages.TLStickerSet)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

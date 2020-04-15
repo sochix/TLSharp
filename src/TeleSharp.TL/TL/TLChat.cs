@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(1004149726)]
@@ -33,10 +35,9 @@ namespace TeleSharp.TL
         public TLChatAdminRights AdminRights { get; set; }
         public TLChatBannedRights DefaultBannedRights { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -67,17 +68,12 @@ namespace TeleSharp.TL
             else
                 DefaultBannedRights = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
-
-
             bw.Write(Id);
             StringUtil.Serialize(Title, bw);
             ObjectUtils.SerializeObject(Photo, bw);
@@ -90,7 +86,6 @@ namespace TeleSharp.TL
                 ObjectUtils.SerializeObject(AdminRights, bw);
             if ((Flags & 262144) != 0)
                 ObjectUtils.SerializeObject(DefaultBannedRights, bw);
-
         }
     }
 }

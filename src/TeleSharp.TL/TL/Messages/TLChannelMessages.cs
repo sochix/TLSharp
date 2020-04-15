@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(-1725551049)]
@@ -26,10 +28,9 @@ namespace TeleSharp.TL.Messages
         public TLVector<TLAbsChat> Chats { get; set; }
         public TLVector<TLAbsUser> Users { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -41,20 +42,17 @@ namespace TeleSharp.TL.Messages
             Messages = (TLVector<TLAbsMessage>)ObjectUtils.DeserializeVector<TLAbsMessage>(br);
             Chats = (TLVector<TLAbsChat>)ObjectUtils.DeserializeVector<TLAbsChat>(br);
             Users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
             bw.Write(Pts);
             bw.Write(Count);
             ObjectUtils.SerializeObject(Messages, bw);
             ObjectUtils.SerializeObject(Chats, bw);
             ObjectUtils.SerializeObject(Users, bw);
-
         }
     }
 }

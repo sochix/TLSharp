@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Auth
 {
     [TLObject(1148485274)]
@@ -21,10 +23,9 @@ namespace TeleSharp.TL.Auth
         public int Flags { get; set; }
         public Help.TLTermsOfService TermsOfService { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -35,7 +36,6 @@ namespace TeleSharp.TL.Auth
             else
                 TermsOfService = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -44,7 +44,6 @@ namespace TeleSharp.TL.Auth
             bw.Write(Flags);
             if ((Flags & 1) != 0)
                 ObjectUtils.SerializeObject(TermsOfService, bw);
-
         }
     }
 }

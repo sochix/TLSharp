@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(772213157)]
@@ -21,17 +23,15 @@ namespace TeleSharp.TL.Messages
         public int Hash { get; set; }
         public TLVector<TLAbsDocument> Gifs { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             Hash = br.ReadInt32();
             Gifs = (TLVector<TLAbsDocument>)ObjectUtils.DeserializeVector<TLAbsDocument>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -39,7 +39,6 @@ namespace TeleSharp.TL.Messages
             bw.Write(Constructor);
             bw.Write(Hash);
             ObjectUtils.SerializeObject(Gifs, bw);
-
         }
     }
 }

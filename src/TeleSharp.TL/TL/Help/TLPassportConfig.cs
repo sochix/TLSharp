@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Help
 {
     [TLObject(-1600596305)]
@@ -21,17 +23,15 @@ namespace TeleSharp.TL.Help
         public int Hash { get; set; }
         public TLDataJSON CountriesLangs { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             Hash = br.ReadInt32();
             CountriesLangs = (TLDataJSON)ObjectUtils.DeserializeObject(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -39,7 +39,6 @@ namespace TeleSharp.TL.Help
             bw.Write(Constructor);
             bw.Write(Hash);
             ObjectUtils.SerializeObject(CountriesLangs, bw);
-
         }
     }
 }

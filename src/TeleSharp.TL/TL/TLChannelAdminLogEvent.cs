@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(995769920)]
@@ -23,10 +25,9 @@ namespace TeleSharp.TL
         public int UserId { get; set; }
         public TLAbsChannelAdminLogEventAction Action { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -35,7 +36,6 @@ namespace TeleSharp.TL
             Date = br.ReadInt32();
             UserId = br.ReadInt32();
             Action = (TLAbsChannelAdminLogEventAction)ObjectUtils.DeserializeObject(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -45,7 +45,6 @@ namespace TeleSharp.TL
             bw.Write(Date);
             bw.Write(UserId);
             ObjectUtils.SerializeObject(Action, bw);
-
         }
     }
 }

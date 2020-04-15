@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Channels
 {
     [TLObject(1029681423)]
@@ -27,10 +29,9 @@ namespace TeleSharp.TL.Channels
         public string Address { get; set; }
         public TLAbsUpdates Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -50,27 +51,23 @@ namespace TeleSharp.TL.Channels
             else
                 Address = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
             StringUtil.Serialize(Title, bw);
             StringUtil.Serialize(About, bw);
             if ((Flags & 4) != 0)
                 ObjectUtils.SerializeObject(GeoPoint, bw);
             if ((Flags & 4) != 0)
                 StringUtil.Serialize(Address, bw);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLAbsUpdates)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

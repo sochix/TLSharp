@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Contacts
 {
     [TLObject(-1878523231)]
@@ -22,10 +24,9 @@ namespace TeleSharp.TL.Contacts
         public TLVector<TLContactBlocked> Blocked { get; set; }
         public TLVector<TLAbsUser> Users { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -33,7 +34,6 @@ namespace TeleSharp.TL.Contacts
             Count = br.ReadInt32();
             Blocked = (TLVector<TLContactBlocked>)ObjectUtils.DeserializeVector<TLContactBlocked>(br);
             Users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -42,7 +42,6 @@ namespace TeleSharp.TL.Contacts
             bw.Write(Count);
             ObjectUtils.SerializeObject(Blocked, bw);
             ObjectUtils.SerializeObject(Users, bw);
-
         }
     }
 }

@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(455635795)]
@@ -21,17 +23,15 @@ namespace TeleSharp.TL
         public TLVector<TLSecureValue> Values { get; set; }
         public TLSecureCredentialsEncrypted Credentials { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             Values = (TLVector<TLSecureValue>)ObjectUtils.DeserializeVector<TLSecureValue>(br);
             Credentials = (TLSecureCredentialsEncrypted)ObjectUtils.DeserializeObject(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -39,7 +39,6 @@ namespace TeleSharp.TL
             bw.Write(Constructor);
             ObjectUtils.SerializeObject(Values, bw);
             ObjectUtils.SerializeObject(Credentials, bw);
-
         }
     }
 }

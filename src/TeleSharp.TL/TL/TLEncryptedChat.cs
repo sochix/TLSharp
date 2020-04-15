@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-94974410)]
@@ -26,10 +28,9 @@ namespace TeleSharp.TL
         public byte[] GAOrB { get; set; }
         public long KeyFingerprint { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -41,7 +42,6 @@ namespace TeleSharp.TL
             ParticipantId = br.ReadInt32();
             GAOrB = BytesUtil.Deserialize(br);
             KeyFingerprint = br.ReadInt64();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -54,7 +54,6 @@ namespace TeleSharp.TL
             bw.Write(ParticipantId);
             BytesUtil.Serialize(GAOrB, bw);
             bw.Write(KeyFingerprint);
-
         }
     }
 }

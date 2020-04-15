@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Contacts
 {
     [TLObject(2010127419)]
@@ -23,10 +25,9 @@ namespace TeleSharp.TL.Contacts
         public TLVector<long> RetryContacts { get; set; }
         public TLVector<TLAbsUser> Users { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -35,7 +36,6 @@ namespace TeleSharp.TL.Contacts
             PopularInvites = (TLVector<TLPopularContact>)ObjectUtils.DeserializeVector<TLPopularContact>(br);
             RetryContacts = (TLVector<long>)ObjectUtils.DeserializeVector<long>(br);
             Users = (TLVector<TLAbsUser>)ObjectUtils.DeserializeVector<TLAbsUser>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -45,7 +45,6 @@ namespace TeleSharp.TL.Contacts
             ObjectUtils.SerializeObject(PopularInvites, bw);
             ObjectUtils.SerializeObject(RetryContacts, bw);
             ObjectUtils.SerializeObject(Users, bw);
-
         }
     }
 }

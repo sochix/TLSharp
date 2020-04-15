@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Auth
 {
     [TLObject(1654593920)]
@@ -21,17 +23,15 @@ namespace TeleSharp.TL.Auth
         public int Expires { get; set; }
         public byte[] Token { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             Expires = br.ReadInt32();
             Token = BytesUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -39,7 +39,6 @@ namespace TeleSharp.TL.Auth
             bw.Write(Constructor);
             bw.Write(Expires);
             BytesUtil.Serialize(Token, bw);
-
         }
     }
 }

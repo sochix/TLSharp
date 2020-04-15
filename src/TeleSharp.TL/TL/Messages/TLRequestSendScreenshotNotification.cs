@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(-914493408)]
@@ -23,10 +25,9 @@ namespace TeleSharp.TL.Messages
         public long RandomId { get; set; }
         public TLAbsUpdates Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -34,7 +35,6 @@ namespace TeleSharp.TL.Messages
             Peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
             ReplyToMsgId = br.ReadInt32();
             RandomId = br.ReadInt64();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -43,12 +43,11 @@ namespace TeleSharp.TL.Messages
             ObjectUtils.SerializeObject(Peer, bw);
             bw.Write(ReplyToMsgId);
             bw.Write(RandomId);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = (TLAbsUpdates)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

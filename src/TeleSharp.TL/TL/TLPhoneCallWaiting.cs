@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(462375633)]
@@ -28,10 +30,9 @@ namespace TeleSharp.TL
         public TLPhoneCallProtocol Protocol { get; set; }
         public int? ReceiveDate { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -49,14 +50,12 @@ namespace TeleSharp.TL
             else
                 ReceiveDate = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
             bw.Write(Id);
             bw.Write(AccessHash);
             bw.Write(Date);
@@ -65,7 +64,6 @@ namespace TeleSharp.TL
             ObjectUtils.SerializeObject(Protocol, bw);
             if ((Flags & 1) != 0)
                 bw.Write(ReceiveDate.Value);
-
         }
     }
 }

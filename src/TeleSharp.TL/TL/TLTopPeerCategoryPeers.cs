@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-75283823)]
@@ -22,10 +24,9 @@ namespace TeleSharp.TL
         public int Count { get; set; }
         public TLVector<TLTopPeer> Peers { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -33,7 +34,6 @@ namespace TeleSharp.TL
             Category = (TLAbsTopPeerCategory)ObjectUtils.DeserializeObject(br);
             Count = br.ReadInt32();
             Peers = (TLVector<TLTopPeer>)ObjectUtils.DeserializeVector<TLTopPeer>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -42,7 +42,6 @@ namespace TeleSharp.TL
             ObjectUtils.SerializeObject(Category, bw);
             bw.Write(Count);
             ObjectUtils.SerializeObject(Peers, bw);
-
         }
     }
 }

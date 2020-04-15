@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(391759200)]
@@ -24,10 +26,9 @@ namespace TeleSharp.TL
         public string Url { get; set; }
         public long? WebpageId { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -45,7 +46,6 @@ namespace TeleSharp.TL
             else
                 WebpageId = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -58,7 +58,6 @@ namespace TeleSharp.TL
                 StringUtil.Serialize(Url, bw);
             if ((Flags & 1) != 0)
                 bw.Write(WebpageId.Value);
-
         }
     }
 }

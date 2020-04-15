@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Updates
 {
     [TLObject(1041346555)]
@@ -23,10 +25,9 @@ namespace TeleSharp.TL.Updates
         public int Pts { get; set; }
         public int? Timeout { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -39,18 +40,15 @@ namespace TeleSharp.TL.Updates
             else
                 Timeout = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
             bw.Write(Pts);
             if ((Flags & 2) != 0)
                 bw.Write(Timeout.Value);
-
         }
     }
 }

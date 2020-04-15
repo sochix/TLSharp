@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(1160515173)]
@@ -44,10 +46,9 @@ namespace TeleSharp.TL
         public long? GroupedId { get; set; }
         public TLVector<TLRestrictionReason> RestrictionReason { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -125,21 +126,12 @@ namespace TeleSharp.TL
             else
                 RestrictionReason = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
-
-
-
-
-
-
             bw.Write(Id);
             if ((Flags & 256) != 0)
                 bw.Write(FromId.Value);
@@ -168,7 +160,6 @@ namespace TeleSharp.TL
                 bw.Write(GroupedId.Value);
             if ((Flags & 4194304) != 0)
                 ObjectUtils.SerializeObject(RestrictionReason, bw);
-
         }
     }
 }

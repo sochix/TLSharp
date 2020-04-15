@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-186607933)]
@@ -28,10 +30,9 @@ namespace TeleSharp.TL
         public TLDataJSON ProviderData { get; set; }
         public string StartParam { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -49,7 +50,6 @@ namespace TeleSharp.TL
             Provider = StringUtil.Deserialize(br);
             ProviderData = (TLDataJSON)ObjectUtils.DeserializeObject(br);
             StartParam = StringUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -65,7 +65,6 @@ namespace TeleSharp.TL
             StringUtil.Serialize(Provider, bw);
             ObjectUtils.SerializeObject(ProviderData, bw);
             StringUtil.Serialize(StartParam, bw);
-
         }
     }
 }

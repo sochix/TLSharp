@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(-1115507112)]
@@ -23,10 +25,9 @@ namespace TeleSharp.TL.Messages
         public TLAbsReportReason Reason { get; set; }
         public bool Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -34,7 +35,6 @@ namespace TeleSharp.TL.Messages
             Peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
             Id = (TLVector<int>)ObjectUtils.DeserializeVector<int>(br);
             Reason = (TLAbsReportReason)ObjectUtils.DeserializeObject(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -43,12 +43,11 @@ namespace TeleSharp.TL.Messages
             ObjectUtils.SerializeObject(Peer, bw);
             ObjectUtils.SerializeObject(Id, bw);
             ObjectUtils.SerializeObject(Reason, bw);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = BoolUtil.Deserialize(br);
-
         }
     }
 }

@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-2143067670)]
@@ -21,17 +23,15 @@ namespace TeleSharp.TL
         public long AudioId { get; set; }
         public TLPageCaption Caption { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
             AudioId = br.ReadInt64();
             Caption = (TLPageCaption)ObjectUtils.DeserializeObject(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -39,7 +39,6 @@ namespace TeleSharp.TL
             bw.Write(Constructor);
             bw.Write(AudioId);
             ObjectUtils.SerializeObject(Caption, bw);
-
         }
     }
 }

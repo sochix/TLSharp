@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Channels
 {
     [TLObject(300429806)]
@@ -20,26 +22,25 @@ namespace TeleSharp.TL.Channels
 
         public Messages.TLInactiveChats Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-
+            // do nothing
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
-
+            // do nothing else
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Messages.TLInactiveChats)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(1417832080)]
@@ -25,10 +27,9 @@ namespace TeleSharp.TL
         public TLAbsGeoPoint Geo { get; set; }
         public string Offset { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -43,7 +44,6 @@ namespace TeleSharp.TL
                 Geo = null;
 
             Offset = StringUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -56,7 +56,6 @@ namespace TeleSharp.TL
             if ((Flags & 1) != 0)
                 ObjectUtils.SerializeObject(Geo, bw);
             StringUtil.Serialize(Offset, bw);
-
         }
     }
 }

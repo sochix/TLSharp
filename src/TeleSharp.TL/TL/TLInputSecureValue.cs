@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-618540889)]
@@ -28,10 +30,9 @@ namespace TeleSharp.TL
         public TLVector<TLAbsInputSecureFile> Files { get; set; }
         public TLAbsSecurePlainData PlainData { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -73,7 +74,6 @@ namespace TeleSharp.TL
             else
                 PlainData = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -95,7 +95,6 @@ namespace TeleSharp.TL
                 ObjectUtils.SerializeObject(Files, bw);
             if ((Flags & 32) != 0)
                 ObjectUtils.SerializeObject(PlainData, bw);
-
         }
     }
 }

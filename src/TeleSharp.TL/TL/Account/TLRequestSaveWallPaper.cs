@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Account
 {
     [TLObject(1817860919)]
@@ -23,10 +25,9 @@ namespace TeleSharp.TL.Account
         public TLWallPaperSettings Settings { get; set; }
         public bool Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -34,7 +35,6 @@ namespace TeleSharp.TL.Account
             Wallpaper = (TLAbsInputWallPaper)ObjectUtils.DeserializeObject(br);
             Unsave = BoolUtil.Deserialize(br);
             Settings = (TLWallPaperSettings)ObjectUtils.DeserializeObject(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -43,12 +43,11 @@ namespace TeleSharp.TL.Account
             ObjectUtils.SerializeObject(Wallpaper, bw);
             BoolUtil.Serialize(Unsave, bw);
             ObjectUtils.SerializeObject(Settings, bw);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = BoolUtil.Deserialize(br);
-
         }
     }
 }

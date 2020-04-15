@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-103646630)]
@@ -26,10 +28,9 @@ namespace TeleSharp.TL
         public byte[] Data { get; set; }
         public string GameShortName { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -49,7 +50,6 @@ namespace TeleSharp.TL
             else
                 GameShortName = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -64,7 +64,6 @@ namespace TeleSharp.TL
                 BytesUtil.Serialize(Data, bw);
             if ((Flags & 2) != 0)
                 StringUtil.Serialize(GameShortName, bw);
-
         }
     }
 }

@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1684914010)]
@@ -22,10 +24,9 @@ namespace TeleSharp.TL
         public TLDataJSON Data { get; set; }
         public int Timeout { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -33,7 +34,6 @@ namespace TeleSharp.TL
             QueryId = br.ReadInt64();
             Data = (TLDataJSON)ObjectUtils.DeserializeObject(br);
             Timeout = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -42,7 +42,6 @@ namespace TeleSharp.TL
             bw.Write(QueryId);
             ObjectUtils.SerializeObject(Data, bw);
             bw.Write(Timeout);
-
         }
     }
 }

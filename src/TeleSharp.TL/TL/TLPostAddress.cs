@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(512535275)]
@@ -25,10 +27,9 @@ namespace TeleSharp.TL
         public string CountryIso2 { get; set; }
         public string PostCode { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -39,7 +40,6 @@ namespace TeleSharp.TL
             State = StringUtil.Deserialize(br);
             CountryIso2 = StringUtil.Deserialize(br);
             PostCode = StringUtil.Deserialize(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -51,7 +51,6 @@ namespace TeleSharp.TL
             StringUtil.Serialize(State, bw);
             StringUtil.Serialize(CountryIso2, bw);
             StringUtil.Serialize(PostCode, bw);
-
         }
     }
 }

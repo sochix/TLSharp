@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(1605510357)]
@@ -28,10 +30,9 @@ namespace TeleSharp.TL
         public bool PinMessages { get; set; }
         public bool AddAdmins { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -45,22 +46,12 @@ namespace TeleSharp.TL
             InviteUsers = (Flags & 32) != 0;
             PinMessages = (Flags & 128) != 0;
             AddAdmins = (Flags & 512) != 0;
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
-
-
-
-
-
-
-
         }
     }
 }

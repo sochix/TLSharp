@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(469850889)]
@@ -25,10 +27,9 @@ namespace TeleSharp.TL.Messages
         public int MaxId { get; set; }
         public Messages.TLAffectedHistory Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -38,23 +39,19 @@ namespace TeleSharp.TL.Messages
             Revoke = (Flags & 2) != 0;
             Peer = (TLAbsInputPeer)ObjectUtils.DeserializeObject(br);
             MaxId = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
             ObjectUtils.SerializeObject(Peer, bw);
             bw.Write(MaxId);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Messages.TLAffectedHistory)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

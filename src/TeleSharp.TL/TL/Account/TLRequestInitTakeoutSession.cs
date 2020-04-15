@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Account
 {
     [TLObject(-262453244)]
@@ -28,10 +30,9 @@ namespace TeleSharp.TL.Account
         public int? FileMaxSize { get; set; }
         public Account.TLTakeout Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -48,27 +49,19 @@ namespace TeleSharp.TL.Account
             else
                 FileMaxSize = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
-
-
-
-
             if ((Flags & 32) != 0)
                 bw.Write(FileMaxSize.Value);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = (Account.TLTakeout)ObjectUtils.DeserializeObject(br);
-
         }
     }
 }

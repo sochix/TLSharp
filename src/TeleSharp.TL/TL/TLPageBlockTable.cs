@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1085412734)]
@@ -24,10 +26,9 @@ namespace TeleSharp.TL
         public TLAbsRichText Title { get; set; }
         public TLVector<TLPageTableRow> Rows { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -37,18 +38,14 @@ namespace TeleSharp.TL
             Striped = (Flags & 2) != 0;
             Title = (TLAbsRichText)ObjectUtils.DeserializeObject(br);
             Rows = (TLVector<TLPageTableRow>)ObjectUtils.DeserializeVector<TLPageTableRow>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
             ObjectUtils.SerializeObject(Title, bw);
             ObjectUtils.SerializeObject(Rows, bw);
-
         }
     }
 }

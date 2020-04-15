@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-847783593)]
@@ -22,10 +24,9 @@ namespace TeleSharp.TL
         public bool ExcludeNewMessages { get; set; }
         public TLVector<TLMessageRange> Ranges { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -33,16 +34,13 @@ namespace TeleSharp.TL
             Flags = br.ReadInt32();
             ExcludeNewMessages = (Flags & 2) != 0;
             Ranges = (TLVector<TLMessageRange>)ObjectUtils.DeserializeVector<TLMessageRange>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
             ObjectUtils.SerializeObject(Ranges, bw);
-
         }
     }
 }

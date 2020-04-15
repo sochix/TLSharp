@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(1662637586)]
@@ -24,10 +26,9 @@ namespace TeleSharp.TL
         public TLAbsInputStickerSet Stickerset { get; set; }
         public TLMaskCoords MaskCoords { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -41,19 +42,16 @@ namespace TeleSharp.TL
             else
                 MaskCoords = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
             StringUtil.Serialize(Alt, bw);
             ObjectUtils.SerializeObject(Stickerset, bw);
             if ((Flags & 1) != 0)
                 ObjectUtils.SerializeObject(MaskCoords, bw);
-
         }
     }
 }

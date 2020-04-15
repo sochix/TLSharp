@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(856375399)]
@@ -71,10 +73,9 @@ namespace TeleSharp.TL
         public int? LangPackVersion { get; set; }
         public int? BaseLangPackVersion { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -167,20 +168,12 @@ namespace TeleSharp.TL
             else
                 BaseLangPackVersion = null;
 
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
-
-
-
-
-
             bw.Write(Date);
             bw.Write(Expires);
             BoolUtil.Serialize(TestMode, bw);
@@ -234,7 +227,6 @@ namespace TeleSharp.TL
                 bw.Write(LangPackVersion.Value);
             if ((Flags & 4) != 0)
                 bw.Write(BaseLangPackVersion.Value);
-
         }
     }
 }

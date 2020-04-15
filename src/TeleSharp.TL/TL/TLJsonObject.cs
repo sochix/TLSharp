@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1715350371)]
@@ -18,25 +20,22 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLVector<TLJsonObjectValue> Value { get; set; }
-
+        public TLVector<TLJSONObjectValue> Value { get; set; }
 
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            Value = (TLVector<TLJsonObjectValue>)ObjectUtils.DeserializeVector<TLJsonObjectValue>(br);
-
+            Value = (TLVector<TLJSONObjectValue>)ObjectUtils.DeserializeVector<TLJSONObjectValue>(br);
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             ObjectUtils.SerializeObject(Value, bw);
-
         }
     }
 }

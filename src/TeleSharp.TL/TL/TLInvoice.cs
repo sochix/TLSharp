@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1022713000)]
@@ -30,10 +32,9 @@ namespace TeleSharp.TL
         public string Currency { get; set; }
         public TLVector<TLLabeledPrice> Prices { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -49,24 +50,14 @@ namespace TeleSharp.TL
             EmailToProvider = (Flags & 128) != 0;
             Currency = StringUtil.Deserialize(br);
             Prices = (TLVector<TLLabeledPrice>)ObjectUtils.DeserializeVector<TLLabeledPrice>(br);
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
-
-
-
-
-
-
             StringUtil.Serialize(Currency, bw);
             ObjectUtils.SerializeObject(Prices, bw);
-
         }
     }
 }

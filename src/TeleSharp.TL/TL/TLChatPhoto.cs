@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(1197267925)]
@@ -18,22 +20,20 @@ namespace TeleSharp.TL
             }
         }
 
-        public TLFileLocationToBeDeprecated PhotoSmall { get; set; }
-        public TLFileLocationToBeDeprecated PhotoBig { get; set; }
+        public FileLocation PhotoSmall { get; set; }
+        public FileLocation PhotoBig { get; set; }
         public int DcId { get; set; }
-
 
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
         {
-            PhotoSmall = (TLFileLocationToBeDeprecated)ObjectUtils.DeserializeObject(br);
-            PhotoBig = (TLFileLocationToBeDeprecated)ObjectUtils.DeserializeObject(br);
+            PhotoSmall = (FileLocation)ObjectUtils.DeserializeObject(br);
+            PhotoBig = (FileLocation)ObjectUtils.DeserializeObject(br);
             DcId = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
@@ -42,7 +42,6 @@ namespace TeleSharp.TL
             ObjectUtils.SerializeObject(PhotoSmall, bw);
             ObjectUtils.SerializeObject(PhotoBig, bw);
             bw.Write(DcId);
-
         }
     }
 }

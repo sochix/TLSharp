@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using TeleSharp.TL;
+
 namespace TeleSharp.TL.Messages
 {
     [TLObject(363700068)]
@@ -26,10 +28,9 @@ namespace TeleSharp.TL.Messages
         public int Score { get; set; }
         public bool Response { get; set; }
 
-
         public void ComputeFlags()
         {
-
+            // do nothing
         }
 
         public override void DeserializeBody(BinaryReader br)
@@ -40,24 +41,20 @@ namespace TeleSharp.TL.Messages
             Id = (TLInputBotInlineMessageID)ObjectUtils.DeserializeObject(br);
             UserId = (TLAbsInputUser)ObjectUtils.DeserializeObject(br);
             Score = br.ReadInt32();
-
         }
 
         public override void SerializeBody(BinaryWriter bw)
         {
             bw.Write(Constructor);
             bw.Write(Flags);
-
-
             ObjectUtils.SerializeObject(Id, bw);
             ObjectUtils.SerializeObject(UserId, bw);
             bw.Write(Score);
-
         }
+
         public override void DeserializeResponse(BinaryReader br)
         {
             Response = BoolUtil.Deserialize(br);
-
         }
     }
 }
