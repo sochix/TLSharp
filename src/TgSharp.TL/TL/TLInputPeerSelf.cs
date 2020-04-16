@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TeleSharp.TL;
+using TgSharp.TL;
 
-namespace TeleSharp.TL
+namespace TgSharp.TL
 {
     [TLObject(2107670217)]
     public class TLInputPeerSelf : TLAbsInputPeer

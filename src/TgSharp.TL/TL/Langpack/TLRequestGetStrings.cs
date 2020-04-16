@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TeleSharp.TL;
+using TgSharp.TL;
 
-namespace TeleSharp.TL.Langpack
+namespace TgSharp.TL.Langpack
 {
     [TLObject(-269862909)]
     public class TLRequestGetStrings : TLMethod

@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TeleSharp.TL;
+using TgSharp.TL;
 
-namespace TeleSharp.TL.Account
+namespace TgSharp.TL.Account
 {
     [TLObject(-1153722364)]
     public class TLRequestResetWallPapers : TLMethod

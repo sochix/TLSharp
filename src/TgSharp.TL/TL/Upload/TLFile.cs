@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TeleSharp.TL;
+using TgSharp.TL;
 
-namespace TeleSharp.TL.Upload
+namespace TgSharp.TL.Upload
 {
     [TLObject(157948117)]
     public class TLFile : TLAbsFile

@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TeleSharp.TL;
+using TgSharp.TL;
 
-namespace TeleSharp.TL
+namespace TgSharp.TL
 {
     [TLObject(-648257196)]
     public class TLMessageActionSecureValuesSent : TLAbsMessageAction

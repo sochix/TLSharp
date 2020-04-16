@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TeleSharp.TL;
+using TgSharp.TL;
 
-namespace TeleSharp.TL.Updates
+namespace TgSharp.TL.Updates
 {
     [TLObject(543450958)]
     public class TLChannelDifference : TLAbsChannelDifference

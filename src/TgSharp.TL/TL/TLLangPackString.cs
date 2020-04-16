@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TeleSharp.TL;
+using TgSharp.TL;
 
-namespace TeleSharp.TL
+namespace TgSharp.TL
 {
     [TLObject(-892239370)]
     public class TLLangPackString : TLAbsLangPackString

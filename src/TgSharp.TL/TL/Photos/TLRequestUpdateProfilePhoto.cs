@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TeleSharp.TL;
+using TgSharp.TL;
 
-namespace TeleSharp.TL.Photos
+namespace TgSharp.TL.Photos
 {
     [TLObject(-256159406)]
     public class TLRequestUpdateProfilePhoto : TLMethod

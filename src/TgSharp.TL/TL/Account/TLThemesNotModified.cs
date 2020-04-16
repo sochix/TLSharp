@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TeleSharp.TL;
+using TgSharp.TL;
 
-namespace TeleSharp.TL.Account
+namespace TgSharp.TL.Account
 {
     [TLObject(-199313886)]
     public class TLThemesNotModified : TLAbsThemes

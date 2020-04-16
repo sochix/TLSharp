@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TeleSharp.TL;
+using TgSharp.TL;
 
-namespace TeleSharp.TL.Channels
+namespace TgSharp.TL.Channels
 {
     [TLObject(-32999408)]
     public class TLRequestReportSpam : TLMethod

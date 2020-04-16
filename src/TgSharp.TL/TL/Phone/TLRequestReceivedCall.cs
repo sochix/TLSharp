@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TeleSharp.TL;
+using TgSharp.TL;
 
-namespace TeleSharp.TL.Phone
+namespace TgSharp.TL.Phone
 {
     [TLObject(399855457)]
     public class TLRequestReceivedCall : TLMethod

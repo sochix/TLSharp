@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TeleSharp.TL;
+using TgSharp.TL;
 
-namespace TeleSharp.TL.Upload
+namespace TgSharp.TL.Upload
 {
     [TLObject(-242427324)]
     public class TLFileCdnRedirect : TLAbsFile

@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TeleSharp.TL;
+using TgSharp.TL;
 
-namespace TeleSharp.TL.Channels
+namespace TgSharp.TL.Channels
 {
     [TLObject(1450044624)]
     public class TLRequestEditTitle : TLMethod

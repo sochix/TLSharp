@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TeleSharp.TL;
+using TgSharp.TL;
 
-namespace TeleSharp.TL.Storage
+namespace TgSharp.TL.Storage
 {
     [TLObject(172975040)]
     public class TLFilePng : TLAbsFileType

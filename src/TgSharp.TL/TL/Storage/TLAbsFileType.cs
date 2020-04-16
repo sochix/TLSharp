@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TeleSharp.TL;
+using TgSharp.TL;
 
-namespace TeleSharp.TL.Storage
+namespace TgSharp.TL.Storage
 {
     public abstract class TLAbsFileType : TLObject
     {

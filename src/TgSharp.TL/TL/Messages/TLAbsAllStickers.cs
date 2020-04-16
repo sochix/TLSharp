@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TeleSharp.TL;
+using TgSharp.TL;
 
-namespace TeleSharp.TL.Messages
+namespace TgSharp.TL.Messages
 {
     public abstract class TLAbsAllStickers : TLObject
     {

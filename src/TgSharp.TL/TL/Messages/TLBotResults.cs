@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TeleSharp.TL;
+using TgSharp.TL;
 
-namespace TeleSharp.TL.Messages
+namespace TgSharp.TL.Messages
 {
     [TLObject(-1803769784)]
     public class TLBotResults : TLObject

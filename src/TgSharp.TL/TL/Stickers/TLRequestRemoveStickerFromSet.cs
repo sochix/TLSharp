@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TeleSharp.TL;
+using TgSharp.TL;
 
-namespace TeleSharp.TL.Stickers
+namespace TgSharp.TL.Stickers
 {
     [TLObject(-143257775)]
     public class TLRequestRemoveStickerFromSet : TLMethod

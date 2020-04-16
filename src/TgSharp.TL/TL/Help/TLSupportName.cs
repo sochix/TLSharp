@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TeleSharp.TL;
+using TgSharp.TL;
 
-namespace TeleSharp.TL.Help
+namespace TgSharp.TL.Help
 {
     [TLObject(-1945767479)]
     public class TLSupportName : TLObject

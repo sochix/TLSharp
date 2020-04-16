@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TeleSharp.TL;
+using TgSharp.TL;
 
-namespace TeleSharp.TL.Contacts
+namespace TgSharp.TL.Contacts
 {
     [TLObject(-1071414113)]
     public class TLRequestGetContacts : TLMethod

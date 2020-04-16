@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TeleSharp.TL;
+using TgSharp.TL;
 
-namespace TeleSharp.TL.Help
+namespace TgSharp.TL.Help
 {
     [TLObject(1783556146)]
     public class TLDeepLinkInfo : TLAbsDeepLinkInfo

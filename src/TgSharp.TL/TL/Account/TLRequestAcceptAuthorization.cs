@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TeleSharp.TL;
+using TgSharp.TL;
 
-namespace TeleSharp.TL.Account
+namespace TgSharp.TL.Account
 {
     [TLObject(-419267436)]
     public class TLRequestAcceptAuthorization : TLMethod

@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TeleSharp.TL;
+using TgSharp.TL;
 
-namespace TeleSharp.TL.Folders
+namespace TgSharp.TL.Folders
 {
     [TLObject(1749536939)]
     public class TLRequestEditPeerFolders : TLMethod

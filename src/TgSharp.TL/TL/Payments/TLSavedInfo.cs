@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TeleSharp.TL;
+using TgSharp.TL;
 
-namespace TeleSharp.TL.Payments
+namespace TgSharp.TL.Payments
 {
     [TLObject(-74456004)]
     public class TLSavedInfo : TLObject
