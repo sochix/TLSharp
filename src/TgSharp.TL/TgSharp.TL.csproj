@@ -7,8 +7,8 @@
     <ProjectGuid>{D6144517-91D2-4880-86DF-E9FF5D7F383A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TeleSharp.TL</RootNamespace>
-    <AssemblyName>TeleSharp.TL</AssemblyName>
+    <RootNamespace>TgSharp.TL</RootNamespace>
+    <AssemblyName>TgSharp.TL</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

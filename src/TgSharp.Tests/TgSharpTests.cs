@@ -7,8 +7,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-using TeleSharp.TL;
-using TeleSharp.TL.Messages;
+using TgSharp.TL;
+using TgSharp.TL.Messages;
 using TgSharp.Core;
 using TgSharp.Core.Exceptions;
 using TgSharp.Core.Network;

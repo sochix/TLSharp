@@ -43,13 +43,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TeleSharp.TL\TeleSharp.TL.csproj">
-      <Project>{d6144517-91d2-4880-86df-e9ff5d7f383a}</Project>
-      <Name>TeleSharp.TL</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TgSharp.Core\TgSharp.Core.csproj">
       <Project>{400d2544-1cc6-4d8a-a62c-2292d9947a16}</Project>
       <Name>TgSharp.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TgSharp.TL\TgSharp.TL.csproj">
+      <Project>{D6144517-91D2-4880-86DF-E9FF5D7F383A}</Project>
+      <Name>TgSharp.TL</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
