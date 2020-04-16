@@ -15,6 +15,6 @@ It's a perfect fit for any developer who would like to send data directly to Tel
         <copyright>Copyright 2015-2020</copyright>
     </metadata>
     <files>
-        <file src="bin\Release\TeleSharp.TL.dll" target="lib\net45\TeleSharp.TL.dll" />
+        <file src="bin\Release\TeleSharp.TL.dll" target="lib\net46\TeleSharp.TL.dll" />
     </files>
 </package>
