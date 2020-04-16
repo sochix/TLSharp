@@ -24,7 +24,8 @@ namespace TeleSharp.TL.Auth
         public string PhoneCodeHash { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public Auth.TLAbsAuthorization Response { get; set; }
+        // manual edit: TLAbsAuthorization->TLAuthorization
+        public Auth.TLAuthorization Response { get; set; }
 
         public void ComputeFlags()
         {
@@ -50,7 +51,8 @@ namespace TeleSharp.TL.Auth
 
         public override void DeserializeResponse(BinaryReader br)
         {
-            Response = (Auth.TLAbsAuthorization)ObjectUtils.DeserializeObject(br);
+            // manual edit: TLAbsAuthorization->TLAuthorization
+            Response = (Auth.TLAuthorization)ObjectUtils.DeserializeObject(br);
         }
     }
 }

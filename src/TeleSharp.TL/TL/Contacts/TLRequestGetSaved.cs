@@ -20,7 +20,8 @@ namespace TeleSharp.TL.Contacts
             }
         }
 
-        public TLVector<SavedContact> Response { get; set; }
+        // manual edit: SavedContact -> TLSavedPhoneContact
+        public TLVector<TLSavedPhoneContact> Response { get; set; }
 
         public void ComputeFlags()
         {
@@ -40,7 +41,8 @@ namespace TeleSharp.TL.Contacts
 
         public override void DeserializeResponse(BinaryReader br)
         {
-            Response = (TLVector<SavedContact>)ObjectUtils.DeserializeVector<SavedContact>(br);
+            // manual edit: SavedContact -> TLSavedPhoneContact
+            Response = (TLVector<TLSavedPhoneContact>)ObjectUtils.DeserializeVector<TLSavedPhoneContact> (br);
         }
     }
 }

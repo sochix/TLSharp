@@ -30,7 +30,8 @@ namespace TeleSharp.TL.Payments
         public string NativeProvider { get; set; }
         public TLDataJSON NativeParams { get; set; }
         public TLPaymentRequestedInfo SavedInfo { get; set; }
-        public PaymentSavedCredentials SavedCredentials { get; set; }
+        // manual edit: PaymentSavedCredentials -> TLPaymentSavedCredentialsCard
+        public TLPaymentSavedCredentialsCard SavedCredentials { get; set; }
         public TLVector<TLAbsUser> Users { get; set; }
 
         public void ComputeFlags()
@@ -63,7 +64,8 @@ namespace TeleSharp.TL.Payments
                 SavedInfo = null;
 
             if ((Flags & 2) != 0)
-                SavedCredentials = (PaymentSavedCredentials)ObjectUtils.DeserializeObject(br);
+                // manual edit: PaymentSavedCredentials -> TLPaymentSavedCredentialsCard
+                SavedCredentials = (TLPaymentSavedCredentialsCard)ObjectUtils.DeserializeObject(br);
             else
                 SavedCredentials = null;
 

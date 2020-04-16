@@ -38,7 +38,8 @@ namespace TeleSharp.TL
         public string Author { get; set; }
         public TLAbsDocument Document { get; set; }
         public TLPage CachedPage { get; set; }
-        public TLVector<WebPageAttribute> Attributes { get; set; }
+        // manual edit: WebPageAttribute->TLWebPageAttributeTheme
+        public TLVector<TLWebPageAttributeTheme> Attributes { get; set; }
 
         public void ComputeFlags()
         {
@@ -118,7 +119,8 @@ namespace TeleSharp.TL
                 CachedPage = null;
 
             if ((Flags & 4096) != 0)
-                Attributes = (TLVector<WebPageAttribute>)ObjectUtils.DeserializeVector<WebPageAttribute>(br);
+                // manual edit: WebPageAttribute->TLWebPageAttributeTheme
+                Attributes = (TLVector<TLWebPageAttributeTheme>)ObjectUtils.DeserializeVector<TLWebPageAttributeTheme> (br);
             else
                 Attributes = null;
 
