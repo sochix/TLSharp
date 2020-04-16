@@ -18,6 +18,8 @@ namespace TgSharp.Generator
         static string constructorTemplate = "Constructor.tmp";
         static string methodTemplate = "Method.tmp";
 
+        static string rootNamespace = "TgSharp";
+
         static List<string> templateFiles = new List<string> (new [] {
             constructorAbsTemplate,
             constructorTemplate,
@@ -102,7 +104,7 @@ namespace TgSharp.Generator
                 {
                     string path =
                         (GetNameSpace(c.Type)
-                            .Replace("TeleSharp.TL", "TL" + Path.DirectorySeparatorChar)
+                            .Replace(rootNamespace + ".TL", "TL" + Path.DirectorySeparatorChar)
                             .Replace(".", "") + Path.DirectorySeparatorChar +
                             GetNameofClass(c.Type, true) + ".cs")
                                 .Replace("\\\\", Path.DirectorySeparatorChar.ToString());
@@ -111,13 +113,13 @@ namespace TgSharp.Generator
                     {
                         string nspace =
                             (GetNameSpace(c.Type)
-                                .Replace("TeleSharp.TL", "TL" + Path.DirectorySeparatorChar)
+                                .Replace(rootNamespace + ".TL", "TL" + Path.DirectorySeparatorChar)
                                 .Replace(".", ""))
                             .Replace("\\\\", Path.DirectorySeparatorChar.ToString())
                             .Replace(Path.DirectorySeparatorChar, '.');
                         if (nspace.EndsWith("."))
                             nspace = nspace.Remove(nspace.Length - 1, 1);
-                        string temp = absStyle.Replace("/* NAMESPACE */", "TeleSharp." + nspace);
+                        string temp = absStyle.Replace("/* NAMESPACE */", rootNamespace + "." + nspace);
                         temp = temp.Replace("/* NAME */", GetNameofClass(c.Type, true));
                         writer.Write(temp);
                         writer.Close();
@@ -134,7 +136,7 @@ namespace TgSharp.Generator
             {
                 string path =
                     (GetNameSpace(c.Predicate)
-                        .Replace("TeleSharp.TL", "TL" + Path.DirectorySeparatorChar)
+                        .Replace(rootNamespace + ".TL", "TL" + Path.DirectorySeparatorChar)
                         .Replace(".", "") + Path.DirectorySeparatorChar +
                         GetNameofClass(c.Predicate, false) + ".cs")
                     .Replace("\\\\", Path.DirectorySeparatorChar.ToString());
@@ -144,13 +146,13 @@ namespace TgSharp.Generator
                     #region About Class
                     string nspace =
                         (GetNameSpace(c.Predicate)
-                            .Replace("TeleSharp.TL", "TL" + Path.DirectorySeparatorChar)
+                            .Replace(rootNamespace + ".TL", "TL" + Path.DirectorySeparatorChar)
                             .Replace(".", ""))
                         .Replace("\\\\", Path.DirectorySeparatorChar.ToString())
                         .Replace(Path.DirectorySeparatorChar, '.');
                     if (nspace.EndsWith("."))
                         nspace = nspace.Remove(nspace.Length - 1, 1);
-                    string temp = normalStyle.Replace("/* NAMESPACE */", "TeleSharp." + nspace);
+                    string temp = normalStyle.Replace("/* NAMESPACE */", rootNamespace + "." + nspace);
                     temp = (c.Type == "himself") ? temp.Replace("/* PARENT */", "TLObject") : temp.Replace("/* PARENT */", GetNameofClass(c.Type, true));
                     temp = temp.Replace("/*Constructor*/", c.Id.ToString());
                     temp = temp.Replace("/* NAME */", GetNameofClass(c.Predicate, false));
@@ -241,7 +243,7 @@ namespace TgSharp.Generator
             {
                 string path =
                     (GetNameSpace(c.Method)
-                        .Replace("TeleSharp.TL", "TL" + Path.DirectorySeparatorChar)
+                        .Replace(rootNamespace + ".TL", "TL" + Path.DirectorySeparatorChar)
                         .Replace(".", "") + Path.DirectorySeparatorChar +
                         GetNameofClass(c.Method, false, true) + ".cs")
                             .Replace("\\\\", Path.DirectorySeparatorChar.ToString());
@@ -251,13 +253,13 @@ namespace TgSharp.Generator
                     #region About Class
                     string nspace =
                         (GetNameSpace(c.Method)
-                            .Replace("TeleSharp.TL", "TL" + Path.DirectorySeparatorChar)
+                            .Replace(rootNamespace + ".TL", "TL" + Path.DirectorySeparatorChar)
                             .Replace(".", ""))
                         .Replace("\\\\", Path.DirectorySeparatorChar.ToString())
                         .Replace(Path.DirectorySeparatorChar, '.');
                     if (nspace.EndsWith("."))
                         nspace = nspace.Remove(nspace.Length - 1, 1);
-                    string temp = methodStyle.Replace("/* NAMESPACE */", "TeleSharp." + nspace);
+                    string temp = methodStyle.Replace("/* NAMESPACE */", rootNamespace + "." + nspace);
                     temp = temp.Replace("/* PARENT */", "TLMethod");
                     temp = temp.Replace("/*Constructor*/", c.Id.ToString());
                     temp = temp.Replace("/* NAME */", GetNameofClass(c.Method, false, true));
@@ -421,10 +423,11 @@ namespace TgSharp.Generator
 
         public static string GetNameSpace(string type)
         {
+            var baseNamespace = rootNamespace + ".TL";
             if (type.IndexOf('.') != -1)
-                return "TeleSharp.TL" + FormatName(type.Split('.')[0]);
+                return baseNamespace + FormatName(type.Split('.')[0]);
             else
-                return "TeleSharp.TL";
+                return baseNamespace;
         }
 
         public static string CheckForFlagBase(string type, string result)
