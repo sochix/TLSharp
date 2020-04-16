@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace TeleSharp.Generator.Models
+namespace TgSharp.Generator.Models
 {
-    internal class TlParam
+    internal class Param
     {
         [JsonProperty("name")] 
         public string Name { get; set; }

@@ -3,9 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using TeleSharp.Generator.Models;
 
-namespace TeleSharp.Generator
+using TgSharp.Generator.Models;
+
+namespace TgSharp.Generator
 {
     class Program
     {
@@ -88,7 +89,7 @@ namespace TeleSharp.Generator
             }
             FileStream file = File.OpenWrite("Result.cs");
             StreamWriter sw = new StreamWriter(file);
-            TlSchema schema = JsonConvert.DeserializeObject<TlSchema>(Json);
+            Schema schema = JsonConvert.DeserializeObject<Schema>(Json);
             foreach (var c in schema.Constructors)
             {
                 interfacesList.Add(c.Type);
@@ -343,7 +344,7 @@ namespace TeleSharp.Generator
                     #endregion
                     #region DeSerializeRespFunc
                     var deserializeResp = "";
-                    TlParam p2 = new TlParam() { Name = "Response", Type = c.Type };
+                    var p2 = new Param() { Name = "Response", Type = c.Type };
                     deserializeResp += WriteReadCode(p2);
                     temp = temp.Replace("/* DESERIALIZEResp */", deserializeResp);
                     #endregion
@@ -506,7 +507,7 @@ namespace TeleSharp.Generator
                 return src;
         }
 
-        public static string WriteWriteCode(TlParam p, bool flag = false)
+        public static string WriteWriteCode(Param p, bool flag = false)
         {
             switch (p.Type.ToLower())
             {
@@ -534,7 +535,7 @@ namespace TeleSharp.Generator
                             return $"";
                         else
                         {
-                            TlParam p2 = new TlParam() { Name = p.Name, Type = p.Type.Split('?')[1] };
+                            Param p2 = new Param() { Name = p.Name, Type = p.Type.Split('?')[1] };
                             return $"if ((Flags & {GetBitMask(p.Type).ToString()}) != 0)" +
                                 Environment.NewLine + "                " +
                                 WriteWriteCode(p2, true);
@@ -542,7 +543,7 @@ namespace TeleSharp.Generator
                     }
             }
         }
-        public static string WriteReadCode(TlParam p)
+        public static string WriteReadCode(Param p)
         {
             switch (p.Type.ToLower())
             {
@@ -575,7 +576,7 @@ namespace TeleSharp.Generator
                             return $"{CheckForKeywordAndPascalCase(p.Name)} = (Flags & {GetBitMask(p.Type).ToString()}) != 0;";
                         else
                         {
-                            TlParam p2 = new TlParam() { Name = p.Name, Type = p.Type.Split('?')[1] };
+                            Param p2 = new Param() { Name = p.Name, Type = p.Type.Split('?')[1] };
                             return $"if ((Flags & {GetBitMask(p.Type).ToString()}) != 0)" +
                                 Environment.NewLine + "                " +
                                 WriteReadCode(p2) + Environment.NewLine + "            " +

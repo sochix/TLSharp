@@ -7,8 +7,8 @@
     <ProjectGuid>{9BE3B9D4-9FF6-4DC8-B9CC-EB2E3F390129}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TeleSharp.Generator</RootNamespace>
-    <AssemblyName>TeleSharp.Generator</AssemblyName>
+    <RootNamespace>TgSharp.Generator</RootNamespace>
+    <AssemblyName>TgSharp.Generator</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -48,12 +48,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\TlMethod.cs" />
+    <Compile Include="Models\Function.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Models\TlConstructor.cs" />
-    <Compile Include="Models\TlParam.cs" />
-    <Compile Include="Models\TlSchema.cs" />
+    <Compile Include="Models\Constructor.cs" />
+    <Compile Include="Models\Param.cs" />
+    <Compile Include="Models\Schema.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

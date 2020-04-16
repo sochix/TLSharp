@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+
 using Newtonsoft.Json;
 
-namespace TeleSharp.Generator.Models
+namespace TgSharp.Generator.Models
 {
-    internal class TlMethod
+    //called 'Function' because C# compiler doesn't let a property name == class
+    internal class Function
     {
         [JsonProperty("id")] 
         public int Id { get; set; }
@@ -12,7 +14,7 @@ namespace TeleSharp.Generator.Models
         public string Method { get; set; }
 
         [JsonProperty("params")] 
-        public List<TlParam> Params { get; set; }
+        public List<Param> Params { get; set; }
 
         [JsonProperty("type")] 
         public string Type { get; set; }

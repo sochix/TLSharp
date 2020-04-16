@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+
 using Newtonsoft.Json;
 
-namespace TeleSharp.Generator.Models
+namespace TgSharp.Generator.Models
 {
-    internal class TlConstructor
+    internal class Constructor
     {
         [JsonProperty("id")]
         public int Id { get; set; }
@@ -12,7 +13,7 @@ namespace TeleSharp.Generator.Models
         public string Predicate { get; set; }
 
         [JsonProperty("params")] 
-        public List<TlParam> Params { get; set; }
+        public List<Param> Params { get; set; }
 
         [JsonProperty("type")]
         public string Type { get; set; }
