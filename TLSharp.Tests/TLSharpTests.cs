@@ -128,7 +128,7 @@ namespace TLSharp.Tests
             var hash = await client.SendCodeRequestAsync(NumberToAuthenticate);
             var code = CodeToAuthenticate; // you can change code in debugger too
 
-            if (string.IsNullOrWhiteSpace(code))
+            if (String.IsNullOrWhiteSpace(code))
             {
                 throw new Exception("CodeToAuthenticate is empty in the app.config file, fill it with the code you just got now by SMS/Telegram");
             }
@@ -177,7 +177,7 @@ namespace TLSharp.Tests
 
             if (user == null)
             {
-                throw new Exception("Number was not found in Contacts List of user: " + NumberToSendMessage);
+                throw new System.Exception("Number was not found in Contacts List of user: " + NumberToSendMessage);
             }
 
             await client.SendTypingAsync(new TLInputPeerUser() { UserId = user.Id });
@@ -191,7 +191,7 @@ namespace TLSharp.Tests
 
             await client.ConnectAsync();
 
-            var dialogs = (TLDialogs)await client.GetUserDialogsAsync();
+            var dialogs = (TLDialogs) await client.GetUserDialogsAsync();
             var chat = dialogs.Chats
                 .OfType<TLChannel>()
                 .FirstOrDefault(c => c.Title == "TestGroup");
@@ -294,7 +294,7 @@ namespace TLSharp.Tests
                 VolumeId = photoLocation.VolumeId
             }, 1024);
 
-            var res = await client.GetUserDialogsAsync();
+            var res = await client.GetUserDialogsAsync(); 
 
             Assert.IsTrue(resFile.Bytes.Length > 0);
         }
@@ -431,7 +431,7 @@ namespace TLSharp.Tests
                 }
             };
 
-            await client.MainLoopAsync(1000);
+            await client.MainLoopAsync(new TimeSpan(0, 0, 1));
 
             // At this point you would send yourself a UPDATE_1 message to trigger update
 

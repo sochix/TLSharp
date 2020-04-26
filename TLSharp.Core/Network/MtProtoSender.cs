@@ -10,6 +10,7 @@ using TeleSharp.TL;
 using TLSharp.Core.Exceptions;
 using TLSharp.Core.MTProto;
 using TLSharp.Core.MTProto.Crypto;
+using TLSharp.Core.Network.Exceptions;
 using TLSharp.Core.Network.Requests;
 using TLSharp.Core.Utils;
 
@@ -157,14 +158,14 @@ namespace TLSharp.Core.Network
 
         public async Task<byte[]> Receive(TLMethod request, CancellationToken token = default(CancellationToken))
         {
-            while (!request.ConfirmReceived) 
+            while (!request.ConfirmReceived)
             {
                 var result = DecodeMessage((await transport.Receive(token).ConfigureAwait(false)).Body);
 
-                using (var messageStream = new MemoryStream (result.Item1, false))
-                using (var messageReader = new BinaryReader (messageStream)) 
+                using (var messageStream = new MemoryStream(result.Item1, false))
+                using (var messageReader = new BinaryReader(messageStream)) 
                 {
-                    await processMessageAsync(result.Item2, result.Item3, messageReader, request, token);
+                    await ProcessMessageAsync(result.Item2, result.Item3, messageReader, request, token);
                 }
 
                 token.ThrowIfCancellationRequested();
@@ -173,14 +174,14 @@ namespace TLSharp.Core.Network
             return null;
         }
 
-        public async Task<byte[]> Receive(int timeoutms, CancellationToken token = default(CancellationToken))
+        public async Task<byte[]> Receive(TimeSpan timeToWait, CancellationToken token = default(CancellationToken))
         {
-            var result = DecodeMessage((await transport.Receieve(timeoutms)).Body);
+            var result = DecodeMessage((await transport.Receive(timeToWait)).Body);
 
             using (var messageStream = new MemoryStream(result.Item1, false))
             using (var messageReader = new BinaryReader(messageStream))
             {
-                await processMessageAsync(result.Item2, result.Item3, messageReader, null);
+                await ProcessMessageAsync(result.Item2, result.Item3, messageReader, null);
             }
 
             token.ThrowIfCancellationRequested();
@@ -203,7 +204,7 @@ namespace TLSharp.Core.Network
             await Receive(pingRequest, token).ConfigureAwait(false);
         }
 
-        private async Task<bool> processMessageAsync(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request, CancellationToken token = default(CancellationToken))
+        private async Task<bool> ProcessMessageAsync(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request, CancellationToken token = default(CancellationToken))
         {
             token.ThrowIfCancellationRequested();
 
@@ -330,7 +331,7 @@ namespace TLSharp.Core.Network
                 }
                 using (BinaryReader compressedReader = new BinaryReader(ms))
                 {
-                    await processMessageAsync(messageId, sequence, compressedReader, request, token);
+                    await ProcessMessageAsync(messageId, sequence, compressedReader, request, token);
                 }
             }
 
@@ -592,7 +593,7 @@ namespace TLSharp.Core.Network
                 long beginPosition = messageReader.BaseStream.Position;
                 try
                 {
-                    var processedMessage = await processMessageAsync(innerMessageId, sequence, messageReader, request, token);
+                    var processedMessage = await ProcessMessageAsync(innerMessageId, sequence, messageReader, request, token);
                     if (!processedMessage)
                     {
                         messageReader.BaseStream.Position = beginPosition + innerLength;
@@ -600,7 +601,7 @@ namespace TLSharp.Core.Network
                 }
                 catch (InvalidOperationException e)
                 {
-                    throw e;
+                    throw;
                 }
                 catch (Exception e)
                 {

@@ -16,6 +16,7 @@ using TLSharp.Core.Auth;
 using TLSharp.Core.Exceptions;
 using TLSharp.Core.MTProto.Crypto;
 using TLSharp.Core.Network;
+using TLSharp.Core.Network.Exceptions;
 using TLSharp.Core.Utils;
 using TLAuthorization = TeleSharp.TL.Auth.TLAuthorization;
 
@@ -164,7 +165,7 @@ namespace TLSharp.Core
             _looping = false;
         }
 
-        public async Task MainLoopAsync(int timeslicems, CancellationToken token = default(CancellationToken))
+        public async Task MainLoopAsync(TimeSpan timeToWait, CancellationToken token = default(CancellationToken))
         {
             var lastPing = DateTime.UtcNow;
             await SendPingAsync();
@@ -172,7 +173,7 @@ namespace TLSharp.Core
             {
                 try
                 {
-                    await WaitEventAsync(timeslicems, token);
+                    await WaitEventAsync(timeToWait, token);
                 }
                 catch (OperationCanceledException)
                 {
@@ -232,9 +233,9 @@ namespace TLSharp.Core
             }
         }
 
-        public async Task WaitEventAsync(int timeoutms, CancellationToken token = default(CancellationToken))
+        public async Task WaitEventAsync(TimeSpan timeToWait, CancellationToken token = default(CancellationToken))
         {
-            await sender.Receive (timeoutms, token);
+            await sender.Receive (timeToWait, token);
         }
 
         public bool IsUserAuthorized()

@@ -161,149 +161,143 @@ Full code you can see at [DownloadFileFromContactTest](https://github.com/sochix
 
           private async Task MainAsync(string[] args)
           {
-              TelegramClient client = null;
-              try
-              {
-				  // -- if necessary, IP can be changed so the client can connect to the test network.
-                  Session session = null;
-                  //    new Session(new FileSessionStore(), "session")
-                  //{
-                  //    ServerAddress = "149.154.175.10",
-                  //    Port = 443
-                  //};
-                  //Console.WriteLine($"{session.ServerAddress}:{session.Port} {phone}");
-                  client = new TelegramClient(APIId, APIHash, session);
-				  // subscribe an event to receive live messages
-                  client.Updates += Client_Updates;
-                  await client.ConnectAsync();
-                  Console.WriteLine($"Authorised: {client.IsUserAuthorized()}");
-                  TLUser user = null;
-				  // -- If the user has already authenticated, this step will prevent account from being blocked as it
-				  // -- reuses the data from last authorisation.
-                  if (client.IsUserAuthorized())
-                      user = client.Session.TLUser;
-                  else
-                  {
-                      var registered = await client.IsPhoneRegisteredAsync(phone);
-                      var hash = await client.SendCodeRequestAsync(phone);
-                      Console.Write("Code: ");
-                      var code = Console.ReadLine();
-                      if (!registered)
-                      {
-                          Console.WriteLine($"Sign up {phone}");
-                          user = await client.SignUpAsync(phone, hash, code, "First", "Last");
-                      }
-                      Console.WriteLine($"Sign in {phone}");
-                      user = await client.MakeAuthAsync(phone, hash, code);
-                  }
+			  TelegramClient client = null;
+		  
+			  // -- if necessary, IP can be changed so the client can connect to the test network.
+			  Session session = null;
+			  //    new Session(new FileSessionStore(), "session")
+			  //{
+			  //    ServerAddress = "149.154.175.10",
+			  //    Port = 443
+			  //};
+			  //Console.WriteLine($"{session.ServerAddress}:{session.Port} {phone}");
+			  client = new TelegramClient(APIId, APIHash, session);
+			  // subscribe an event to receive live messages
+			  client.Updates += Client_Updates;
+			  await client.ConnectAsync();
+			  Console.WriteLine($"Authorised: {client.IsUserAuthorized()}");
+			  TLUser user = null;
+			  // -- If the user has already authenticated, this step will prevent account from being blocked as it
+			  // -- reuses the data from last authorisation.
+			  if (client.IsUserAuthorized())
+				  user = client.Session.TLUser;
+			  else
+			  {
+				  var registered = await client.IsPhoneRegisteredAsync(phone);
+				  var hash = await client.SendCodeRequestAsync(phone);
+				  Console.Write("Code: ");
+				  var code = Console.ReadLine();
+				  if (!registered)
+				  {
+					  Console.WriteLine($"Sign up {phone}");
+					  user = await client.SignUpAsync(phone, hash, code, "First", "Last");
+				  }
+				  Console.WriteLine($"Sign in {phone}");
+				  user = await client.MakeAuthAsync(phone, hash, code);
+			  }
 
-                  var contacts = await client.GetContactsAsync();
-                  Console.WriteLine("Contacts:");
-                  foreach (var contact in contacts.Users.OfType<TLUser>())
-                  {
-                      var contactUser = contact as TLUser;
-                      Console.WriteLine($"\t{contact.Id} {contact.Phone} {contact.FirstName} {contact.LastName}");
-                  }
-
-
-                  var dialogs = (TLDialogs) await client.GetUserDialogsAsync();
-                  Console.WriteLine("Channels: ");
-                  foreach (var channelObj in dialogs.Chats.OfType<TLChannel>())
-                  {
-                      var channel = channelObj as TLChannel;
-                      Console.WriteLine($"\tChat: {channel.Title}");
-                  }
-
-                  Console.WriteLine("Groups:");
-                  TLChat chat = null;
-                  foreach (var chatObj in dialogs.Chats.OfType<TLChat>())
-                  {
-                      chat = chatObj as TLChat;
-                      Console.WriteLine($"Chat name: {chat.Title}");
-                      var request = new TLRequestGetFullChat() { ChatId = chat.Id };
-                      var fullChat = await client.SendRequestAsync<TeleSharp.TL.Messages.TLChatFull>(request);
-
-                      var participants = (fullChat.FullChat as TeleSharp.TL.TLChatFull).Participants as TLChatParticipants;
-                      foreach (var p in participants.Participants)
-                      {
-                          if (p is TLChatParticipant)
-                          {
-                              var participant = p as TLChatParticipant;
-                              Console.WriteLine($"\t{participant.UserId}");
-                          }
-                          else if (p is TLChatParticipantAdmin)
-                          {
-                              var participant = p as TLChatParticipantAdmin;
-                              Console.WriteLine($"\t{participant.UserId}**");
-                          }
-                          else if (p is TLChatParticipantCreator)
-                          {
-                              var participant = p as TLChatParticipantCreator;
-                              Console.WriteLine($"\t{participant.UserId}**");
-                          }
-                      }
-
-                      var peer = new TLInputPeerChat() { ChatId = chat.Id };
-                      var m = await client.GetHistoryAsync(peer, 0, 0, 0);
-                      Console.WriteLine(m);
-                      if (m is TLMessages)
-                      {
-                          var messages = m as TLMessages;
+			  var contacts = await client.GetContactsAsync();
+			  Console.WriteLine("Contacts:");
+			  foreach (var contact in contacts.Users.OfType<TLUser>())
+			  {
+				  var contactUser = contact as TLUser;
+				  Console.WriteLine($"\t{contact.Id} {contact.Phone} {contact.FirstName} {contact.LastName}");
+			  }
 
 
-                          foreach (var message in messages.Messages)
-                          {
-                              if (message is TLMessage)
-                              {
-                                  var m1 = message as TLMessage;
-                                  Console.WriteLine($"\t\t{m1.Id} {m1.Message}");
-                              }
-                              else if (message is TLMessageService)
-                              {
-                                  var m1 = message as TLMessageService;
-                                  Console.WriteLine($"\t\t{m1.Id} {m1.Action}");
-                              }
-                          }
-                      }
-                      else if (m is TLMessagesSlice)
-                      {
-                          bool done = false;
-                          int total = 0;
-                          while (!done)
-                          {
-                              var messages = m as TLMessagesSlice;
+			  var dialogs = (TLDialogs) await client.GetUserDialogsAsync();
+			  Console.WriteLine("Channels: ");
+			  foreach (var channelObj in dialogs.Chats.OfType<TLChannel>())
+			  {
+				  var channel = channelObj as TLChannel;
+				  Console.WriteLine($"\tChat: {channel.Title}");
+			  }
 
-                              foreach (var m1 in messages.Messages)
-                              {
-                                  if (m1 is TLMessage)
-                                  {
-                                      var message = m1 as TLMessage;
-                                      Console.WriteLine($"\t\t{message.Id} {message.Message}");
-                                      ++total;
-                                  }
-                                  else if (m1 is TLMessageService)
-                                  {
-                                      var message = m1 as TLMessageService;
-                                      Console.WriteLine($"\t\t{message.Id} {message.Action}");
-                                      ++total;
-                                      done = message.Action is TLMessageActionChatCreate;
-                                  }
-                              }
-                              m = await client.GetHistoryAsync(peer, total, 0, 0);
-                          }
-                      }
-                  }
-      
-				  // -- Wait in a loop to handle incoming updates. No need to poll.
-                  for (;;)
-                  {
-                      await client.WaitEventAsync();
-                  }
-              }
-              catch (Exception e)
-              {
-                  Console.WriteLine(e);
-              }
+			  Console.WriteLine("Groups:");
+			  TLChat chat = null;
+			  foreach (var chatObj in dialogs.Chats.OfType<TLChat>())
+			  {
+				  chat = chatObj as TLChat;
+				  Console.WriteLine($"Chat name: {chat.Title}");
+				  var request = new TLRequestGetFullChat() { ChatId = chat.Id };
+				  var fullChat = await client.SendRequestAsync<TeleSharp.TL.Messages.TLChatFull>(request);
+
+				  var participants = (fullChat.FullChat as TeleSharp.TL.TLChatFull).Participants as TLChatParticipants;
+				  foreach (var p in participants.Participants)
+				  {
+					  if (p is TLChatParticipant)
+					  {
+						  var participant = p as TLChatParticipant;
+						  Console.WriteLine($"\t{participant.UserId}");
+					  }
+					  else if (p is TLChatParticipantAdmin)
+					  {
+						  var participant = p as TLChatParticipantAdmin;
+						  Console.WriteLine($"\t{participant.UserId}**");
+					  }
+					  else if (p is TLChatParticipantCreator)
+					  {
+						  var participant = p as TLChatParticipantCreator;
+						  Console.WriteLine($"\t{participant.UserId}**");
+					  }
+				  }
+
+				  var peer = new TLInputPeerChat() { ChatId = chat.Id };
+				  var m = await client.GetHistoryAsync(peer, 0, 0, 0);
+				  Console.WriteLine(m);
+				  if (m is TLMessages)
+				  {
+					  var messages = m as TLMessages;
+
+
+					  foreach (var message in messages.Messages)
+					  {
+						  if (message is TLMessage)
+						  {
+							  var m1 = message as TLMessage;
+							  Console.WriteLine($"\t\t{m1.Id} {m1.Message}");
+						  }
+						  else if (message is TLMessageService)
+						  {
+							  var m1 = message as TLMessageService;
+							  Console.WriteLine($"\t\t{m1.Id} {m1.Action}");
+						  }
+					  }
+				  }
+				  else if (m is TLMessagesSlice)
+				  {
+					  bool done = false;
+					  int total = 0;
+					  while (!done)
+					  {
+						  var messages = m as TLMessagesSlice;
+
+						  foreach (var m1 in messages.Messages)
+						  {
+							  if (m1 is TLMessage)
+							  {
+								  var message = m1 as TLMessage;
+								  Console.WriteLine($"\t\t{message.Id} {message.Message}");
+								  ++total;
+							  }
+							  else if (m1 is TLMessageService)
+							  {
+								  var message = m1 as TLMessageService;
+								  Console.WriteLine($"\t\t{message.Id} {message.Action}");
+								  ++total;
+								  done = message.Action is TLMessageActionChatCreate;
+							  }
+						  }
+						  m = await client.GetHistoryAsync(peer, total, 0, 0);
+					  }
+				  }
+			  }
+  
+			  // -- Wait in a loop to handle incoming updates. No need to poll.
+			  for (;;)
+			  {
+				  await client.WaitEventAsync();
+			  }
           }
 
           private void Client_Updates(TelegramClient client, TLAbsUpdates updates)
@@ -323,7 +317,11 @@ Full code you can see at [DownloadFileFromContactTest](https://github.com/sochix
                           {
                               var peer = new TLInputPeerUser() { UserId = status.UserId };
                               client.SendMessageAsync(peer, "Você está online.").Wait();
-                          } catch {}
+                          } 
+			  catch (Exception e)
+              		  {
+                  	      Console.WriteLine(e);
+              		  }
                       }
                   }
               }
@@ -371,7 +369,7 @@ Full code you can see at [DownloadFileFromContactTest](https://github.com/sochix
 
           private void MarkMessageRead(TelegramClient client, TLAbsInputPeer peer, int id)
           {
-			  // An exception happens here but it's not fatal.
+	      // An exception happens here but it's not fatal.
               try
               {
                   var request = new TLRequestReadHistory();

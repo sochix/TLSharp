@@ -102,13 +102,13 @@ namespace TLSharp.Core.Network
             return new TcpMessage(seq, body);
         }
 
-        public async Task<TcpMessage> Receieve(int timeoutms)
+        public async Task<TcpMessage> Receive(TimeSpan timeToWait)
         {
             var stream = tcpClient.GetStream();
 
             var packetLengthBytes = new byte[4];
             var token = tokenSource.Token;
-            stream.ReadTimeout = timeoutms;
+            stream.ReadTimeout = (int)timeToWait.TotalMilliseconds;
             int bytes = 0;
             try
             {
@@ -118,7 +118,7 @@ namespace TLSharp.Core.Network
                 var socketError = io.InnerException as SocketException;
                 if (socketError != null && socketError.SocketErrorCode == SocketError.TimedOut)
                     throw new OperationCanceledException();
-                throw io;
+                throw;
             }
             if (bytes != 4)
                 throw new InvalidOperationException("Couldn't read the packet length");
