@@ -42,7 +42,7 @@ namespace TLSharp.Core.Network
             return confirmed ? session.Sequence++ * 2 + 1 : session.Sequence * 2;
         }
 
-        public async Task Send(TLMethod request, CancellationToken token = default(CancellationToken))
+        public async Task Send(TeleSharp.TL.TLMethod request, CancellationToken token = default(CancellationToken))
         {
             token.ThrowIfCancellationRequested();
 
@@ -69,7 +69,7 @@ namespace TLSharp.Core.Network
             session.Save();
         }
 
-        public async Task Send(byte[] packet, TLMethod request, CancellationToken token = default(CancellationToken))
+        public async Task Send(byte[] packet, TeleSharp.TL.TLMethod request, CancellationToken token = default(CancellationToken))
         {
             token.ThrowIfCancellationRequested();
 
@@ -156,7 +156,7 @@ namespace TLSharp.Core.Network
             return new Tuple<byte[], ulong, int>(message, remoteMessageId, remoteSequence);
         }
 
-        public async Task<byte[]> Receive(TLMethod request, CancellationToken token = default(CancellationToken))
+        public async Task<byte[]> Receive(TeleSharp.TL.TLMethod request, CancellationToken token = default(CancellationToken))
         {
             while (!request.ConfirmReceived)
             {
@@ -269,17 +269,17 @@ namespace TLSharp.Core.Network
 
         private bool HandleUpdate(uint code, int sequence, BinaryReader messageReader, TLMethod request)
         {
-			try
-			{
-                var update = ParseUpdate (code, messageReader);
-                if (update != null && UpdatesEvent != null) 
+            try
+            {
+                var update = ParseUpdate(code, messageReader);
+                if (update != null && UpdatesEvent != null)
                 {
-                    UpdatesEvent (update);
+                    UpdatesEvent(update);
                 }
                 return true;
-			}
-			catch (Exception e)
-			{
+            }
+            catch (Exception e)
+            {
                 return false;
             }
         }
@@ -338,7 +338,7 @@ namespace TLSharp.Core.Network
             return true;
         }
 
-        private bool HandleRpcResult(ulong messageId, int sequence, BinaryReader messageReader, TLMethod request)
+        private bool HandleRpcResult(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
         {
             uint code = messageReader.ReadUInt32();
             ulong requestId = messageReader.ReadUInt64();
@@ -561,7 +561,7 @@ namespace TLSharp.Core.Network
             return true;
         }
 
-        private bool HandlePong(ulong messageId, int sequence, BinaryReader messageReader, TLMethod request)
+        private bool HandlePong(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
         {
             uint code = messageReader.ReadUInt32();
             ulong msgId = messageReader.ReadUInt64();

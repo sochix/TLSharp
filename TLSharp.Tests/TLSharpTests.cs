@@ -12,6 +12,7 @@ using TeleSharp.TL;
 using TeleSharp.TL.Messages;
 using TLSharp.Core;
 using TLSharp.Core.Exceptions;
+using TLSharp.Core.Network.Exceptions;
 using TLSharp.Core.Utils;
 
 namespace TLSharp.Tests
@@ -285,7 +286,7 @@ namespace TLSharp.Tests
                 .FirstOrDefault(x => x.Id == 5880094);
 
             var photo = ((TLUserProfilePhoto)user.Photo);
-            var photoLocation = (TLFileLocation)photo.PhotoBig;
+            var photoLocation = (TLFileLocation) photo.PhotoBig;
 
             var resFile = await client.GetFile(new TLInputFileLocation()
             {
@@ -332,7 +333,7 @@ namespace TLSharp.Tests
                 {
                     await CheckPhones();
                 }
-                catch (Core.Network.Exceptions.FloodException floodException)
+                catch (FloodException floodException)
                 {
                     Console.WriteLine($"FLOODEXCEPTION: {floodException}");
                     Thread.Sleep(floodException.TimeToWait);
@@ -369,7 +370,7 @@ namespace TLSharp.Tests
 
             if (user == null)
             {
-                throw new Exception("Username was not found: " + UserNameToSendMessage);
+                throw new System.Exception("Username was not found: " + UserNameToSendMessage);
             }
 
             await client.SendTypingAsync(new TLInputPeerUser() { UserId = user.Id });
@@ -413,13 +414,16 @@ namespace TLSharp.Tests
                 }
             }
 
+            // Things to note:- If the updates are not getting triggered, please re-authenticate the user
+            // Would trigger the updates on a seperate thread if possible
+
             client.Updates += (TelegramClient tclient, TLAbsUpdates updates) =>
             {
                 if (updates is TLUpdates)
                 {
-                    var allupdates = updates as TLUpdates;
+                    var allUpdates = updates as TLUpdates;
 
-                    foreach (var update in allupdates.Updates)
+                    foreach (var update in allUpdates.Updates)
                     {
                         if (update is TLUpdateNewMessage)
                         {
@@ -431,9 +435,10 @@ namespace TLSharp.Tests
                 }
             };
 
-            await client.MainLoopAsync(new TimeSpan(0, 0, 1));
+            Console.WriteLine("Send yourself an UPDATE_1 message to trigger update during loop");
+            Debug.WriteLine("Send yourself an UPDATE_1 message to trigger update during loop");
 
-            // At this point you would send yourself a UPDATE_1 message to trigger update
+            await client.MainLoopAsync(new TimeSpan(0, 0, 1));
 
             Assert.IsTrue(newMsgs.Count == 1);
             Assert.IsTrue(newMsgs.First().Message.Equals("UPDATE_1"));

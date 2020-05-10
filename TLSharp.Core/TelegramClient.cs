@@ -25,16 +25,16 @@ namespace TLSharp.Core
     public class TelegramClient : IDisposable
     {
         private MtProtoSender sender;
-        private AuthKey _key;
+        private AuthKey key;
         private TcpTransport transport;
-        private string apiHash = "";
+        private string apiHash = String.Empty;
         private int apiId = 0;
         private Session session;
         private List<TLDcOption> dcOptions;
         private TcpClientConnectionHandler handler;
         private DataCenterIPVersion dcIpVersion;
 
-        private bool _looping = true;
+        private bool looping = true;
 
         public delegate void UpdatesEvent (TelegramClient source, TLAbsUpdates updates);
         public delegate void ClientEvent(TelegramClient source);
@@ -162,14 +162,14 @@ namespace TLSharp.Core
 
         public void Close()
         {
-            _looping = false;
+            looping = false;
         }
 
         public async Task MainLoopAsync(TimeSpan timeToWait, CancellationToken token = default(CancellationToken))
         {
             var lastPing = DateTime.UtcNow;
             await SendPingAsync();
-            while (_looping)
+            while (looping)
             {
                 try
                 {

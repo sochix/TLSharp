@@ -113,7 +113,8 @@ namespace TLSharp.Core.Network
             try
             {
                 bytes = stream.Read(packetLengthBytes, 0, 4);
-            } catch (System.IO.IOException io)
+            }
+            catch (System.IO.IOException io)
             {
                 var socketError = io.InnerException as SocketException;
                 if (socketError != null && socketError.SocketErrorCode == SocketError.TimedOut)
