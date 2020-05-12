@@ -382,6 +382,7 @@ namespace TLSharp.Tests
         {
             IList<TLMessage> newMsgs = new List<TLMessage>();
             TLUser user = null;
+            var updateMsg = "Send yourself an UPDATE_1 message to trigger update during loop";
 
             var client = NewClient();
             await client.ConnectAsync();
@@ -435,8 +436,8 @@ namespace TLSharp.Tests
                 }
             };
 
-            Console.WriteLine("Send yourself an UPDATE_1 message to trigger update during loop");
-            Debug.WriteLine("Send yourself an UPDATE_1 message to trigger update during loop");
+            Console.WriteLine(updateMsg);
+            Debug.WriteLine(updateMsg);
 
             await client.MainLoopAsync(new TimeSpan(0, 0, 1));
 

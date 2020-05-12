@@ -269,19 +269,12 @@ namespace TLSharp.Core.Network
 
         private bool HandleUpdate(uint code, int sequence, BinaryReader messageReader, TLMethod request)
         {
-            try
+            var update = ParseUpdate(code, messageReader);
+            if (update != null && UpdatesEvent != null)
             {
-                var update = ParseUpdate(code, messageReader);
-                if (update != null && UpdatesEvent != null)
-                {
-                    UpdatesEvent(update);
-                }
-                return true;
+                UpdatesEvent(update);
             }
-            catch (Exception e)
-            {
-                return false;
-            }
+            return true;
         }
 
         private TLAbsUpdates ParseUpdate(uint code, BinaryReader messageReader)

@@ -139,7 +139,7 @@ Full code you can see at [DownloadFileFromContactTest](https://github.com/sochix
 
 # Events Sample code
 ```csharp
-  using System;
+using System;
 using System.Threading.Tasks;
 using TeleSharp.TL;
 using TLSharp.Core;
@@ -234,7 +234,7 @@ namespace TLSharpPOC
                 var msg = await client.GetHistoryAsync(peer, 0, 0, 0);
                 Console.WriteLine(msg);
                 if (msg is TLMessages messages)
-				{
+		{
                     foreach (var message in messages.Messages)
                     {
                         if (message is TLMessage m1)
@@ -247,7 +247,7 @@ namespace TLSharpPOC
                         }
                     }
                 }
-				else if (msg is TLMessagesSlice messagesSlice)
+		else if (msg is TLMessagesSlice messagesSlice)
                 {
                     bool done = false;
                     int total = 0;
@@ -273,7 +273,7 @@ namespace TLSharpPOC
             }
 
             // -- Wait in a loop to handle incoming updates. No need to poll.
-            for (; ; )
+            while(true)
             {
                 await client.WaitEventAsync(TimeSpan.FromSeconds(1));
             }
