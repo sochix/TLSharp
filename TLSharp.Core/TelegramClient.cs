@@ -300,6 +300,17 @@ namespace TLSharp.Core
                 .ConfigureAwait(false);
         }
 
+        public async Task<TLResolvedPeer> ResolveUsernameAsync(string usernameToResolve, CancellationToken token = default(CancellationToken))
+        {
+            if (usernameToResolve.StartsWith("@"))
+                usernameToResolve = usernameToResolve.Substring(1);
+
+            var req = new TLRequestResolveUsername() { Username = usernameToResolve };
+
+            return await SendAuthenticatedRequestAsync<TLResolvedPeer>(req, token)
+                .ConfigureAwait(false);
+        }
+
         public async Task<TLImportedContacts> ImportContactsAsync(IReadOnlyList<TLInputPhoneContact> contacts, CancellationToken token = default(CancellationToken))
         {
             var req = new TLRequestImportContacts { Contacts = new TLVector<TLInputPhoneContact>(contacts)};
