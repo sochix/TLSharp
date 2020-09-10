@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using TeleSharp.TL;
+
+using TgSharp.TL;
 
 namespace TgSharp.Core.Network.Requests
 {

@@ -5,20 +5,21 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using TeleSharp.TL;
-using TeleSharp.TL.Account;
-using TeleSharp.TL.Auth;
-using TeleSharp.TL.Contacts;
-using TeleSharp.TL.Help;
-using TeleSharp.TL.Messages;
-using TeleSharp.TL.Upload;
+
+using TgSharp.TL;
+using TgSharp.TL.Account;
+using TgSharp.TL.Auth;
+using TgSharp.TL.Contacts;
+using TgSharp.TL.Help;
+using TgSharp.TL.Messages;
+using TgSharp.TL.Upload;
 using TgSharp.Core.Auth;
 using TgSharp.Core.Exceptions;
 using TgSharp.Core.MTProto.Crypto;
 using TgSharp.Core.Network;
 using TgSharp.Core.Network.Exceptions;
 using TgSharp.Core.Utils;
-using TLAuthorization = TeleSharp.TL.Auth.TLAuthorization;
+using TLAuthorization = TgSharp.TL.Auth.TLAuthorization;
 
 namespace TgSharp.Core
 {
@@ -406,7 +407,7 @@ namespace TgSharp.Core
         /// <returns></returns>
         public async Task<TLFound> SearchUserAsync(string q, int limit = 10, CancellationToken token = default(CancellationToken))
         {
-            var r = new TeleSharp.TL.Contacts.TLRequestSearch
+            var r = new TL.Contacts.TLRequestSearch
             {
                 Q = q,
                 Limit = limit
