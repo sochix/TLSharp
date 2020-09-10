@@ -6,8 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using TeleSharp.TL;
-namespace TeleSharp.TL
+namespace TgSharp.TL
 {
     public class IntegerUtil
     {

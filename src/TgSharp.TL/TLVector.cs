@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TeleSharp.TL
+namespace TgSharp.TL
 {
     public class TLVector<T> : TLObject, IList<T>
     {
