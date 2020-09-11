@@ -28,7 +28,7 @@ jobs:
             $version = $Env:GITHUB_REF.Substring($tagPrefix.Length)
         }
         Else {
-            $baseVersion = "0.1.1"
+            $baseVersion = "0.3.1"
             $version = "$baseVersion--date$date.git-$hash"
         }
 

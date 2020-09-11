@@ -64,19 +64,6 @@ namespace TgSharp.Tests
         }
 
         [Test]
-        public override async Task CheckPhones()
-        {
-            await base.CheckPhones();
-        }
-
-        [Test]
-        [Ignore("FIXME")]
-        public override async Task FloodExceptionShouldNotCauseCannotReadPackageLengthError()
-        {
-            await base.FloodExceptionShouldNotCauseCannotReadPackageLengthError();
-        }
-
-        [Test]
         public override async Task SendMessageByUserNameTest()
         {
             await base.SendMessageByUserNameTest();

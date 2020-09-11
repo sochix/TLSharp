@@ -5,9 +5,9 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TgSharp.Core", "TgSharp.Core\TgSharp.Core.csproj", "{400D2544-1CC6-4D8A-A62C-2292D9947A16}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeleSharp.TL", "TeleSharp.TL\TeleSharp.TL.csproj", "{D6144517-91D2-4880-86DF-E9FF5D7F383A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TgSharp.TL", "TgSharp.TL\TgSharp.TL.csproj", "{D6144517-91D2-4880-86DF-E9FF5D7F383A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeleSharp.Generator", "TeleSharp.Generator\TeleSharp.Generator.csproj", "{9BE3B9D4-9FF6-4DC8-B9CC-EB2E3F390129}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TgSharp.Generator", "TgSharp.Generator\TgSharp.Generator.csproj", "{9BE3B9D4-9FF6-4DC8-B9CC-EB2E3F390129}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TgSharp.Tests", "TgSharp.Tests\TgSharp.Tests.csproj", "{DE5C0467-EE99-4734-95F2-EFF7A0B99924}"
 EndProject

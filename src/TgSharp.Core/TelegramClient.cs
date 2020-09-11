@@ -5,20 +5,21 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using TeleSharp.TL;
-using TeleSharp.TL.Account;
-using TeleSharp.TL.Auth;
-using TeleSharp.TL.Contacts;
-using TeleSharp.TL.Help;
-using TeleSharp.TL.Messages;
-using TeleSharp.TL.Upload;
+
+using TgSharp.TL;
+using TgSharp.TL.Account;
+using TgSharp.TL.Auth;
+using TgSharp.TL.Contacts;
+using TgSharp.TL.Help;
+using TgSharp.TL.Messages;
+using TgSharp.TL.Upload;
 using TgSharp.Core.Auth;
 using TgSharp.Core.Exceptions;
 using TgSharp.Core.MTProto.Crypto;
 using TgSharp.Core.Network;
 using TgSharp.Core.Network.Exceptions;
 using TgSharp.Core.Utils;
-using TLAuthorization = TeleSharp.TL.Auth.TLAuthorization;
+using TLAuthorization = TgSharp.TL.Auth.TLAuthorization;
 
 namespace TgSharp.Core
 {
@@ -100,9 +101,11 @@ namespace TgSharp.Core
                 DeviceModel = "PC",
                 LangCode = "en",
                 Query = config,
-                SystemVersion = "Win 10.0"
+                SystemVersion = "Win 10.0",
+                SystemLangCode = "en",
+                LangPack = ""
             };
-            var invokewithLayer = new TLRequestInvokeWithLayer() { Layer = 66, Query = request };
+            var invokewithLayer = new TLRequestInvokeWithLayer() { Layer = 108, Query = request };
             await sender.Send(invokewithLayer, token).ConfigureAwait(false);
             await sender.Receive(invokewithLayer, token).ConfigureAwait(false);
 
@@ -164,7 +167,7 @@ namespace TgSharp.Core
                 throw new InvalidOperationException("Not connected!");
 
             var completed = false;
-            while(!completed)
+            while (!completed)
             {
                 try
                 {
@@ -172,7 +175,7 @@ namespace TgSharp.Core
                     await sender.Receive(request, token).ConfigureAwait(false);
                     completed = true;
                 }
-                catch(DataCenterMigrationException e)
+                catch (DataCenterMigrationException e)
                 {
                     if (session.DataCenter.DataCenterId.HasValue &&
                         session.DataCenter.DataCenterId.Value == e.DC)
@@ -192,31 +195,19 @@ namespace TgSharp.Core
             return session.TLUser != null;
         }
 
-        public async Task<bool> IsPhoneRegisteredAsync(string phoneNumber, CancellationToken token = default(CancellationToken))
-        {
-            if (String.IsNullOrWhiteSpace(phoneNumber))
-                throw new ArgumentNullException(nameof(phoneNumber));
-
-            var authCheckPhoneRequest = new TLRequestCheckPhone() { PhoneNumber = phoneNumber };
-
-            await RequestWithDcMigration(authCheckPhoneRequest, token).ConfigureAwait(false);
-
-            return authCheckPhoneRequest.Response.PhoneRegistered;
-        }
-
         public async Task<string> SendCodeRequestAsync(string phoneNumber, CancellationToken token = default(CancellationToken))
         {
             if (String.IsNullOrWhiteSpace(phoneNumber))
                 throw new ArgumentNullException(nameof(phoneNumber));
 
-            var request = new TLRequestSendCode() { PhoneNumber = phoneNumber, ApiId = apiId, ApiHash = apiHash };
+            var request = new TLRequestSendCode() { PhoneNumber = phoneNumber, ApiId = apiId, ApiHash = apiHash, Settings = new TLCodeSettings { } };
 
             await RequestWithDcMigration(request, token).ConfigureAwait(false);
 
             return request.Response.PhoneCodeHash;
         }
 
-        public async Task<TLUser> MakeAuthAsync(string phoneNumber, string phoneCodeHash, string code, CancellationToken token = default(CancellationToken))
+        public async Task<TLUser> MakeAuthAsync(string phoneNumber, string phoneCodeHash, string code, string firstName = "", string lastName = "", CancellationToken token = default(CancellationToken))
         {
             if (String.IsNullOrWhiteSpace(phoneNumber))
                 throw new ArgumentNullException(nameof(phoneNumber));
@@ -226,53 +217,23 @@ namespace TgSharp.Core
 
             if (String.IsNullOrWhiteSpace(code))
                 throw new ArgumentNullException(nameof(code));
-            
+
             var request = new TLRequestSignIn() { PhoneNumber = phoneNumber, PhoneCodeHash = phoneCodeHash, PhoneCode = code };
 
             await RequestWithDcMigration(request, token).ConfigureAwait(false);
 
-            OnUserAuthenticated(((TLUser)request.Response.User));
-
-            return ((TLUser)request.Response.User);
-        }
-        
-        public async Task<TLPassword> GetPasswordSetting(CancellationToken token = default(CancellationToken))
-        {
-            var request = new TLRequestGetPassword();
-
-            await RequestWithDcMigration(request, token).ConfigureAwait(false);
-
-            return (TLPassword)request.Response;
-        }
-
-        public async Task<TLUser> MakeAuthWithPasswordAsync(TLPassword password, string password_str, CancellationToken token = default(CancellationToken))
-        {
-            token.ThrowIfCancellationRequested();
-
-            byte[] password_Bytes = Encoding.UTF8.GetBytes(password_str);
-            IEnumerable<byte> rv = password.CurrentSalt.Concat(password_Bytes).Concat(password.CurrentSalt);
-
-            SHA256Managed hashstring = new SHA256Managed();
-            var password_hash = hashstring.ComputeHash(rv.ToArray());
-
-            var request = new TLRequestCheckPassword() { PasswordHash = password_hash };
-
-            await RequestWithDcMigration(request, token).ConfigureAwait(false);
-
-            OnUserAuthenticated((TLUser)request.Response.User);
-
-            return (TLUser)request.Response.User;
-        }
-
-        public async Task<TLUser> SignUpAsync(string phoneNumber, string phoneCodeHash, string code, string firstName, string lastName, CancellationToken token = default(CancellationToken))
-        {
-            var request = new TLRequestSignUp() { PhoneNumber = phoneNumber, PhoneCode = code, PhoneCodeHash = phoneCodeHash, FirstName = firstName, LastName = lastName };
-            
-            await RequestWithDcMigration(request, token).ConfigureAwait(false);
-
-            OnUserAuthenticated((TLUser)request.Response.User);
-
-            return (TLUser)request.Response.User;
+            if (request.Response is TLAuthorization)
+            {
+                OnUserAuthenticated(((TLUser)((TLAuthorization)request.Response).User));
+                return ((TLUser)((TLAuthorization)request.Response).User);
+            }
+            else
+            {
+                var signUpRequest = new TLRequestSignUp() { PhoneNumber = phoneNumber, PhoneCodeHash = phoneCodeHash, FirstName = firstName, LastName = lastName };
+                await RequestWithDcMigration(signUpRequest, token).ConfigureAwait(false);
+                OnUserAuthenticated((TLUser)signUpRequest.Response.User);
+                return (TLUser)signUpRequest.Response.User;
+            }
         }
 
         public async Task<T> SendRequestAsync<T>(TLMethod methodToExecute, CancellationToken token = default(CancellationToken))
@@ -284,7 +245,7 @@ namespace TgSharp.Core
             return (T)result;
         }
 
-        internal async Task<T> SendAuthenticatedRequestAsync<T> (TLMethod methodToExecute, CancellationToken token = default(CancellationToken))
+        internal async Task<T> SendAuthenticatedRequestAsync<T>(TLMethod methodToExecute, CancellationToken token = default(CancellationToken))
         {
             if (!IsUserAuthorized())
                 throw new InvalidOperationException("Authorize user first!");
@@ -311,7 +272,7 @@ namespace TgSharp.Core
 
         public async Task<TLImportedContacts> ImportContactsAsync(IReadOnlyList<TLInputPhoneContact> contacts, CancellationToken token = default(CancellationToken))
         {
-            var req = new TLRequestImportContacts { Contacts = new TLVector<TLInputPhoneContact>(contacts)};
+            var req = new TLRequestImportContacts { Contacts = new TLVector<TLInputPhoneContact>(contacts) };
 
             return await SendAuthenticatedRequestAsync<TLImportedContacts>(req, token)
                 .ConfigureAwait(false);
@@ -319,23 +280,15 @@ namespace TgSharp.Core
 
         public async Task<bool> DeleteContactsAsync(IReadOnlyList<TLAbsInputUser> users, CancellationToken token = default(CancellationToken))
         {
-            var req = new TLRequestDeleteContacts {Id = new TLVector<TLAbsInputUser>(users)};
+            var req = new TLRequestDeleteContacts { Id = new TLVector<TLAbsInputUser>(users) };
 
             return await SendAuthenticatedRequestAsync<bool>(req, token)
                 .ConfigureAwait(false);
         }
 
-        public async Task<TLLink> DeleteContactAsync(TLAbsInputUser user, CancellationToken token = default(CancellationToken))
-        {
-            var req = new TLRequestDeleteContact {Id = user};
-
-            return await SendAuthenticatedRequestAsync<TLLink>(req, token)
-                .ConfigureAwait(false);
-        }
-
         public async Task<TLContacts> GetContactsAsync(CancellationToken token = default(CancellationToken))
         {
-            var req = new TLRequestGetContacts() { Hash = "" };
+            var req = new TLRequestGetContacts() { Hash = 0 };
 
             return await SendAuthenticatedRequestAsync<TLContacts>(req, token)
                 .ConfigureAwait(false);
@@ -370,57 +323,56 @@ namespace TgSharp.Core
                 offsetPeer = new TLInputPeerSelf();
 
             var req = new TLRequestGetDialogs()
-            { 
-                OffsetDate = offsetDate, 
-                OffsetId = offsetId, 
-                OffsetPeer = offsetPeer, 
+            {
+                OffsetDate = offsetDate,
+                OffsetId = offsetId,
+                OffsetPeer = offsetPeer,
                 Limit = limit
             };
             return await SendAuthenticatedRequestAsync<TLAbsDialogs>(req, token)
                 .ConfigureAwait(false);
         }
 
-        public async Task<TLAbsUpdates> SendUploadedPhoto(TLAbsInputPeer peer, TLAbsInputFile file, string caption, CancellationToken token = default(CancellationToken))
+        public async Task<TLAbsUpdates> SendUploadedPhoto(TLAbsInputPeer peer, TLAbsInputFile file, CancellationToken token = default(CancellationToken))
         {
             return await SendAuthenticatedRequestAsync<TLAbsUpdates>(new TLRequestSendMedia()
-                {
-                    RandomId = Helpers.GenerateRandomLong(),
-                    Background = false,
-                    ClearDraft = false,
-                    Media = new TLInputMediaUploadedPhoto() { File = file, Caption = caption },
-                    Peer = peer
-                }, token)
+            {
+                RandomId = Helpers.GenerateRandomLong(),
+                Background = false,
+                ClearDraft = false,
+                Media = new TLInputMediaUploadedPhoto() { File = file },
+                Peer = peer
+            }, token)
                 .ConfigureAwait(false);
         }
 
         public async Task<TLAbsUpdates> SendUploadedDocument(
-            TLAbsInputPeer peer, TLAbsInputFile file, string caption, string mimeType, TLVector<TLAbsDocumentAttribute> attributes, CancellationToken token = default(CancellationToken))
+            TLAbsInputPeer peer, TLAbsInputFile file, string mimeType, TLVector<TLAbsDocumentAttribute> attributes, CancellationToken token = default(CancellationToken))
         {
             return await SendAuthenticatedRequestAsync<TLAbsUpdates>(new TLRequestSendMedia()
+            {
+                RandomId = Helpers.GenerateRandomLong(),
+                Background = false,
+                ClearDraft = false,
+                Media = new TLInputMediaUploadedDocument()
                 {
-                    RandomId = Helpers.GenerateRandomLong(),
-                    Background = false,
-                    ClearDraft = false,
-                    Media = new TLInputMediaUploadedDocument()
-                    {
-                        File = file,
-                        Caption = caption,
-                        MimeType = mimeType,
-                        Attributes = attributes
-                    },
-                    Peer = peer
-                }, token)
+                    File = file,
+                    MimeType = mimeType,
+                    Attributes = attributes
+                },
+                Peer = peer
+            }, token)
                 .ConfigureAwait(false);
         }
 
         public async Task<TLFile> GetFile(TLAbsInputFileLocation location, int filePartSize, int offset = 0, CancellationToken token = default(CancellationToken))
         {
             TLFile result = await SendAuthenticatedRequestAsync<TLFile>(new TLRequestGetFile
-                {
-                    Location = location,
-                    Limit = filePartSize,
-                    Offset = offset
-                }, token)
+            {
+                Location = location,
+                Limit = filePartSize,
+                Offset = offset
+            }, token)
                 .ConfigureAwait(false);
             return result;
         }
@@ -455,7 +407,7 @@ namespace TgSharp.Core
         /// <returns></returns>
         public async Task<TLFound> SearchUserAsync(string q, int limit = 10, CancellationToken token = default(CancellationToken))
         {
-            var r = new TeleSharp.TL.Contacts.TLRequestSearch
+            var r = new TL.Contacts.TLRequestSearch
             {
                 Q = q,
                 Limit = limit

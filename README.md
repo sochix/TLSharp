@@ -122,7 +122,6 @@ TgSharp provides two wrappers for sending photo and document:
     await client.SendUploadedPhoto(new TLInputPeerUser() { UserId = user.Id }, fileResult, "kitty");
     await client.SendUploadedDocument(new TLInputPeerUser() { UserId = user.Id },
                                       fileResult,
-                                      "some zips", //caption
                                       "application/zip", //mime-type
 
                                       //document attributes, such as file name
@@ -138,7 +137,8 @@ To download a file you should call the **GetFile** method:
                          {
                              AccessHash = document.AccessHash,
                              Id = document.Id,
-                             Version = document.Version
+                             FileReference = document.FileReference,
+                             ThumbSize = "250x250"
                          },
 
                          //size of fileChunk you want to retrieve
@@ -152,10 +152,8 @@ You can see the Full code at [DownloadFileFromContactTest](https://github.com/nb
 
 For your convenience TgSharp have wrappers for several Telegram API methods. You could add your own, see details below.
 
-1. IsPhoneRegisteredAsync
 1. SendCodeRequestAsync
 1. MakeAuthAsync
-1. SignUpAsync
 1. GetContactsAsync
 1. SendMessageAsync
 1. SendTypingAsync
@@ -187,15 +185,14 @@ Don't panic. You can call any method with help of `SendRequestAsync` function. F
 
 **Where can you find a list of requests and its parameters?**
 
-The only way is [Telegram API docs](https://core.telegram.org/methods). Yes, it's outdated. But there is no other source.
-Latest scheme in JSON format you can find [here](https://gist.github.com/aarani/b22b7cda024973dff68e1672794b0298)
+The only way is [Telegram API docs](https://core.telegram.org/methods). Yes, it's no longer outdated.
+Latest scheme in JSON format you can find [here](https://core.telegram.org/schema/json)
 
 
 ## What things can I help on (Project Roadmap)?
 
 * Add Updates handling via events (WIP PR: https://github.com/sochix/TLSharp/pull/892 )
 * GithubActions CI job for running tests
-* Update to latest Layer (WIP PR: https://github.com/nblockchain/TgSharp/pull/5 ).
 * Upgrade to .NETStandard 2.0.
 
 
@@ -203,7 +200,7 @@ Latest scheme in JSON format you can find [here](https://gist.github.com/aarani/
 
 #### What API layer is supported?
 
-Layer 66. Thanks to Afshin Arani for his TLGenerator
+Layer 108. Thanks to Afshin Arani for his TLGenerator
 
 
 #### I get a xxxMigrationException or a MIGRATE_X error!

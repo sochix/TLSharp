@@ -7,7 +7,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using TeleSharp.TL;
+
+using TgSharp.TL;
 using TgSharp.Core.Exceptions;
 using TgSharp.Core.MTProto;
 using TgSharp.Core.MTProto.Crypto;
@@ -37,7 +38,7 @@ namespace TgSharp.Core.Network
             return confirmed ? session.Sequence++ * 2 + 1 : session.Sequence * 2;
         }
 
-        public async Task Send(TeleSharp.TL.TLMethod request, CancellationToken token = default(CancellationToken))
+        public async Task Send(TLMethod request, CancellationToken token = default(CancellationToken))
         {
             token.ThrowIfCancellationRequested();
 
@@ -65,7 +66,7 @@ namespace TgSharp.Core.Network
             session.Save();
         }
 
-        public async Task Send(byte[] packet, TeleSharp.TL.TLMethod request, CancellationToken token = default(CancellationToken))
+        public async Task Send(byte[] packet, TLMethod request, CancellationToken token = default(CancellationToken))
         {
             token.ThrowIfCancellationRequested();
 
@@ -134,7 +135,7 @@ namespace TgSharp.Core.Network
             return new Tuple<byte[], ulong, int>(message, remoteMessageId, remoteSequence);
         }
 
-        public async Task<byte[]> Receive(TeleSharp.TL.TLMethod request, CancellationToken token = default(CancellationToken))
+        public async Task<byte[]> Receive(TLMethod request, CancellationToken token = default(CancellationToken))
         {
             while (!request.ConfirmReceived)
             {
@@ -270,7 +271,7 @@ namespace TgSharp.Core.Network
             return true;
         }
 
-        private bool HandleRpcResult(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
+        private bool HandleRpcResult(ulong messageId, int sequence, BinaryReader messageReader, TLMethod request)
         {
             uint code = messageReader.ReadUInt32();
             ulong requestId = messageReader.ReadUInt64();
@@ -492,7 +493,7 @@ namespace TgSharp.Core.Network
             return true;
         }
 
-        private bool HandlePong(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
+        private bool HandlePong(ulong messageId, int sequence, BinaryReader messageReader, TLMethod request)
         {
             uint code = messageReader.ReadUInt32();
             ulong msgId = messageReader.ReadUInt64();
