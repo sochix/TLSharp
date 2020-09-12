@@ -51,8 +51,11 @@ namespace TgSharp.Core
         /// <param name="handler">A delegate to invoke when a connection is needed and that will return a TcpClient that will be used to connect</param>
         /// <param name="dcIpVersion">Indicates the preferred IpAddress version to use to connect to a Telegram server</param>
         public TelegramClient(int apiId, string apiHash,
-            ISessionStore store = null, string sessionUserId = "session", TcpClientConnectionHandler handler = null,
-            DataCenterIPVersion dcIpVersion = DataCenterIPVersion.Default)
+            DataCenterIPVersion dcIpVersion = DataCenterIPVersion.Default,
+            ISessionStore store = null,
+            string sessionUserId = "session",
+            TcpClientConnectionHandler handler = null
+            )
         {
             if (apiId == default(int))
                 throw new MissingApiConfigurationException("API_ID");
