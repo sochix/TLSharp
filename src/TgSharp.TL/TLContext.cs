@@ -19,7 +19,19 @@ namespace TgSharp.TL
                      where t.IsSubclassOf(typeof(TLObject))
                      where t.GetCustomAttribute(typeof(TLObjectAttribute)) != null
                      select t).ToDictionary(x => ((TLObjectAttribute)x.GetCustomAttribute(typeof(TLObjectAttribute))).Constructor, x => x);
-            Types.Add(481674261, typeof(TLVector<>));
+
+
+            var vectorTypeId = 481674261;
+            var genericVectorType = typeof (TLVector<>);
+
+            Type type;
+            if (Types.TryGetValue(vectorTypeId, out type)) {
+                if (type != genericVectorType && type != typeof(TLVector)) {
+                    throw new InvalidOperationException ($"Type {vectorTypeId} should have been a TLVector type but was {type}");
+                }
+            } else {
+                Types [vectorTypeId] = genericVectorType;
+            }
         }
 
         public static Type getType(int Constructor)

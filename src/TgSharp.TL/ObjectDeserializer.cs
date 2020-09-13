@@ -12,6 +12,7 @@ namespace TgSharp.TL
         public static object DeserializeObject(BinaryReader reader)
         {
             int Constructor = reader.ReadInt32();
+
             object obj;
             Type t = null;
             try
@@ -21,8 +22,9 @@ namespace TgSharp.TL
             }
             catch (Exception ex)
             {
-                throw new InvalidDataException("Constructor Invalid Or Context.Init Not Called !", ex);
+                throw new InvalidDataException("Invalid constructor, or invalid TLContext static initialization", ex);
             }
+
             if (t.IsSubclassOf(typeof(TLMethod)))
             {
                 ((TLMethod)obj).DeserializeResponse(reader);
