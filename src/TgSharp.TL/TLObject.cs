@@ -27,16 +27,11 @@ namespace TgSharp.TL
             using (MemoryStream m = new MemoryStream())
             using (BinaryWriter bw = new BinaryWriter(m))
             {
-                Serialize(bw);
+                SerializeBody(bw);
                 bw.Close();
                 m.Close();
                 return m.ToArray();
             }
-        }
-        public void Serialize(BinaryWriter writer)
-        {
-            writer.Write(Constructor);
-            SerializeBody(writer);
         }
         public void Deserialize(BinaryReader reader)
         {
