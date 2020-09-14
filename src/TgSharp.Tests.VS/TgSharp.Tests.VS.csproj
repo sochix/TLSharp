@@ -55,7 +55,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TeleSharp.TL\TeleSharp.TL.csproj">
+    <ProjectReference Include="..\TgSharp.TL\TgSharp.TL.csproj">
       <Project>{d6144517-91d2-4880-86df-e9ff5d7f383a}</Project>
       <Name>TeleSharp.TL</Name>
     </ProjectReference>
