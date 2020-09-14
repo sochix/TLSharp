@@ -83,10 +83,9 @@
   <ItemGroup>
     <ProjectReference Include="..\TgSharp.TL\TgSharp.TL.csproj">
       <Project>{d6144517-91d2-4880-86df-e9ff5d7f383a}</Project>
-      <Name>TeleSharp.TL</Name>
+      <Name>TgSharp.TL</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
