@@ -31,15 +31,11 @@ namespace TgSharp.Core
         private readonly int apiId;
         private readonly string sessionUserId;
         private readonly ISessionStore store;
-        private Session session;
         private List<TLDcOption> dcOptions;
         private readonly TcpClientConnectionHandler handler;
         private readonly DataCenterIPVersion dcIpVersion;
 
-        public Session Session
-        {
-            get { return session; }
-        }
+        public Session Session { get; private set; }
 
         /// <summary>
         /// Creates a new TelegramClient
@@ -83,17 +79,17 @@ namespace TgSharp.Core
         {
             token.ThrowIfCancellationRequested();
 
-            session = Session.TryLoadOrCreateNew (store, sessionUserId);
-            transport = new TcpTransport (session.DataCenter.Address, session.DataCenter.Port, this.handler);
+            Session = SessionFactory.TryLoadOrCreateNew (store, sessionUserId);
+            transport = new TcpTransport (Session.DataCenter.Address, Session.DataCenter.Port, this.handler);
 
-            if (session.AuthKey == null || reconnect)
+            if (Session.AuthKey == null || reconnect)
             {
                 var result = await Authenticator.DoAuthentication(transport, token).ConfigureAwait(false);
-                session.AuthKey = result.AuthKey;
-                session.TimeOffset = result.TimeOffset;
+                Session.AuthKey = result.AuthKey;
+                Session.TimeOffset = result.TimeOffset;
             }
 
-            sender = new MtProtoSender(transport, session);
+            sender = new MtProtoSender(transport, store, Session);
 
             //set-up layer
             var config = new TLRequestGetConfig();
@@ -123,7 +119,7 @@ namespace TgSharp.Core
                 throw new InvalidOperationException($"Can't reconnect. Establish initial connection first.");
 
             TLExportedAuthorization exported = null;
-            if (session.TLUser != null)
+            if (Session.TLUser != null)
             {
                 TLRequestExportAuthorization exportAuthorization = new TLRequestExportAuthorization() { DcId = dcId };
                 exported = await SendRequestAsync<TLExportedAuthorization>(exportAuthorization, token).ConfigureAwait(false);
@@ -151,12 +147,12 @@ namespace TgSharp.Core
                 dc = dcs.First();
             
             var dataCenter = new DataCenter (dcId, dc.IpAddress, dc.Port);
-            session.DataCenter = dataCenter;
-            session.Save();
+            Session.DataCenter = dataCenter;
+            this.store.Save (Session);
 
             await ConnectInternalAsync(true, token).ConfigureAwait(false);
 
-            if (session.TLUser != null)
+            if (Session.TLUser != null)
             {
                 TLRequestImportAuthorization importAuthorization = new TLRequestImportAuthorization() { Id = exported.Id, Bytes = exported.Bytes };
                 var imported = await SendRequestAsync<TLAuthorization>(importAuthorization, token).ConfigureAwait(false);
@@ -180,8 +176,8 @@ namespace TgSharp.Core
                 }
                 catch (DataCenterMigrationException e)
                 {
-                    if (session.DataCenter.DataCenterId.HasValue &&
-                        session.DataCenter.DataCenterId.Value == e.DC)
+                    if (Session.DataCenter.DataCenterId.HasValue &&
+                        Session.DataCenter.DataCenterId.Value == e.DC)
                     {
                         throw new Exception($"Telegram server replied requesting a migration to DataCenter {e.DC} when this connection was already using this DataCenter", e);
                     }
@@ -195,7 +191,7 @@ namespace TgSharp.Core
 
         public bool IsUserAuthorized()
         {
-            return session.TLUser != null;
+            return Session.TLUser != null;
         }
 
         public async Task<string> SendCodeRequestAsync(string phoneNumber, CancellationToken token = default(CancellationToken))
@@ -427,10 +423,10 @@ namespace TgSharp.Core
 
         private void OnUserAuthenticated(TLUser TLUser)
         {
-            session.TLUser = TLUser;
-            session.SessionExpires = int.MaxValue;
+            Session.TLUser = TLUser;
+            Session.SessionExpires = int.MaxValue;
 
-            session.Save();
+            this.store.Save (Session);
         }
 
         public bool IsConnected

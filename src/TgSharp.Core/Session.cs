@@ -71,11 +71,32 @@ namespace TgSharp.Core
         }
     }
 
+    internal static class SessionFactory
+    {
+        internal static Session TryLoadOrCreateNew (ISessionStore store, string sessionUserId)
+        {
+            var session = store.Load (sessionUserId);
+            if (null == session) {
+                var defaultDataCenter = new DataCenter ();
+                session = new Session {
+                    Id = GenerateRandomUlong (),
+                    SessionUserId = sessionUserId,
+                    DataCenter = defaultDataCenter,
+                };
+            }
+            return session;
+        }
+
+        private static ulong GenerateRandomUlong ()
+        {
+            var random = new Random ();
+            ulong rand = (((ulong)random.Next ()) << 32) | ((ulong)random.Next ());
+            return rand;
+        }
+    }
+
     public class Session
     {
-        private const string defaultConnectionAddress = "149.154.175.100";//"149.154.167.50";
-        private const int defaultConnectionPort = 443;
-
         public int Sequence { get; set; }
 #if CI
             // see the same CI-wrapped assignment in .FromBytes(), but this one will become useful
@@ -100,12 +121,9 @@ namespace TgSharp.Core
         public TLUser TLUser { get; set; }
         private Random random;
 
-        private ISessionStore store;
-
-        public Session(ISessionStore store)
+        public Session()
         {
             random = new Random();
-            this.store = store;
         }
 
         public byte[] ToBytes()
@@ -170,7 +188,7 @@ namespace TgSharp.Core
                 var authData = Serializers.Bytes.Read(reader);
                 var defaultDataCenter = new DataCenter (serverAddress, port);
 
-                return new Session(store)
+                return new Session()
                 {
                     AuthKey = new AuthKey(authData),
                     Id = id,
@@ -184,30 +202,6 @@ namespace TgSharp.Core
                     DataCenter = defaultDataCenter,
                 };
             }
-        }
-
-        public void Save()
-        {
-            store.Save(this);
-        }
-
-        public static Session TryLoadOrCreateNew(ISessionStore store, string sessionUserId)
-        {
-            var defaultDataCenter = new DataCenter (defaultConnectionAddress, defaultConnectionPort);
-
-            return store.Load(sessionUserId) ?? new Session(store)
-            {
-                Id = GenerateRandomUlong(),
-                SessionUserId = sessionUserId,
-                DataCenter = defaultDataCenter,
-            };
-        }
-
-        private static ulong GenerateRandomUlong()
-        {
-            var random = new Random();
-            ulong rand = (((ulong)random.Next()) << 32) | ((ulong)random.Next());
-            return rand;
         }
 
         public long GetNewMessageId()

@@ -23,13 +23,15 @@ namespace TgSharp.Core.Network
         //private ulong sessionId = GenerateRandomUlong();
 
         private readonly TcpTransport transport;
+        private readonly ISessionStore sessionStore;
         private readonly Session session;
 
         public readonly List<ulong> needConfirmation = new List<ulong>();
 
-        public MtProtoSender(TcpTransport transport, Session session)
+        public MtProtoSender(TcpTransport transport, ISessionStore sessionStore, Session session)
         {
             this.transport = transport;
+            this.sessionStore = sessionStore;
             this.session = session;
         }
 
@@ -63,7 +65,7 @@ namespace TgSharp.Core.Network
                 await Send(memory.ToArray(), request, token).ConfigureAwait(false);
             }
 
-            session.Save();
+            sessionStore.Save (session);
         }
 
         public async Task Send(byte[] packet, TLMethod request, CancellationToken token = default(CancellationToken))
