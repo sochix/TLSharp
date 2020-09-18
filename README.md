@@ -4,7 +4,7 @@ TLSharp
 ![Build status](https://github.com/sochix/TLSharp/workflows/CI/badge.svg?branch=master&event=push)
 [![NuGet version](https://badge.fury.io/nu/TLSharp.svg)](https://badge.fury.io/nu/TLSharp)
 
-_Unofficial_ Telegram (http://telegram.org) client library implemented in C#. Latest TL scheme supported, thanks to Afshin Arani
+_Unofficial_ Telegram (http://telegram.org) client library implemented in C#.
 
 🚩 Check out [TeleJS](https://github.com/RD17/TeleJS) - a pure JavaScript implementation of Telegram MTP protocol
 
@@ -175,24 +175,25 @@ Don't panic. You can call any method with help of `SendRequestAsync` function. F
 
 **Where you can find a list of requests and its params?**
 
-The only way is [Telegram API docs](https://core.telegram.org/methods). Yes, it's outdated. But there is no other source.
-Latest scheme in JSON format you can find [here](https://gist.github.com/aarani/b22b7cda024973dff68e1672794b0298)
+The only way is [Telegram API docs](https://core.telegram.org/methods). Latest scheme in JSON format you can find [here](https://core.telegram.org/schema/json).
 
 ## What things can I Implement (Project Roadmap)?
 
-### Release 1.0.0
+### Latest Release
 
 * [DONE] Add PHONE_MIGRATE handling
 * [DONE] Add FILE_MIGRATE handling
-* Add Updates handling
 * [DONE] Add NuGet package
 * [DONE] Add wrappers for media uploading and downloading
-* Store user session as JSON
+* Add Updates handling ([WIP](https://github.com/sochix/TLSharp/pull/940))
+* Store user session as JSON ([WIP](https://github.com/nblockchain/TgSharp/pull/18))
+* Upgrade MTProto protocol version to 2.0 ([WIP](https://github.com/nblockchain/TgSharp/pull/23))
+* SRP/2FA support ([WIP](https://github.com/nblockchain/TgSharp/pull/17))
 
 # FAQ
 
 #### What API layer is supported?
-The latest layer supported by TLSharp is 66. If you need a higher layer, we're working on it in this PullRequest: https://github.com/nblockchain/TgSharp/pull/5 (your feedback is welcome!)
+The latest layer supported by TLSharp is 66. If you need a higher layer, help us test the preview version of [TgSharp](https://github.com/nblockchain/TgSharp) (your feedback is welcome!)
 
 #### I get a xxxMigrationException or a MIGRATE_X error!
 
