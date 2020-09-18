@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TgSharp.Generator", "TgShar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TgSharp.Tests", "TgSharp.Tests\TgSharp.Tests.csproj", "{DE5C0467-EE99-4734-95F2-EFF7A0B99924}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TgSharp.Tests.VS", "TgSharp.Tests.VS\TgSharp.Tests.VS.csproj", "{AFFC3B00-3E4D-4327-8F7A-08EE41E0C8B7}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TgSharp.Tests.NUnit", "TgSharp.Tests.NUnit\TgSharp.Tests.NUnit.csproj", "{E90B705B-19FA-43BA-B952-69957976D12C}"
 EndProject
 Global
@@ -37,10 +35,6 @@ Global
 		{DE5C0467-EE99-4734-95F2-EFF7A0B99924}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE5C0467-EE99-4734-95F2-EFF7A0B99924}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE5C0467-EE99-4734-95F2-EFF7A0B99924}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AFFC3B00-3E4D-4327-8F7A-08EE41E0C8B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AFFC3B00-3E4D-4327-8F7A-08EE41E0C8B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AFFC3B00-3E4D-4327-8F7A-08EE41E0C8B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AFFC3B00-3E4D-4327-8F7A-08EE41E0C8B7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E90B705B-19FA-43BA-B952-69957976D12C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E90B705B-19FA-43BA-B952-69957976D12C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E90B705B-19FA-43BA-B952-69957976D12C}.Release|Any CPU.ActiveCfg = Release|Any CPU
