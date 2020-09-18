@@ -11,18 +11,6 @@ stages:
   - build
 
 stockmono_build:
-  image: ubuntu:18.04
-  stage: build
-  script:
-    # https://askubuntu.com/a/1013396
-    - DEBIAN_FRONTEND=noninteractive apt install -y mono-complete mono-xbuild fsharp
-    - mono --version
-
-    - curl -o nuget.exe $NUGET_451_URL
-    - mono nuget.exe restore src/TgSharp.sln
-    - xbuild src/TgSharp.Core/TgSharp.Core.csproj
-
-stocknewmono_build:
   image: ubuntu:20.04
   stage: build
   script:
@@ -35,7 +23,7 @@ stocknewmono_build:
     - xbuild src/TgSharp.Core/TgSharp.Core.csproj
 
 newmono_build:
-  image: ubuntu:18.04
+  image: ubuntu:20.04
   stage: build
   artifacts:
     paths:
