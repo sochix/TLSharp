@@ -76,11 +76,23 @@ namespace TgSharp.Core
         private const string defaultConnectionAddress = "149.154.175.100";//"149.154.167.50";
         private const int defaultConnectionPort = 443;
 
+        public int Sequence { get; set; }
+#if CI
+            // see the same CI-wrapped assignment in .FromBytes(), but this one will become useful
+            // when we generate a new session.dat for CI again
+            = CurrentTime ();
+
+        // this is similar to the unixTime but rooted on the worst year of humanity instead of 1970
+        private static int CurrentTime ()
+        {
+            return (int)DateTime.UtcNow.Subtract (new DateTime (2020, 1, 1)).TotalSeconds;
+        }
+#endif
+
         public string SessionUserId { get; set; }
         internal DataCenter DataCenter { get; set; }
         public AuthKey AuthKey { get; set; }
         public ulong Id { get; set; }
-        public int Sequence { get; set; }
         public ulong Salt { get; set; }
         public int TimeOffset { get; set; }
         public long LastMessageId { get; set; }
@@ -133,6 +145,13 @@ namespace TgSharp.Core
             {
                 var id = reader.ReadUInt64();
                 var sequence = reader.ReadInt32();
+
+// we do this in CI when running tests so that the they can always use a
+// higher sequence than previous run
+#if CI
+                sequence = CurrentTime();
+#endif
+
                 var salt = reader.ReadUInt64();
                 var lastMessageId = reader.ReadInt64();
                 var timeOffset = reader.ReadInt32();

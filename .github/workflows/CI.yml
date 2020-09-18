@@ -47,4 +47,23 @@ jobs:
       uses: microsoft/setup-msbuild@v1
 
     - name: Build Project
-      run: MSBuild src/TgSharp.sln
+      run: MSBuild src/TgSharp.sln && MSBuild -t:Clean src/TgSharp.sln
+
+    - name: Prepare test suite assets
+      run: |
+        echo "$APP_CONFIG_IN_TESTS" > app.config
+        echo "$SESSION_DAT_IN_TESTS" > encodedSession.dat
+      shell: bash
+      env:
+        APP_CONFIG_IN_TESTS: ${{secrets.APP_CONFIG_IN_TESTS}}
+        SESSION_DAT_IN_TESTS: ${{secrets.SESSION_DAT_IN_TESTS}}
+
+    - name: Run Tests
+      run: |
+        MSBuild -p:Configuration=Debug -p:CI=true src/TgSharp.sln
+
+        certutil -decode encodedSession.dat src/TgSharp.Tests.NUnit/bin/Debug/session.dat
+        cp app.config src/TgSharp.Tests.NUnit/bin/Debug/TgSharp.Tests.NUnit.dll.config
+
+        ./Nuget.exe install NUnit.Runners -Version 3.11.1 -OutputDirectory packages
+        ./packages/NUnit.ConsoleRunner.3.11.1/tools/nunit3-console.exe src/TgSharp.Tests.NUnit/bin/Debug/TgSharp.Tests.NUnit.dll
