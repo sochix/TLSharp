@@ -254,7 +254,7 @@ If you have troubles while using TgSharp, we may be able to help you; access our
 # Contributors
 
 * [knocte](https://github.com/knocte) - Maintainer
-* [Afshin Arani](http://aarani.ir) - Main contributor
+* [Afshin Arani](https://github.com/aarani) - Main contributor
 * [CheshireCaat](http://github.com/CheshireCaat) - Occasional contributor
 * [sochix](https://github.com/sochix) - Original author
 
@@ -266,7 +266,7 @@ If you have troubles while using TgSharp, we may be able to help you; access our
 The MIT License
 
 
-Copyright (c) 2015 Ilya Pirozhenko http://www.sochix.ru/
+Copyright (c) 2015 Ilya Pirozhenko ([sochix](https://github.com/sochix))
 
 Copyright (c) 2015-2020 TLSharp/TgSharp contributors
 
