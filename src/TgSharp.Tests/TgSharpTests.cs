@@ -176,7 +176,7 @@ namespace TgSharp.Tests
 
             await client.SendTypingAsync(new TLInputPeerUser() { UserId = user.Id });
             Thread.Sleep(3000);
-            await client.SendMessageAsync(new TLInputPeerUser() { UserId = user.Id }, "TEST");
+            await client.SendMessageAsync(new TLInputPeerUser() { UserId = user.Id }, "test message by phone number");
         }
 
         public virtual async Task SendMessageToChannelTest()
@@ -341,7 +341,7 @@ namespace TgSharp.Tests
 
             await client.SendTypingAsync(new TLInputPeerUser() { UserId = user.Id });
             Thread.Sleep(3000);
-            await client.SendMessageAsync(new TLInputPeerUser() { UserId = user.Id }, "TEST");
+            await client.SendMessageAsync(new TLInputPeerUser() { UserId = user.Id }, "test message by username");
         }
     }
 }
