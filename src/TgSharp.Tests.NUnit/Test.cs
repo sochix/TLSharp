@@ -36,7 +36,6 @@ namespace TgSharp.Tests
         }
 
         [Test]
-        [Ignore("Untested in CI")]
         public override async Task SendPhotoToContactTest()
         {
             await base.SendPhotoToContactTest();

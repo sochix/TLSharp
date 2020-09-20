@@ -206,7 +206,7 @@ namespace TgSharp.Tests
                 .FirstOrDefault(x => x.Phone == NumberToSendMessage);
 
             var fileResult = (TLInputFile)await client.UploadFile("cat.jpg", new StreamReader("data/cat.jpg"));
-            await client.SendUploadedPhoto(new TLInputPeerUser() { UserId = user.Id }, fileResult);
+            await client.SendUploadedPhoto(new TLInputPeerUser() { UserId = user.Id }, fileResult, "cat");
         }
 
         public virtual async Task SendBigFileToContactTest()

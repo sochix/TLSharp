@@ -336,13 +336,18 @@ namespace TgSharp.Core
                 .ConfigureAwait(false);
         }
 
-        public async Task<TLAbsUpdates> SendUploadedPhoto(TLAbsInputPeer peer, TLAbsInputFile file, CancellationToken token = default(CancellationToken))
+        public async Task<TLAbsUpdates> SendUploadedPhoto(TLAbsInputPeer peer, TLAbsInputFile file, string message, CancellationToken token = default(CancellationToken))
         {
+            if (String.IsNullOrEmpty(message)) {
+                throw new ArgumentNullException (nameof (message));
+            }
+
             return await SendAuthenticatedRequestAsync<TLAbsUpdates>(new TLRequestSendMedia()
             {
                 RandomId = Helpers.GenerateRandomLong(),
                 Background = false,
                 ClearDraft = false,
+                Message = message,
                 Media = new TLInputMediaUploadedPhoto() { File = file },
                 Peer = peer
             }, token)
