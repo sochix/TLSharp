@@ -34,7 +34,9 @@ namespace TLSharp.Core.Network
 
         private int GenerateSequence(bool confirmed)
         {
-            return confirmed ? session.Sequence++ * 2 + 1 : session.Sequence * 2;
+            lock (session.Lock) {
+                return confirmed ? session.Sequence++ * 2 + 1 : session.Sequence * 2;
+            }
         }
 
         public async Task Send(TeleSharp.TL.TLMethod request, CancellationToken token = default(CancellationToken))
