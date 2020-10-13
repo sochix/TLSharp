@@ -13,51 +13,6 @@ namespace TgSharp.Core
         Session Load(string sessionUserId);
     }
 
-    public class FileSessionStore : ISessionStore
-    {
-        private readonly DirectoryInfo basePath;
-
-        public FileSessionStore(DirectoryInfo basePath = null)
-        {
-            if (basePath != null && !basePath.Exists)
-            {
-                throw new ArgumentException("basePath doesn't exist", nameof(basePath));
-            }
-            this.basePath = basePath;
-        }
-
-        public void Save(Session session)
-        {
-            string sessionFileName = $"{session.SessionUserId}.dat";
-            var sessionPath = basePath == null ? sessionFileName :
-                Path.Combine(basePath.FullName, sessionFileName);
-
-            using (var stream = new FileStream(sessionPath, FileMode.OpenOrCreate))
-            {
-                var result = session.ToBytes();
-                stream.Write(result, 0, result.Length);
-            }
-        }
-
-        public Session Load(string sessionUserId)
-        {
-            string sessionFileName = $"{sessionUserId}.dat";
-            var sessionPath = basePath == null ? sessionFileName :
-                Path.Combine(basePath.FullName, sessionFileName);
-
-            if (!File.Exists(sessionPath))
-                return null;
-
-            using (var stream = new FileStream(sessionPath, FileMode.Open))
-            {
-                var buffer = new byte[2048];
-                stream.Read(buffer, 0, 2048);
-
-                return Session.FromBytes(buffer, this, sessionUserId);
-            }
-        }
-    }
-
     public class FakeSessionStore : ISessionStore
     {
         public void Save(Session session)
@@ -104,7 +59,7 @@ namespace TgSharp.Core
             = CurrentTime ();
 
         // this is similar to the unixTime but rooted on the worst year of humanity instead of 1970
-        private static int CurrentTime ()
+        internal static int CurrentTime ()
         {
             return (int)DateTime.UtcNow.Subtract (new DateTime (2020, 1, 1)).TotalSeconds;
         }
@@ -124,84 +79,6 @@ namespace TgSharp.Core
         public Session()
         {
             random = new Random();
-        }
-
-        public byte[] ToBytes()
-        {
-            using (var stream = new MemoryStream())
-            using (var writer = new BinaryWriter(stream))
-            {
-                writer.Write(Id);
-                writer.Write(Sequence);
-                writer.Write(Salt);
-                writer.Write(LastMessageId);
-                writer.Write(TimeOffset);
-                Serializers.String.Write(writer, DataCenter.Address);
-                writer.Write(DataCenter.Port);
-
-                if (TLUser != null)
-                {
-                    writer.Write(1);
-                    writer.Write(SessionExpires);
-                    ObjectUtils.SerializeObject(TLUser, writer);
-                }
-                else
-                {
-                    writer.Write(0);
-                }
-
-                Serializers.Bytes.Write(writer, AuthKey.Data);
-
-                return stream.ToArray();
-            }
-        }
-
-        public static Session FromBytes(byte[] buffer, ISessionStore store, string sessionUserId)
-        {
-            using (var stream = new MemoryStream(buffer))
-            using (var reader = new BinaryReader(stream))
-            {
-                var id = reader.ReadUInt64();
-                var sequence = reader.ReadInt32();
-
-// we do this in CI when running tests so that the they can always use a
-// higher sequence than previous run
-#if CI
-                sequence = CurrentTime();
-#endif
-
-                var salt = reader.ReadUInt64();
-                var lastMessageId = reader.ReadInt64();
-                var timeOffset = reader.ReadInt32();
-                var serverAddress = Serializers.String.Read(reader);
-                var port = reader.ReadInt32();
-
-                var isAuthExsist = reader.ReadInt32() == 1;
-                int sessionExpires = 0;
-                TLUser TLUser = null;
-                if (isAuthExsist)
-                {
-                    sessionExpires = reader.ReadInt32();
-                    TLUser = (TLUser)ObjectUtils.DeserializeObject(reader);
-                }
-
-                var authData = Serializers.Bytes.Read(reader);
-                var defaultDataCenter = new DataCenter (serverAddress, port);
-
-                return new Session()
-                {
-                    AuthKey = new AuthKey(authData),
-                    Id = id,
-                    Salt = salt,
-                    Sequence = sequence,
-                    LastMessageId = lastMessageId,
-                    TimeOffset = timeOffset,
-                    SessionExpires = sessionExpires,
-                    TLUser = TLUser,
-                    SessionUserId = sessionUserId,
-                    DataCenter = defaultDataCenter,
-                };
-            }
         }
 
         public long GetNewMessageId()

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+
 using System.IO;
 using System.Text;
 
@@ -6,7 +6,6 @@ namespace TgSharp.Core.MTProto
 {
     public class Serializers
     {
-
         public static class Bytes
         {
             public static byte[] Read(BinaryReader binaryReader)
