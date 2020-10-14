@@ -52,6 +52,8 @@ namespace TgSharp.Core
 
     public class Session
     {
+        internal object Lock = new object ();
+
         public int Sequence { get; set; }
 #if CI
             // see the same CI-wrapped assignment in .FromBytes(), but this one will become useful
