@@ -38,7 +38,11 @@ namespace TgSharp.Core.Network
         private int GenerateSequence(bool confirmed)
         {
             lock (session.Lock) {
-                return confirmed ? session.Sequence++ * 2 + 1 : session.Sequence * 2;
+                try {
+                    return confirmed ? session.Sequence++ * 2 + 1 : session.Sequence * 2;
+                } finally {
+                    sessionStore.Save(session);
+                }
             }
         }
 
