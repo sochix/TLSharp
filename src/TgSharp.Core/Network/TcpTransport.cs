@@ -18,6 +18,9 @@ namespace TgSharp.Core.Network
 
         public TcpTransport(string address, int port, TcpClientConnectionHandler handler = null)
         {
+            if (String.IsNullOrEmpty (address))
+                throw new ArgumentNullException (nameof (address));
+
             if (handler == null)
             {
                 var ipAddress = IPAddress.Parse(address);
@@ -54,9 +57,11 @@ namespace TgSharp.Core.Network
 
         public async Task<TcpMessage> Receive(CancellationToken token = default(CancellationToken))
         {
-            var packetLengthBytes = new byte[4];
-            if (await stream.ReadAsync(packetLengthBytes, 0, 4, token).ConfigureAwait(false) != 4)
-                throw new InvalidOperationException("Couldn't read the packet length");
+            var packetLengthLength = 4;
+            var packetLengthBytes = new byte[packetLengthLength];
+            var bytesRead = await stream.ReadAsync(packetLengthBytes, 0, packetLengthLength, token).ConfigureAwait(false);
+            if (bytesRead != packetLengthLength)
+                throw new InvalidOperationException($"Couldn't read the packet length (was {bytesRead}, expected {packetLengthLength})");
             int packetLength = BitConverter.ToInt32(packetLengthBytes, 0);
 
             var seqBytes = new byte[4];
