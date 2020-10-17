@@ -15,6 +15,13 @@ namespace TgSharp.Tests
             base.Init(o => Assert.IsNotNull(o), b => Assert.IsTrue(b));
         }
 
+        [SetUp]
+        public void DummyWait()
+        {
+            // if we don't wait a bit between tests, they could hang...
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1.0));
+        }
+
         [Test]
         [Ignore("Only run again when you want a new CodeToAuthenticate value in your app.config")]
         public async override Task AuthUser()
