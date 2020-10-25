@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(377562760)]
@@ -25,7 +20,7 @@ namespace TeleSharp.TL
         public bool Silent { get; set; }
         public int Id { get; set; }
         public int FromId { get; set; }
-        public int ChatId { get; set; }
+        public long ChatId { get; set; }
         public string Message { get; set; }
         public int Pts { get; set; }
         public int PtsCount { get; set; }
@@ -59,7 +54,7 @@ namespace TeleSharp.TL
             Silent = (Flags & 8192) != 0;
             Id = br.ReadInt32();
             FromId = br.ReadInt32();
-            ChatId = br.ReadInt32();
+            ChatId = br.ReadInt64();
             Message = StringUtil.Deserialize(br);
             Pts = br.ReadInt32();
             PtsCount = br.ReadInt32();

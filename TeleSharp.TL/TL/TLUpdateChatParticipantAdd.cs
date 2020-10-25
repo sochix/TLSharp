@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-364179876)]
@@ -18,7 +13,7 @@ namespace TeleSharp.TL
             }
         }
 
-        public int ChatId { get; set; }
+        public long ChatId { get; set; }
         public int UserId { get; set; }
         public int InviterId { get; set; }
         public int Date { get; set; }
@@ -32,7 +27,7 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            ChatId = br.ReadInt32();
+            ChatId = br.ReadInt64();
             UserId = br.ReadInt32();
             InviterId = br.ReadInt32();
             Date = br.ReadInt32();
