@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>8.0</LangVersion>
+    <Authors>Mahdi K. Fard</Authors>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>A port of TLSharp for .NET Standard 2.0.</Description>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <FileVersion>1.0.0</FileVersion>
+    <Version>1.0.0</Version>
+    <RepositoryUrl>https://github.com/xclud/Telegram</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/xclud/Telegram</PackageProjectUrl>
+    <PackageTags>Telegram</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="TLSchema" Version="1.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Requests\AuthSendCodeRequest.cs" />
+    <Compile Remove="Requests\AuthSignInRequest.cs" />
+    <Compile Remove="Requests\DownloadFileRequest.cs" />
+    <Compile Remove="Requests\InitConnectionRequest.cs" />
+    <Compile Remove="Requests\MTProtoRequest.cs" />
+  </ItemGroup>
+</Project>
