@@ -21,6 +21,12 @@ namespace TLSharp.Tests
         }
 
         [TestMethod]
+        public override async Task AuthUserByResendCode()
+        {
+            await base.AuthUserByResendCode();
+        }
+        
+        [TestMethod]
         public override async Task SendMessageTest()
         {
             await base.SendMessageTest();
