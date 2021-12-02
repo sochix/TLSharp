@@ -1,5 +1,7 @@
-TLSharp
+TLSharp (LIBRARY IS ARCHIVED AND NOT MAINTAINED)
 -------------------------------
+
+!!!WARNING!!! LIBRARY ISN'T MAINTAINED
 
 ![Build status](https://github.com/sochix/TLSharp/workflows/CI/badge.svg?branch=master&event=push)
 [![NuGet version](https://badge.fury.io/nu/TLSharp.svg)](https://badge.fury.io/nu/TLSharp)
@@ -246,7 +248,7 @@ My pricing is **219$/hour**. I accept PayPal. To request a paid support write me
 
 The MIT License
 
-Copyright (c) 2015 Ilya Pirozhenko http://www.sochix.ru/
+Copyright (c) 2015 Ilya Pirozhenko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
