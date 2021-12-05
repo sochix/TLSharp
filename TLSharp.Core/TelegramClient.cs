@@ -456,6 +456,22 @@ namespace TLSharp.Core
                 .ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Resolve user or chat. API: contacts.resolveUsername#f93ccba3 username:string = contacts.ResolvedPeer;
+        /// </summary>
+        /// <param name="username">User or chat name</param>
+        /// <returns></returns>
+        public async Task<TLResolvedPeer> resolveUserName(string username)
+        {
+            var r = new TeleSharp.TL.Contacts.TLRequestResolveUsername
+            {
+                Username = username
+            };
+
+            return await SendRequestAsync<TLResolvedPeer>(r)
+                .ConfigureAwait(false);
+        }
+
         private void OnUserAuthenticated(TLUser TLUser)
         {
             session.TLUser = TLUser;
