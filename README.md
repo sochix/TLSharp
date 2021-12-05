@@ -1,14 +1,26 @@
-TLSharp (LIBRARY IS ARCHIVED AND NOT MAINTAINED)
+# (LIBRARY IS ARCHIVED AND NOT MAINTAINED) 
+
+TLSharp
 -------------------------------
 
-!!!WARNING!!! LIBRARY ISN'T MAINTAINED
+🚩🚩🚩 **WARNING** 🚩🚩🚩🚩 
+## LIBRARY IS NO LONGER MAINTAINED    
+
+As a workaround you can use -> [WTelegramClient](https://github.com/wiz0u/WTelegramClient)
+
+WTelegramClient is another C#/.NET open-source library for accessing Telegram Client API and is:
+- offering up-to-date API (latest layer)
+- safer (latest MTProto v2 implementation and many security checks)
+- feature-complete (handling of updates, multiple-DC connections)
+- easy-to-use (API calls are direct methods with fully documented parameters in VS)
+- designed for .NET 5.0+, but also available for .NET Standard 2.0 (.NET Framework 4.6.1+ & .NET Core 2.0+)
+
+-------------------------------
 
 ![Build status](https://github.com/sochix/TLSharp/workflows/CI/badge.svg?branch=master&event=push)
 [![NuGet version](https://badge.fury.io/nu/TLSharp.svg)](https://badge.fury.io/nu/TLSharp)
 
 _Unofficial_ Telegram (http://telegram.org) client library implemented in C#.
-
-🚩 Check out [TeleJS](https://github.com/RD17/TeleJS) - a pure JavaScript implementation of Telegram MTP protocol
 
 It's a perfect fit for any developer who would like to send data directly to Telegram users or write own custom Telegram client.
 
