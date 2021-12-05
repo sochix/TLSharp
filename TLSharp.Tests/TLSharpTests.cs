@@ -155,6 +155,44 @@ namespace TLSharp.Tests
             Assert.IsTrue(client.IsUserAuthorized());
         }
 
+        public virtual async Task AuthUserByResendCode()
+        {
+            var client = NewClient();
+
+            await client.ConnectAsync();
+
+            var hash = await client.SendCodeRequestAsync(NumberToAuthenticate);
+
+            var resendHash = await client.ResendCodeRequestAsync(NumberToAuthenticate, hash);
+
+            var code = CodeToAuthenticate; // you can change code in debugger too
+
+            if (String.IsNullOrWhiteSpace(code))
+            {
+                throw new Exception("CodeToAuthenticate is empty in the app.config file, fill it with the code you just got now by SMS/Telegram");
+            }
+
+            TLUser user = null;
+            try
+            {
+                user = await client.MakeAuthAsync(NumberToAuthenticate, resendHash, code);
+            }
+            catch (CloudPasswordNeededException ex)
+            {
+                var passwordSetting = await client.GetPasswordSetting();
+                var password = PasswordToAuthenticate;
+
+                user = await client.MakeAuthWithPasswordAsync(passwordSetting, password);
+            }
+            catch (InvalidPhoneCodeException ex)
+            {
+                throw new Exception("CodeToAuthenticate is wrong in the app.config file, fill it with the code you just got now by SMS/Telegram",
+                    ex);
+            }
+            Assert.IsNotNull(user);
+            Assert.IsTrue(client.IsUserAuthorized());
+        }
+        
         public virtual async Task SendMessageTest()
         {
             NumberToSendMessage = ConfigurationManager.AppSettings[nameof(NumberToSendMessage)];

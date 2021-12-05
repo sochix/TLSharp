@@ -207,6 +207,21 @@ namespace TLSharp.Core
             return request.Response.PhoneCodeHash;
         }
 
+        public async Task<string> ResendCodeRequestAsync(string phoneNumber, string phoneCodeHash, CancellationToken token = default(CancellationToken))
+        {
+            if (String.IsNullOrWhiteSpace(phoneNumber))
+                throw new ArgumentNullException(nameof(phoneNumber));
+
+            if(String.IsNullOrWhiteSpace(phoneCodeHash))
+                throw new ArgumentNullException(nameof(phoneCodeHash));
+
+            var request = new TLRequestResendCode() { PhoneNumber = phoneNumber, PhoneCodeHash = phoneCodeHash };
+
+            await RequestWithDcMigration(request, token).ConfigureAwait(false);
+
+            return request.Response.PhoneCodeHash;
+        }
+        
         public async Task<TLUser> MakeAuthAsync(string phoneNumber, string phoneCodeHash, string code, CancellationToken token = default(CancellationToken))
         {
             if (String.IsNullOrWhiteSpace(phoneNumber))
