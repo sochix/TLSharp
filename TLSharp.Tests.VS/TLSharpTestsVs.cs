@@ -79,5 +79,12 @@ namespace TLSharp.Tests
         {
             await base.SendMessageByUserNameTest();
         }
+
+        [TestMethod]
+        public override async Task GetUpdatesForUser()
+        {
+            await base.GetUpdatesForUser();
+        }
+
     }
 }

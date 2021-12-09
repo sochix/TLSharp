@@ -151,6 +151,220 @@ To download file you should call **GetFile** method
 
 Full code you can see at [DownloadFileFromContactTest](https://github.com/sochix/TLSharp/blob/master/TLSharp.Tests/TLSharpTests.cs#L167)
 
+# Events Sample code
+```csharp
+using System;
+using System.Threading.Tasks;
+using TeleSharp.TL;
+using TLSharp.Core;
+using System.Linq;
+using TeleSharp.TL.Messages;
+
+namespace TLSharpPOC
+{
+    class MainClass
+    {
+        const int APIId = 0;
+        const string APIHash = "???";
+        const string phone = "???";
+        public static void Main(string[] args)
+        {
+            new MainClass().MainAsync(args).Wait();
+        }
+
+        private async Task MainAsync(string[] args)
+        {
+            TelegramClient client = null;
+
+            client = new TelegramClient(APIId, APIHash);
+            // subscribe an event to receive live messages
+            client.Updates += ClientUpdates;
+            await client.ConnectAsync();
+            Console.WriteLine($"Authorised: {client.IsUserAuthorized()}");
+            TLUser user = null;
+            // -- If the user has already authenticated, this step will prevent account from being blocked as it
+            // -- reuses the data from last authorisation.
+            if (client.IsUserAuthorized())
+                user = client.Session.TLUser;
+            else
+            {
+                var registered = await client.IsPhoneRegisteredAsync(phone);
+                var hash = await client.SendCodeRequestAsync(phone);
+                Console.Write("Code: ");
+                var code = Console.ReadLine();
+                if (!registered)
+                {
+                    Console.WriteLine($"Sign up {phone}");
+                    user = await client.SignUpAsync(phone, hash, code, "First", "Last");
+                }
+                Console.WriteLine($"Sign in {phone}");
+                user = await client.MakeAuthAsync(phone, hash, code);
+            }
+
+            var contacts = await client.GetContactsAsync();
+            Console.WriteLine("Contacts:");
+            foreach (var contact in contacts.Users.OfType<TLUser>())
+            {
+                var contactUser = contact as TLUser;
+                Console.WriteLine($"\t{contact.Id} {contact.Phone} {contact.FirstName} {contact.LastName}");
+            }
+
+
+            var dialogs = (TLDialogs) await client.GetUserDialogsAsync();
+            Console.WriteLine("Channels: ");
+            foreach (var channelObj in dialogs.Chats.OfType<TLChannel>())
+            {
+                var channel = channelObj as TLChannel;
+                Console.WriteLine($"\tChat: {channel.Title}");
+            }
+
+            Console.WriteLine("Groups:");
+            TLChat chat = null;
+            foreach (var chatObj in dialogs.Chats.OfType<TLChat>())
+            {
+                chat = chatObj as TLChat;
+                Console.WriteLine($"Chat name: {chat.Title}");
+                var request = new TLRequestGetFullChat() { ChatId = chat.Id };
+                var fullChat = await client.SendRequestAsync<TeleSharp.TL.Messages.TLChatFull>(request);
+
+                var participants = (fullChat.FullChat as TeleSharp.TL.TLChatFull).Participants as TLChatParticipants;
+                foreach (var p in participants.Participants)
+                {
+                    if (p is TLChatParticipant chatParticipant)
+                    {
+                        Console.WriteLine($"\t{chatParticipant.UserId}");
+                    }
+                    else if (p is TLChatParticipantAdmin chatParticipantAdmin)
+                    {
+                        Console.WriteLine($"\t{chatParticipantAdmin.UserId}**");
+                    }
+                    else if (p is TLChatParticipantCreator chatParticipantCreator)
+                    {
+                        Console.WriteLine($"\t{chatParticipantCreator.UserId}**");
+                    }
+                }
+
+                var peer = new TLInputPeerChat() { ChatId = chat.Id };
+                var msg = await client.GetHistoryAsync(peer, 0, 0, 0);
+                Console.WriteLine(msg);
+                if (msg is TLMessages messages)
+		{
+                    foreach (var message in messages.Messages)
+                    {
+                        if (message is TLMessage m1)
+                        {
+                            Console.WriteLine($"\t\t{m1.Id} {m1.Message}");
+                        }
+                        else if (message is TLMessageService msgService)
+                        {
+                            Console.WriteLine($"\t\t{msgService.Id} {msgService.Action}");
+                        }
+                    }
+                }
+		else if (msg is TLMessagesSlice messagesSlice)
+                {
+                    bool done = false;
+                    int total = 0;
+                    while (!done)
+                    {
+                        foreach (var m1 in messagesSlice.Messages)
+                        {
+                            if (m1 is TLMessage message)
+                            {
+                                Console.WriteLine($"\t\t{message.Id} {message.Message}");
+                                ++total;
+                            }
+                            else if (m1 is TLMessageService messageService)
+                            {
+                                Console.WriteLine($"\t\t{messageService.Id} {messageService.Action}");
+                                ++total;
+                                done = messageService.Action is TLMessageActionChatCreate;
+                            }
+                        }
+                        msg = await client.GetHistoryAsync(peer, total, 0, 0);
+                    }
+                }
+            }
+
+            // -- Wait in a loop to handle incoming updates. No need to poll.
+            while(true)
+            {
+                await client.WaitEventAsync(TimeSpan.FromSeconds(1));
+            }
+        }
+
+        private void ClientUpdates(TelegramClient client, TLAbsUpdates updates)
+        {
+            Console.WriteLine($"Got update: {updates}");
+            if (updates is TLUpdateShort updateShort)
+            {
+                Console.WriteLine($"Short: {updateShort.Update}");
+                if (updateShort.Update is TLUpdateUserStatus status)
+                {
+                    Console.WriteLine($"User {status.UserId} is {status.Status}");
+                    if (status.Status is TLUserStatusOnline)
+                    {
+                        var peer = new TLInputPeerUser() { UserId = status.UserId };
+                        client.SendMessageAsync(peer, "Você está online.").Wait();
+                    }
+                }
+            }
+            else if (updates is TLUpdateShortMessage message)
+            {
+                Console.WriteLine($"Message: {message.Message}");
+                MarkMessageRead(client, new TLInputPeerUser() { UserId = message.UserId }, message.Id);
+            }
+            else if (updates is TLUpdateShortChatMessage shortChatMessage)
+            {
+                Console.WriteLine($"Chat Message: {shortChatMessage.Message}");
+                MarkMessageRead(client, new TLInputPeerChat() { ChatId = shortChatMessage.ChatId }, shortChatMessage.Id);
+            }
+            else if (updates is TLUpdates allUpdates)
+            {
+                foreach (var update in allUpdates.Updates)
+                {
+                    Console.WriteLine($"\t{update}");
+                    if (update is TLUpdateNewChannelMessage metaMessage)
+                    {
+                        var channelMsg = metaMessage.Message as TLMessage;
+                        Console.WriteLine($"Channel message: {channelMsg.Message}");
+                        var channel = allUpdates.Chats[0] as TLChannel;
+                        MarkMessageRead(client,
+                                        new TLInputPeerChannel() { ChannelId = channel.Id, AccessHash = channel.AccessHash.Value },
+                                        channelMsg.Id);
+                    }
+                }
+
+                foreach (var user in allUpdates.Users)
+                {
+                    Console.WriteLine($"{user}");
+                }
+
+                foreach (var chat in allUpdates.Chats)
+                {
+                    Console.WriteLine($"{chat}");
+                }
+            }
+        }
+
+        private void MarkMessageRead(TelegramClient client, TLAbsInputPeer peer, int id)
+        {
+            try
+            {
+                var request = new TLRequestReadHistory();
+                request.MaxId = id;
+                request.Peer = peer;
+                client.SendRequestAsync<bool>(request).Wait();
+            }
+            catch (InvalidOperationException e)
+            {
+                Console.WriteLine($"MarkMessageRead Error: {e.Message}");
+            }
+        }
+    }
+}
+```
+
 # Available Methods
 
 For your convenience TLSharp have wrappers for several Telegram API methods. You could add your own, see details below.

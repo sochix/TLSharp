@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
@@ -11,7 +12,6 @@ using TeleSharp.TL;
 using TeleSharp.TL.Messages;
 using TLSharp.Core;
 using TLSharp.Core.Exceptions;
-using TLSharp.Core.Network;
 using TLSharp.Core.Network.Exceptions;
 using TLSharp.Core.Utils;
 
@@ -269,7 +269,7 @@ namespace TLSharp.Tests
                     Version = document.Version
                 },
                 document.Size);
-            
+
             Assert.IsTrue(resFile.Bytes.Length > 0);
         }
 
@@ -284,7 +284,7 @@ namespace TLSharp.Tests
             var user = result.Users
                 .OfType<TLUser>()
                 .FirstOrDefault(x => x.Id == 5880094);
-    
+
             var photo = ((TLUserProfilePhoto)user.Photo);
             var photoLocation = (TLFileLocation) photo.PhotoBig;
 
@@ -376,6 +376,73 @@ namespace TLSharp.Tests
             await client.SendTypingAsync(new TLInputPeerUser() { UserId = user.Id });
             Thread.Sleep(3000);
             await client.SendMessageAsync(new TLInputPeerUser() { UserId = user.Id }, "TEST");
+        }
+
+        public virtual async Task GetUpdatesForUser()
+        {
+            IList<TLMessage> newMsgs = new List<TLMessage>();
+            TLUser user = null;
+            var updateMsg = "Send yourself an UPDATE_1 message to trigger update during loop";
+
+            var client = NewClient();
+            await client.ConnectAsync();
+
+            if (client.IsUserAuthorized())
+                user = client.Session.TLUser;
+
+            else
+            {
+                var hash = await client.SendCodeRequestAsync(NumberToAuthenticate);
+                var code = CodeToAuthenticate; // you can change code in debugger too
+                if (string.IsNullOrWhiteSpace(code))
+                {
+                    throw new Exception("CodeToAuthenticate is empty in the app.config file, fill it with the code you just got now by SMS/Telegram");
+                }
+
+                try
+                {
+                    user = await client.MakeAuthAsync(NumberToAuthenticate, hash, code);
+                }
+                catch (CloudPasswordNeededException)
+                {
+                    var passwordSetting = await client.GetPasswordSetting();
+                    var password = PasswordToAuthenticate;
+                    user = await client.MakeAuthWithPasswordAsync(passwordSetting, password);
+                }
+                catch (InvalidPhoneCodeException ex)
+                {
+                    throw new Exception("CodeToAuthenticate is wrong in the app.config file, fill it with the code you just got now by SMS/Telegram", ex);
+                }
+            }
+
+            // Things to note:- If the updates are not getting triggered, please re-authenticate the user
+            // Would trigger the updates on a seperate thread if possible
+
+            client.Updates += (TelegramClient tclient, TLAbsUpdates updates) =>
+            {
+                if (updates is TLUpdates)
+                {
+                    var allUpdates = updates as TLUpdates;
+
+                    foreach (var update in allUpdates.Updates)
+                    {
+                        if (update is TLUpdateNewMessage)
+                        {
+                            var metaMsg = update as TLUpdateNewMessage;
+                            var msg = metaMsg.Message as TLMessage;
+                            newMsgs.Add(msg);
+                        }
+                    }
+                }
+            };
+
+            Console.WriteLine(updateMsg);
+            Debug.WriteLine(updateMsg);
+
+            await client.MainLoopAsync(new TimeSpan(0, 0, 1));
+
+            Assert.IsTrue(newMsgs.Count == 1);
+            Assert.IsTrue(newMsgs.First().Message.Equals("UPDATE_1"));
         }
     }
 }

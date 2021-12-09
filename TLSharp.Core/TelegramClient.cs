@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -25,6 +25,7 @@ namespace TLSharp.Core
     public class TelegramClient : IDisposable
     {
         private MtProtoSender sender;
+        private AuthKey key;
         private TcpTransport transport;
         private string apiHash = String.Empty;
         private int apiId = 0;
@@ -32,6 +33,15 @@ namespace TLSharp.Core
         private List<TLDcOption> dcOptions;
         private TcpClientConnectionHandler handler;
         private DataCenterIPVersion dcIpVersion;
+
+        private bool looping = true;
+
+        public delegate void UpdatesEvent (TelegramClient source, TLAbsUpdates updates);
+        public delegate void ClientEvent(TelegramClient source);
+
+        public event UpdatesEvent Updates;
+        public event ClientEvent ScheduledTasks;
+        public event ClientEvent IdleTasks;
 
         public Session Session
         {
@@ -80,6 +90,7 @@ namespace TLSharp.Core
             }
 
             sender = new MtProtoSender(transport, session);
+            sender.UpdatesEvent += SenderUpdatesEvent;
 
             //set-up layer
             var config = new TLRequestGetConfig();
@@ -149,6 +160,50 @@ namespace TLSharp.Core
             }
         }
 
+        public void Close()
+        {
+            looping = false;
+        }
+
+        public async Task MainLoopAsync(TimeSpan timeToWait, CancellationToken token = default(CancellationToken))
+        {
+            var lastPing = DateTime.UtcNow;
+            await SendPingAsync();
+            while (looping)
+            {
+                try
+                {
+                    await WaitEventAsync(timeToWait, token);
+                }
+                catch (OperationCanceledException)
+                {
+                    // Handle timeout, no problem
+                }
+                finally
+                {
+                    var now = DateTime.UtcNow;
+                    if ((now - lastPing).TotalSeconds >= 30)
+                    {
+                        await SendPingAsync();
+                        lastPing = now;
+                    }
+                    if (ScheduledTasks != null)
+                    {
+                        ScheduledTasks.Invoke(this);
+                        ScheduledTasks = null;
+                    }
+                    IdleTasks?.Invoke(this);
+                }
+
+                token.ThrowIfCancellationRequested();
+            }
+        }
+        
+        private void SenderUpdatesEvent (TLAbsUpdates updates)
+        {
+            Updates?.Invoke(this, updates);
+        }
+
         private async Task RequestWithDcMigration(TLMethod request, CancellationToken token = default(CancellationToken))
         {
             if (sender == null)
@@ -176,6 +231,11 @@ namespace TLSharp.Core
                     request.ConfirmReceived = false;
                 }
             }
+        }
+
+        public async Task WaitEventAsync(TimeSpan timeToWait, CancellationToken token = default(CancellationToken))
+        {
+            await sender.Receive (timeToWait, token);
         }
 
         public bool IsUserAuthorized()
