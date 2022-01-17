@@ -211,7 +211,7 @@ namespace TLSharp.Core.Network
                     return HandleBadServerSalt(messageId, sequence, messageReader, request, token);
                 case 0xa7eff811: // bad_msg_notification
                                  //logger.debug("MSG bad_msg_notification");
-                    return HandleBadMsgNotification(messageId, sequence, messageReader);
+                    return HandleBadMsgNotification(messageId, sequence, messageReader, request);
                 case 0x276d3ec6: // msg_detailed_info
                                  //logger.debug("MSG msg_detailed_info");
                     return HandleMsgDetailedInfo(messageId, sequence, messageReader);
@@ -382,7 +382,7 @@ namespace TLSharp.Core.Network
             return false;
         }
 
-        private bool HandleBadMsgNotification(ulong messageId, int sequence, BinaryReader messageReader)
+        private bool HandleBadMsgNotification(ulong messageId, int sequence, BinaryReader messageReader, TeleSharp.TL.TLMethod request)
         {
             uint code = messageReader.ReadUInt32();
             ulong requestId = messageReader.ReadUInt64();
@@ -402,7 +402,10 @@ namespace TLSharp.Core.Network
                 case 20:
                     throw new InvalidOperationException("message too old, and it cannot be verified whether the server has received a message with this msg_id or not");
                 case 32:
-                    throw new InvalidOperationException("msg_seqno too low (the server has already received a message with a lower msg_id but with either a higher or an equal and odd seqno)");
+                    session.Sequence += 64;
+                    var t3 = Send(request);
+                    t3.Wait();
+                    break;
                 case 33:
                     throw new InvalidOperationException(" msg_seqno too high (similarly, there is a message with a higher msg_id but with either a lower or an equal and odd seqno)");
                 case 34:
