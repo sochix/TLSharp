@@ -12,9 +12,13 @@ namespace TLSharp.Core.Network
 
     public class TcpTransport : IDisposable
     {
-        private readonly TcpClient tcpClient;
-        private readonly NetworkStream stream;
+        private TcpClient tcpClient;
+        private NetworkStream stream;
         private int sendCounter = 0;
+        TcpClientConnectionHandler handler;
+        readonly string address;
+        readonly int port;
+        readonly IPAddress ipAddress;
 
         public TcpTransport(string address, int port, TcpClientConnectionHandler handler = null)
         {
@@ -25,10 +29,13 @@ namespace TLSharp.Core.Network
 
                 tcpClient = new TcpClient(ipAddress.AddressFamily);
 
-                try {
-                    tcpClient.Connect (endpoint);
-                } catch (Exception ex) {
-                    throw new Exception ($"Problem when trying to connect to {endpoint}; either there's no internet connection or the IP address version is not compatible (if the latter, consider using DataCenterIPVersion enum)",
+                try
+                {
+                    tcpClient.Connect(endpoint);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Problem when trying to connect to {endpoint}; either there's no internet connection or the IP address version is not compatible (if the latter, consider using DataCenterIPVersion enum)",
                                          ex);
                 }
             }
@@ -102,7 +109,7 @@ namespace TLSharp.Core.Network
         {
             get
             {
-                return this.tcpClient.Connected;
+                return this.tcpClient != null && this.tcpClient.Connected;
             }
         }
 
