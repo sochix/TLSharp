@@ -29,6 +29,8 @@ namespace TLSharp.Core
         private string apiHash = String.Empty;
         private int apiId = 0;
         private Session session;
+        private string sessionUserId;
+        private ISessionStore store;
         private List<TLDcOption> dcOptions;
         private TcpClientConnectionHandler handler;
         private DataCenterIPVersion dcIpVersion;
@@ -58,19 +60,21 @@ namespace TLSharp.Core
 
             if (store == null)
                 store = new FileSessionStore();
+            this.store = store;
 
             this.apiHash = apiHash;
             this.apiId = apiId;
             this.handler = handler;
             this.dcIpVersion = dcIpVersion;
-
-            session = Session.TryLoadOrCreateNew(store, sessionUserId);
-            transport = new TcpTransport (session.DataCenter.Address, session.DataCenter.Port, this.handler);
+            this.sessionUserId = sessionUserId;
         }
 
         public async Task ConnectAsync(bool reconnect = false, CancellationToken token = default(CancellationToken))
         {
             token.ThrowIfCancellationRequested();
+
+            session = Session.TryLoadOrCreateNew (store, sessionUserId);
+            transport = new TcpTransport (session.DataCenter.Address, session.DataCenter.Port, this.handler);
 
             if (session.AuthKey == null || reconnect)
             {
