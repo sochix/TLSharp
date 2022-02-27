@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-1704596961)]
@@ -18,7 +13,7 @@ namespace TeleSharp.TL
             }
         }
 
-        public int ChatId { get; set; }
+        public long ChatId { get; set; }
         public int UserId { get; set; }
         public TLAbsSendMessageAction Action { get; set; }
 
@@ -30,7 +25,7 @@ namespace TeleSharp.TL
 
         public override void DeserializeBody(BinaryReader br)
         {
-            ChatId = br.ReadInt32();
+            ChatId = br.ReadInt64();
             UserId = br.ReadInt32();
             Action = (TLAbsSendMessageAction)ObjectUtils.DeserializeObject(br);
 

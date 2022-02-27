@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TeleSharp.TL;
+
 namespace TeleSharp.TL
 {
     [TLObject(-57668565)]
@@ -19,7 +14,7 @@ namespace TeleSharp.TL
         }
 
         public int Flags { get; set; }
-        public int ChatId { get; set; }
+        public long ChatId { get; set; }
         public TLAbsChatParticipant SelfParticipant { get; set; }
 
 
@@ -33,7 +28,7 @@ namespace TeleSharp.TL
         public override void DeserializeBody(BinaryReader br)
         {
             Flags = br.ReadInt32();
-            ChatId = br.ReadInt32();
+            ChatId = br.ReadInt64();
             if ((Flags & 1) != 0)
                 SelfParticipant = (TLAbsChatParticipant)ObjectUtils.DeserializeObject(br);
             else
